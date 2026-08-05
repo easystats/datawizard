@@ -36,15 +36,7 @@ Note: In this vignette, we use the native pipe-operator, `|>`, which was
 introduced in R 4.1. Users of R version 3.6 or 4.0 should replace the
 native pipe by magrittr’s one (`%>%`) so that examples work.
 
-``` r
-
-library(dplyr)
-library(tidyr)
-library(datawizard)
-
-data(efc)
-efc <- head(efc)
-```
+[`library`](https://rdrr.io/r/base/library.html)`(`[`dplyr`](https://dplyr.tidyverse.org)`)`` `[`library`](https://rdrr.io/r/base/library.html)`(`[`tidyr`](https://tidyr.tidyverse.org)`)`` `[`library`](https://rdrr.io/r/base/library.html)`(`[`datawizard`](https://easystats.github.io/datawizard/)`)`` `` `[`data`](https://rdrr.io/r/utils/data.html)`(``efc``)`` ``efc`` ``<-`` `[`head`](https://rdrr.io/r/utils/head.html)`(``efc``)`
 
 ## Workhorses
 
@@ -105,32 +97,9 @@ either use `&` (as in [`subset()`](https://rdrr.io/r/base/subset.html))
 or `,` (as in
 [`dplyr::filter()`](https://dplyr.tidyverse.org/reference/filter.html)).
 
-``` r
+`# ---------- datawizard -----------`` ``starwars`` ``|>`` `` `[`data_filter`](https://easystats.github.io/datawizard/reference/data_match.md)`(`` `` ``skin_color`` ``==`` ``"light"``,`` `` ``eye_color`` ``==`` ``"brown"`` `` ``)`` `` ``# or`` ``starwars`` ``|>`` `` `[`data_filter`](https://easystats.github.io/datawizard/reference/data_match.md)`(`` `` ``skin_color`` ``==`` ``"light"`` ``&`` `` ``eye_color`` ``==`` ``"brown"`` `` ``)`
 
-# ---------- datawizard -----------
-starwars |>
-  data_filter(
-    skin_color == "light",
-    eye_color == "brown"
-  )
-
-# or
-starwars |>
-  data_filter(
-    skin_color == "light" &
-      eye_color == "brown"
-  )
-```
-
-``` r
-
-# ---------- tidyverse -----------
-starwars |>
-  filter(
-    skin_color == "light",
-    eye_color == "brown"
-  )
-```
+`# ---------- tidyverse -----------`` ``starwars`` ``|>`` `` `[`filter`](https://dplyr.tidyverse.org/reference/filter.html)`(`` `` ``skin_color`` ``==`` ``"light"``,`` `` ``eye_color`` ``==`` ``"brown"`` `` ``)`
 
     ## # A tibble: 7 × 14
     ##   name      height  mass hair_color skin_color eye_color birth_year sex   gender
@@ -170,19 +139,9 @@ names if we want to select several variables, while
 [`dplyr::select()`](https://dplyr.tidyverse.org/reference/select.html)
 accepts any unquoted column names.
 
-``` r
+`# ---------- datawizard -----------`` ``starwars`` ``|>`` `` `[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``select ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"hair_color"``, ``"skin_color"``, ``"eye_color"``)``)`
 
-# ---------- datawizard -----------
-starwars |>
-  data_select(select = c("hair_color", "skin_color", "eye_color"))
-```
-
-``` r
-
-# ---------- tidyverse -----------
-starwars |>
-  select(hair_color, skin_color, eye_color)
-```
+`# ---------- tidyverse -----------`` ``starwars`` ``|>`` `` `[`select`](https://dplyr.tidyverse.org/reference/select.html)`(``hair_color``, ``skin_color``, ``eye_color``)`
 
     ## # A tibble: 6 × 3
     ##   hair_color  skin_color  eye_color
@@ -194,19 +153,9 @@ starwars |>
     ## 5 brown       light       brown    
     ## 6 brown, grey light       blue
 
-``` r
+`# ---------- datawizard -----------`` ``starwars`` ``|>`` `` `[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``select ``=`` ``-`[`ends_with`](https://tidyselect.r-lib.org/reference/starts_with.html)`(``"color"``)``)`
 
-# ---------- datawizard -----------
-starwars |>
-  data_select(select = -ends_with("color"))
-```
-
-``` r
-
-# ---------- tidyverse -----------
-starwars |>
-  select(-ends_with("color"))
-```
+`# ---------- tidyverse -----------`` ``starwars`` ``|>`` `` `[`select`](https://dplyr.tidyverse.org/reference/select.html)`(``-`[`ends_with`](https://tidyselect.r-lib.org/reference/starts_with.html)`(``"color"``)``)`
 
     ## # A tibble: 6 × 11
     ##   name     height  mass birth_year sex   gender homeworld species films vehicles
@@ -219,19 +168,9 @@ starwars |>
     ## 6 Owen La…    178   120       52   male  mascu… Tatooine  Human   <chr> <chr>   
     ## # ℹ 1 more variable: starships <list>
 
-``` r
+`# ---------- datawizard -----------`` ``starwars`` ``|>`` `` `[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``select ``=`` ``-``(``hair_color``:``eye_color``)``)`
 
-# ---------- datawizard -----------
-starwars |>
-  data_select(select = -(hair_color:eye_color))
-```
-
-``` r
-
-# ---------- tidyverse -----------
-starwars |>
-  select(!(hair_color:eye_color))
-```
+`# ---------- tidyverse -----------`` ``starwars`` ``|>`` `` `[`select`](https://dplyr.tidyverse.org/reference/select.html)`(``!``(``hair_color``:``eye_color``)``)`
 
     ## # A tibble: 6 × 11
     ##   name     height  mass birth_year sex   gender homeworld species films vehicles
@@ -244,19 +183,9 @@ starwars |>
     ## 6 Owen La…    178   120       52   male  mascu… Tatooine  Human   <chr> <chr>   
     ## # ℹ 1 more variable: starships <list>
 
-``` r
+`# ---------- datawizard -----------`` ``starwars`` ``|>`` `` `[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``exclude ``=`` ``regex``(``"color$"``)``)`
 
-# ---------- datawizard -----------
-starwars |>
-  data_select(exclude = regex("color$"))
-```
-
-``` r
-
-# ---------- tidyverse -----------
-starwars |>
-  select(-contains("color$"))
-```
+`# ---------- tidyverse -----------`` ``starwars`` ``|>`` `` `[`select`](https://dplyr.tidyverse.org/reference/select.html)`(``-`[`contains`](https://tidyselect.r-lib.org/reference/starts_with.html)`(``"color$"``)``)`
 
     ## # A tibble: 6 × 11
     ##   name     height  mass birth_year sex   gender homeworld species films vehicles
@@ -269,19 +198,9 @@ starwars |>
     ## 6 Owen La…    178   120       52   male  mascu… Tatooine  Human   <chr> <chr>   
     ## # ℹ 1 more variable: starships <list>
 
-``` r
+`# ---------- datawizard -----------`` ``starwars`` ``|>`` `` `[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``select ``=`` ``is.numeric``)`
 
-# ---------- datawizard -----------
-starwars |>
-  data_select(select = is.numeric)
-```
-
-``` r
-
-# ---------- tidyverse -----------
-starwars |>
-  select(where(is.numeric))
-```
+`# ---------- tidyverse -----------`` ``starwars`` ``|>`` `` `[`select`](https://dplyr.tidyverse.org/reference/select.html)`(`[`where`](https://tidyselect.r-lib.org/reference/where.html)`(``is.numeric``)``)`
 
     ## # A tibble: 6 × 3
     ##   height  mass birth_year
@@ -315,27 +234,9 @@ This last point is also the main difference between
 and
 [`dplyr::mutate()`](https://dplyr.tidyverse.org/reference/mutate.html).
 
-``` r
+`# ---------- datawizard -----------`` ``efc`` ``|>`` `` `[`data_modify`](https://easystats.github.io/datawizard/reference/data_modify.md)`(`` `` c12hour_c ``=`` `[`center`](https://easystats.github.io/datawizard/reference/center.md)`(``c12hour``)``,`` `` c12hour_z ``=`` ``c12hour_c`` ``/`` `[`sd`](https://rdrr.io/r/stats/sd.html)`(``c12hour``, na.rm ``=`` ``TRUE``)``,`` `` c12hour_z2 ``=`` `[`standardize`](https://easystats.github.io/datawizard/reference/standardize.md)`(``c12hour``)`` `` ``)`
 
-# ---------- datawizard -----------
-efc |>
-  data_modify(
-    c12hour_c = center(c12hour),
-    c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE),
-    c12hour_z2 = standardize(c12hour)
-  )
-```
-
-``` r
-
-# ---------- tidyverse -----------
-efc |>
-  mutate(
-    c12hour_c = center(c12hour),
-    c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE),
-    c12hour_z2 = standardize(c12hour)
-  )
-```
+`# ---------- tidyverse -----------`` ``efc`` ``|>`` `` `[`mutate`](https://dplyr.tidyverse.org/reference/mutate.html)`(`` `` c12hour_c ``=`` `[`center`](https://easystats.github.io/datawizard/reference/center.md)`(``c12hour``)``,`` `` c12hour_z ``=`` ``c12hour_c`` ``/`` `[`sd`](https://rdrr.io/r/stats/sd.html)`(``c12hour``, na.rm ``=`` ``TRUE``)``,`` `` c12hour_z2 ``=`` `[`standardize`](https://easystats.github.io/datawizard/reference/standardize.md)`(``c12hour``)`` `` ``)`
 
     ##   c12hour e16sex e42dep c172code neg_c_7 c12hour_c  c12hour_z c12hour_z2
     ## 1      16      2      3        2      12     -67.6 -0.9420928 -0.9420928
@@ -348,14 +249,7 @@ efc |>
 [`data_modify()`](https://easystats.github.io/datawizard/reference/data_modify.md)
 supports expressions as strings via its `as_expr()` helper function.
 
-``` r
-
-new_exp <- c(
-  "c12hour_c = center(c12hour)",
-  "c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)"
-)
-data_modify(efc, as_expr(new_exp))
-```
+`new_exp`` ``<-`` `[`c`](https://rdrr.io/r/base/c.html)`(`` `` ``"c12hour_c = center(c12hour)"``,`` `` ``"c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)"`` ``)`` `[`data_modify`](https://easystats.github.io/datawizard/reference/data_modify.md)`(``efc``, ``as_expr``(``new_exp``)``)`
 
     ##   c12hour e16sex e42dep c172code neg_c_7 c12hour_c  c12hour_z
     ## 1      16      2      3        2      12     -67.6 -0.9420928
@@ -367,18 +261,7 @@ data_modify(efc, as_expr(new_exp))
 
 This makes it easy to use it in custom functions:
 
-``` r
-
-miles_to_km <- function(data, var) {
-  data_modify(
-    data,
-    as_expr(paste0("km = ", var, "* 1.609344"))
-  )
-}
-
-distance <- data.frame(miles = c(1, 8, 233, 88, 9))
-distance
-```
+`miles_to_km`` ``<-`` ``function``(``data``, ``var``)`` ``{`` `` `[`data_modify`](https://easystats.github.io/datawizard/reference/data_modify.md)`(`` `` ``data``,`` `` ``as_expr``(`[`paste0`](https://rdrr.io/r/base/paste.html)`(``"km = "``, ``var``, ``"* 1.609344"``)``)`` `` ``)`` ``}`` `` ``distance`` ``<-`` `[`data.frame`](https://rdrr.io/r/base/data.frame.html)`(``miles ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``1``, ``8``, ``233``, ``88``, ``9``)``)`` ``distance`
 
     ##   miles
     ## 1     1
@@ -387,10 +270,7 @@ distance
     ## 4    88
     ## 5     9
 
-``` r
-
-miles_to_km(distance, "miles")
-```
+`miles_to_km``(``distance``, ``"miles"``)`
 
     ##   miles         km
     ## 1     1   1.609344
@@ -412,19 +292,9 @@ possible to use select helpers such as
 in
 [`data_arrange()`](https://easystats.github.io/datawizard/reference/data_arrange.md).
 
-``` r
+`# ---------- datawizard -----------`` ``starwars`` ``|>`` `` `[`data_arrange`](https://easystats.github.io/datawizard/reference/data_arrange.md)`(`[`c`](https://rdrr.io/r/base/c.html)`(``"hair_color"``, ``"height"``)``)`
 
-# ---------- datawizard -----------
-starwars |>
-  data_arrange(c("hair_color", "height"))
-```
-
-``` r
-
-# ---------- tidyverse -----------
-starwars |>
-  arrange(hair_color, height)
-```
+`# ---------- tidyverse -----------`` ``starwars`` ``|>`` `` `[`arrange`](https://dplyr.tidyverse.org/reference/arrange.html)`(``hair_color``, ``height``)`
 
     ##             name height mass  hair_color  skin_color eye_color birth_year
     ## 1 Luke Skywalker    172   77       blond        fair      blue       19.0
@@ -458,19 +328,9 @@ starwars |>
 You can also sort variables in descending order by putting a `"-"` in
 front of their name, like below:
 
-``` r
+`# ---------- datawizard -----------`` ``starwars`` ``|>`` `` `[`data_arrange`](https://easystats.github.io/datawizard/reference/data_arrange.md)`(`[`c`](https://rdrr.io/r/base/c.html)`(``"-hair_color"``, ``"-height"``)``)`
 
-# ---------- datawizard -----------
-starwars |>
-  data_arrange(c("-hair_color", "-height"))
-```
-
-``` r
-
-# ---------- tidyverse -----------
-starwars |>
-  arrange(desc(hair_color), -height)
-```
+`# ---------- tidyverse -----------`` ``starwars`` ``|>`` `` `[`arrange`](https://dplyr.tidyverse.org/reference/arrange.html)`(`[`desc`](https://dplyr.tidyverse.org/reference/desc.html)`(``hair_color``)``, ``-``height``)`
 
     ##             name height mass  hair_color  skin_color eye_color birth_year
     ## 1    Darth Vader    202  136        none       white    yellow       41.9
@@ -509,19 +369,9 @@ extract a single column as a vector. This can be done with
 which reproduces the behavior of
 [`dplyr::pull()`](https://dplyr.tidyverse.org/reference/pull.html):
 
-``` r
+`# ---------- datawizard -----------`` ``starwars`` ``|>`` `` `[`data_extract`](https://easystats.github.io/datawizard/reference/data_extract.md)`(``gender``)`
 
-# ---------- datawizard -----------
-starwars |>
-  data_extract(gender)
-```
-
-``` r
-
-# ---------- tidyverse -----------
-starwars |>
-  pull(gender)
-```
+`# ---------- tidyverse -----------`` ``starwars`` ``|>`` `` `[`pull`](https://dplyr.tidyverse.org/reference/pull.html)`(``gender``)`
 
     ## [1] "masculine" "masculine" "masculine" "masculine" "feminine"  "masculine"
 
@@ -530,11 +380,7 @@ We can also specify several variables in `select`. In this case,
 is equivalent to
 [`data_select()`](https://easystats.github.io/datawizard/reference/extract_column_names.md):
 
-``` r
-
-starwars |>
-  data_extract(select = contains("color"))
-```
+`starwars`` ``|>`` `` `[`data_extract`](https://easystats.github.io/datawizard/reference/data_extract.md)`(``select ``=`` `[`contains`](https://tidyselect.r-lib.org/reference/starts_with.html)`(``"color"``)``)`
 
     ## # A tibble: 6 × 3
     ##   hair_color  skin_color  eye_color
@@ -558,25 +404,9 @@ takes new-old pairs of column names,
 requires a vector of column names to rename, and then a vector of new
 names for these columns that must be of the same length.
 
-``` r
+`# ---------- datawizard -----------`` ``starwars`` ``|>`` `` `[`data_rename`](https://easystats.github.io/datawizard/reference/data_rename.md)`(`` `` select ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"sex"``, ``"hair_color"``)``,`` `` replacement ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"Sex"``, ``"Hair Color"``)`` `` ``)`
 
-# ---------- datawizard -----------
-starwars |>
-  data_rename(
-    select = c("sex", "hair_color"),
-    replacement = c("Sex", "Hair Color")
-  )
-```
-
-``` r
-
-# ---------- tidyverse -----------
-starwars |>
-  rename(
-    Sex = sex,
-    "Hair Color" = hair_color
-  )
-```
+`# ---------- tidyverse -----------`` ``starwars`` ``|>`` `` `[`rename`](https://dplyr.tidyverse.org/reference/rename.html)`(`` `` Sex ``=`` ``sex``,`` `` ``"Hair Color"`` ``=`` ``hair_color`` `` ``)`
 
     ## # A tibble: 6 × 14
     ##   name    height  mass `Hair Color` skin_color eye_color birth_year Sex   gender
@@ -596,16 +426,7 @@ is designed makes it easy to apply the same modifications to a vector of
 column names. For example, we can remove underscores and use TitleCase
 with the following code:
 
-``` r
-
-to_rename <- names(starwars)
-
-starwars |>
-  data_rename(
-    select = to_rename,
-    replacement = tools::toTitleCase(gsub("_", " ", to_rename, fixed = TRUE))
-  )
-```
+`to_rename`` ``<-`` `[`names`](https://rdrr.io/r/base/names.html)`(``starwars``)`` `` ``starwars`` ``|>`` `` `[`data_rename`](https://easystats.github.io/datawizard/reference/data_rename.md)`(`` `` select ``=`` ``to_rename``,`` `` replacement ``=`` ``tools``::`[`toTitleCase`](https://rdrr.io/r/tools/toTitleCase.html)`(`[`gsub`](https://rdrr.io/r/base/grep.html)`(``"_"``, ``" "``, ``to_rename``, fixed ``=`` ``TRUE``)``)`` `` ``)`
 
     ## # A tibble: 6 × 14
     ##   Name     Height  Mass `Hair Color` `Skin Color` `Eye Color` `Birth Year` Sex  
@@ -627,18 +448,7 @@ and
 The argument `select` accepts all select helpers that we saw above with
 [`data_select()`](https://easystats.github.io/datawizard/reference/extract_column_names.md):
 
-``` r
-
-starwars |>
-  data_addprefix(
-    pattern = "OLD.",
-    select = contains("color")
-  ) |>
-  data_addsuffix(
-    pattern = ".NEW",
-    select = -contains("color")
-  )
-```
+`starwars`` ``|>`` `` `[`data_addprefix`](https://easystats.github.io/datawizard/reference/data_prefix_suffix.md)`(`` `` pattern ``=`` ``"OLD."``,`` `` select ``=`` `[`contains`](https://tidyselect.r-lib.org/reference/starts_with.html)`(``"color"``)`` `` ``)`` ``|>`` `` `[`data_addsuffix`](https://easystats.github.io/datawizard/reference/data_prefix_suffix.md)`(`` `` pattern ``=`` ``".NEW"``,`` `` select ``=`` ``-`[`contains`](https://tidyselect.r-lib.org/reference/starts_with.html)`(``"color"``)`` `` ``)`
 
     ## # A tibble: 6 × 14
     ##   name.NEW       height.NEW mass.NEW OLD.hair_color OLD.skin_color OLD.eye_color
@@ -668,19 +478,9 @@ we can specify a list of variables we want to relocate with `select` and
 `exclude`. Then, the arguments `before` and `after`[^1] specify where
 the selected columns should be relocated:
 
-``` r
+`# ---------- datawizard -----------`` ``starwars`` ``|>`` `` `[`data_relocate`](https://easystats.github.io/datawizard/reference/data_relocate.md)`(``sex``:``homeworld``, before ``=`` ``"height"``)`
 
-# ---------- datawizard -----------
-starwars |>
-  data_relocate(sex:homeworld, before = "height")
-```
-
-``` r
-
-# ---------- tidyverse -----------
-starwars |>
-  relocate(sex:homeworld, .before = height)
-```
+`# ---------- tidyverse -----------`` ``starwars`` ``|>`` `` `[`relocate`](https://dplyr.tidyverse.org/reference/relocate.html)`(``sex``:``homeworld``, .before ``=`` ``height``)`
 
     ## # A tibble: 6 × 14
     ##   name       sex   gender homeworld height  mass hair_color skin_color eye_color
@@ -699,12 +499,7 @@ Finally, one can use `before = -1` to relocate the selected columns just
 before the last column, or `after = -1` to relocate them after the last
 column.
 
-``` r
-
-# ---------- datawizard -----------
-starwars |>
-  data_relocate(sex:homeworld, after = -1)
-```
+`# ---------- datawizard -----------`` ``starwars`` ``|>`` `` `[`data_relocate`](https://easystats.github.io/datawizard/reference/data_relocate.md)`(``sex``:``homeworld``, after ``=`` ``-``1``)`
 
     ## # A tibble: 6 × 14
     ##   name     height  mass hair_color skin_color eye_color birth_year species films
@@ -741,10 +536,7 @@ features are available yet.
 We will use the `relig_income` dataset, as in the [`{tidyr}`
 vignette](https://tidyr.tidyverse.org/articles/pivot.html).
 
-``` r
-
-relig_income
-```
+`relig_income`
 
     ## # A tibble: 18 × 11
     ##    religion `<$10k` `$10-20k` `$20-30k` `$30-40k` `$40-50k` `$50-75k` `$75-100k`
@@ -778,27 +570,9 @@ a single column called “income”. Finally, the values corresponding to
 each of these columns will be reshaped to be in a single new column,
 called “count”.
 
-``` r
+`# ---------- datawizard -----------`` ``relig_income`` ``|>`` `` `[`data_to_long`](https://easystats.github.io/datawizard/reference/data_to_long.md)`(`` `` ``-``religion``,`` `` names_to ``=`` ``"income"``,`` `` values_to ``=`` ``"count"`` `` ``)`
 
-# ---------- datawizard -----------
-relig_income |>
-  data_to_long(
-    -religion,
-    names_to = "income",
-    values_to = "count"
-  )
-```
-
-``` r
-
-# ---------- tidyverse -----------
-relig_income |>
-  pivot_longer(
-    !religion,
-    names_to = "income",
-    values_to = "count"
-  )
-```
+`# ---------- tidyverse -----------`` ``relig_income`` ``|>`` `` `[`pivot_longer`](https://tidyr.tidyverse.org/reference/pivot_longer.html)`(`` `` ``!``religion``,`` `` names_to ``=`` ``"income"``,`` `` values_to ``=`` ``"count"`` `` ``)`
 
     ## # A tibble: 180 × 3
     ##    religion income             count
@@ -819,10 +593,7 @@ To explore a bit more the arguments of
 [`data_to_long()`](https://easystats.github.io/datawizard/reference/data_to_long.md),
 we will use another dataset: the `billboard` dataset.
 
-``` r
-
-billboard
-```
+`billboard`
 
     ## # A tibble: 317 × 79
     ##    artist     track date.entered   wk1   wk2   wk3   wk4   wk5   wk6   wk7   wk8
@@ -845,29 +616,9 @@ billboard
     ## #   wk31 <dbl>, wk32 <dbl>, wk33 <dbl>, wk34 <dbl>, wk35 <dbl>, wk36 <dbl>,
     ## #   wk37 <dbl>, wk38 <dbl>, wk39 <dbl>, wk40 <dbl>, wk41 <dbl>, wk42 <dbl>, …
 
-``` r
+`# ---------- datawizard -----------`` ``billboard`` ``|>`` `` `[`data_to_long`](https://easystats.github.io/datawizard/reference/data_to_long.md)`(`` `` cols ``=`` `[`starts_with`](https://tidyselect.r-lib.org/reference/starts_with.html)`(``"wk"``)``,`` `` names_to ``=`` ``"week"``,`` `` values_to ``=`` ``"rank"``,`` `` values_drop_na ``=`` ``TRUE`` `` ``)`
 
-# ---------- datawizard -----------
-billboard |>
-  data_to_long(
-    cols = starts_with("wk"),
-    names_to = "week",
-    values_to = "rank",
-    values_drop_na = TRUE
-  )
-```
-
-``` r
-
-# ---------- tidyverse -----------
-billboard |>
-  pivot_longer(
-    cols = starts_with("wk"),
-    names_to = "week",
-    values_to = "rank",
-    values_drop_na = TRUE
-  )
-```
+`# ---------- tidyverse -----------`` ``billboard`` ``|>`` `` `[`pivot_longer`](https://tidyr.tidyverse.org/reference/pivot_longer.html)`(`` `` cols ``=`` `[`starts_with`](https://tidyselect.r-lib.org/reference/starts_with.html)`(``"wk"``)``,`` `` names_to ``=`` ``"week"``,`` `` values_to ``=`` ``"rank"``,`` `` values_drop_na ``=`` ``TRUE`` `` ``)`
 
     ## # A tibble: 5,307 × 5
     ##    artist  track                   date.entered week   rank
@@ -893,10 +644,7 @@ and
 [`pivot_wider()`](https://tidyr.tidyverse.org/reference/pivot_wider.html)
 are:
 
-``` r
-
-fish_encounters
-```
+`fish_encounters`
 
     ## # A tibble: 114 × 3
     ##    fish  station  seen
@@ -913,25 +661,9 @@ fish_encounters
     ## 10 4842  MAE         1
     ## # ℹ 104 more rows
 
-``` r
+`# ---------- datawizard -----------`` ``fish_encounters`` ``|>`` `` `[`data_to_wide`](https://easystats.github.io/datawizard/reference/data_to_wide.md)`(`` `` names_from ``=`` ``"station"``,`` `` values_from ``=`` ``"seen"`` `` ``)`
 
-# ---------- datawizard -----------
-fish_encounters |>
-  data_to_wide(
-    names_from = "station",
-    values_from = "seen"
-  )
-```
-
-``` r
-
-# ---------- tidyverse -----------
-fish_encounters |>
-  pivot_wider(
-    names_from = station,
-    values_from = seen
-  )
-```
+`# ---------- tidyverse -----------`` ``fish_encounters`` ``|>`` `` `[`pivot_wider`](https://tidyr.tidyverse.org/reference/pivot_wider.html)`(`` `` names_from ``=`` ``station``,`` `` values_from ``=`` ``seen`` `` ``)`
 
     ## # A tibble: 19 × 12
     ##    fish  Release I80_1 Lisbon  Rstr Base_TD   BCE   BCW  BCE2  BCW2   MAE   MAW
@@ -971,10 +703,7 @@ Below, we show how to perform the four most common joins: full, left,
 right and inner. We will use the datasets `band_members`and
 `band_instruments` provided by [dplyr](https://dplyr.tidyverse.org):
 
-``` r
-
-band_members
-```
+`band_members`
 
     ## # A tibble: 3 × 2
     ##   name  band   
@@ -983,10 +712,7 @@ band_members
     ## 2 John  Beatles
     ## 3 Paul  Beatles
 
-``` r
-
-band_instruments
-```
+`band_instruments`
 
     ## # A tibble: 3 × 2
     ##   name  plays 
@@ -997,19 +723,9 @@ band_instruments
 
 #### Full join
 
-``` r
+`# ---------- datawizard -----------`` ``band_members`` ``|>`` `` `[`data_join`](https://easystats.github.io/datawizard/reference/data_merge.md)`(``band_instruments``, join ``=`` ``"full"``)`
 
-# ---------- datawizard -----------
-band_members |>
-  data_join(band_instruments, join = "full")
-```
-
-``` r
-
-# ---------- tidyverse -----------
-band_members |>
-  full_join(band_instruments)
-```
+`# ---------- tidyverse -----------`` ``band_members`` ``|>`` `` `[`full_join`](https://dplyr.tidyverse.org/reference/mutate-joins.html)`(``band_instruments``)`
 
     ## # A tibble: 4 × 3
     ##   name  band    plays 
@@ -1021,19 +737,9 @@ band_members |>
 
 #### Left and right joins
 
-``` r
+`# ---------- datawizard -----------`` ``band_members`` ``|>`` `` `[`data_join`](https://easystats.github.io/datawizard/reference/data_merge.md)`(``band_instruments``, join ``=`` ``"left"``)`
 
-# ---------- datawizard -----------
-band_members |>
-  data_join(band_instruments, join = "left")
-```
-
-``` r
-
-# ---------- tidyverse -----------
-band_members |>
-  left_join(band_instruments)
-```
+`# ---------- tidyverse -----------`` ``band_members`` ``|>`` `` `[`left_join`](https://dplyr.tidyverse.org/reference/mutate-joins.html)`(``band_instruments``)`
 
     ## # A tibble: 3 × 3
     ##   name  band    plays 
@@ -1042,19 +748,9 @@ band_members |>
     ## 2 John  Beatles guitar
     ## 3 Paul  Beatles bass
 
-``` r
+`# ---------- datawizard -----------`` ``band_members`` ``|>`` `` `[`data_join`](https://easystats.github.io/datawizard/reference/data_merge.md)`(``band_instruments``, join ``=`` ``"right"``)`
 
-# ---------- datawizard -----------
-band_members |>
-  data_join(band_instruments, join = "right")
-```
-
-``` r
-
-# ---------- tidyverse -----------
-band_members |>
-  right_join(band_instruments)
-```
+`# ---------- tidyverse -----------`` ``band_members`` ``|>`` `` `[`right_join`](https://dplyr.tidyverse.org/reference/mutate-joins.html)`(``band_instruments``)`
 
     ## # A tibble: 3 × 3
     ##   name  band    plays 
@@ -1065,19 +761,9 @@ band_members |>
 
 #### Inner join
 
-``` r
+`# ---------- datawizard -----------`` ``band_members`` ``|>`` `` `[`data_join`](https://easystats.github.io/datawizard/reference/data_merge.md)`(``band_instruments``, join ``=`` ``"inner"``)`
 
-# ---------- datawizard -----------
-band_members |>
-  data_join(band_instruments, join = "inner")
-```
-
-``` r
-
-# ---------- tidyverse -----------
-band_members |>
-  inner_join(band_instruments)
-```
+`# ---------- tidyverse -----------`` ``band_members`` ``|>`` `` `[`inner_join`](https://dplyr.tidyverse.org/reference/mutate-joins.html)`(``band_instruments``)`
 
     ## # A tibble: 2 × 3
     ##   name  band    plays 
@@ -1094,72 +780,25 @@ date.
 offers an interface very close to
 [`tidyr::unite()`](https://tidyr.tidyverse.org/reference/unite.html):
 
-``` r
-
-test <- data.frame(
-  year = 2002:2004,
-  month = c("02", "03", "09"),
-  day = c("11", "22", "28"),
-  stringsAsFactors = FALSE
-)
-test
-```
+`test`` ``<-`` `[`data.frame`](https://rdrr.io/r/base/data.frame.html)`(`` `` year ``=`` ``2002``:``2004``,`` `` month ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"02"``, ``"03"``, ``"09"``)``,`` `` day ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"11"``, ``"22"``, ``"28"``)``,`` `` stringsAsFactors ``=`` ``FALSE`` ``)`` ``test`
 
     ##   year month day
     ## 1 2002    02  11
     ## 2 2003    03  22
     ## 3 2004    09  28
 
-``` r
+`# ---------- datawizard -----------`` ``test`` ``|>`` `` `[`data_unite`](https://easystats.github.io/datawizard/reference/data_unite.md)`(`` `` new_column ``=`` ``"date"``,`` `` select ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"year"``, ``"month"``, ``"day"``)``,`` `` separator ``=`` ``"-"`` `` ``)`
 
-# ---------- datawizard -----------
-test |>
-  data_unite(
-    new_column = "date",
-    select = c("year", "month", "day"),
-    separator = "-"
-  )
-```
-
-``` r
-
-# ---------- tidyverse -----------
-test |>
-  unite(
-    col = "date",
-    year, month, day,
-    sep = "-"
-  )
-```
+`# ---------- tidyverse -----------`` ``test`` ``|>`` `` `[`unite`](https://tidyr.tidyverse.org/reference/unite.html)`(`` `` col ``=`` ``"date"``,`` `` ``year``, ``month``, ``day``,`` `` sep ``=`` ``"-"`` `` ``)`
 
     ##         date
     ## 1 2002-02-11
     ## 2 2003-03-22
     ## 3 2004-09-28
 
-``` r
+`# ---------- datawizard -----------`` ``test`` ``|>`` `` `[`data_unite`](https://easystats.github.io/datawizard/reference/data_unite.md)`(`` `` new_column ``=`` ``"date"``,`` `` select ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"year"``, ``"month"``, ``"day"``)``,`` `` separator ``=`` ``"-"``,`` `` append ``=`` ``TRUE`` `` ``)`
 
-# ---------- datawizard -----------
-test |>
-  data_unite(
-    new_column = "date",
-    select = c("year", "month", "day"),
-    separator = "-",
-    append = TRUE
-  )
-```
-
-``` r
-
-# ---------- tidyverse -----------
-test |>
-  unite(
-    col = "date",
-    year, month, day,
-    sep = "-",
-    remove = FALSE
-  )
-```
+`# ---------- tidyverse -----------`` ``test`` ``|>`` `` `[`unite`](https://tidyr.tidyverse.org/reference/unite.html)`(`` `` col ``=`` ``"date"``,`` `` ``year``, ``month``, ``day``,`` `` sep ``=`` ``"-"``,`` `` remove ``=`` ``FALSE`` `` ``)`
 
     ##   year month day       date
     ## 1 2002    02  11 2002-02-11
@@ -1175,40 +814,16 @@ into values for years, months and days.
 offers an interface very close to
 [`tidyr::separate()`](https://tidyr.tidyverse.org/reference/separate.html):
 
-``` r
-
-test <- data.frame(
-  date_arrival = c("2002-02-11", "2003-03-22", "2004-09-28"),
-  date_departure = c("2002-03-15", "2003-03-28", "2004-09-30"),
-  stringsAsFactors = FALSE
-)
-test
-```
+`test`` ``<-`` `[`data.frame`](https://rdrr.io/r/base/data.frame.html)`(`` `` date_arrival ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"2002-02-11"``, ``"2003-03-22"``, ``"2004-09-28"``)``,`` `` date_departure ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"2002-03-15"``, ``"2003-03-28"``, ``"2004-09-30"``)``,`` `` stringsAsFactors ``=`` ``FALSE`` ``)`` ``test`
 
     ##   date_arrival date_departure
     ## 1   2002-02-11     2002-03-15
     ## 2   2003-03-22     2003-03-28
     ## 3   2004-09-28     2004-09-30
 
-``` r
+`# ---------- datawizard -----------`` ``test`` ``|>`` `` `[`data_separate`](https://easystats.github.io/datawizard/reference/data_separate.md)`(`` `` select ``=`` ``"date_arrival"``,`` `` new_columns ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"Year"``, ``"Month"``, ``"Day"``)`` `` ``)`
 
-# ---------- datawizard -----------
-test |>
-  data_separate(
-    select = "date_arrival",
-    new_columns = c("Year", "Month", "Day")
-  )
-```
-
-``` r
-
-# ---------- tidyverse -----------
-test |>
-  separate(
-    date_arrival,
-    into = c("Year", "Month", "Day")
-  )
-```
+`# ---------- tidyverse -----------`` ``test`` ``|>`` `` `[`separate`](https://tidyr.tidyverse.org/reference/separate.html)`(`` `` ``date_arrival``,`` `` into ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"Year"``, ``"Month"``, ``"Day"``)`` `` ``)`
 
     ##   date_departure Year Month Day
     ## 1     2002-03-15 2002    02  11
@@ -1220,16 +835,7 @@ Unlike
 you can separate multiple columns in one step with
 [`data_separate()`](https://easystats.github.io/datawizard/reference/data_separate.md).
 
-``` r
-
-test |>
-  data_separate(
-    new_columns = list(
-      date_arrival = c("Arr_Year", "Arr_Month", "Arr_Day"),
-      date_departure = c("Dep_Year", "Dep_Month", "Dep_Day")
-    )
-  )
-```
+`test`` ``|>`` `` `[`data_separate`](https://easystats.github.io/datawizard/reference/data_separate.md)`(`` `` new_columns ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(`` `` date_arrival ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"Arr_Year"``, ``"Arr_Month"``, ``"Arr_Day"``)``,`` `` date_departure ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"Dep_Year"``, ``"Dep_Month"``, ``"Dep_Day"``)`` `` ``)`` `` ``)`
 
     ##   Arr_Year Arr_Month Arr_Day Dep_Year Dep_Month Dep_Day
     ## 1     2002        02      11     2002        03      15
@@ -1252,11 +858,7 @@ with
 and
 [`column_as_rownames()`](https://easystats.github.io/datawizard/reference/rownames.md):
 
-``` r
-
-mtcars <- head(mtcars)
-mtcars
-```
+`mtcars`` ``<-`` `[`head`](https://rdrr.io/r/utils/head.html)`(``mtcars``)`` ``mtcars`
 
     ##                    mpg cyl disp  hp drat    wt  qsec vs am gear carb
     ## Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
@@ -1266,13 +868,7 @@ mtcars
     ## Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
     ## Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
 
-``` r
-
-mtcars2 <- mtcars |>
-  rownames_as_column(var = "model")
-
-mtcars2
-```
+`mtcars2`` ``<-`` ``mtcars`` ``|>`` `` `[`rownames_as_column`](https://easystats.github.io/datawizard/reference/rownames.md)`(``var ``=`` ``"model"``)`` `` ``mtcars2`
 
     ##               model  mpg cyl disp  hp drat    wt  qsec vs am gear carb
     ## 1         Mazda RX4 21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
@@ -1282,11 +878,7 @@ mtcars2
     ## 5 Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
     ## 6           Valiant 18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
 
-``` r
-
-mtcars2 |>
-  column_as_rownames(var = "model")
-```
+`mtcars2`` ``|>`` `` `[`column_as_rownames`](https://easystats.github.io/datawizard/reference/rownames.md)`(``var ``=`` ``"model"``)`
 
     ##                    mpg cyl disp  hp drat    wt  qsec vs am gear carb
     ## Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
@@ -1315,15 +907,7 @@ is closer to using
 [`mutate()`](https://dplyr.tidyverse.org/reference/mutate.html), like
 the following:
 
-``` r
-
-test <- data.frame(
-  group = c("A", "A", "B", "B"),
-  value = c(3, 5, 8, 1),
-  stringsAsFactors = FALSE
-)
-test
-```
+`test`` ``<-`` `[`data.frame`](https://rdrr.io/r/base/data.frame.html)`(`` `` group ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"A"``, ``"A"``, ``"B"``, ``"B"``)``,`` `` value ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``3``, ``5``, ``8``, ``1``)``,`` `` stringsAsFactors ``=`` ``FALSE`` ``)`` ``test`
 
     ##   group value
     ## 1     A     3
@@ -1331,12 +915,7 @@ test
     ## 3     B     8
     ## 4     B     1
 
-``` r
-
-test |>
-  data_group(group) |>
-  tibble::rowid_to_column()
-```
+`test`` ``|>`` `` `[`data_group`](https://easystats.github.io/datawizard/reference/data_group.md)`(``group``)`` ``|>`` `` ``tibble``::`[`rowid_to_column`](https://tibble.tidyverse.org/reference/rownames.html)`(``)`
 
     ##   rowid group value
     ## 1     1     A     3
@@ -1344,12 +923,7 @@ test |>
     ## 3     3     B     8
     ## 4     4     B     1
 
-``` r
-
-test |>
-  data_group(group) |>
-  rowid_as_column()
-```
+`test`` ``|>`` `` `[`data_group`](https://easystats.github.io/datawizard/reference/data_group.md)`(``group``)`` ``|>`` `` `[`rowid_as_column`](https://easystats.github.io/datawizard/reference/rownames.md)`(``)`
 
     ## # A tibble: 4 × 3
     ## # Groups:   group [2]
@@ -1360,12 +934,7 @@ test |>
     ## 3     1 B         8
     ## 4     2 B         1
 
-``` r
-
-test |>
-  data_group(group) |>
-  mutate(id = seq_len(n()))
-```
+`test`` ``|>`` `` `[`data_group`](https://easystats.github.io/datawizard/reference/data_group.md)`(``group``)`` ``|>`` `` `[`mutate`](https://dplyr.tidyverse.org/reference/mutate.html)`(``id ``=`` `[`seq_len`](https://rdrr.io/r/base/seq.html)`(`[`n`](https://dplyr.tidyverse.org/reference/context.html)`(``)``)``)`
 
     ## # A tibble: 4 × 3
     ## # Groups:   group [2]
@@ -1384,14 +953,7 @@ column names, and vice versa. This can be done with
 and
 [`colnames_to_row()`](https://easystats.github.io/datawizard/reference/colnames.md).
 
-``` r
-
-x <- data.frame(
-  X_1 = c(NA, "Title", 1:3),
-  X_2 = c(NA, "Title2", 4:6)
-)
-x
-```
+`x`` ``<-`` `[`data.frame`](https://rdrr.io/r/base/data.frame.html)`(`` `` X_1 ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``NA``, ``"Title"``, ``1``:``3``)``,`` `` X_2 ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``NA``, ``"Title2"``, ``4``:``6``)`` ``)`` ``x`
 
     ##     X_1    X_2
     ## 1  <NA>   <NA>
@@ -1400,12 +962,7 @@ x
     ## 4     2      5
     ## 5     3      6
 
-``` r
-
-x2 <- x |>
-  row_to_colnames(row = 2)
-x2
-```
+`x2`` ``<-`` ``x`` ``|>`` `` `[`row_to_colnames`](https://easystats.github.io/datawizard/reference/colnames.md)`(``row ``=`` ``2``)`` ``x2`
 
     ##   Title Title2
     ## 1  <NA>   <NA>
@@ -1413,11 +970,7 @@ x2
     ## 4     2      5
     ## 5     3      6
 
-``` r
-
-x2 |>
-  colnames_to_row()
-```
+`x2`` ``|>`` `` `[`colnames_to_row`](https://easystats.github.io/datawizard/reference/colnames.md)`(``)`
 
     ##       x1     x2
     ## 1  Title Title2
@@ -1428,17 +981,9 @@ x2 |>
 
 ### Take a quick look at the data
 
-``` r
+`# ---------- datawizard -----------`` `[`data_peek`](https://easystats.github.io/datawizard/reference/data_peek.md)`(``iris``)`
 
-# ---------- datawizard -----------
-data_peek(iris)
-```
-
-``` r
-
-# ---------- tidyverse -----------
-glimpse(iris)
-```
+`# ---------- tidyverse -----------`` `[`glimpse`](https://pillar.r-lib.org/reference/glimpse.html)`(``iris``)`
 
     ## Data frame with 150 rows and 5 variables
     ## 

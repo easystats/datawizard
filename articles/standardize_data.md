@@ -29,15 +29,7 @@ function:
 
 Let’s look at the following example:
 
-``` r
-
-library(datawizard)
-library(effectsize) # for data
-
-# let's have a look at what the data look like
-data("hardlyworking", package = "effectsize")
-head(hardlyworking)
-```
+[`library`](https://rdrr.io/r/base/library.html)`(`[`datawizard`](https://easystats.github.io/datawizard/)`)`` `[`library`](https://rdrr.io/r/base/library.html)`(`[`effectsize`](https://easystats.github.io/effectsize/)`)`` ``# for data`` `` ``# let's have a look at what the data look like`` `[`data`](https://rdrr.io/r/utils/data.html)`(``"hardlyworking"``, package ``=`` ``"effectsize"``)`` `[`head`](https://rdrr.io/r/utils/head.html)`(``hardlyworking``)`
 
     #>     salary xtra_hours n_comps age seniority is_senior
     #> 1 19744.65       4.16       1  32         3     FALSE
@@ -47,31 +39,12 @@ head(hardlyworking)
     #> 5 27342.15      11.26       0  33         4     FALSE
     #> 6 25656.63       3.63       2  30         5      TRUE
 
-``` r
-
-# let's use both methods of standardization
-hardlyworking$xtra_hours_z <- standardize(hardlyworking$xtra_hours)
-hardlyworking$xtra_hours_zr <- standardize(hardlyworking$xtra_hours, robust = TRUE)
-```
+`# let's use both methods of standardization`` ``hardlyworking``$``xtra_hours_z`` ``<-`` `[`standardize`](https://easystats.github.io/datawizard/reference/standardize.md)`(``hardlyworking``$``xtra_hours``)`` ``hardlyworking``$``xtra_hours_zr`` ``<-`` `[`standardize`](https://easystats.github.io/datawizard/reference/standardize.md)`(``hardlyworking``$``xtra_hours``, robust ``=`` ``TRUE``)`
 
 We can see that different methods give different central and variation
 values:
 
-``` r
-
-library(dplyr)
-
-hardlyworking %>%
-  select(starts_with("xtra_hours")) %>%
-  data_to_long() %>%
-  group_by(Name) %>%
-  summarise(
-    mean = mean(Value),
-    sd = sd(Value),
-    median = median(Value),
-    mad = mad(Value)
-  )
-```
+[`library`](https://rdrr.io/r/base/library.html)`(`[`dplyr`](https://dplyr.tidyverse.org)`)`` `` ``hardlyworking`` `[`%>%`](https://magrittr.tidyverse.org/reference/pipe.html)` `` `[`select`](https://dplyr.tidyverse.org/reference/select.html)`(`[`starts_with`](https://tidyselect.r-lib.org/reference/starts_with.html)`(``"xtra_hours"``)``)`` `[`%>%`](https://magrittr.tidyverse.org/reference/pipe.html)` `` `[`data_to_long`](https://easystats.github.io/datawizard/reference/data_to_long.md)`(``)`` `[`%>%`](https://magrittr.tidyverse.org/reference/pipe.html)` `` `[`group_by`](https://dplyr.tidyverse.org/reference/group_by.html)`(``Name``)`` `[`%>%`](https://magrittr.tidyverse.org/reference/pipe.html)` `` `[`summarise`](https://dplyr.tidyverse.org/reference/summarise.html)`(`` `` mean ``=`` `[`mean`](https://rdrr.io/r/base/mean.html)`(``Value``)``,`` `` sd ``=`` `[`sd`](https://rdrr.io/r/stats/sd.html)`(``Value``)``,`` `` median ``=`` `[`median`](https://rdrr.io/r/stats/median.html)`(``Value``)``,`` `` mad ``=`` `[`mad`](https://rdrr.io/r/stats/mad.html)`(``Value``)`` `` ``)`
 
 | name          |   mean |     sd |  median |    mad |
 |:--------------|-------:|-------:|--------:|-------:|
@@ -83,24 +56,9 @@ hardlyworking %>%
 can also be used to standardize a full data frame - where each numeric
 variable is standardized separately:
 
-``` r
+`hardlyworking_z`` ``<-`` `[`standardize`](https://easystats.github.io/datawizard/reference/standardize.md)`(``hardlyworking``)`
 
-hardlyworking_z <- standardize(hardlyworking)
-```
-
-``` r
-
-hardlyworking_z %>%
-  select(-xtra_hours_z, -xtra_hours_zr) %>%
-  data_to_long() %>%
-  group_by(Name) %>%
-  summarise(
-    mean = mean(Value),
-    sd = sd(Value),
-    median = median(Value),
-    mad = mad(Value)
-  )
-```
+`hardlyworking_z`` `[`%>%`](https://magrittr.tidyverse.org/reference/pipe.html)` `` `[`select`](https://dplyr.tidyverse.org/reference/select.html)`(``-``xtra_hours_z``, ``-``xtra_hours_zr``)`` `[`%>%`](https://magrittr.tidyverse.org/reference/pipe.html)` `` `[`data_to_long`](https://easystats.github.io/datawizard/reference/data_to_long.md)`(``)`` `[`%>%`](https://magrittr.tidyverse.org/reference/pipe.html)` `` `[`group_by`](https://dplyr.tidyverse.org/reference/group_by.html)`(``Name``)`` `[`%>%`](https://magrittr.tidyverse.org/reference/pipe.html)` `` `[`summarise`](https://dplyr.tidyverse.org/reference/summarise.html)`(`` `` mean ``=`` `[`mean`](https://rdrr.io/r/base/mean.html)`(``Value``)``,`` `` sd ``=`` `[`sd`](https://rdrr.io/r/stats/sd.html)`(``Value``)``,`` `` median ``=`` `[`median`](https://rdrr.io/r/stats/median.html)`(``Value``)``,`` `` mad ``=`` `[`mad`](https://rdrr.io/r/stats/mad.html)`(``Value``)`` `` ``)`
 
 | name       | mean |     sd |  median |    mad |
 |:-----------|-----:|-------:|--------:|-------:|
@@ -151,24 +109,7 @@ to less negativity) **and autobiographical link**.
 
 Let’s have a look at the data, averaged by participants:
 
-``` r
-
-# Download the 'emotion' dataset
-load(url("https://raw.githubusercontent.com/neuropsychology/psycho.R/master/data/emotion.rda"))
-
-# Discard neutral pictures (keep only negative)
-emotion <- emotion %>% filter(Emotion_Condition == "Negative")
-
-# Summary
-emotion %>%
-  drop_na(Subjective_Valence, Autobiographical_Link) %>%
-  group_by(Participant_ID) %>%
-  summarise(
-    n_Trials = n(),
-    Valence_Mean = mean(Subjective_Valence),
-    Valence_SD = sd(Subjective_Valence)
-  )
-```
+`# Download the 'emotion' dataset`` `[`load`](https://rdrr.io/r/base/load.html)`(`[`url`](https://rdrr.io/r/base/connections.html)`(``"https://raw.githubusercontent.com/neuropsychology/psycho.R/master/data/emotion.rda"``)``)`` `` ``# Discard neutral pictures (keep only negative)`` ``emotion`` ``<-`` ``emotion`` `[`%>%`](https://magrittr.tidyverse.org/reference/pipe.html)` `[`filter`](https://dplyr.tidyverse.org/reference/filter.html)`(``Emotion_Condition`` ``==`` ``"Negative"``)`` `` ``# Summary`` ``emotion`` `[`%>%`](https://magrittr.tidyverse.org/reference/pipe.html)` `` ``drop_na``(``Subjective_Valence``, ``Autobiographical_Link``)`` `[`%>%`](https://magrittr.tidyverse.org/reference/pipe.html)` `` `[`group_by`](https://dplyr.tidyverse.org/reference/group_by.html)`(``Participant_ID``)`` `[`%>%`](https://magrittr.tidyverse.org/reference/pipe.html)` `` `[`summarise`](https://dplyr.tidyverse.org/reference/summarise.html)`(`` `` n_Trials ``=`` `[`n`](https://dplyr.tidyverse.org/reference/context.html)`(``)``,`` `` Valence_Mean ``=`` `[`mean`](https://rdrr.io/r/base/mean.html)`(``Subjective_Valence``)``,`` `` Valence_SD ``=`` `[`sd`](https://rdrr.io/r/stats/sd.html)`(``Subjective_Valence``)`` `` ``)`
 
     #> # A tibble: 19 × 4
     #> # Groups:   Participant_ID [19]
@@ -203,21 +144,7 @@ As we can see from the means and SDs, there is a lot of variability
 We will create three data frames standardized with each of the three
 techniques.
 
-``` r
-
-Z_VariableWise <- emotion %>%
-  standardize()
-
-Z_ParticipantWise <- emotion %>%
-  group_by(Participant_ID) %>%
-  standardize()
-
-Z_Full <- emotion %>%
-  group_by(Participant_ID) %>%
-  standardize() %>%
-  ungroup() %>%
-  standardize()
-```
+`Z_VariableWise`` ``<-`` ``emotion`` `[`%>%`](https://magrittr.tidyverse.org/reference/pipe.html)` `` `[`standardize`](https://easystats.github.io/datawizard/reference/standardize.md)`(``)`` `` ``Z_ParticipantWise`` ``<-`` ``emotion`` `[`%>%`](https://magrittr.tidyverse.org/reference/pipe.html)` `` `[`group_by`](https://dplyr.tidyverse.org/reference/group_by.html)`(``Participant_ID``)`` `[`%>%`](https://magrittr.tidyverse.org/reference/pipe.html)` `` `[`standardize`](https://easystats.github.io/datawizard/reference/standardize.md)`(``)`` `` ``Z_Full`` ``<-`` ``emotion`` `[`%>%`](https://magrittr.tidyverse.org/reference/pipe.html)` `` `[`group_by`](https://dplyr.tidyverse.org/reference/group_by.html)`(``Participant_ID``)`` `[`%>%`](https://magrittr.tidyverse.org/reference/pipe.html)` `` `[`standardize`](https://easystats.github.io/datawizard/reference/standardize.md)`(``)`` `[`%>%`](https://magrittr.tidyverse.org/reference/pipe.html)` `` `[`ungroup`](https://dplyr.tidyverse.org/reference/group_by.html)`(``)`` `[`%>%`](https://magrittr.tidyverse.org/reference/pipe.html)` `` `[`standardize`](https://easystats.github.io/datawizard/reference/standardize.md)`(``)`
 
 Let’s see how these three standardization techniques affected the
 **Valence** variable.
@@ -226,26 +153,7 @@ Let’s see how these three standardization techniques affected the
 
 We can calculate the mean and SD of *Valence* across all participants:
 
-``` r
-
-# Create a convenient function to print
-summarise_Subjective_Valence <- function(data) {
-  df_name <- deparse(substitute(data))
-  data %>%
-    ungroup() %>%
-    summarise(
-      DF = df_name,
-      Mean = mean(Subjective_Valence),
-      SD = sd(Subjective_Valence)
-    )
-}
-# Check the results
-rbind(
-  summarise_Subjective_Valence(Z_VariableWise),
-  summarise_Subjective_Valence(Z_ParticipantWise),
-  summarise_Subjective_Valence(Z_Full)
-)
-```
+`# Create a convenient function to print`` ``summarise_Subjective_Valence`` ``<-`` ``function``(``data``)`` ``{`` `` ``df_name`` ``<-`` `[`deparse`](https://rdrr.io/r/base/deparse.html)`(`[`substitute`](https://rdrr.io/r/base/substitute.html)`(``data``)``)`` `` ``data`` `[`%>%`](https://magrittr.tidyverse.org/reference/pipe.html)` `` `[`ungroup`](https://dplyr.tidyverse.org/reference/group_by.html)`(``)`` `[`%>%`](https://magrittr.tidyverse.org/reference/pipe.html)` `` `[`summarise`](https://dplyr.tidyverse.org/reference/summarise.html)`(`` `` DF ``=`` ``df_name``,`` `` Mean ``=`` `[`mean`](https://rdrr.io/r/base/mean.html)`(``Subjective_Valence``)``,`` `` SD ``=`` `[`sd`](https://rdrr.io/r/stats/sd.html)`(``Subjective_Valence``)`` `` ``)`` ``}`` ``# Check the results`` `[`rbind`](https://rdrr.io/r/base/cbind.html)`(`` `` ``summarise_Subjective_Valence``(``Z_VariableWise``)``,`` `` ``summarise_Subjective_Valence``(``Z_ParticipantWise``)``,`` `` ``summarise_Subjective_Valence``(``Z_Full``)`` ``)`
 
 | DF                | Mean |   SD |
 |:------------------|-----:|-----:|
@@ -255,24 +163,7 @@ rbind(
 
 The **means** and the **SD** appear as fairly similar (0 and 1)…
 
-``` r
-
-library(see)
-library(ggplot2)
-
-ggplot() +
-  geom_density(aes(Z_VariableWise$Subjective_Valence,
-    color = "Z_VariableWise"
-  ), linewidth = 1) +
-  geom_density(aes(Z_ParticipantWise$Subjective_Valence,
-    color = "Z_ParticipantWise"
-  ), linewidth = 1) +
-  geom_density(aes(Z_Full$Subjective_Valence,
-    color = "Z_Full"
-  ), linewidth = 1) +
-  see::theme_modern() +
-  labs(color = "")
-```
+[`library`](https://rdrr.io/r/base/library.html)`(`[`see`](https://easystats.github.io/see/)`)`` `[`library`](https://rdrr.io/r/base/library.html)`(`[`ggplot2`](https://ggplot2.tidyverse.org)`)`` `` `[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``)`` ``+`` `` `[`geom_density`](https://ggplot2.tidyverse.org/reference/geom_density.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``Z_VariableWise``$``Subjective_Valence``,`` `` color ``=`` ``"Z_VariableWise"`` `` ``)``, linewidth ``=`` ``1``)`` ``+`` `` `[`geom_density`](https://ggplot2.tidyverse.org/reference/geom_density.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``Z_ParticipantWise``$``Subjective_Valence``,`` `` color ``=`` ``"Z_ParticipantWise"`` `` ``)``, linewidth ``=`` ``1``)`` ``+`` `` `[`geom_density`](https://ggplot2.tidyverse.org/reference/geom_density.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``Z_Full``$``Subjective_Valence``,`` `` color ``=`` ``"Z_Full"`` `` ``)``, linewidth ``=`` ``1``)`` ``+`` `` ``see``::`[`theme_modern`](https://easystats.github.io/see/reference/theme_modern.html)`(``)`` ``+`` `` `[`labs`](https://ggplot2.tidyverse.org/reference/labs.html)`(``color ``=`` ``""``)`
 
 ![](standardize_data_files/figure-html/unnamed-chunk-13-1.png)
 
@@ -283,29 +174,7 @@ and so do the marginal distributions…
 However, we can also look at what happens in the participant level.
 Let’s look at the first 5 participants:
 
-``` r
-
-# Create convenient function
-print_participants <- function(data) {
-  df_name <- deparse(substitute(data))
-  data %>%
-    group_by(Participant_ID) %>%
-    summarise(
-      DF = df_name,
-      Mean = mean(Subjective_Valence),
-      SD = sd(Subjective_Valence)
-    ) %>%
-    head(5) %>%
-    select(DF, everything())
-}
-
-# Check the results
-rbind(
-  print_participants(Z_VariableWise),
-  print_participants(Z_ParticipantWise),
-  print_participants(Z_Full)
-)
-```
+`# Create convenient function`` ``print_participants`` ``<-`` ``function``(``data``)`` ``{`` `` ``df_name`` ``<-`` `[`deparse`](https://rdrr.io/r/base/deparse.html)`(`[`substitute`](https://rdrr.io/r/base/substitute.html)`(``data``)``)`` `` ``data`` `[`%>%`](https://magrittr.tidyverse.org/reference/pipe.html)` `` `[`group_by`](https://dplyr.tidyverse.org/reference/group_by.html)`(``Participant_ID``)`` `[`%>%`](https://magrittr.tidyverse.org/reference/pipe.html)` `` `[`summarise`](https://dplyr.tidyverse.org/reference/summarise.html)`(`` `` DF ``=`` ``df_name``,`` `` Mean ``=`` `[`mean`](https://rdrr.io/r/base/mean.html)`(``Subjective_Valence``)``,`` `` SD ``=`` `[`sd`](https://rdrr.io/r/stats/sd.html)`(``Subjective_Valence``)`` `` ``)`` `[`%>%`](https://magrittr.tidyverse.org/reference/pipe.html)` `` `[`head`](https://rdrr.io/r/utils/head.html)`(``5``)`` `[`%>%`](https://magrittr.tidyverse.org/reference/pipe.html)` `` `[`select`](https://dplyr.tidyverse.org/reference/select.html)`(``DF``, `[`everything`](https://tidyselect.r-lib.org/reference/everything.html)`(``)``)`` ``}`` `` ``# Check the results`` `[`rbind`](https://rdrr.io/r/base/cbind.html)`(`` `` ``print_participants``(``Z_VariableWise``)``,`` `` ``print_participants``(``Z_ParticipantWise``)``,`` `` ``print_participants``(``Z_Full``)`` ``)`
 
 | DF                | Participant_ID |  Mean |   SD |
 |:------------------|:---------------|------:|-----:|
@@ -333,25 +202,7 @@ results, but different ones than *variable-wise* standardization.
 Let’s do a **correlation** between the **variable-wise and
 participant-wise methods**.
 
-``` r
-
-r <- cor.test(
-  Z_VariableWise$Subjective_Valence,
-  Z_ParticipantWise$Subjective_Valence
-)
-
-data.frame(
-  Original = emotion$Subjective_Valence,
-  VariableWise = Z_VariableWise$Subjective_Valence,
-  ParticipantWise = Z_ParticipantWise$Subjective_Valence
-) %>%
-  ggplot(aes(x = VariableWise, y = ParticipantWise, colour = Original)) +
-  geom_point(alpha = 0.75, shape = 16) +
-  geom_smooth(method = "lm", color = "black") +
-  scale_color_distiller(palette = 1) +
-  ggtitle(paste0("r = ", round(r$estimate, 2))) +
-  see::theme_modern()
-```
+`r`` ``<-`` `[`cor.test`](https://rdrr.io/r/stats/cor.test.html)`(`` `` ``Z_VariableWise``$``Subjective_Valence``,`` `` ``Z_ParticipantWise``$``Subjective_Valence`` ``)`` `` `[`data.frame`](https://rdrr.io/r/base/data.frame.html)`(`` `` Original ``=`` ``emotion``$``Subjective_Valence``,`` `` VariableWise ``=`` ``Z_VariableWise``$``Subjective_Valence``,`` `` ParticipantWise ``=`` ``Z_ParticipantWise``$``Subjective_Valence`` ``)`` `[`%>%`](https://magrittr.tidyverse.org/reference/pipe.html)` `` `[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``VariableWise``, y ``=`` ``ParticipantWise``, colour ``=`` ``Original``)``)`` ``+`` `` `[`geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)`(``alpha ``=`` ``0.75``, shape ``=`` ``16``)`` ``+`` `` `[`geom_smooth`](https://ggplot2.tidyverse.org/reference/geom_smooth.html)`(``method ``=`` ``"lm"``, color ``=`` ``"black"``)`` ``+`` `` `[`scale_color_distiller`](https://ggplot2.tidyverse.org/reference/scale_brewer.html)`(``palette ``=`` ``1``)`` ``+`` `` `[`ggtitle`](https://ggplot2.tidyverse.org/reference/labs.html)`(`[`paste0`](https://rdrr.io/r/base/paste.html)`(``"r = "``, `[`round`](https://rdrr.io/r/base/Round.html)`(``r``$``estimate``, ``2``)``)``)`` ``+`` `` ``see``::`[`theme_modern`](https://easystats.github.io/see/reference/theme_modern.html)`(``)`
 
 ![](standardize_data_files/figure-html/unnamed-chunk-16-1.png)
 
@@ -364,40 +215,11 @@ relationship between valence and autobiographical link**. We can do this
 by running a mixed-effects model with participants entered as random
 effects.
 
-``` r
-
-library(lme4)
-m_raw <- lmer(
-  formula = Subjective_Valence ~ Autobiographical_Link + (1 | Participant_ID),
-  data = emotion
-)
-m_VariableWise <- update(m_raw, data = Z_VariableWise)
-m_ParticipantWise <- update(m_raw, data = Z_ParticipantWise)
-m_Full <- update(m_raw, data = Z_Full)
-```
+[`library`](https://rdrr.io/r/base/library.html)`(`[`lme4`](https://github.com/lme4/lme4/)`)`` ``m_raw`` ``<-`` `[`lmer`](https://rdrr.io/pkg/lme4/man/lmer.html)`(`` `` formula ``=`` ``Subjective_Valence`` ``~`` ``Autobiographical_Link`` ``+`` ``(``1`` ``|`` ``Participant_ID``)``,`` `` data ``=`` ``emotion`` ``)`` ``m_VariableWise`` ``<-`` `[`update`](https://rdrr.io/r/stats/update.html)`(``m_raw``, data ``=`` ``Z_VariableWise``)`` ``m_ParticipantWise`` ``<-`` `[`update`](https://rdrr.io/r/stats/update.html)`(``m_raw``, data ``=`` ``Z_ParticipantWise``)`` ``m_Full`` ``<-`` `[`update`](https://rdrr.io/r/stats/update.html)`(``m_raw``, data ``=`` ``Z_Full``)`
 
 We can extract the parameters of interest from each model, and find:
 
-``` r
-
-# Convenient function
-get_par <- function(model) {
-  mod_name <- deparse(substitute(model))
-  parameters::model_parameters(model) %>%
-    mutate(Model = mod_name) %>%
-    select(-Parameter) %>%
-    select(Model, everything()) %>%
-    .[-1, ]
-}
-
-# Run the model on all datasets
-rbind(
-  get_par(m_raw),
-  get_par(m_VariableWise),
-  get_par(m_ParticipantWise),
-  get_par(m_Full)
-)
-```
+`# Convenient function`` ``get_par`` ``<-`` ``function``(``model``)`` ``{`` `` ``mod_name`` ``<-`` `[`deparse`](https://rdrr.io/r/base/deparse.html)`(`[`substitute`](https://rdrr.io/r/base/substitute.html)`(``model``)``)`` `` ``parameters``::`[`model_parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``model``)`` `[`%>%`](https://magrittr.tidyverse.org/reference/pipe.html)` `` `[`mutate`](https://dplyr.tidyverse.org/reference/mutate.html)`(``Model ``=`` ``mod_name``)`` `[`%>%`](https://magrittr.tidyverse.org/reference/pipe.html)` `` `[`select`](https://dplyr.tidyverse.org/reference/select.html)`(``-``Parameter``)`` `[`%>%`](https://magrittr.tidyverse.org/reference/pipe.html)` `` `[`select`](https://dplyr.tidyverse.org/reference/select.html)`(``Model``, `[`everything`](https://tidyselect.r-lib.org/reference/everything.html)`(``)``)`` `[`%>%`](https://magrittr.tidyverse.org/reference/pipe.html)` `` ``.``[``-``1``, ``]`` ``}`` `` ``# Run the model on all datasets`` `[`rbind`](https://rdrr.io/r/base/cbind.html)`(`` `` ``get_par``(``m_raw``)``,`` `` ``get_par``(``m_VariableWise``)``,`` `` ``get_par``(``m_ParticipantWise``)``,`` `` ``get_par``(``m_Full``)`` ``)`
 
     #> # Fixed Effects
     #> 
