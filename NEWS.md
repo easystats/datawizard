@@ -16,6 +16,8 @@ CHANGES
 * The object returned by `as.table.datawizard.crosstab()` now includes
   dimnames. (#699 @elinw)
 
+*
+
 # datawizard 1.3.1
 
 CHANGES

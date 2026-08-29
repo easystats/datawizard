@@ -4,10 +4,14 @@
 \alias{distribution_mode}
 \title{Compute mode for a statistical distribution}
 \usage{
-distribution_mode(x)
+distribution_mode(x, verbose = TRUE)
 }
 \arguments{
 \item{x}{An atomic vector, a list, or a data frame.}
+
+\item{verbose}{Logical. Whether to show a message if there is a tie for the
+mode value. Defaults to \code{TRUE}. Setting to \code{FALSE} skips the tie check. In
+both cases, only the first mode is returned.}
 }
 \value{
 The value that appears most frequently in the provided data.
@@ -17,9 +21,12 @@ The returned data structure will be the same as the entered one.
 Compute mode for a statistical distribution
 }
 \examples{
-
 distribution_mode(c(1, 2, 3, 3, 4, 5))
 distribution_mode(c(1.5, 2.3, 3.7, 3.7, 4.0, 5))
+
+# message for tied frequencies
+data(iris)
+distribution_mode(iris$Species)
 
 }
 \seealso{

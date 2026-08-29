@@ -346,7 +346,9 @@ export(weighted_mean)
 export(weighted_median)
 export(weighted_sd)
 export(winsorize)
-importFrom(insight,display)
-importFrom(insight,print_html)
-importFrom(insight,print_md)
+importFrom(insight,
+  display,
+  print_html,
+  print_md
+)
 importFrom(stats,makepredictcall)

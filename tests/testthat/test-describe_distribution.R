@@ -267,6 +267,20 @@ test_that("distribution_mode works as expected", {
 
   # empty
   expect_null(distribution_mode(NULL))
+
+  # message for tied mode values
+  data(iris) #
+  expect_message(
+    {
+      out <- distribution_mode(iris$Species)
+    },
+    regex = "Multiple modes detected"
+  )
+  expect_equal(as.character(out), "setosa", ignore_attr = TRUE)
+  expect_equal(
+    as.character(attributes(out)$tied_values),
+    c("setosa", "versicolor", "virginica")
+  )
 })
 
 # select helpers ------------------------------
