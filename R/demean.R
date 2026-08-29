@@ -450,7 +450,7 @@ degroup <- function(
   gm_fun <- switch(
     center,
     mode = function(.gm) {
-      distribution_mode(stats::na.omit(.gm), verbose = FALSE)
+      distribution_mode(stats::na.omit(.gm), verbose = verbose)
     },
     median = function(.gm) stats::median(.gm, na.rm = TRUE),
     min = function(.gm) min(.gm, na.rm = TRUE),
