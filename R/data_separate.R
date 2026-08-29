@@ -243,7 +243,7 @@ data_separate <- function(
         guess_columns,
         min = min(l, na.rm = TRUE),
         max = max(l, na.rm = TRUE),
-        mode = distribution_mode(l),
+        mode = distribution_mode(l, verbose = FALSE),
       )
       # tell user
       if (verbose && insight::n_unique(l) != 1 && !is.numeric(separator)) {
