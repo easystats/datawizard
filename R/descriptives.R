@@ -5,7 +5,8 @@
 #' @param x An atomic vector, a list, or a data frame.
 #' @param verbose Logical. Whether to show a message if there is a tie for the
 #' mode value. Defaults to `TRUE`. Setting to `FALSE` skips the tie check. In
-#' both cases, only the first mode is returned.
+#' both cases, only the first mode is returned. Possible multiple mode values
+#' are saved as attribute `tied_values`.
 #'
 #' @return
 #'
@@ -31,13 +32,8 @@ distribution_mode <- function(x, verbose = TRUE) {
   uniqv <- unique(x)
   tab <- tabulate(match(x, uniqv))
 
-  # if we ignore the message for tied frequencies anyway, we can use the
-  # faster computation method - else, we need which() instead of which.max()
-  if (verbose) {
-    idx <- which(tab == max(tab))
-  } else {
-    idx <- which.max(tab)
-  }
+  # we need which() instead of which.max(), to save multiple ties
+  idx <- which(tab == max(tab))
 
   # deal with ties
   if (length(idx) > 1) {

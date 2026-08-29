@@ -11,7 +11,8 @@ distribution_mode(x, verbose = TRUE)
 
 \item{verbose}{Logical. Whether to show a message if there is a tie for the
 mode value. Defaults to \code{TRUE}. Setting to \code{FALSE} skips the tie check. In
-both cases, only the first mode is returned.}
+both cases, only the first mode is returned. Possible multiple mode values
+are saved as attribute \code{tied_values}.}
 }
 \value{
 The value that appears most frequently in the provided data.

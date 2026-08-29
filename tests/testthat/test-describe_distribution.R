@@ -255,9 +255,17 @@ test_that("empty groups are discarded from the output, #608", {
 # distribution_mode --------------------------
 test_that("distribution_mode works as expected", {
   # atomic vector
-  expect_identical(distribution_mode(c(1, 2, 3, 3, 4, 5)), 3)
-  expect_identical(distribution_mode(c(1, 2, 3, 3, 4, 4, 5)), 3)
-  expect_identical(distribution_mode(c(1.5, 2.3, 3.7, 3.7, 4.0, 5)), 3.7)
+  expect_equal(distribution_mode(c(1, 2, 3, 3, 4, 5)), 3, ignore_attr = TRUE)
+  expect_equal(
+    distribution_mode(c(1, 2, 3, 3, 4, 4, 5), verbose = FALSE),
+    3,
+    ignore_attr = TRUE
+  )
+  expect_equal(
+    distribution_mode(c(1.5, 2.3, 3.7, 3.7, 4.0, 5)),
+    3.7,
+    ignore_attr = TRUE
+  )
 
   # list
   expect_identical(distribution_mode(list(1, 2, 3, 3, 4, 5)), list(3))
@@ -281,6 +289,7 @@ test_that("distribution_mode works as expected", {
     as.character(attributes(out)$tied_values),
     c("setosa", "versicolor", "virginica")
   )
+  expect_silent(distribution_mode(iris$Species, verbose = FALSE))
 })
 
 # select helpers ------------------------------
