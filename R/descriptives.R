@@ -45,10 +45,9 @@ distribution_mode <- function(x, verbose = TRUE) {
     # save all modes and just keep first
     all_modes <- uniqv[idx]
     idx <- idx[1]
-    # create an object, we want to store all mode values as attribute
+    # save tied values as attribute
     out <- uniqv[idx]
     attr(out, "tied_values") <- all_modes
-    # return here
     return(out)
   }
 
