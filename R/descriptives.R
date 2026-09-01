@@ -3,6 +3,10 @@
 #' Compute mode for a statistical distribution
 #'
 #' @param x An atomic vector, a list, or a data frame.
+#' @param verbose Logical. Whether to show a message if there is a tie for the
+#' mode value. Defaults to `TRUE`. Setting to `FALSE` skips the tie check. In
+#' both cases, only the first mode is returned. Possible multiple mode values
+#' are saved as attribute `tied_values`.
 #'
 #' @return
 #'
@@ -15,16 +19,38 @@
 #'   than the mode. See [bayestestR::map_estimate()].
 #'
 #' @examples
-#'
 #' distribution_mode(c(1, 2, 3, 3, 4, 5))
 #' distribution_mode(c(1.5, 2.3, 3.7, 3.7, 4.0, 5))
 #'
+#' # message for tied frequencies
+#' data(iris)
+#' distribution_mode(iris$Species)
+#'
 #' @export
-distribution_mode <- function(x) {
+distribution_mode <- function(x, verbose = TRUE) {
   # TODO: Add support for weights, trim, binned (method)
   uniqv <- unique(x)
   tab <- tabulate(match(x, uniqv))
-  idx <- which.max(tab)
+
+  # we need which() instead of which.max(), to save multiple ties
+  idx <- which(tab == max(tab))
+
+  # deal with ties
+  if (length(idx) > 1) {
+    if (verbose) {
+      insight::format_alert(
+        "Multiple modes detected with equal frequency. Returning the smallest value."
+      )
+    }
+    # save all modes and just keep first
+    all_modes <- uniqv[idx]
+    idx <- idx[1]
+    # save tied values as attribute
+    out <- uniqv[idx]
+    attr(out, "tied_values") <- all_modes
+    return(out)
+  }
+
   uniqv[idx]
 }
 
