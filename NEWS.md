@@ -16,6 +16,9 @@ CHANGES
 * The object returned by `as.table.datawizard.crosstab()` now includes
   dimnames. (#699 @elinw)
 
+* `distribution_mode()` now displays an informative message when mode frequencies
+  are tied, and tied values are stored in output attributes (#702).
+
 # datawizard 1.3.1
 
 CHANGES
