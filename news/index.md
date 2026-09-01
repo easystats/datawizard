@@ -1165,7 +1165,18 @@ CHANGES
   have been improved to work in loops and in custom functions. For
   example, the following code now works:
 
-`foo`` ``<-`` ``function``(``data``)`` ``{`` `` ``i`` ``<-`` ``"Sep"`` `` `[`find_columns`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``data``, select ``=`` `[`starts_with`](https://tidyselect.r-lib.org/reference/starts_with.html)`(``i``)``)`` ``}`` ``foo``(``iris``)`` `` ``for`` ``(``i`` ``in`` `[`c`](https://rdrr.io/r/base/c.html)`(``"Sepal"``, ``"Sp"``)``)`` ``{`` `` `[`head`](https://rdrr.io/r/utils/head.html)`(``iris``)`` ``|>`` `` `[`find_columns`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``select ``=`` `[`starts_with`](https://tidyselect.r-lib.org/reference/starts_with.html)`(``i``)``)`` ``|>`` `` `[`print`](https://rdrr.io/r/base/print.html)`(``)`` ``}`
+\
+`foo`` ``<-`` ``function``(``data``)`` ``{`\
+`  ``i`` ``<-`` ``"Sep"`\
+`  `[`find_columns`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``data``, select ``=`` `[`starts_with`](https://tidyselect.r-lib.org/reference/starts_with.html)`(``i``)``)`\
+`}`\
+`foo``(``iris``)`\
+\
+`for`` ``(``i`` ``in`` `[`c`](https://rdrr.io/r/base/c.html)`(``"Sepal"``, ``"Sp"``)``)`` ``{`\
+`  `[`head`](https://rdrr.io/r/utils/head.html)`(``iris``)`` ``|>`\
+`    `[`find_columns`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``select ``=`` `[`starts_with`](https://tidyselect.r-lib.org/reference/starts_with.html)`(``i``)``)`` ``|>`\
+`    `[`print`](https://rdrr.io/r/base/print.html)`(``)`\
+`}`
 
 - There is now a vignette summarizing the various ways to select or
   exclude variables in most

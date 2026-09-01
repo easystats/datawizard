@@ -1,3 +1,4 @@
 # License
 
-YEAR: 2023 COPYRIGHT HOLDER: datawizard authors
+YEAR: 2023\
+COPYRIGHT HOLDER: datawizard authors\

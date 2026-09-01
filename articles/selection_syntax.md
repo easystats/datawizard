@@ -13,7 +13,19 @@ and Statistical Transformations. *Journal of Open Source Software*,
 This is the most simple way to select one or several variables. Just use
 a character vector containing variables names, like in base R.
 
-[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``iris``, `[`c`](https://rdrr.io/r/base/c.html)`(``"Sepal.Length"``, ``"Petal.Width"``)``)`` ``#> Sepal.Length Petal.Width`` ``#> 1 4.3 0.1`` ``#> 2 5.0 0.2`` ``#> 3 7.7 2.2`` ``#> 4 4.4 0.2`` ``#> 5 5.9 1.8`` ``#> 6 6.5 2.0`` ``#> 7 5.5 1.3`` ``#> 8 5.5 1.2`` ``#> 9 5.8 1.9`` ``#> 10 6.1 1.4`
+\
+[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``iris``, `[`c`](https://rdrr.io/r/base/c.html)`(``"Sepal.Length"``, ``"Petal.Width"``)``)`\
+`#>    Sepal.Length Petal.Width`\
+`#> 1           4.3         0.1`\
+`#> 2           5.0         0.2`\
+`#> 3           7.7         2.2`\
+`#> 4           4.4         0.2`\
+`#> 5           5.9         1.8`\
+`#> 6           6.5         2.0`\
+`#> 7           5.5         1.3`\
+`#> 8           5.5         1.2`\
+`#> 9           5.8         1.9`\
+`#> 10          6.1         1.4`
 
 ### Unquoted names
 
@@ -21,14 +33,43 @@ It is also possible to use unquoted names. This is useful if we use the
 `tidyverse` and want to be consistent about the way variable names are
 passed.
 
-`iris`` `[`%>%`](https://nathaneastwood.github.io/poorman/reference/pipe.html)` `` `[`group_by`](https://nathaneastwood.github.io/poorman/reference/group_by.html)`(``Species``)`` `[`%>%`](https://nathaneastwood.github.io/poorman/reference/pipe.html)` `` `[`standardise`](https://easystats.github.io/datawizard/reference/standardize.md)`(``Petal.Length``)`` `[`%>%`](https://nathaneastwood.github.io/poorman/reference/pipe.html)` `` `[`ungroup`](https://nathaneastwood.github.io/poorman/reference/group_by.html)`(``)`` ``#> ``# A tibble: 10 × 5`` ``#> Sepal.Length Sepal.Width Petal.Length Petal.Width Species `` ``#> ``<dbl>`` ``<dbl>`` ``<dbl>`` ``<dbl>`` ``<fct>`` `` ``#> `` 1`` 4.3 3 -``1.09`` 0.1 setosa `` ``#> `` 2`` 5 3.3 0.873 0.2 setosa `` ``#> `` 3`` 7.7 3.8 1.50 2.2 virginica `` ``#> `` 4`` 4.4 3.2 0.218 0.2 setosa `` ``#> `` 5`` 5.9 3 -``0.542`` 1.8 virginica `` ``#> `` 6`` 6.5 3 -``0.414`` 2 virginica `` ``#> `` 7`` 5.5 2.5 -``1.09`` 1.3 versicolor`` ``#> `` 8`` 5.5 2.6 0.218 1.2 versicolor`` ``#> `` 9`` 5.8 2.7 -``0.542`` 1.9 virginica `` ``#> ``10`` 6.1 3 0.873 1.4 versicolor`
+\
+`iris`` `[`%>%`](https://nathaneastwood.github.io/poorman/reference/pipe.html)\
+`  `[`group_by`](https://nathaneastwood.github.io/poorman/reference/group_by.html)`(``Species``)`` `[`%>%`](https://nathaneastwood.github.io/poorman/reference/pipe.html)\
+`  `[`standardise`](https://easystats.github.io/datawizard/reference/standardize.md)`(``Petal.Length``)`` `[`%>%`](https://nathaneastwood.github.io/poorman/reference/pipe.html)\
+`  `[`ungroup`](https://nathaneastwood.github.io/poorman/reference/group_by.html)`(``)`\
+`#> ``# A tibble: 10 × 5`\
+`#>    Sepal.Length Sepal.Width Petal.Length Petal.Width Species   `\
+`#>           ``<dbl>``       ``<dbl>``        ``<dbl>``       ``<dbl>`` ``<fct>``     `\
+`#> `` 1``          4.3         3         -``1.09``          0.1 setosa    `\
+`#> `` 2``          5           3.3        0.873         0.2 setosa    `\
+`#> `` 3``          7.7         3.8        1.50          2.2 virginica `\
+`#> `` 4``          4.4         3.2        0.218         0.2 setosa    `\
+`#> `` 5``          5.9         3         -``0.542``         1.8 virginica `\
+`#> `` 6``          6.5         3         -``0.414``         2   virginica `\
+`#> `` 7``          5.5         2.5       -``1.09``          1.3 versicolor`\
+`#> `` 8``          5.5         2.6        0.218         1.2 versicolor`\
+`#> `` 9``          5.8         2.7       -``0.542``         1.9 virginica `\
+`#> ``10``          6.1         3          0.873         1.4 versicolor`
 
 ### Positions
 
 In addition to variable names, `select` can also take indices for the
 variables to select in the dataframe.
 
-[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``iris``, `[`c`](https://rdrr.io/r/base/c.html)`(``1``, ``2``, ``5``)``)`` ``#> Sepal.Length Sepal.Width Species`` ``#> 1 4.3 3.0 setosa`` ``#> 2 5.0 3.3 setosa`` ``#> 3 7.7 3.8 virginica`` ``#> 4 4.4 3.2 setosa`` ``#> 5 5.9 3.0 virginica`` ``#> 6 6.5 3.0 virginica`` ``#> 7 5.5 2.5 versicolor`` ``#> 8 5.5 2.6 versicolor`` ``#> 9 5.8 2.7 virginica`` ``#> 10 6.1 3.0 versicolor`
+\
+[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``iris``, `[`c`](https://rdrr.io/r/base/c.html)`(``1``, ``2``, ``5``)``)`\
+`#>    Sepal.Length Sepal.Width    Species`\
+`#> 1           4.3         3.0     setosa`\
+`#> 2           5.0         3.3     setosa`\
+`#> 3           7.7         3.8  virginica`\
+`#> 4           4.4         3.2     setosa`\
+`#> 5           5.9         3.0  virginica`\
+`#> 6           6.5         3.0  virginica`\
+`#> 7           5.5         2.5 versicolor`\
+`#> 8           5.5         2.6 versicolor`\
+`#> 9           5.8         2.7  virginica`\
+`#> 10          6.1         3.0 versicolor`
 
 ### Functions
 
@@ -37,12 +78,40 @@ be applied to all columns and should return `TRUE` or `FALSE`. For
 example, if we want to keep only numeric columns, we can use
 `is.numeric`.
 
-[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``iris``, ``is.numeric``)`` ``#> Sepal.Length Sepal.Width Petal.Length Petal.Width`` ``#> 1 4.3 3.0 1.1 0.1`` ``#> 2 5.0 3.3 1.4 0.2`` ``#> 3 7.7 3.8 6.7 2.2`` ``#> 4 4.4 3.2 1.3 0.2`` ``#> 5 5.9 3.0 5.1 1.8`` ``#> 6 6.5 3.0 5.2 2.0`` ``#> 7 5.5 2.5 4.0 1.3`` ``#> 8 5.5 2.6 4.4 1.2`` ``#> 9 5.8 2.7 5.1 1.9`` ``#> 10 6.1 3.0 4.6 1.4`
+\
+[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``iris``, ``is.numeric``)`\
+`#>    Sepal.Length Sepal.Width Petal.Length Petal.Width`\
+`#> 1           4.3         3.0          1.1         0.1`\
+`#> 2           5.0         3.3          1.4         0.2`\
+`#> 3           7.7         3.8          6.7         2.2`\
+`#> 4           4.4         3.2          1.3         0.2`\
+`#> 5           5.9         3.0          5.1         1.8`\
+`#> 6           6.5         3.0          5.2         2.0`\
+`#> 7           5.5         2.5          4.0         1.3`\
+`#> 8           5.5         2.6          4.4         1.2`\
+`#> 9           5.8         2.7          5.1         1.9`\
+`#> 10          6.1         3.0          4.6         1.4`
 
 Note that we can provide any custom function to `select`, *provided it
 returns `TRUE` or `FALSE`* when applied to a column.
 
-`my_function`` ``<-`` ``function``(``i``)`` ``{`` `` `[`is.numeric`](https://rdrr.io/r/base/numeric.html)`(``i``)`` ``&&`` `[`mean`](https://rdrr.io/r/base/mean.html)`(``i``, na.rm ``=`` ``TRUE``)`` ``>`` ``3.5`` ``}`` `` `[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``iris``, ``my_function``)`` ``#> Sepal.Length Petal.Length`` ``#> 1 4.3 1.1`` ``#> 2 5.0 1.4`` ``#> 3 7.7 6.7`` ``#> 4 4.4 1.3`` ``#> 5 5.9 5.1`` ``#> 6 6.5 5.2`` ``#> 7 5.5 4.0`` ``#> 8 5.5 4.4`` ``#> 9 5.8 5.1`` ``#> 10 6.1 4.6`
+\
+`my_function`` ``<-`` ``function``(``i``)`` ``{`\
+`  `[`is.numeric`](https://rdrr.io/r/base/numeric.html)`(``i``)`` ``&&`` `[`mean`](https://rdrr.io/r/base/mean.html)`(``i``, na.rm ``=`` ``TRUE``)`` ``>`` ``3.5`\
+`}`\
+\
+[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``iris``, ``my_function``)`\
+`#>    Sepal.Length Petal.Length`\
+`#> 1           4.3          1.1`\
+`#> 2           5.0          1.4`\
+`#> 3           7.7          6.7`\
+`#> 4           4.4          1.3`\
+`#> 5           5.9          5.1`\
+`#> 6           6.5          5.2`\
+`#> 7           5.5          4.0`\
+`#> 8           5.5          4.4`\
+`#> 9           5.8          5.1`\
+`#> 10          6.1          4.6`
 
 ### Patterns
 
@@ -56,7 +125,58 @@ helpers:
 and `regex()`. The first three can take several patterns, while
 `regex()` takes a single regular expression.
 
-[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``iris``, `[`starts_with`](https://nathaneastwood.github.io/poorman/reference/select_helpers.html)`(``"Sep"``, ``"Peta"``)``)`` ``#> Sepal.Length Sepal.Width Petal.Length Petal.Width`` ``#> 1 4.3 3.0 1.1 0.1`` ``#> 2 5.0 3.3 1.4 0.2`` ``#> 3 7.7 3.8 6.7 2.2`` ``#> 4 4.4 3.2 1.3 0.2`` ``#> 5 5.9 3.0 5.1 1.8`` ``#> 6 6.5 3.0 5.2 2.0`` ``#> 7 5.5 2.5 4.0 1.3`` ``#> 8 5.5 2.6 4.4 1.2`` ``#> 9 5.8 2.7 5.1 1.9`` ``#> 10 6.1 3.0 4.6 1.4`` `` `[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``iris``, `[`ends_with`](https://nathaneastwood.github.io/poorman/reference/select_helpers.html)`(``"dth"``, ``"ies"``)``)`` ``#> Sepal.Width Petal.Width Species`` ``#> 1 3.0 0.1 setosa`` ``#> 2 3.3 0.2 setosa`` ``#> 3 3.8 2.2 virginica`` ``#> 4 3.2 0.2 setosa`` ``#> 5 3.0 1.8 virginica`` ``#> 6 3.0 2.0 virginica`` ``#> 7 2.5 1.3 versicolor`` ``#> 8 2.6 1.2 versicolor`` ``#> 9 2.7 1.9 virginica`` ``#> 10 3.0 1.4 versicolor`` `` `[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``iris``, `[`contains`](https://nathaneastwood.github.io/poorman/reference/select_helpers.html)`(``"pal"``, ``"ec"``)``)`` ``#> Sepal.Length Sepal.Width Species`` ``#> 1 4.3 3.0 setosa`` ``#> 2 5.0 3.3 setosa`` ``#> 3 7.7 3.8 virginica`` ``#> 4 4.4 3.2 setosa`` ``#> 5 5.9 3.0 virginica`` ``#> 6 6.5 3.0 virginica`` ``#> 7 5.5 2.5 versicolor`` ``#> 8 5.5 2.6 versicolor`` ``#> 9 5.8 2.7 virginica`` ``#> 10 6.1 3.0 versicolor`` `` `[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``iris``, ``regex``(``"^Sep|ies"``)``)`` ``#> Sepal.Length Sepal.Width Species`` ``#> 1 4.3 3.0 setosa`` ``#> 2 5.0 3.3 setosa`` ``#> 3 7.7 3.8 virginica`` ``#> 4 4.4 3.2 setosa`` ``#> 5 5.9 3.0 virginica`` ``#> 6 6.5 3.0 virginica`` ``#> 7 5.5 2.5 versicolor`` ``#> 8 5.5 2.6 versicolor`` ``#> 9 5.8 2.7 virginica`` ``#> 10 6.1 3.0 versicolor`
+\
+[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``iris``, `[`starts_with`](https://nathaneastwood.github.io/poorman/reference/select_helpers.html)`(``"Sep"``, ``"Peta"``)``)`\
+`#>    Sepal.Length Sepal.Width Petal.Length Petal.Width`\
+`#> 1           4.3         3.0          1.1         0.1`\
+`#> 2           5.0         3.3          1.4         0.2`\
+`#> 3           7.7         3.8          6.7         2.2`\
+`#> 4           4.4         3.2          1.3         0.2`\
+`#> 5           5.9         3.0          5.1         1.8`\
+`#> 6           6.5         3.0          5.2         2.0`\
+`#> 7           5.5         2.5          4.0         1.3`\
+`#> 8           5.5         2.6          4.4         1.2`\
+`#> 9           5.8         2.7          5.1         1.9`\
+`#> 10          6.1         3.0          4.6         1.4`\
+\
+[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``iris``, `[`ends_with`](https://nathaneastwood.github.io/poorman/reference/select_helpers.html)`(``"dth"``, ``"ies"``)``)`\
+`#>    Sepal.Width Petal.Width    Species`\
+`#> 1          3.0         0.1     setosa`\
+`#> 2          3.3         0.2     setosa`\
+`#> 3          3.8         2.2  virginica`\
+`#> 4          3.2         0.2     setosa`\
+`#> 5          3.0         1.8  virginica`\
+`#> 6          3.0         2.0  virginica`\
+`#> 7          2.5         1.3 versicolor`\
+`#> 8          2.6         1.2 versicolor`\
+`#> 9          2.7         1.9  virginica`\
+`#> 10         3.0         1.4 versicolor`\
+\
+[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``iris``, `[`contains`](https://nathaneastwood.github.io/poorman/reference/select_helpers.html)`(``"pal"``, ``"ec"``)``)`\
+`#>    Sepal.Length Sepal.Width    Species`\
+`#> 1           4.3         3.0     setosa`\
+`#> 2           5.0         3.3     setosa`\
+`#> 3           7.7         3.8  virginica`\
+`#> 4           4.4         3.2     setosa`\
+`#> 5           5.9         3.0  virginica`\
+`#> 6           6.5         3.0  virginica`\
+`#> 7           5.5         2.5 versicolor`\
+`#> 8           5.5         2.6 versicolor`\
+`#> 9           5.8         2.7  virginica`\
+`#> 10          6.1         3.0 versicolor`\
+\
+[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``iris``, ``regex``(``"^Sep|ies"``)``)`\
+`#>    Sepal.Length Sepal.Width    Species`\
+`#> 1           4.3         3.0     setosa`\
+`#> 2           5.0         3.3     setosa`\
+`#> 3           7.7         3.8  virginica`\
+`#> 4           4.4         3.2     setosa`\
+`#> 5           5.9         3.0  virginica`\
+`#> 6           6.5         3.0  virginica`\
+`#> 7           5.5         2.5 versicolor`\
+`#> 8           5.5         2.6 versicolor`\
+`#> 9           5.8         2.7  virginica`\
+`#> 10          6.1         3.0 versicolor`
 
 Note: these functions are not exported by `datawizard` but are detected
 and applied internally. This means that they won’t be detected by
@@ -75,24 +195,111 @@ two ways we can invert our selection.
 The first way is to put a minus sign `"-"` in front of the `select`
 argument.
 
-[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``iris``, ``-`[`c`](https://rdrr.io/r/base/c.html)`(``"Sepal.Length"``, ``"Petal.Width"``)``)`` ``#> Sepal.Width Petal.Length Species`` ``#> 1 3.0 1.1 setosa`` ``#> 2 3.3 1.4 setosa`` ``#> 3 3.8 6.7 virginica`` ``#> 4 3.2 1.3 setosa`` ``#> 5 3.0 5.1 virginica`` ``#> 6 3.0 5.2 virginica`` ``#> 7 2.5 4.0 versicolor`` ``#> 8 2.6 4.4 versicolor`` ``#> 9 2.7 5.1 virginica`` ``#> 10 3.0 4.6 versicolor`` `` `[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``iris``, ``-`[`starts_with`](https://nathaneastwood.github.io/poorman/reference/select_helpers.html)`(``"Sep"``, ``"Peta"``)``)`` ``#> Species`` ``#> 1 setosa`` ``#> 2 setosa`` ``#> 3 virginica`` ``#> 4 setosa`` ``#> 5 virginica`` ``#> 6 virginica`` ``#> 7 versicolor`` ``#> 8 versicolor`` ``#> 9 virginica`` ``#> 10 versicolor`` `` `[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``iris``, ``-``is.numeric``)`` ``#> Species`` ``#> 1 setosa`` ``#> 2 setosa`` ``#> 3 virginica`` ``#> 4 setosa`` ``#> 5 virginica`` ``#> 6 virginica`` ``#> 7 versicolor`` ``#> 8 versicolor`` ``#> 9 virginica`` ``#> 10 versicolor`
+\
+[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``iris``, ``-`[`c`](https://rdrr.io/r/base/c.html)`(``"Sepal.Length"``, ``"Petal.Width"``)``)`\
+`#>    Sepal.Width Petal.Length    Species`\
+`#> 1          3.0          1.1     setosa`\
+`#> 2          3.3          1.4     setosa`\
+`#> 3          3.8          6.7  virginica`\
+`#> 4          3.2          1.3     setosa`\
+`#> 5          3.0          5.1  virginica`\
+`#> 6          3.0          5.2  virginica`\
+`#> 7          2.5          4.0 versicolor`\
+`#> 8          2.6          4.4 versicolor`\
+`#> 9          2.7          5.1  virginica`\
+`#> 10         3.0          4.6 versicolor`\
+\
+[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``iris``, ``-`[`starts_with`](https://nathaneastwood.github.io/poorman/reference/select_helpers.html)`(``"Sep"``, ``"Peta"``)``)`\
+`#>       Species`\
+`#> 1      setosa`\
+`#> 2      setosa`\
+`#> 3   virginica`\
+`#> 4      setosa`\
+`#> 5   virginica`\
+`#> 6   virginica`\
+`#> 7  versicolor`\
+`#> 8  versicolor`\
+`#> 9   virginica`\
+`#> 10 versicolor`\
+\
+[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``iris``, ``-``is.numeric``)`\
+`#>       Species`\
+`#> 1      setosa`\
+`#> 2      setosa`\
+`#> 3   virginica`\
+`#> 4      setosa`\
+`#> 5   virginica`\
+`#> 6   virginica`\
+`#> 7  versicolor`\
+`#> 8  versicolor`\
+`#> 9   virginica`\
+`#> 10 versicolor`
 
 Note that if we use numeric indices, we can’t mix negative and positive
 values. This means that we have to use `select = -(1:2)` if we want to
 exclude the first two columns; `select = -1:2` will *not* work:
 
-[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``iris``, ``-``(``1``:``2``)``)`` ``#> Petal.Length Petal.Width Species`` ``#> 1 1.1 0.1 setosa`` ``#> 2 1.4 0.2 setosa`` ``#> 3 6.7 2.2 virginica`` ``#> 4 1.3 0.2 setosa`` ``#> 5 5.1 1.8 virginica`` ``#> 6 5.2 2.0 virginica`` ``#> 7 4.0 1.3 versicolor`` ``#> 8 4.4 1.2 versicolor`` ``#> 9 5.1 1.9 virginica`` ``#> 10 4.6 1.4 versicolor`
+\
+[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``iris``, ``-``(``1``:``2``)``)`\
+`#>    Petal.Length Petal.Width    Species`\
+`#> 1           1.1         0.1     setosa`\
+`#> 2           1.4         0.2     setosa`\
+`#> 3           6.7         2.2  virginica`\
+`#> 4           1.3         0.2     setosa`\
+`#> 5           5.1         1.8  virginica`\
+`#> 6           5.2         2.0  virginica`\
+`#> 7           4.0         1.3 versicolor`\
+`#> 8           4.4         1.2 versicolor`\
+`#> 9           5.1         1.9  virginica`\
+`#> 10          4.6         1.4 versicolor`
 
 Same thing for variable names:
 
-[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``iris``, ``-``(``Petal.Length``:``Species``)``)`` ``#> Sepal.Length Sepal.Width`` ``#> 1 4.3 3.0`` ``#> 2 5.0 3.3`` ``#> 3 7.7 3.8`` ``#> 4 4.4 3.2`` ``#> 5 5.9 3.0`` ``#> 6 6.5 3.0`` ``#> 7 5.5 2.5`` ``#> 8 5.5 2.6`` ``#> 9 5.8 2.7`` ``#> 10 6.1 3.0`
+\
+[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``iris``, ``-``(``Petal.Length``:``Species``)``)`\
+`#>    Sepal.Length Sepal.Width`\
+`#> 1           4.3         3.0`\
+`#> 2           5.0         3.3`\
+`#> 3           7.7         3.8`\
+`#> 4           4.4         3.2`\
+`#> 5           5.9         3.0`\
+`#> 6           6.5         3.0`\
+`#> 7           5.5         2.5`\
+`#> 8           5.5         2.6`\
+`#> 9           5.8         2.7`\
+`#> 10          6.1         3.0`
 
 The second way is to use the argument `exclude`. This argument has the
 same possibilities as `select`. Although this may not be required in
 most contexts, if we wanted to, we could use both `select` and `exclude`
 arguments at the same time.
 
-[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``iris``, exclude ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"Sepal.Length"``, ``"Petal.Width"``)``)`` ``#> Sepal.Width Petal.Length Species`` ``#> 1 3.0 1.1 setosa`` ``#> 2 3.3 1.4 setosa`` ``#> 3 3.8 6.7 virginica`` ``#> 4 3.2 1.3 setosa`` ``#> 5 3.0 5.1 virginica`` ``#> 6 3.0 5.2 virginica`` ``#> 7 2.5 4.0 versicolor`` ``#> 8 2.6 4.4 versicolor`` ``#> 9 2.7 5.1 virginica`` ``#> 10 3.0 4.6 versicolor`` `` `[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``iris``, exclude ``=`` `[`starts_with`](https://nathaneastwood.github.io/poorman/reference/select_helpers.html)`(``"Sep"``, ``"Peta"``)``)`` ``#> Species`` ``#> 1 setosa`` ``#> 2 setosa`` ``#> 3 virginica`` ``#> 4 setosa`` ``#> 5 virginica`` ``#> 6 virginica`` ``#> 7 versicolor`` ``#> 8 versicolor`` ``#> 9 virginica`` ``#> 10 versicolor`
+\
+[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``iris``, exclude ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"Sepal.Length"``, ``"Petal.Width"``)``)`\
+`#>    Sepal.Width Petal.Length    Species`\
+`#> 1          3.0          1.1     setosa`\
+`#> 2          3.3          1.4     setosa`\
+`#> 3          3.8          6.7  virginica`\
+`#> 4          3.2          1.3     setosa`\
+`#> 5          3.0          5.1  virginica`\
+`#> 6          3.0          5.2  virginica`\
+`#> 7          2.5          4.0 versicolor`\
+`#> 8          2.6          4.4 versicolor`\
+`#> 9          2.7          5.1  virginica`\
+`#> 10         3.0          4.6 versicolor`\
+\
+[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``iris``, exclude ``=`` `[`starts_with`](https://nathaneastwood.github.io/poorman/reference/select_helpers.html)`(``"Sep"``, ``"Peta"``)``)`\
+`#>       Species`\
+`#> 1      setosa`\
+`#> 2      setosa`\
+`#> 3   virginica`\
+`#> 4      setosa`\
+`#> 5   virginica`\
+`#> 6   virginica`\
+`#> 7  versicolor`\
+`#> 8  versicolor`\
+`#> 9   virginica`\
+`#> 10 versicolor`
 
 ## Programming with selections
 
@@ -103,13 +310,43 @@ to program with `datawizard`.
 For example, if we want to let the user decide the selection they want
 to use:
 
-`my_function`` ``<-`` ``function``(``data``, ``selection``)`` ``{`` `` `[`extract_column_names`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``data``, select ``=`` ``selection``)`` ``}`` ``my_function``(``iris``, ``"Sepal.Length"``)`` ``#> [1] "Sepal.Length"`` ``my_function``(``iris``, `[`starts_with`](https://nathaneastwood.github.io/poorman/reference/select_helpers.html)`(``"Sep"``)``)`` ``#> [1] "Sepal.Length" "Sepal.Width"`` `` ``my_function_2`` ``<-`` ``function``(``data``, ``pattern``)`` ``{`` `` `[`extract_column_names`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``data``, select ``=`` `[`starts_with`](https://nathaneastwood.github.io/poorman/reference/select_helpers.html)`(``pattern``)``)`` ``}`` ``my_function_2``(``iris``, ``"Sep"``)`` ``#> [1] "Sepal.Length" "Sepal.Width"`
+\
+`my_function`` ``<-`` ``function``(``data``, ``selection``)`` ``{`\
+`  `[`extract_column_names`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``data``, select ``=`` ``selection``)`\
+`}`\
+`my_function``(``iris``, ``"Sepal.Length"``)`\
+`#> [1] "Sepal.Length"`\
+`my_function``(``iris``, `[`starts_with`](https://nathaneastwood.github.io/poorman/reference/select_helpers.html)`(``"Sep"``)``)`\
+`#> [1] "Sepal.Length" "Sepal.Width"`\
+\
+`my_function_2`` ``<-`` ``function``(``data``, ``pattern``)`` ``{`\
+`  `[`extract_column_names`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``data``, select ``=`` `[`starts_with`](https://nathaneastwood.github.io/poorman/reference/select_helpers.html)`(``pattern``)``)`\
+`}`\
+`my_function_2``(``iris``, ``"Sep"``)`\
+`#> [1] "Sepal.Length" "Sepal.Width"`
 
 It is also possible to pass these values in loops, for example if we
 have a list of patterns and we want to relocate columns based on these
 patterns, one by one:
 
-`new_iris`` ``<-`` ``iris`` ``for`` ``(``i`` ``in`` `[`c`](https://rdrr.io/r/base/c.html)`(``"Sep"``, ``"Pet"``)``)`` ``{`` `` ``new_iris`` ``<-`` ``new_iris`` `[`%>%`](https://nathaneastwood.github.io/poorman/reference/pipe.html)` `` `[`data_relocate`](https://easystats.github.io/datawizard/reference/data_relocate.md)`(``select ``=`` `[`starts_with`](https://nathaneastwood.github.io/poorman/reference/select_helpers.html)`(``i``)``, after ``=`` ``-``1``)`` ``}`` ``new_iris`` ``#> Species Sepal.Length Sepal.Width Petal.Length Petal.Width`` ``#> 1 setosa 4.3 3.0 1.1 0.1`` ``#> 2 setosa 5.0 3.3 1.4 0.2`` ``#> 3 virginica 7.7 3.8 6.7 2.2`` ``#> 4 setosa 4.4 3.2 1.3 0.2`` ``#> 5 virginica 5.9 3.0 5.1 1.8`` ``#> 6 virginica 6.5 3.0 5.2 2.0`` ``#> 7 versicolor 5.5 2.5 4.0 1.3`` ``#> 8 versicolor 5.5 2.6 4.4 1.2`` ``#> 9 virginica 5.8 2.7 5.1 1.9`` ``#> 10 versicolor 6.1 3.0 4.6 1.4`
+\
+`new_iris`` ``<-`` ``iris`\
+`for`` ``(``i`` ``in`` `[`c`](https://rdrr.io/r/base/c.html)`(``"Sep"``, ``"Pet"``)``)`` ``{`\
+`  ``new_iris`` ``<-`` ``new_iris`` `[`%>%`](https://nathaneastwood.github.io/poorman/reference/pipe.html)\
+`    `[`data_relocate`](https://easystats.github.io/datawizard/reference/data_relocate.md)`(``select ``=`` `[`starts_with`](https://nathaneastwood.github.io/poorman/reference/select_helpers.html)`(``i``)``, after ``=`` ``-``1``)`\
+`}`\
+`new_iris`\
+`#>       Species Sepal.Length Sepal.Width Petal.Length Petal.Width`\
+`#> 1      setosa          4.3         3.0          1.1         0.1`\
+`#> 2      setosa          5.0         3.3          1.4         0.2`\
+`#> 3   virginica          7.7         3.8          6.7         2.2`\
+`#> 4      setosa          4.4         3.2          1.3         0.2`\
+`#> 5   virginica          5.9         3.0          5.1         1.8`\
+`#> 6   virginica          6.5         3.0          5.2         2.0`\
+`#> 7  versicolor          5.5         2.5          4.0         1.3`\
+`#> 8  versicolor          5.5         2.6          4.4         1.2`\
+`#> 9   virginica          5.8         2.7          5.1         1.9`\
+`#> 10 versicolor          6.1         3.0          4.6         1.4`
 
 In the loop above, all columns starting with `"Sep"` are moved at the
 end of the data frame, and the same thing was made with all columns
@@ -122,13 +359,63 @@ starting with `"Pet"`.
 In every selection that uses variable names, we can ignore the case in
 the selection by applying `ignore_case = TRUE`.
 
-[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``iris``, `[`c`](https://rdrr.io/r/base/c.html)`(``"sepal.length"``, ``"petal.width"``)``, ignore_case ``=`` ``TRUE``)`` ``#> Sepal.Length Petal.Width`` ``#> 1 4.3 0.1`` ``#> 2 5.0 0.2`` ``#> 3 7.7 2.2`` ``#> 4 4.4 0.2`` ``#> 5 5.9 1.8`` ``#> 6 6.5 2.0`` ``#> 7 5.5 1.3`` ``#> 8 5.5 1.2`` ``#> 9 5.8 1.9`` ``#> 10 6.1 1.4`` `` `[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``iris``, ``~`` ``Sepal.length`` ``+`` ``petal.Width``, ignore_case ``=`` ``TRUE``)`` ``#> Sepal.Length Petal.Width`` ``#> 1 4.3 0.1`` ``#> 2 5.0 0.2`` ``#> 3 7.7 2.2`` ``#> 4 4.4 0.2`` ``#> 5 5.9 1.8`` ``#> 6 6.5 2.0`` ``#> 7 5.5 1.3`` ``#> 8 5.5 1.2`` ``#> 9 5.8 1.9`` ``#> 10 6.1 1.4`` `` `[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``iris``, `[`starts_with`](https://nathaneastwood.github.io/poorman/reference/select_helpers.html)`(``"sep"``, ``"peta"``)``, ignore_case ``=`` ``TRUE``)`` ``#> Sepal.Length Sepal.Width Petal.Length Petal.Width`` ``#> 1 4.3 3.0 1.1 0.1`` ``#> 2 5.0 3.3 1.4 0.2`` ``#> 3 7.7 3.8 6.7 2.2`` ``#> 4 4.4 3.2 1.3 0.2`` ``#> 5 5.9 3.0 5.1 1.8`` ``#> 6 6.5 3.0 5.2 2.0`` ``#> 7 5.5 2.5 4.0 1.3`` ``#> 8 5.5 2.6 4.4 1.2`` ``#> 9 5.8 2.7 5.1 1.9`` ``#> 10 6.1 3.0 4.6 1.4`
+\
+[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``iris``, `[`c`](https://rdrr.io/r/base/c.html)`(``"sepal.length"``, ``"petal.width"``)``, ignore_case ``=`` ``TRUE``)`\
+`#>    Sepal.Length Petal.Width`\
+`#> 1           4.3         0.1`\
+`#> 2           5.0         0.2`\
+`#> 3           7.7         2.2`\
+`#> 4           4.4         0.2`\
+`#> 5           5.9         1.8`\
+`#> 6           6.5         2.0`\
+`#> 7           5.5         1.3`\
+`#> 8           5.5         1.2`\
+`#> 9           5.8         1.9`\
+`#> 10          6.1         1.4`\
+\
+[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``iris``, ``~`` ``Sepal.length`` ``+`` ``petal.Width``, ignore_case ``=`` ``TRUE``)`\
+`#>    Sepal.Length Petal.Width`\
+`#> 1           4.3         0.1`\
+`#> 2           5.0         0.2`\
+`#> 3           7.7         2.2`\
+`#> 4           4.4         0.2`\
+`#> 5           5.9         1.8`\
+`#> 6           6.5         2.0`\
+`#> 7           5.5         1.3`\
+`#> 8           5.5         1.2`\
+`#> 9           5.8         1.9`\
+`#> 10          6.1         1.4`\
+\
+[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``iris``, `[`starts_with`](https://nathaneastwood.github.io/poorman/reference/select_helpers.html)`(``"sep"``, ``"peta"``)``, ignore_case ``=`` ``TRUE``)`\
+`#>    Sepal.Length Sepal.Width Petal.Length Petal.Width`\
+`#> 1           4.3         3.0          1.1         0.1`\
+`#> 2           5.0         3.3          1.4         0.2`\
+`#> 3           7.7         3.8          6.7         2.2`\
+`#> 4           4.4         3.2          1.3         0.2`\
+`#> 5           5.9         3.0          5.1         1.8`\
+`#> 6           6.5         3.0          5.2         2.0`\
+`#> 7           5.5         2.5          4.0         1.3`\
+`#> 8           5.5         2.6          4.4         1.2`\
+`#> 9           5.8         2.7          5.1         1.9`\
+`#> 10          6.1         3.0          4.6         1.4`
 
 ### Formulas
 
 It is also possible to use formulas to select variables:
 
-[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``iris``, ``~`` ``Sepal.Length`` ``+`` ``Petal.Width``)`` ``#> Sepal.Length Petal.Width`` ``#> 1 4.3 0.1`` ``#> 2 5.0 0.2`` ``#> 3 7.7 2.2`` ``#> 4 4.4 0.2`` ``#> 5 5.9 1.8`` ``#> 6 6.5 2.0`` ``#> 7 5.5 1.3`` ``#> 8 5.5 1.2`` ``#> 9 5.8 1.9`` ``#> 10 6.1 1.4`
+\
+[`data_select`](https://easystats.github.io/datawizard/reference/extract_column_names.md)`(``iris``, ``~`` ``Sepal.Length`` ``+`` ``Petal.Width``)`\
+`#>    Sepal.Length Petal.Width`\
+`#> 1           4.3         0.1`\
+`#> 2           5.0         0.2`\
+`#> 3           7.7         2.2`\
+`#> 4           4.4         0.2`\
+`#> 5           5.9         1.8`\
+`#> 6           6.5         2.0`\
+`#> 7           5.5         1.3`\
+`#> 8           5.5         1.2`\
+`#> 9           5.8         1.9`\
+`#> 10          6.1         1.4`
 
 This made it easier to use selection in custom functions before
 `datawizard` 0.6.0, and is kept available for backward compatibility.

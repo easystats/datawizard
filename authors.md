@@ -36,9 +36,13 @@ Patil et al., (2022). datawizard: An R Package for Easy Data Preparation
 and Statistical Transformations. Journal of Open Source Software, 7(78),
 4684, https://doi.org/10.21105/joss.04684
 
-@Article{, title = {{datawizard}: An {R} Package for Easy Data
-Preparation and Statistical Transformations}, author = {Indrajeet Patil
-and Dominique Makowski and Mattan S. Ben-Shachar and Brenton M. Wiernik
-and Etienne Bacher and Daniel Lüdecke}, journal = {Journal of Open
-Source Software}, year = {2022}, volume = {7}, number = {78}, pages =
-{4684}, doi = {10.21105/joss.04684}, }
+@Article{,\
+  title = {{datawizard}: An {R} Package for Easy Data Preparation and Statistical Transformations},\
+  author = {Indrajeet Patil and Dominique Makowski and Mattan S. Ben-Shachar and Brenton M. Wiernik and Etienne Bacher and Daniel Lüdecke},\
+  journal = {Journal of Open Source Software},\
+  year = {2022},\
+  volume = {7},\
+  number = {78},\
+  pages = {4684},\
+  doi = {10.21105/joss.04684},\
+}
