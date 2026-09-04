@@ -19,6 +19,11 @@ CHANGES
 * `distribution_mode()` now displays an informative message when mode frequencies
   are tied, and tied values are stored in output attributes (#702).
 
+FIXES
+
+* Fixed a bug failure on R-devel (#706).
+
+
 # datawizard 1.3.1
 
 CHANGES

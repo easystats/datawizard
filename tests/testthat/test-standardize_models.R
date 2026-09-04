@@ -18,12 +18,12 @@ test_that("standardize, mlm", {
 })
 
 test_that("standardize | errors", {
-  my_lm_external_formula <- function(.dat, predicted, predictor) {
-    my_formula <- as.formula(paste0(predicted, "~", predictor))
-    lm(formula = my_formula, data = .dat)
-  }
+  # we remove `fam` below (before standardizing). When `update()` (used internally)
+  # re-evaluates the call, the refitting fails
+  fam <- binomial()
+  m <- glm(am ~ mpg, data = mtcars, family = fam)
+  rm(fam)
 
-  m <- my_lm_external_formula(mtcars, "mpg", "am")
   ers <- capture_error(standardize(m))
   expect_match(
     as.character(ers),
