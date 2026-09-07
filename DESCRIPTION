@@ -15,9 +15,9 @@ Authors@R: c(
            comment = c(ORCID = "0000-0002-4287-4801")),
     person("Brenton M.", "Wiernik", , "brenton@wiernik.org", role = "aut",
            comment = c(ORCID = "0000-0001-9560-6336")),
-    person(given = "Elin", family = "Waring", role = c("ctb"), email = "elin.waring@gmail.com"),
     person("Rémi", "Thériault", , "remi.theriault@mail.mcgill.ca", role = "ctb",
            comment = c(ORCID = "0000-0003-4315-6788")),
+    person("Elin", "Waring", , "elin.waring@gmail.com", role = c("ctb")),
     person("Thomas J.", "Faulkenberry", , "faulkenberry@tarleton.edu", role = "rev"),
     person("Robert", "Garrett", , "rcg4@illinois.edu", role = "rev")
   )
