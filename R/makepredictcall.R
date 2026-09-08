@@ -51,8 +51,11 @@ makepredictcall.dw_transformer <- function(var, call) {
     )
   }
 
+  f_name <- as.character(call)[1L]
+  f_name <- gsub("datawizard::", "", f_name) # remove namespace if present
+
   switch(
-    as.character(call)[1L],
+    f_name,
     centre = ,
     center = {
       call$center <- attr(var, "center")
@@ -70,11 +73,18 @@ makepredictcall.dw_transformer <- function(var, call) {
       call$include_bounds <- attr(var, "include_bounds")
       call$flag_bounds <- attr(var, "flag_bounds")
     },
-    rescale = {
+    rescale = ,
+    change_scale = ,
+    reverse = ,
+    reverse_scale = ,
+    slide = {
       call$min_value <- attr(var, "min_value")
       call$max_value <- attr(var, "max_value")
       call$new_min <- attr(var, "new_min")
       call$new_max <- attr(var, "new_max")
+      if (f_name %in% c("reverse", "reverse_scale", "slide")) {
+        call[[1L]] <- as.name("rescale")
+      }
     },
     winsorise = ,
     winsorize = {

@@ -47,10 +47,15 @@ slide.default <- function(x, lowest = 0, verbose = TRUE, ...) {
 #' @export
 slide.numeric <- function(x, lowest = 0, ...) {
   original_x <- x
-  minval <- min(x, na.rm = TRUE)
-  difference <- minval - lowest
-  x <- x - difference
-  .set_back_labels(x, original_x, include_values = FALSE)
+
+  out <- rescale(
+    x,
+    to = lowest + c(0, max(x, na.rm = TRUE) - min(x, na.rm = TRUE)),
+    range = range(x, na.rm = TRUE),
+    ...
+  )
+
+  .set_back_labels(out, original_x, include_values = FALSE)
 }
 
 
@@ -98,6 +103,7 @@ slide.data.frame <- function(
     slide,
     lowest = lowest,
     verbose = verbose,
+    add_transform_class = FALSE,
     ...
   )
 

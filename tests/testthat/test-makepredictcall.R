@@ -78,3 +78,29 @@ test_that("makepredictcall, winsorize", {
   p <- predict(m6, newdata = nd)
   expect_equal(p[1:2], p[3:4], ignore_attr = TRUE)
 })
+
+
+test_that("makepredictcall, reverse", {
+  m1 <- lm(mpg ~ reverse(hp), data = mtcars)
+  m2 <- lm(mpg ~ rescale(hp, to = rev(range(hp))), data = mtcars)
+
+  nd <- data.frame(hp = c(50, 300))
+
+  out1 <- predict(m1, newdata = nd)
+  out2 <- predict(m2, newdata = nd)
+
+  expect_equal(out1, out2)
+})
+
+
+test_that("makepredictcall, slide", {
+  m1 <- lm(mpg ~ slide(hp, lowest = 10), data = mtcars)
+  m2 <- lm(mpg ~ rescale(hp, to = c(10, diff(range(hp)) + 10)), data = mtcars)
+
+  nd <- data.frame(hp = c(50, 300))
+
+  out1 <- predict(m1, newdata = nd)
+  out2 <- predict(m2, newdata = nd)
+
+  expect_equal(out1, out2)
+})
