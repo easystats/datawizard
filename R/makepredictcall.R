@@ -3,8 +3,8 @@
 #' This function allows for the use of (some of) `datawizard`'s transformers
 #' inside a model formula. See examples below.
 #' \cr\cr
-#' Currently, [center()], [standardize()], [normalize()], & [rescale()] are
-#' supported.
+#' Currently, [center()], [standardize()], [normalize()], [rescale()], & [winsorize()]
+#' are supported.
 #'
 #' @inheritParams stats::makepredictcall
 #'
@@ -21,8 +21,8 @@
 #' test <- mtcars[31:32, ]
 #'
 #' m1 <- lm(mpg ~ center(hp), data = train)
-#' predict(m1, newdata = test) # Data is "centered" before the prediction is made,
-#' # according to the center of the old data
+#' # Data is "centered" before the prediction is made according to the center of the old data
+#' predict(m1, newdata = test)
 #'
 #' m2 <- lm(mpg ~ standardize(hp), data = train)
 #' m3 <- lm(mpg ~ scale(hp), data = train) # same as above
@@ -37,6 +37,11 @@
 #'
 #' model.frame(delete.response(terms(m4)), data = newdata)
 #' model.frame(delete.response(terms(m5)), data = newdata)
+#'
+#' m6 <- lm(mpg ~ winsorize(hp), data = mtcars)
+#'
+#' # both values are outside winsorized range!
+#' model.frame(delete.response(terms(m6)), data = data.frame(hp = c(90, 250)))
 #'
 #' @export
 makepredictcall.dw_transformer <- function(var, call) {
@@ -70,6 +75,11 @@ makepredictcall.dw_transformer <- function(var, call) {
       call$max_value <- attr(var, "max_value")
       call$new_min <- attr(var, "new_min")
       call$new_max <- attr(var, "new_max")
+    },
+    winsorise = ,
+    winsorize = {
+      call$threshold <- attr(var, "threshold")
+      call$method <- "raw"
     },
 
     # ELSE:

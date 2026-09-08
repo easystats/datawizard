@@ -102,6 +102,7 @@ winsorize.numeric <- function(
   verbose = TRUE,
   ...
 ) {
+  dot_args <- list(...)
   method <- match.arg(method, choices = c("percentile", "zscore", "raw"))
 
   if (method == "raw" && length(threshold) != 2L) {
@@ -145,5 +146,10 @@ winsorize.numeric <- function(
 
   data[data < threshold[1]] <- threshold[1]
   data[data > threshold[2]] <- threshold[2]
+  if (!isFALSE(dot_args$add_transform_class)) {
+    attr(data, "threshold") <- threshold
+    class(data) <- c("dw_transformer", class(data))
+  }
+
   return(data)
 }

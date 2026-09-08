@@ -65,3 +65,16 @@ test_that("makepredictcall, rescale", {
   expect_equal(out1, out3, tolerance = 1e-3, ignore_attr = TRUE)
   expect_equal(out2, out3, tolerance = 1e-3, ignore_attr = TRUE)
 })
+
+
+test_that("makepredictcall, winsorize", {
+  m6 <- lm(mpg ~ winsorize(hp, 2, method = "zscore"), data = mtcars)
+
+  nd <- data.frame(hp = c(-300, 1000, 9.561763, 283.813237))
+
+  mf <- model.frame(delete.response(terms(m6)), data = nd)
+  expect_equal(mf[1:2, 1], mf[3:4, 1])
+
+  p <- predict(m6, newdata = nd)
+  expect_equal(p[1:2], p[3:4], ignore_attr = TRUE)
+})
