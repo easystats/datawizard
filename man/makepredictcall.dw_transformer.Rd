@@ -19,8 +19,8 @@ A replacement for \code{call} for the \code{predvars} attribute of
 This function allows for the use of (some of) \code{datawizard}'s transformers
 inside a model formula. See examples below.
 \cr\cr
-Currently, \code{\link[=center]{center()}}, \code{\link[=standardize]{standardize()}}, \code{\link[=normalize]{normalize()}}, & \code{\link[=rescale]{rescale()}} are
-supported.
+Currently, \code{\link[=center]{center()}}, \code{\link[=standardize]{standardize()}}, \code{\link[=normalize]{normalize()}}, \code{\link[=rescale]{rescale()}}, & \code{\link[=winsorize]{winsorize()}}
+are supported.
 }
 \examples{
 
@@ -29,8 +29,8 @@ train <- mtcars[1:30, ]
 test <- mtcars[31:32, ]
 
 m1 <- lm(mpg ~ center(hp), data = train)
-predict(m1, newdata = test) # Data is "centered" before the prediction is made,
-# according to the center of the old data
+# Data is "centered" before the prediction is made according to the center of the old data
+predict(m1, newdata = test)
 
 m2 <- lm(mpg ~ standardize(hp), data = train)
 m3 <- lm(mpg ~ scale(hp), data = train) # same as above
@@ -45,6 +45,11 @@ m5 <- lm(mpg ~ rescale(hp, to = c(-3, 3)), data = mtcars)
 
 model.frame(delete.response(terms(m4)), data = newdata)
 model.frame(delete.response(terms(m5)), data = newdata)
+
+m6 <- lm(mpg ~ winsorize(hp), data = mtcars)
+
+# both values are outside winsorized range!
+model.frame(delete.response(terms(m6)), data = data.frame(hp = c(90, 250)))
 
 }
 \seealso{
