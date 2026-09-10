@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.1.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,6 +53,18 @@
       <small>Source: <a href="https://github.com/easystats/datawizard/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.4.0" id="datawizard-140">datawizard 1.4.0<a class="anchor" aria-label="anchor" href="#datawizard-140"></a></h2>
+<p>CHANGES</p>
+<ul><li><p><code><a href="../reference/data_read.html">data_read()</a></code> now also reads zip-files from URLs (<a href="https://github.com/easystats/datawizard/issues/682" class="external-link">#682</a>).</p></li>
+<li><p><code><a href="../reference/data_tabulate.html">data_tabulate()</a></code> now returns an attribute “by” with the <code>by</code> variable name when the <code>by</code> parameter is used (<a href="https://github.com/easystats/datawizard/issues/690" class="external-link">#690</a> <a href="https://github.com/elinw" class="external-link">@elinw</a>).</p></li>
+<li><p><code><a href="../reference/data_tabulate.html">data_tabulate()</a></code> gain a <code>metrics</code> argument to allow selection of columns to display (“N”, “raw”, “valid”, and “cumulative”) (<a href="https://github.com/easystats/datawizard/issues/689" class="external-link">#689</a>, <a href="https://github.com/elinw" class="external-link">@elinw</a>).</p></li>
+<li><p><code><a href="../reference/means_by_group.html">means_by_group()</a></code> gains a <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> method (requires latest version from the see-package) (<a href="https://github.com/easystats/datawizard/issues/697" class="external-link">#697</a>)</p></li>
+<li><p>The object returned by <code>as.table.datawizard.crosstab()</code> now includes dimnames. (<a href="https://github.com/easystats/datawizard/issues/699" class="external-link">#699</a> <a href="https://github.com/elinw" class="external-link">@elinw</a>)</p></li>
+<li><p><code><a href="../reference/distribution_mode.html">distribution_mode()</a></code> now displays an informative message when mode frequencies are tied, and tied values are stored in output attributes (<a href="https://github.com/easystats/datawizard/issues/702" class="external-link">#702</a>).</p></li>
+</ul><p>FIXES</p>
+<ul><li>Fixed a bug failure on R-devel (<a href="https://github.com/easystats/datawizard/issues/706" class="external-link">#706</a>).</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.3.1" id="datawizard-131">datawizard 1.3.1<a class="anchor" aria-label="anchor" href="#datawizard-131"></a></h2><p class="text-muted">CRAN release: 2026-04-26</p>
 <p>CHANGES</p>

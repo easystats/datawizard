@@ -1,5 +1,44 @@
 # Changelog
 
+## datawizard 1.4.0
+
+CHANGES
+
+- [`data_read()`](https://easystats.github.io/datawizard/reference/data_read.md)
+  now also reads zip-files from URLs
+  ([\#682](https://github.com/easystats/datawizard/issues/682)).
+
+- [`data_tabulate()`](https://easystats.github.io/datawizard/reference/data_tabulate.md)
+  now returns an attribute “by” with the `by` variable name when the
+  `by` parameter is used
+  ([\#690](https://github.com/easystats/datawizard/issues/690)
+  [@elinw](https://github.com/elinw)).
+
+- [`data_tabulate()`](https://easystats.github.io/datawizard/reference/data_tabulate.md)
+  gain a `metrics` argument to allow selection of columns to display
+  (“N”, “raw”, “valid”, and “cumulative”)
+  ([\#689](https://github.com/easystats/datawizard/issues/689),
+  [@elinw](https://github.com/elinw)).
+
+- [`means_by_group()`](https://easystats.github.io/datawizard/reference/means_by_group.md)
+  gains a [`plot()`](https://rdrr.io/r/graphics/plot.default.html)
+  method (requires latest version from the see-package)
+  ([\#697](https://github.com/easystats/datawizard/issues/697))
+
+- The object returned by `as.table.datawizard.crosstab()` now includes
+  dimnames. ([\#699](https://github.com/easystats/datawizard/issues/699)
+  [@elinw](https://github.com/elinw))
+
+- [`distribution_mode()`](https://easystats.github.io/datawizard/reference/distribution_mode.md)
+  now displays an informative message when mode frequencies are tied,
+  and tied values are stored in output attributes
+  ([\#702](https://github.com/easystats/datawizard/issues/702)).
+
+FIXES
+
+- Fixed a bug failure on R-devel
+  ([\#706](https://github.com/easystats/datawizard/issues/706)).
+
 ## datawizard 1.3.1
 
 CRAN release: 2026-04-26

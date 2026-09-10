@@ -23,6 +23,8 @@
 - **[Rémi Thériault](https://remi-theriault.com/)**. Contributor.
   [](https://orcid.org/0000-0003-4315-6788)
 
+- **Elin Waring**. Contributor.
+
 - **Thomas J. Faulkenberry**. Reviewer.
 
 - **Robert Garrett**. Reviewer.
