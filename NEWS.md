@@ -1,8 +1,12 @@
-# datawizard 1.4.0
+# datawizard (DEV)
 
 CHANGES
 
 * `makepredictcall(<dw_transformer>)` now supports `winsorize()`, `reverse()`, and `slide()`.
+
+# datawizard 1.4.0
+
+CHANGES
 
 * `data_read()` now also reads zip-files from URLs (#682).
 
