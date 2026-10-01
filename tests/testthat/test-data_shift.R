@@ -1,16 +1,16 @@
 # numeric
 test_that("slide", {
   x <- c(10, 11, 12)
-  expect_identical(slide(x), c(0, 1, 2))
+  expect_identical(slide(x), c(0, 1, 2), ignore_attr = TRUE)
 
   x <- c(10, 11, 12)
-  expect_identical(slide(x, lowest = 10), x)
+  expect_identical(slide(x, lowest = 10), x, ignore_attr = TRUE)
 
   x <- c(10, 11, 12)
-  expect_identical(slide(x, lowest = 1), c(1, 2, 3))
+  expect_identical(slide(x, lowest = 1), c(1, 2, 3), ignore_attr = TRUE)
 
   x <- c(10, 11, NA, 12)
-  expect_identical(slide(x, lowest = 1), c(1, 2, NA, 3))
+  expect_identical(slide(x, lowest = 1), c(1, 2, NA, 3), ignore_attr = TRUE)
 })
 
 # factor

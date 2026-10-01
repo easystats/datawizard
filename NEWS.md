@@ -1,3 +1,9 @@
+# datawizard (DEV)
+
+CHANGES
+
+* `makepredictcall(<dw_transformer>)` now supports `winsorize()`, `reverse()`, and `slide()`.
+
 # datawizard 1.4.0
 
 CHANGES
