@@ -2,6 +2,8 @@
 
 ## datawizard 1.4.0
 
+CRAN release: 2026-09-10
+
 CHANGES
 
 - [`data_read()`](https://easystats.github.io/datawizard/reference/data_read.md)
