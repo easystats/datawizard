@@ -1,3 +1,10 @@
+# datawizard 1.4.1
+
+FIXES
+
+* Fixed an issue in `data_to_wide()` where values could be assigned to wrong rows
+  when input data were not sorted by `id_cols` (#713).
+
 # datawizard 1.4.0
 
 CHANGES

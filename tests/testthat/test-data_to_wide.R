@@ -53,6 +53,25 @@ test_that("data_to_wide works", {
 })
 
 
+test_that("data_to_wide aligns rows correctly for unsorted id_cols, #713", {
+  d <- data.frame(
+    id = c(1, 2, 1, 2),
+    g = c("a", "b", "b", "a"),
+    y = c(1, 2, 3, 4)
+  )
+
+  expect_equal(
+    data_to_wide(d, id_cols = "id", names_from = "g", values_from = "y"),
+    data.frame(
+      id = c(1, 2),
+      a = c(1, 4),
+      b = c(3, 2)
+    ),
+    ignore_attr = TRUE
+  )
+})
+
+
 test_that("data_to_wide, names_prefix works", {
   skip_if_not_installed("tidyr")
 

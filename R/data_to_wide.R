@@ -265,6 +265,9 @@ data_to_wide <- function(
     new_data$temporary_id <- seq_len(nrow(new_data))
   }
 
+  temporary_id_levels <- unique(new_data$temporary_id)
+  new_data$temporary_id_2 <- match(new_data$temporary_id, temporary_id_levels)
+
   # check that all_groups have all possible values for names_from
   # If not, need to complete the dataset with NA for values_from where names_from
   # didn't exist
@@ -296,28 +299,7 @@ data_to_wide <- function(
       by = c("temporary_id", names_from),
       sort = FALSE
     )
-
-    # need to make a second temporary id to keep arrange values *without*
-    # rearranging the whole dataset
-    # Ex:
-    # "B"   1
-    # "A"   3
-    # "A"   NA
-    # "B"   NA
-    #
-    # must be rearranged as "B" "B" "A" "A" and not "A" "A" "B" "B"
-    lookup <- data.frame(
-      temporary_id = unique(
-        new_data[!is.na(new_data[values_from]), "temporary_id"]
-      )
-    )
-    lookup$temporary_id_2 <- seq_len(nrow(lookup))
-    new_data <- data_merge(
-      new_data,
-      lookup,
-      by = "temporary_id",
-      join = "left"
-    )
+    new_data$temporary_id_2 <- match(new_data$temporary_id, temporary_id_levels)
 
     # creation of missing combinations was done with a temporary id, so need
     # to fill columns that are not selected in names_from or values_from
@@ -327,9 +309,9 @@ data_to_wide <- function(
       rep_times <- diff(c(ind, length(data[[x]]) + 1))
       rep(data[[x]][ind], times = rep_times)
     })
-
-    new_data <- data_arrange(new_data, "temporary_id_2")
   }
+
+  new_data <- data_arrange(new_data, "temporary_id_2")
 
   # don't need temporary ids anymore
   new_data$temporary_id <- NULL
