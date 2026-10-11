@@ -1,7 +1,7 @@
 # Compute the coefficient of variation
 
 Compute the coefficient of variation (CV, ratio of the standard
-deviation to the mean, \\\sigma/\mu\\) for a set of numeric values.
+deviation to the mean, \\(\sigma/\mu\\)) for a set of numeric values.
 
 ## Usage
 
@@ -53,8 +53,8 @@ coef_var(
   alternatives: `"median_mad"` to divide the median by the
   [`stats::mad()`](https://rdrr.io/r/stats/mad.html), or `"qcd"`
   (quartile coefficient of dispersion, interquartile range divided by
-  the sum of the quartiles \[twice the midhinge\]: \\(Q_3 - Q_1)/(Q_3 +
-  Q_1)\\.
+  the sum of the quartiles \[twice the midhinge\]: \\((Q_3 - Q_1)/(Q_3 +
+  Q_1)\\).
 
 - trim:
 
