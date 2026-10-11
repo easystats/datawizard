@@ -251,27 +251,29 @@ data_to_wide <- function(
   # reshape), so we need to complete the dataset before unstacking.
 
   new_data <- data
+  temp_id <- "__datawizard__temp_id"
+  temp_id_2 <- "__datawizard__temp_id_2"
 
   # create an id with all variables that are not in names_from or values_from
   # so that we can create missing combinations between this id and names_from
   if (length(id_cols) > 1L) {
-    new_data$temporary_id <- do.call(
+    new_data[[temp_id]] <- do.call(
       paste,
       c(new_data[, id_cols, drop = FALSE], sep = "_")
     )
   } else if (length(id_cols) == 1L) {
-    new_data$temporary_id <- new_data[[id_cols]]
+    new_data[[temp_id]] <- new_data[[id_cols]]
   } else {
-    new_data$temporary_id <- seq_len(nrow(new_data))
+    new_data[[temp_id]] <- seq_len(nrow(new_data))
   }
 
-  temporary_id_levels <- unique(new_data$temporary_id)
-  new_data$temporary_id_2 <- match(new_data$temporary_id, temporary_id_levels)
+  temporary_id_levels <- unique(new_data[[temp_id]])
+  new_data[[temp_id_2]] <- match(new_data[[temp_id]], temporary_id_levels)
 
   # check that all_groups have all possible values for names_from
   # If not, need to complete the dataset with NA for values_from where names_from
   # didn't exist
-  n_rows_per_group <- table(new_data$temporary_id)
+  n_rows_per_group <- table(new_data[[temp_id]])
   n_values_per_group <- insight::n_unique(n_rows_per_group)
 
   not_all_cols_are_selected <- length(id_cols) > 0L
@@ -288,34 +290,34 @@ data_to_wide <- function(
 
   if (not_all_cols_are_selected && incomplete_groups) {
     expanded <- expand.grid(
-      unique(new_data[["temporary_id"]]),
+      unique(new_data[[temp_id]]),
       unique(new_data[[names_from]])
     )
-    names(expanded) <- c("temporary_id", names_from)
+    names(expanded) <- c(temp_id, names_from)
     new_data <- data_merge(
       new_data,
       expanded,
       join = "full",
-      by = c("temporary_id", names_from),
+      by = c(temp_id, names_from),
       sort = FALSE
     )
-    new_data$temporary_id_2 <- match(new_data$temporary_id, temporary_id_levels)
+    new_data[[temp_id_2]] <- match(new_data[[temp_id]], temporary_id_levels)
 
     # creation of missing combinations was done with a temporary id, so need
     # to fill columns that are not selected in names_from or values_from
     new_data[, id_cols] <- lapply(id_cols, function(x) {
-      data <- data_arrange(new_data, c("temporary_id_2", x))
+      data <- data_arrange(new_data, c(temp_id_2, x))
       ind <- which(!is.na(data[[x]]))
       rep_times <- diff(c(ind, length(data[[x]]) + 1))
       rep(data[[x]][ind], times = rep_times)
     })
   }
 
-  new_data <- data_arrange(new_data, "temporary_id_2")
+  new_data <- data_arrange(new_data, temp_id_2)
 
   # don't need temporary ids anymore
-  new_data$temporary_id <- NULL
-  new_data$temporary_id_2 <- NULL
+  new_data[[temp_id]] <- NULL
+  new_data[[temp_id_2]] <- NULL
 
   # convert to wide format (returns the data and the order in which columns
   # should be ordered)
