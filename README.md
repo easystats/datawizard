@@ -567,7 +567,7 @@ x <- (-10:10)^3 + rnorm(21, 0, 100)
 smoothness(x, method = "diff")
 #> [1] 1.791243
 #> attr(,"class")
-#> [1] "parameters_smoothness" "numeric"
+#> [1] "datawizard_smoothness" "parameters_smoothness" "numeric"
 ```
 
 ## Function design and pipe-workflow

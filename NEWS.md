@@ -2,11 +2,11 @@
 
 CHANGES
 
-* `skewness()` and `kurtosis()` now return objects of class
-  `datawizard_skewness` and `datawizard_kurtosis`. The old class names
-  `parameters_skewness` and `parameters_kurtosis` remain as secondary
-  classes, so code that checks `class(x)[1]` for the old names needs to be
-  updated (#248).
+* `skewness()`, `kurtosis()`, and `smoothness()` now return objects of class
+  `datawizard_skewness`, `datawizard_kurtosis`, and `datawizard_smoothness`.
+  The old class names `parameters_skewness`, `parameters_kurtosis`, and
+  `parameters_smoothness` remain as secondary classes, so code that checks
+  `class(x)[1]` for the old names needs to be updated (#248).
 
 FIXES
 
