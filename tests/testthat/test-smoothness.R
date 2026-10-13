@@ -35,3 +35,55 @@ test_that("smoothness works with data frames", {
   set.seed(123)
   expect_snapshot(smoothness(BOD))
 })
+
+test_that("smoothness returns datawizard class", {
+  set.seed(123)
+  x <- (-10:10)^3 + rnorm(21, 0, 100)
+  expect_s3_class(
+    smoothness(x),
+    c("datawizard_smoothness", "parameters_smoothness", "numeric"),
+    exact = TRUE
+  )
+  expect_s3_class(
+    smoothness(BOD),
+    c("datawizard_smoothness", "parameters_smoothness", "matrix", "array"),
+    exact = TRUE
+  )
+
+  skip_if_not_installed("boot")
+  expect_s3_class(
+    smoothness(x, iterations = 20),
+    c("datawizard_smoothness", "parameters_smoothness", "data.frame"),
+    exact = TRUE
+  )
+  expect_s3_class(
+    smoothness(BOD, iterations = 20),
+    c("datawizard_smoothness", "parameters_smoothness", "data.frame"),
+    exact = TRUE
+  )
+})
+
+test_that("as.numeric and as.double work for smoothness", {
+  set.seed(123)
+  x <- (-10:10)^3 + rnorm(21, 0, 100)
+  out <- smoothness(x)
+  expect_identical(as.numeric(out), unclass(out))
+  expect_identical(as.double(out), unclass(out))
+
+  skip_if_not_installed("boot")
+  out <- smoothness(x, iterations = 20)
+  expect_identical(as.numeric(out), out$Smoothness)
+  expect_identical(as.double(out), out$Smoothness)
+})
+
+test_that("objects with the old parameters_smoothness class still work", {
+  skip_if_not_installed("boot")
+  set.seed(123)
+  x <- (-10:10)^3 + rnorm(21, 0, 100)
+  for (new in list(smoothness(x), smoothness(x, iterations = 20))) {
+    old <- new
+    class(old) <- setdiff(class(new), "datawizard_smoothness")
+    expect_identical(as.numeric(old), as.numeric(new))
+    expect_identical(as.double(old), as.double(new))
+  }
+})
