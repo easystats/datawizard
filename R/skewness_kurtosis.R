@@ -423,7 +423,7 @@ as.double.datawizard_skewness <- as.numeric.datawizard_skewness
 
 #' @rdname skewness
 #' @aliases print.parameters_kurtosis print.parameters_skewness
-#'   summary.parameters_skewness summary.parameters_kurtosis
+#' @aliases summary.parameters_skewness summary.parameters_kurtosis
 #' @export
 print.datawizard_kurtosis <- function(x, digits = 3, test = FALSE, ...) {
   out <- summary(x, test = test)
