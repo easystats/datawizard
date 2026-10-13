@@ -100,3 +100,66 @@ test_that("kurtosis uses type 1 if not enough obs for type 2", {
   )
   expect_equal(test, kurtosis(c(1, 2, 3), type = "1"))
 })
+
+test_that("skewness and kurtosis return datawizard classes", {
+  inputs <- list(
+    vector = iris$Sepal.Length,
+    data_frame = iris[, 1:4],
+    matrix = as.matrix(iris[, 1:4])
+  )
+  for (x in inputs) {
+    expect_identical(
+      class(skewness(x)),
+      c("datawizard_skewness", "parameters_skewness", "data.frame")
+    )
+    expect_identical(
+      class(kurtosis(x)),
+      c("datawizard_kurtosis", "parameters_kurtosis", "data.frame")
+    )
+  }
+})
+
+test_that("summary, as.numeric and as.double work for skewness and kurtosis", {
+  inputs <- list(vector = iris$Sepal.Length, data_frame = iris[, 1:4])
+  for (x in inputs) {
+    skew <- skewness(x)
+    kurt <- kurtosis(x)
+
+    expect_true(all(c("z", "p") %in% colnames(summary(skew, test = TRUE))))
+    expect_true(all(c("z", "p") %in% colnames(summary(kurt, test = TRUE))))
+
+    expect_identical(as.numeric(skew), skew$Skewness)
+    expect_identical(as.double(skew), skew$Skewness)
+    expect_identical(as.numeric(kurt), kurt$Kurtosis)
+    expect_identical(as.double(kurt), kurt$Kurtosis)
+  }
+})
+
+test_that("objects with the old parameters_* classes still work", {
+  inputs <- list(vector = iris$Sepal.Length, data_frame = iris[, 1:4])
+  for (x in inputs) {
+    new_skew <- skewness(x)
+    old_skew <- new_skew
+    class(old_skew) <- c("parameters_skewness", "data.frame")
+
+    new_kurt <- kurtosis(x)
+    old_kurt <- new_kurt
+    class(old_kurt) <- c("parameters_kurtosis", "data.frame")
+
+    pairs <- list(list(old_skew, new_skew), list(old_kurt, new_kurt))
+    for (pair in pairs) {
+      old <- pair[[1]]
+      new <- pair[[2]]
+      expect_identical(capture.output(print(old)), capture.output(print(new)))
+      expect_identical(
+        capture.output(print(old, test = TRUE)),
+        capture.output(print(new, test = TRUE))
+      )
+      expect_identical(
+        unclass(summary(old, test = TRUE)),
+        unclass(summary(new, test = TRUE))
+      )
+      expect_identical(as.numeric(old), as.numeric(new))
+    }
+  }
+})
