@@ -164,7 +164,11 @@ skewness.numeric <- function(
     Skewness = .skewness,
     SE = out_se
   )
-  class(.skewness) <- unique(c("parameters_skewness", class(.skewness)))
+  class(.skewness) <- unique(c(
+    "datawizard_skewness",
+    "parameters_skewness",
+    class(.skewness)
+  ))
   .skewness
 }
 
@@ -194,7 +198,11 @@ skewness.matrix <- function(
 
   .skewness <- cbind(Parameter = .names, do.call(rbind, .skewness))
 
-  class(.skewness) <- unique(c("parameters_skewness", class(.skewness)))
+  class(.skewness) <- unique(c(
+    "datawizard_skewness",
+    "parameters_skewness",
+    class(.skewness)
+  ))
   .skewness
 }
 
@@ -217,7 +225,11 @@ skewness.data.frame <- function(
 
   .skewness <- cbind(Parameter = names(.skewness), do.call(rbind, .skewness))
 
-  class(.skewness) <- unique(c("parameters_skewness", class(.skewness)))
+  class(.skewness) <- unique(c(
+    "datawizard_skewness",
+    "parameters_skewness",
+    class(.skewness)
+  ))
   .skewness
 }
 
@@ -310,7 +322,11 @@ kurtosis.numeric <- function(
     Kurtosis = .kurtosis,
     SE = out_se
   )
-  class(.kurtosis) <- unique(c("parameters_kurtosis", class(.kurtosis)))
+  class(.kurtosis) <- unique(c(
+    "datawizard_kurtosis",
+    "parameters_kurtosis",
+    class(.kurtosis)
+  ))
   .kurtosis
 }
 
@@ -336,7 +352,11 @@ kurtosis.matrix <- function(
     .names <- paste0("X", seq_len(ncol(x)))
   }
   .kurtosis <- cbind(Parameter = .names, do.call(rbind, .kurtosis))
-  class(.kurtosis) <- unique(c("parameters_kurtosis", class(.kurtosis)))
+  class(.kurtosis) <- unique(c(
+    "datawizard_kurtosis",
+    "parameters_kurtosis",
+    class(.kurtosis)
+  ))
   .kurtosis
 }
 
@@ -357,7 +377,11 @@ kurtosis.data.frame <- function(
     iterations = iterations
   )
   .kurtosis <- cbind(Parameter = names(.kurtosis), do.call(rbind, .kurtosis))
-  class(.kurtosis) <- unique(c("parameters_kurtosis", class(.kurtosis)))
+  class(.kurtosis) <- unique(c(
+    "datawizard_kurtosis",
+    "parameters_kurtosis",
+    class(.kurtosis)
+  ))
   .kurtosis
 }
 
@@ -382,24 +406,24 @@ kurtosis.default <- function(
 # methods -----------------------------------------
 
 #' @export
-as.numeric.parameters_kurtosis <- function(x, ...) {
+as.numeric.datawizard_kurtosis <- function(x, ...) {
   x$Kurtosis
 }
 
 #' @export
-as.numeric.parameters_skewness <- function(x, ...) {
+as.numeric.datawizard_skewness <- function(x, ...) {
   x$Skewness
 }
 
 #' @export
-as.double.parameters_kurtosis <- as.numeric.parameters_kurtosis
+as.double.datawizard_kurtosis <- as.numeric.datawizard_kurtosis
 
 #' @export
-as.double.parameters_skewness <- as.numeric.parameters_skewness
+as.double.datawizard_skewness <- as.numeric.datawizard_skewness
 
 #' @rdname skewness
 #' @export
-print.parameters_kurtosis <- function(x, digits = 3, test = FALSE, ...) {
+print.datawizard_kurtosis <- function(x, digits = 3, test = FALSE, ...) {
   out <- summary(x, test = test)
   cat(insight::export_table(out, digits = digits))
   invisible(x)
@@ -407,11 +431,11 @@ print.parameters_kurtosis <- function(x, digits = 3, test = FALSE, ...) {
 
 #' @rdname skewness
 #' @export
-print.parameters_skewness <- print.parameters_kurtosis
+print.datawizard_skewness <- print.datawizard_kurtosis
 
 #' @rdname skewness
 #' @export
-summary.parameters_skewness <- function(object, test = FALSE, ...) {
+summary.datawizard_skewness <- function(object, test = FALSE, ...) {
   if (test) {
     object$z <- object$Skewness / object$SE
     object$p <- 2 * (1 - stats::pnorm(abs(object$z)))
@@ -421,13 +445,40 @@ summary.parameters_skewness <- function(object, test = FALSE, ...) {
 
 #' @rdname skewness
 #' @export
-summary.parameters_kurtosis <- function(object, test = FALSE, ...) {
+summary.datawizard_kurtosis <- function(object, test = FALSE, ...) {
   if (test) {
     object$z <- object$Kurtosis / object$SE
     object$p <- 2 * (1 - stats::pnorm(abs(object$z)))
   }
   object
 }
+
+# methods for the old class names, kept so that objects created with
+# earlier versions of datawizard still work
+
+#' @export
+as.numeric.parameters_kurtosis <- as.numeric.datawizard_kurtosis
+
+#' @export
+as.numeric.parameters_skewness <- as.numeric.datawizard_skewness
+
+#' @export
+as.double.parameters_kurtosis <- as.double.datawizard_kurtosis
+
+#' @export
+as.double.parameters_skewness <- as.double.datawizard_skewness
+
+#' @export
+print.parameters_kurtosis <- print.datawizard_kurtosis
+
+#' @export
+print.parameters_skewness <- print.datawizard_skewness
+
+#' @export
+summary.parameters_skewness <- summary.datawizard_skewness
+
+#' @export
+summary.parameters_kurtosis <- summary.datawizard_kurtosis
 
 # helper ------------------------------------------
 

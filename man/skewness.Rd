@@ -5,10 +5,10 @@
 \alias{skewness.numeric}
 \alias{kurtosis}
 \alias{kurtosis.numeric}
-\alias{print.parameters_kurtosis}
-\alias{print.parameters_skewness}
-\alias{summary.parameters_skewness}
-\alias{summary.parameters_kurtosis}
+\alias{print.datawizard_kurtosis}
+\alias{print.datawizard_skewness}
+\alias{summary.datawizard_skewness}
+\alias{summary.datawizard_kurtosis}
 \title{Compute Skewness and (Excess) Kurtosis}
 \usage{
 skewness(x, ...)
@@ -33,13 +33,13 @@ kurtosis(x, ...)
   ...
 )
 
-\method{print}{parameters_kurtosis}(x, digits = 3, test = FALSE, ...)
+\method{print}{datawizard_kurtosis}(x, digits = 3, test = FALSE, ...)
 
-\method{print}{parameters_skewness}(x, digits = 3, test = FALSE, ...)
+\method{print}{datawizard_skewness}(x, digits = 3, test = FALSE, ...)
 
-\method{summary}{parameters_skewness}(object, test = FALSE, ...)
+\method{summary}{datawizard_skewness}(object, test = FALSE, ...)
 
-\method{summary}{parameters_kurtosis}(object, test = FALSE, ...)
+\method{summary}{datawizard_kurtosis}(object, test = FALSE, ...)
 }
 \arguments{
 \item{x}{A numeric vector or data.frame.}

@@ -108,13 +108,15 @@ test_that("skewness and kurtosis return datawizard classes", {
     matrix = as.matrix(iris[, 1:4])
   )
   for (x in inputs) {
-    expect_identical(
-      class(skewness(x)),
-      c("datawizard_skewness", "parameters_skewness", "data.frame")
+    expect_s3_class(
+      skewness(x),
+      c("datawizard_skewness", "parameters_skewness", "data.frame"),
+      exact = TRUE
     )
-    expect_identical(
-      class(kurtosis(x)),
-      c("datawizard_kurtosis", "parameters_kurtosis", "data.frame")
+    expect_s3_class(
+      kurtosis(x),
+      c("datawizard_kurtosis", "parameters_kurtosis", "data.frame"),
+      exact = TRUE
     )
   }
 })
