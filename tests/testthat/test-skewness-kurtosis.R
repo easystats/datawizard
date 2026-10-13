@@ -162,6 +162,7 @@ test_that("objects with the old parameters_* classes still work", {
         unclass(summary(new, test = TRUE))
       )
       expect_identical(as.numeric(old), as.numeric(new))
+      expect_identical(as.double(old), as.double(new))
     }
   }
 })
