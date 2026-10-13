@@ -77,13 +77,16 @@ test_that("as.numeric and as.double work for smoothness", {
 })
 
 test_that("objects with the old parameters_smoothness class still work", {
-  skip_if_not_installed("boot")
   set.seed(123)
   x <- (-10:10)^3 + rnorm(21, 0, 100)
-  for (new in list(smoothness(x), smoothness(x, iterations = 20))) {
+  expect_old_class_works <- function(new) {
     old <- new
     class(old) <- setdiff(class(new), "datawizard_smoothness")
     expect_identical(as.numeric(old), as.numeric(new))
     expect_identical(as.double(old), as.double(new))
   }
+  expect_old_class_works(smoothness(x))
+
+  skip_if_not_installed("boot")
+  expect_old_class_works(smoothness(x, iterations = 20))
 })
