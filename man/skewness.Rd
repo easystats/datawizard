@@ -6,6 +6,10 @@
 \alias{kurtosis}
 \alias{kurtosis.numeric}
 \alias{print.datawizard_kurtosis}
+\alias{print.parameters_kurtosis}
+\alias{print.parameters_skewness}
+\alias{summary.parameters_skewness}
+\alias{summary.parameters_kurtosis}
 \alias{print.datawizard_skewness}
 \alias{summary.datawizard_skewness}
 \alias{summary.datawizard_kurtosis}

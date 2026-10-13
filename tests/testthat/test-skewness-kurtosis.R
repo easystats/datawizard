@@ -161,6 +161,7 @@ test_that("objects with the old parameters_* classes still work", {
         unclass(summary(old, test = TRUE)),
         unclass(summary(new, test = TRUE))
       )
+      expect_s3_class(summary(old, test = TRUE), class(old), exact = TRUE)
       expect_identical(as.numeric(old), as.numeric(new))
       expect_identical(as.double(old), as.double(new))
     }
