@@ -1,5 +1,12 @@
 # datawizard 1.4.1
 
+CHANGES
+
+* `skewness()` and `kurtosis()` now return objects of class
+  `datawizard_skewness` and `datawizard_kurtosis`. The old class names
+  `parameters_skewness` and `parameters_kurtosis` remain as secondary
+  classes (#248).
+
 FIXES
 
 * Fixed an issue in `data_to_wide()` where values could be assigned to wrong rows
