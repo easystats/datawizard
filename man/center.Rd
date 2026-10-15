@@ -76,8 +76,9 @@ name of a column that contains the cluster ids. If given, the center and
 scale are computed from one value per cluster instead of from all
 observations, so that a cluster-level (Level 2) variable in long format is
 not weighted by the number of observations per cluster. The variable must
-take only one value within each cluster, and observations with a missing
-cluster id are returned as \code{NA}. \code{cluster} cannot be combined with
+take only one finite value within each cluster (infinite values are
+treated as missing), and observations with a missing cluster id are
+returned as \code{NA}. \code{cluster} cannot be combined with
 \code{weights}, \code{reference}, or values for \code{center} and \code{scale}. For grouped
 data frames, \code{cluster} must be a column name.}
 

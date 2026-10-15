@@ -32,8 +32,9 @@
 #'   scale are computed from one value per cluster instead of from all
 #'   observations, so that a cluster-level (Level 2) variable in long format is
 #'   not weighted by the number of observations per cluster. The variable must
-#'   take only one value within each cluster, and observations with a missing
-#'   cluster id are returned as `NA`. `cluster` cannot be combined with
+#'   take only one finite value within each cluster (infinite values are
+#'   treated as missing), and observations with a missing cluster id are
+#'   returned as `NA`. `cluster` cannot be combined with
 #'   `weights`, `reference`, or values for `center` and `scale`. For grouped
 #'   data frames, `cluster` must be a column name.
 #' @param verbose Toggle warnings and messages on or off.

@@ -102,6 +102,48 @@ test_that("cluster does not shift positional arguments", {
     center(d_pos, NULL, NULL, FALSE, NULL, NULL, NULL, FALSE, "all"),
     center(d_pos, remove_na = "all")
   )
+  expect_identical(
+    standardize(d_pos, NULL, NULL, FALSE, FALSE, NULL, NULL, NULL, NULL, "all"),
+    standardize(d_pos, remove_na = "all")
+  )
+
+  skip_if_not_installed("poorman")
+  g_pos <- poorman::group_by(
+    data.frame(g = rep(c("a", "b"), each = 3), y = c(1, 2, 4, 3, 5, 9)),
+    g
+  )
+  expect_identical(
+    center(g_pos, NULL, NULL, FALSE, NULL, NULL, NULL, FALSE, "none", TRUE),
+    center(g_pos, append = TRUE)
+  )
+  expect_identical(
+    standardize(
+      g_pos,
+      NULL,
+      NULL,
+      FALSE,
+      FALSE,
+      NULL,
+      NULL,
+      NULL,
+      NULL,
+      "none",
+      FALSE,
+      TRUE
+    ),
+    standardize(g_pos, append = TRUE)
+  )
+})
+
+test_that("cluster, infinite values count as missing", {
+  x <- c(10, 10, Inf, 20, 20, 30)
+  cl <- c(1, 1, 2, 2, 2, 3)
+  for (fun in list(center, standardize)) {
+    expect_no_error(z <- fun(x, cluster = cl))
+    # cluster-level values are 10, 20, 30: mean 20
+    expect_identical(attr(z, "center"), 20)
+    expect_true(is.na(z[3]))
+  }
 })
 
 test_that("cluster, factor input with force = TRUE", {
@@ -161,10 +203,6 @@ for (fun_name in c("center", "standardize")) {
   test_that(paste(fun_name, "cluster errors, numeric"), {
     expect_error(
       fun(c(1, 2, 3, 4), cluster = c(1, 1, 2, 2)),
-      "more than one value within a cluster"
-    )
-    expect_error(
-      fun(c(10, 10, Inf, 20, 20, 30), cluster = c(1, 1, 2, 2, 2, 3)),
       "more than one value within a cluster"
     )
     expect_error(
