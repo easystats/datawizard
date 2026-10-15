@@ -17,6 +17,7 @@ centre(x, ...)
   weights = NULL,
   reference = NULL,
   center = NULL,
+  cluster = NULL,
   verbose = TRUE,
   ...
 )
@@ -29,6 +30,7 @@ centre(x, ...)
   weights = NULL,
   reference = NULL,
   center = NULL,
+  cluster = NULL,
   force = FALSE,
   remove_na = c("none", "selected", "all"),
   append = FALSE,
@@ -65,6 +67,17 @@ Else, \code{center} must be of same length as the number of selected variables.
 Values in \code{center} will be matched to selected variables in the provided
 order, unless a named vector is given. In this case, names are matched
 against the names of the selected variables.}
+
+\item{cluster}{Can be \code{NULL} (for no clustering), or a vector of cluster
+ids with one element per observation. For data frames, it can also be the
+name of a column that contains the cluster ids. If given, the center and
+scale are computed from one value per cluster instead of from all
+observations, so that a cluster-level (Level 2) variable in long format is
+not weighted by the number of observations per cluster. The variable must
+take only one value within each cluster, and observations with a missing
+cluster id are returned as \code{NA}. \code{cluster} cannot be combined with
+\code{weights}, \code{reference}, or values for \code{center} and \code{scale}. For grouped
+data frames, \code{cluster} must be a column name.}
 
 \item{verbose}{Toggle warnings and messages.}
 

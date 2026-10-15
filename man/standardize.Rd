@@ -24,6 +24,7 @@ standardise(x, ...)
   reference = NULL,
   center = NULL,
   scale = NULL,
+  cluster = NULL,
   verbose = TRUE,
   ...
 )
@@ -48,6 +49,7 @@ standardise(x, ...)
   reference = NULL,
   center = NULL,
   scale = NULL,
+  cluster = NULL,
   remove_na = c("none", "selected", "all"),
   force = FALSE,
   append = FALSE,
@@ -135,6 +137,17 @@ Alternatively, if the input contains the attributes \code{center} and \code{scal
 (as does the output of \code{standardize()}), it will take it from there if the
 rest of the arguments are absent.
 }}
+
+\item{cluster}{Can be \code{NULL} (for no clustering), or a vector of cluster
+ids with one element per observation. For data frames, it can also be the
+name of a column that contains the cluster ids. If given, the center and
+scale are computed from one value per cluster instead of from all
+observations, so that a cluster-level (Level 2) variable in long format is
+not weighted by the number of observations per cluster. The variable must
+take only one value within each cluster, and observations with a missing
+cluster id are returned as \code{NA}. \code{cluster} cannot be combined with
+\code{weights}, \code{reference}, or values for \code{center} and \code{scale}. For grouped
+data frames, \code{cluster} must be a column name.}
 
 \item{verbose}{Toggle warnings and messages on or off.}
 
@@ -274,6 +287,17 @@ standardize(d, center = c(3, 4), scale = c(2, 4))
 
 # standardization, taking same mean and sd for each variable
 standardize(d, center = 1, scale = 3)
+
+# cluster-level variable in long format: one value per school, but
+# schools have different numbers of students
+d <- data.frame(
+  school = rep(1:3, times = c(2, 3, 10)),
+  funding = rep(c(10, 20, 30), times = c(2, 3, 10))
+)
+# mean and sd are weighted by the number of students per school
+standardize(d$funding)
+# mean and sd are computed from one value per school
+standardize(d, select = "funding", cluster = "school")
 }
 \seealso{
 See \code{\link[=center]{center()}} for grand-mean centering of variables, and
