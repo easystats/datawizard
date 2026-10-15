@@ -24,8 +24,8 @@ standardise(x, ...)
   reference = NULL,
   center = NULL,
   scale = NULL,
-  cluster = NULL,
   verbose = TRUE,
+  cluster = NULL,
   ...
 )
 
@@ -49,13 +49,13 @@ standardise(x, ...)
   reference = NULL,
   center = NULL,
   scale = NULL,
-  cluster = NULL,
   remove_na = c("none", "selected", "all"),
   force = FALSE,
   append = FALSE,
   ignore_case = FALSE,
   regex = FALSE,
   verbose = TRUE,
+  cluster = NULL,
   ...
 )
 
@@ -138,6 +138,8 @@ Alternatively, if the input contains the attributes \code{center} and \code{scal
 rest of the arguments are absent.
 }}
 
+\item{verbose}{Toggle warnings and messages on or off.}
+
 \item{cluster}{Can be \code{NULL} (for no clustering), or a vector of cluster
 ids with one element per observation. For data frames, it can also be the
 name of a column that contains the cluster ids. If given, the center and
@@ -148,8 +150,6 @@ take only one value within each cluster, and observations with a missing
 cluster id are returned as \code{NA}. \code{cluster} cannot be combined with
 \code{weights}, \code{reference}, or values for \code{center} and \code{scale}. For grouped
 data frames, \code{cluster} must be a column name.}
-
-\item{verbose}{Toggle warnings and messages on or off.}
 
 \item{force}{Logical, if \code{TRUE}, forces recoding of factors and character
 vectors as well.}

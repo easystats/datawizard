@@ -87,6 +87,23 @@ test_that("cluster, one row per cluster gives the result without cluster", {
   expect_identical(center(funding_l2, cluster = 1:5), center(funding_l2))
 })
 
+test_that("cluster does not shift positional arguments", {
+  x <- c(1, 2, 3, 4)
+  expect_identical(
+    center(x, FALSE, NULL, NULL, NULL, FALSE),
+    center(x, verbose = FALSE)
+  )
+  expect_identical(
+    standardize(x, FALSE, FALSE, NULL, NULL, NULL, NULL, FALSE),
+    standardize(x, verbose = FALSE)
+  )
+  d_pos <- data.frame(a = c(1, NA, 3, 4), b = 1:4)
+  expect_identical(
+    center(d_pos, NULL, NULL, FALSE, NULL, NULL, NULL, FALSE, "all"),
+    center(d_pos, remove_na = "all")
+  )
+})
+
 test_that("cluster, factor input with force = TRUE", {
   f <- factor(funding)
   z <- standardize(f, cluster = school, force = TRUE)
@@ -220,39 +237,57 @@ for (fun_name in c("center", "standardize")) {
     )
   })
 
-  test_that(paste(fun_name, "data frame, the cluster column is not transformed"), {
-    out <- fun(d, cluster = "school", append = TRUE)
-    expect_identical(out$school, d$school)
-    expect_false("school_c" %in% names(out) || "school_z" %in% names(out))
-    expect_named(out, c(names(d), paste0(c("funding", "budget"), if (fun_name == "center") "_c" else "_z")))
+  test_that(
+    paste(fun_name, "data frame, the cluster column is not transformed"),
+    {
+      out <- fun(d, cluster = "school", append = TRUE)
+      expect_identical(out$school, d$school)
+      expect_false("school_c" %in% names(out) || "school_z" %in% names(out))
+      expect_named(
+        out,
+        c(
+          names(d),
+          paste0(
+            c("funding", "budget"),
+            if (fun_name == "center") "_c" else "_z"
+          )
+        )
+      )
 
-    out <- fun(d, select = c("school", "funding"), cluster = "school")
-    expect_identical(out$school, d$school)
+      out <- fun(d, select = c("school", "funding"), cluster = "school")
+      expect_identical(out$school, d$school)
 
-    d_f <- d
-    d_f$school <- factor(d_f$school)
-    out <- fun(d_f, cluster = "school", force = TRUE)
-    expect_identical(out$school, d_f$school)
-    expect_equal(
-      out$funding,
-      as.vector(fun(funding, cluster = school)),
-      ignore_attr = TRUE
-    )
-  })
+      d_f <- d
+      d_f$school <- factor(d_f$school)
+      out <- fun(d_f, cluster = "school", force = TRUE)
+      expect_identical(out$school, d_f$school)
+      expect_equal(
+        out$funding,
+        as.vector(fun(funding, cluster = school)),
+        ignore_attr = TRUE
+      )
+    }
+  )
 
-  test_that(paste(fun_name, "data frame, vector cluster loses the rows remove_na drops"), {
-    d_na <- d
-    d_na$budget[1] <- NA
-    out <- fun(d_na, cluster = school, remove_na = "all")
-    expect_identical(nrow(out), nrow(d) - 1L)
-    expect_equal(
-      out$funding,
-      as.vector(fun(funding[-1], cluster = school[-1])),
-      ignore_attr = TRUE
-    )
-    out_name <- fun(d_na, cluster = "school", remove_na = "all")
-    expect_identical(out_name$funding, out$funding)
-  })
+  test_that(
+    paste(
+      fun_name,
+      "data frame, vector cluster loses the rows remove_na drops"
+    ),
+    {
+      d_na <- d
+      d_na$budget[1] <- NA
+      out <- fun(d_na, cluster = school, remove_na = "all")
+      expect_identical(nrow(out), nrow(d) - 1L)
+      expect_equal(
+        out$funding,
+        as.vector(fun(funding[-1], cluster = school[-1])),
+        ignore_attr = TRUE
+      )
+      out_name <- fun(d_na, cluster = "school", remove_na = "all")
+      expect_identical(out_name$funding, out$funding)
+    }
+  )
 }
 
 

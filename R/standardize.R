@@ -168,8 +168,8 @@ standardize.numeric <- function(
   reference = NULL,
   center = NULL,
   scale = NULL,
-  cluster = NULL,
   verbose = TRUE,
+  cluster = NULL,
   ...
 ) {
   .check_cluster_args(cluster, weights, reference, center, scale)
@@ -301,13 +301,13 @@ standardize.data.frame <- function(
   reference = NULL,
   center = NULL,
   scale = NULL,
-  cluster = NULL,
   remove_na = c("none", "selected", "all"),
   force = FALSE,
   append = FALSE,
   ignore_case = FALSE,
   regex = FALSE,
   verbose = TRUE,
+  cluster = NULL,
   ...
 ) {
   # evaluate select/exclude, may be select-helpers
@@ -378,13 +378,13 @@ standardize.grouped_df <- function(
   reference = NULL,
   center = NULL,
   scale = NULL,
-  cluster = NULL,
   remove_na = c("none", "selected", "all"),
   force = FALSE,
   append = FALSE,
   ignore_case = FALSE,
   regex = FALSE,
   verbose = TRUE,
+  cluster = NULL,
   ...
 ) {
   # evaluate select/exclude, may be select-helpers

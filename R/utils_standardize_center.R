@@ -96,18 +96,18 @@
 #
 #' @keywords internal
 .cluster_values <- function(x, cluster) {
-  pairs <- unique(data.frame(cluster = cluster, x = x))
-  if (anyDuplicated(pairs$cluster) > 0) {
+  cluster_pairs <- unique(data.frame(cluster = cluster, x = x))
+  if (anyDuplicated(cluster_pairs$cluster) > 0) {
     insight::format_error(
       "The variable takes more than one value within a cluster. With `cluster`, it must have one value per cluster."
     )
   }
-  if (nrow(pairs) < 2) {
+  if (nrow(cluster_pairs) < 2) {
     insight::format_error(
       "`cluster` must contain at least two clusters with non-missing values."
     )
   }
-  pairs$x
+  cluster_pairs$x
 }
 
 

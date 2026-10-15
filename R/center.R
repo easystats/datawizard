@@ -113,8 +113,8 @@ center.numeric <- function(
   weights = NULL,
   reference = NULL,
   center = NULL,
-  cluster = NULL,
   verbose = TRUE,
+  cluster = NULL,
   ...
 ) {
   .check_cluster_args(cluster, weights, reference, center)
@@ -206,13 +206,13 @@ center.data.frame <- function(
   weights = NULL,
   reference = NULL,
   center = NULL,
-  cluster = NULL,
   force = FALSE,
   remove_na = c("none", "selected", "all"),
   append = FALSE,
   ignore_case = FALSE,
   verbose = TRUE,
   regex = FALSE,
+  cluster = NULL,
   ...
 ) {
   # evaluate select/exclude, may be select-helpers
@@ -282,13 +282,13 @@ center.grouped_df <- function(
   weights = NULL,
   reference = NULL,
   center = NULL,
-  cluster = NULL,
   force = FALSE,
   remove_na = c("none", "selected", "all"),
   append = FALSE,
   ignore_case = FALSE,
   verbose = TRUE,
   regex = FALSE,
+  cluster = NULL,
   ...
 ) {
   # evaluate select/exclude, may be select-helpers
