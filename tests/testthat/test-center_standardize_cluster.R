@@ -136,13 +136,21 @@ test_that("cluster does not shift positional arguments", {
 })
 
 test_that("cluster, infinite values count as missing", {
-  x <- c(10, 10, Inf, 20, 20, 30)
   cl <- c(1, 1, 2, 2, 2, 3)
-  for (fun in list(center, standardize)) {
-    expect_no_error(z <- fun(x, cluster = cl))
-    # cluster-level values are 10, 20, 30: mean 20
-    expect_identical(attr(z, "center"), 20)
-    expect_true(is.na(z[3]))
+  for (x in list(c(10, 10, Inf, 20, 20, 30), c(10, 10, -Inf, 20, 20, 30))) {
+    for (fun in list(center, standardize)) {
+      expect_no_error(z <- fun(x, cluster = cl))
+      # oracle (closed-form): cluster-level values are 10, 20, 30, so the
+      # mean is 20
+      expect_identical(attr(z, "center"), 20)
+      expect_true(is.na(z[3]))
+    }
+    # oracle (closed-form): deviations -10, 0, 10, so sd = sqrt(200 / 2) = 10
+    expect_identical(attr(standardize(x, cluster = cl), "scale"), 10)
+
+    out <- standardize(data.frame(cl = cl, y = x), select = "y", cluster = "cl")
+    expect_true(is.na(out$y[3]))
+    expect_equal(out$y[-3], (x[-3] - 20) / 10)
   }
 })
 
@@ -171,7 +179,8 @@ test_that("cluster, NA ids are excluded and returned as NA", {
 
 test_that("cluster, a cluster with only Inf values is excluded", {
   z <- standardize(c(10, 10, Inf, Inf, 30), cluster = c(1, 1, 2, 2, 3))
-  # cluster-level values are 10 and 30: mean 20, sd sqrt(200)
+  # oracle (closed-form): cluster-level values are 10 and 30, so the mean is
+  # 20 and sd = sqrt((100 + 100) / 1) = sqrt(200)
   expect_identical(attr(z, "center"), 20)
   expect_equal(attr(z, "scale"), sqrt(200))
   expect_true(all(is.na(z[3:4])))
