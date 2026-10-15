@@ -60,9 +60,13 @@
     vals <- .factor_to_numeric(vals)
   }
 
-  # with clusters, center and scale are computed from one value per cluster
+  # with clusters, center and scale are computed from one value per cluster.
+  # Infinite values are not used for the statistics, but they still count as
+  # a second value within a cluster.
   ref_vals <- vals
   if (!is.null(cluster)) {
+    observed <- !is.na(x) & !is.na(cluster)
+    .check_one_value_per_cluster(x[observed], cluster[observed])
     ref_vals <- .cluster_values(vals, cluster[valid_x])
   }
 
@@ -96,18 +100,25 @@
 #
 #' @keywords internal
 .cluster_values <- function(x, cluster) {
+  .check_one_value_per_cluster(x, cluster)
   cluster_pairs <- unique(data.frame(cluster = cluster, x = x))
-  if (anyDuplicated(cluster_pairs$cluster) > 0) {
-    insight::format_error(
-      "The variable takes more than one value within a cluster. With `cluster`, it must have one value per cluster."
-    )
-  }
   if (nrow(cluster_pairs) < 2) {
     insight::format_error(
       "`cluster` must contain at least two clusters with non-missing values."
     )
   }
   cluster_pairs$x
+}
+
+
+#' @keywords internal
+.check_one_value_per_cluster <- function(x, cluster) {
+  cluster_pairs <- unique(data.frame(cluster = cluster, x = x))
+  if (anyDuplicated(cluster_pairs$cluster) > 0) {
+    insight::format_error(
+      "The variable takes more than one value within a cluster. With `cluster`, it must have one value per cluster."
+    )
+  }
 }
 
 

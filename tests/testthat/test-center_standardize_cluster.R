@@ -127,6 +127,14 @@ test_that("cluster, NA ids are excluded and returned as NA", {
   expect_true(is.na(z[length(z)]))
 })
 
+test_that("cluster, a cluster with only Inf values is excluded", {
+  z <- standardize(c(10, 10, Inf, Inf, 30), cluster = c(1, 1, 2, 2, 3))
+  # cluster-level values are 10 and 30: mean 20, sd sqrt(200)
+  expect_identical(attr(z, "center"), 20)
+  expect_equal(attr(z, "scale"), sqrt(200))
+  expect_true(all(is.na(z[3:4])))
+})
+
 test_that("cluster, NA in x does not count as a second value", {
   x <- c(funding, NA)
   z <- standardize(x, cluster = c(school, 1))
@@ -153,6 +161,10 @@ for (fun_name in c("center", "standardize")) {
   test_that(paste(fun_name, "cluster errors, numeric"), {
     expect_error(
       fun(c(1, 2, 3, 4), cluster = c(1, 1, 2, 2)),
+      "more than one value within a cluster"
+    )
+    expect_error(
+      fun(c(10, 10, Inf, 20, 20, 30), cluster = c(1, 1, 2, 2, 2, 3)),
       "more than one value within a cluster"
     )
     expect_error(
