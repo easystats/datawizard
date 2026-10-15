@@ -280,6 +280,7 @@ standardize.data.frame <- function(
   reference = NULL,
   center = NULL,
   scale = NULL,
+  cluster = NULL,
   remove_na = c("none", "selected", "all"),
   force = FALSE,
   append = FALSE,
@@ -310,7 +311,8 @@ standardize.data.frame <- function(
     remove_na,
     reference,
     .center = center,
-    .scale = scale
+    .scale = scale,
+    cluster = cluster
   )
 
   # set new values
@@ -326,6 +328,7 @@ standardize.data.frame <- function(
       reference = reference[[var]],
       center = my_args$center[var],
       scale = my_args$scale[var],
+      cluster = my_args$cluster,
       verbose = FALSE,
       force = force,
       add_transform_class = FALSE
@@ -354,6 +357,7 @@ standardize.grouped_df <- function(
   reference = NULL,
   center = NULL,
   scale = NULL,
+  cluster = NULL,
   remove_na = c("none", "selected", "all"),
   force = FALSE,
   append = FALSE,
@@ -380,7 +384,8 @@ standardize.grouped_df <- function(
     append_suffix = "_z",
     reference,
     weights,
-    keep_factors = force
+    keep_factors = force,
+    cluster = cluster
   )
 
   # create column(s) to store dw_transformer attributes
@@ -396,6 +401,7 @@ standardize.grouped_df <- function(
       robust = robust,
       two_sd = two_sd,
       weights = my_args$weights,
+      cluster = cluster,
       remove_na = remove_na,
       verbose = verbose,
       force = force,

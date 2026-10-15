@@ -206,6 +206,7 @@ center.data.frame <- function(
   weights = NULL,
   reference = NULL,
   center = NULL,
+  cluster = NULL,
   force = FALSE,
   remove_na = c("none", "selected", "all"),
   append = FALSE,
@@ -236,7 +237,8 @@ center.data.frame <- function(
     remove_na,
     reference,
     .center = center,
-    .scale = NULL
+    .scale = NULL,
+    cluster = cluster
   )
 
   # set new values
@@ -250,6 +252,7 @@ center.data.frame <- function(
       verbose = FALSE,
       reference = reference[[var]],
       center = my_args$center[var],
+      cluster = my_args$cluster,
       force = force,
       add_transform_class = FALSE
     )
@@ -279,6 +282,7 @@ center.grouped_df <- function(
   weights = NULL,
   reference = NULL,
   center = NULL,
+  cluster = NULL,
   force = FALSE,
   remove_na = c("none", "selected", "all"),
   append = FALSE,
@@ -305,7 +309,8 @@ center.grouped_df <- function(
     append_suffix = "_c",
     reference,
     weights,
-    keep_factors = force
+    keep_factors = force,
+    cluster = cluster
   )
 
   for (rows in my_args$grps) {
@@ -315,6 +320,7 @@ center.grouped_df <- function(
       exclude = NULL,
       robust = robust,
       weights = my_args$weights,
+      cluster = cluster,
       remove_na = remove_na,
       verbose = verbose,
       force = force,

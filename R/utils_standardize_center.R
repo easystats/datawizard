@@ -136,6 +136,16 @@
 }
 
 
+#' @keywords internal
+.check_cluster_column <- function(x, cluster) {
+  if (!cluster %in% colnames(x)) {
+    insight::format_error(
+      paste0("Could not find the `cluster` column `", cluster, "`.")
+    )
+  }
+}
+
+
 # processing and checking of arguments ----
 #
 # Performs some preparation when standardizing or centering variables,
@@ -156,13 +166,29 @@
   .center = NULL,
   .scale = NULL,
   keep_character = FALSE,
-  preserve_value_labels = FALSE
+  preserve_value_labels = FALSE,
+  cluster = NULL
 ) {
   # check append argument, and set default
   if (isFALSE(append)) {
     append <- NULL
   } else if (isTRUE(append)) {
     append <- append_suffix
+  }
+
+  # a single string is the name of the cluster column, which is never
+  # transformed
+  cluster_name <- NULL
+  if (!is.null(cluster)) {
+    if (is.character(cluster) && length(cluster) == 1L) {
+      .check_cluster_column(x, cluster)
+      cluster_name <- cluster
+      exclude <- c(exclude, cluster)
+    } else if (length(cluster) != nrow(x)) {
+      insight::format_error(
+        "`cluster` must have the same length as the number of rows in the data."
+      )
+    }
   }
 
   if (!is.null(weights) && is.character(weights)) {
@@ -220,6 +246,12 @@
 
   if (!is.null(weights) && is.character(weights)) {
     weights <- x[[weights]]
+  }
+
+  if (!is.null(cluster_name)) {
+    cluster <- x[[cluster_name]]
+  } else if (!is.null(cluster)) {
+    cluster <- cluster[!omit]
   }
 
   # append standardized variables
@@ -300,7 +332,8 @@
     weights = weights,
     append = append,
     center = .center,
-    scale = .scale
+    scale = .scale,
+    cluster = cluster
   )
 }
 
@@ -546,8 +579,20 @@
   append_suffix = "_z",
   reference,
   weights,
-  keep_factors
+  keep_factors,
+  cluster = NULL
 ) {
+  if (!is.null(cluster)) {
+    if (!is.character(cluster) || length(cluster) != 1L) {
+      insight::format_error(
+        "For grouped data frames, `cluster` must be a column name."
+      )
+    }
+    .check_cluster_args(cluster, weights, reference)
+    .check_cluster_column(x, cluster)
+    exclude <- c(exclude, cluster)
+  }
+
   if (!is.null(reference)) {
     insight::format_error(
       "The `reference` argument cannot be used with grouped standardization for now."

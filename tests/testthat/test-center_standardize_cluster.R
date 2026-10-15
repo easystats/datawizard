@@ -171,3 +171,183 @@ test_that("cluster errors, standardize scale", {
     "`cluster` cannot be combined with `reference`"
   )
 })
+
+
+# data frame methods -------------------------------------------
+
+d <- data.frame(school = school, funding = funding, budget = funding * 3)
+
+for (fun_name in c("center", "standardize")) {
+  fun <- get(fun_name)
+
+  test_that(paste(fun_name, "data frame, cluster as column name or vector"), {
+    out <- fun(d, cluster = "school")
+    expect_identical(out$school, d$school)
+    expect_equal(
+      out$funding,
+      as.vector(fun(funding, cluster = school)),
+      ignore_attr = TRUE
+    )
+    expect_equal(
+      out$budget,
+      as.vector(fun(d$budget, cluster = school)),
+      ignore_attr = TRUE
+    )
+    out_vector <- fun(d, select = "funding", cluster = school)
+    expect_identical(out_vector$funding, out$funding)
+    expect_identical(out_vector$budget, d$budget)
+
+    out <- fun(d, cluster = school, robust = TRUE)
+    expect_equal(
+      out$funding,
+      as.vector(fun(funding, cluster = school, robust = TRUE)),
+      ignore_attr = TRUE
+    )
+  })
+
+  test_that(paste(fun_name, "data frame, the cluster column is not transformed"), {
+    out <- fun(d, cluster = "school", append = TRUE)
+    expect_identical(out$school, d$school)
+    expect_false("school_c" %in% names(out) || "school_z" %in% names(out))
+    expect_named(out, c(names(d), paste0(c("funding", "budget"), if (fun_name == "center") "_c" else "_z")))
+
+    out <- fun(d, select = c("school", "funding"), cluster = "school")
+    expect_identical(out$school, d$school)
+
+    d_f <- d
+    d_f$school <- factor(d_f$school)
+    out <- fun(d_f, cluster = "school", force = TRUE)
+    expect_identical(out$school, d_f$school)
+    expect_equal(
+      out$funding,
+      as.vector(fun(funding, cluster = school)),
+      ignore_attr = TRUE
+    )
+  })
+
+  test_that(paste(fun_name, "data frame, vector cluster loses the rows remove_na drops"), {
+    d_na <- d
+    d_na$budget[1] <- NA
+    out <- fun(d_na, cluster = school, remove_na = "all")
+    expect_identical(nrow(out), nrow(d) - 1L)
+    expect_equal(
+      out$funding,
+      as.vector(fun(funding[-1], cluster = school[-1])),
+      ignore_attr = TRUE
+    )
+    out_name <- fun(d_na, cluster = "school", remove_na = "all")
+    expect_identical(out_name$funding, out$funding)
+  })
+}
+
+
+# grouped data frames -------------------------------------------
+
+g <- data.frame(
+  region = rep(c("a", "b"), times = c(17, 51)),
+  school = rep(1:6, times = c(2, 5, 10, 3, 8, 40)),
+  funding = rep(c(10, 20, 60, 5, 15, 25), times = c(2, 5, 10, 3, 8, 40))
+)
+
+for (fun_name in c("center", "standardize")) {
+  fun <- get(fun_name)
+
+  test_that(paste(fun_name, "grouped data frame, cluster within each group"), {
+    skip_if_not_installed("poorman")
+    out <- g |>
+      poorman::group_by(region) |>
+      fun(select = "funding", cluster = "school") |>
+      poorman::ungroup()
+    a <- g$region == "a"
+    expected <- c(
+      as.vector(fun(g$funding[a], cluster = g$school[a])),
+      as.vector(fun(g$funding[!a], cluster = g$school[!a]))
+    )
+    expect_equal(out$funding, expected, ignore_attr = TRUE)
+    expect_identical(out$school, g$school)
+
+    out <- g |>
+      poorman::group_by(region) |>
+      fun(cluster = "school", append = TRUE) |>
+      poorman::ungroup()
+    expect_identical(out$school, g$school)
+    expect_false(any(c("school_c", "school_z") %in% names(out)))
+  })
+}
+
+
+# errors, data frame methods -------------------------------------------
+
+for (fun_name in c("center", "standardize")) {
+  fun <- get(fun_name)
+
+  test_that(paste(fun_name, "cluster errors, data frame"), {
+    d_var <- data.frame(school = c(1, 1, 2, 2), y = c(1, 2, 3, 4))
+    expect_error(
+      fun(d_var, cluster = "school"),
+      "more than one value within a cluster"
+    )
+    expect_error(
+      fun(d, cluster = "school", weights = "budget"),
+      "`cluster` cannot be combined with `weights`"
+    )
+    expect_error(
+      fun(d, cluster = "school", reference = d),
+      "`cluster` cannot be combined with `reference`"
+    )
+    expect_error(
+      fun(d, cluster = "school", center = 0),
+      "`cluster` cannot be combined with `reference`"
+    )
+    expect_error(
+      fun(d, cluster = school[-1]),
+      "`cluster` must have the same length"
+    )
+    expect_error(
+      fun(d, cluster = "district"),
+      "Could not find the `cluster` column"
+    )
+    expect_error(
+      fun(d[d$school == 1, ], cluster = "school", verbose = FALSE),
+      "at least two clusters"
+    )
+  })
+
+  test_that(paste(fun_name, "cluster errors, grouped data frame"), {
+    skip_if_not_installed("poorman")
+    gd <- poorman::group_by(g, region)
+    g_var <- poorman::group_by(
+      data.frame(region = "a", school = c(1, 1, 2, 2), y = c(1, 2, 3, 4)),
+      region
+    )
+    expect_error(
+      fun(g_var, select = "y", cluster = "school"),
+      "more than one value within a cluster"
+    )
+    expect_error(
+      fun(gd, select = "funding", cluster = "school", weights = "school"),
+      "`cluster` cannot be combined with `weights`"
+    )
+    expect_error(
+      fun(gd, select = "funding", cluster = "school", reference = g),
+      "`cluster` cannot be combined with `reference`"
+    )
+    expect_error(
+      fun(gd, select = "funding", cluster = "school", center = 0),
+      "`cluster` cannot be combined with `reference`"
+    )
+    expect_error(
+      fun(gd, select = "funding", cluster = "district"),
+      "Could not find the `cluster` column"
+    )
+    expect_error(
+      fun(gd, select = "funding", cluster = g$school),
+      "`cluster` must be a column name"
+    )
+    g_one <- poorman::group_by(g[g$school %in% c(1, 2, 4), ], region)
+    expect_error(
+      fun(g_one, select = "funding", cluster = "school", verbose = FALSE),
+      "at least two clusters"
+    )
+  })
+}
