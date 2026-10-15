@@ -104,7 +104,7 @@
   cluster_pairs <- unique(data.frame(cluster = cluster, x = x))
   if (nrow(cluster_pairs) < 2) {
     insight::format_error(
-      "`cluster` must contain at least two clusters with non-missing values."
+      "`cluster` must contain at least two clusters with finite, non-missing values."
     )
   }
   cluster_pairs$x
