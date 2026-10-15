@@ -180,6 +180,8 @@
   # transformed
   cluster_name <- NULL
   if (!is.null(cluster)) {
+    # check here, because `.scale` is dropped below when no `.center` is given
+    .check_cluster_args(cluster, weights, reference, .center, .scale)
     if (is.character(cluster) && length(cluster) == 1L) {
       .check_cluster_column(x, cluster)
       cluster_name <- cluster

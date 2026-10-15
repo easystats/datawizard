@@ -170,6 +170,21 @@ test_that("cluster errors, standardize scale", {
     standardize(funding, cluster = school, scale = 2),
     "`cluster` cannot be combined with `reference`"
   )
+  d_scale <- data.frame(school = school, funding = funding)
+  expect_error(
+    standardize(d_scale, cluster = "school", scale = 2),
+    "`cluster` cannot be combined with `reference`"
+  )
+  skip_if_not_installed("poorman")
+  expect_error(
+    standardize(
+      poorman::group_by(d_scale, school),
+      select = "funding",
+      cluster = "school",
+      scale = 2
+    ),
+    "`cluster` cannot be combined with `reference`"
+  )
 })
 
 
