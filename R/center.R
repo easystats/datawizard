@@ -113,9 +113,12 @@ center.numeric <- function(
   weights = NULL,
   reference = NULL,
   center = NULL,
+  cluster = NULL,
   verbose = TRUE,
   ...
 ) {
+  .check_cluster_args(cluster, weights, reference, center)
+
   # set default. Furthermore, data.frame methods cannot return a vector
   # of NULLs for each variable - instead they return NA. Thus, we have to
   # treat NA like NULL
@@ -130,7 +133,8 @@ center.numeric <- function(
     verbose,
     reference,
     center,
-    scale = NULL
+    scale = NULL,
+    cluster = cluster
   )
   dot_args <- list(...)
 

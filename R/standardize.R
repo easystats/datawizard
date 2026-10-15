@@ -147,9 +147,12 @@ standardize.numeric <- function(
   reference = NULL,
   center = NULL,
   scale = NULL,
+  cluster = NULL,
   verbose = TRUE,
   ...
 ) {
+  .check_cluster_args(cluster, weights, reference, center, scale)
+
   # set default - need to fix this, else we don't know whether this
   # comes from "center()" or "standardize()". Furthermore, data.frame
   # methods cannot return a vector of NULLs for each variable - instead
@@ -168,7 +171,8 @@ standardize.numeric <- function(
     verbose,
     reference,
     center,
-    scale
+    scale,
+    cluster = cluster
   )
   dot_args <- list(...)
 

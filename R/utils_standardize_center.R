@@ -12,14 +12,26 @@
   verbose = TRUE,
   reference = NULL,
   center = NULL,
-  scale = NULL
+  scale = NULL,
+  cluster = NULL
 ) {
+  if (!is.null(cluster) && length(cluster) != length(x)) {
+    insight::format_error(
+      "`cluster` must have the same length as the variable to transform."
+    )
+  }
+
   # Warning if all NaNs
   if (all(is.na(x) | is.infinite(x))) {
     return(NULL)
   }
 
-  if (.are_weights(weights)) {
+  if (!is.null(cluster)) {
+    valid_x <- !is.na(x) & !is.infinite(x) & !is.na(cluster)
+    na_values <- is.na(x) | is.na(cluster)
+    inf_values <- is.infinite(x)
+    vals <- x[valid_x]
+  } else if (.are_weights(weights)) {
     valid_x <- !is.na(x) &
       !is.na(weights) &
       !is.infinite(x) &
@@ -48,9 +60,15 @@
     vals <- .factor_to_numeric(vals)
   }
 
+  # with clusters, center and scale are computed from one value per cluster
+  ref_vals <- vals
+  if (!is.null(cluster)) {
+    ref_vals <- .cluster_values(vals, cluster[valid_x])
+  }
+
   # Get center and scale
   ref <- .get_center_scale(
-    vals,
+    ref_vals,
     robust,
     weights,
     reference,
@@ -68,6 +86,53 @@
     na_values = na_values,
     inf_values = inf_values
   )
+}
+
+
+# cluster-level values ----
+#
+# Reduces `x` to one value per cluster. `x` and `cluster` must not contain
+# missing values.
+#
+#' @keywords internal
+.cluster_values <- function(x, cluster) {
+  pairs <- unique(data.frame(cluster = cluster, x = x))
+  if (anyDuplicated(pairs$cluster) > 0) {
+    insight::format_error(
+      "The variable takes more than one value within a cluster. With `cluster`, it must have one value per cluster."
+    )
+  }
+  if (nrow(pairs) < 2) {
+    insight::format_error(
+      "`cluster` must contain at least two clusters with non-missing values."
+    )
+  }
+  pairs$x
+}
+
+
+#' @keywords internal
+.check_cluster_args <- function(
+  cluster,
+  weights = NULL,
+  reference = NULL,
+  center = NULL,
+  scale = NULL
+) {
+  if (is.null(cluster)) {
+    return(invisible(NULL))
+  }
+  if (!is.null(weights)) {
+    insight::format_error("`cluster` cannot be combined with `weights`.")
+  }
+  # data frame methods pass `NA` when no center or scale was given
+  has_value <- function(i) is.numeric(i) && !all(is.na(i))
+  if (!is.null(reference) || has_value(center) || has_value(scale)) {
+    insight::format_error(
+      "`cluster` cannot be combined with `reference`, or with values for `center` or `scale`."
+    )
+  }
+  invisible(NULL)
 }
 
 
