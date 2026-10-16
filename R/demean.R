@@ -342,9 +342,23 @@ degroup <- function(
     ))
   }
 
-  # handle different "by" options
+  # handle different "by" options. A formula with only "/" (e.g. ~ L4/L3/L2)
+  # is nested, like the string "L4/L3/L2". A formula with only "+" is crossed.
   if (inherits(by, "formula")) {
+    by_terms <- insight::safe_deparse(by[[length(by)]])
+    by_nested <- grepl("/", by_terms, fixed = TRUE)
+    if (by_nested && grepl("+", by_terms, fixed = TRUE)) {
+      .mixed_design_error()
+    }
+    if (by_nested) {
+      nested <- TRUE
+    }
     by <- all.vars(by)
+  }
+
+  # a character vector such as c("L4", "L3/L2") mixes crossed and nested
+  if (length(by) > 1 && any(grepl("/", by, fixed = TRUE))) {
+    .mixed_design_error()
   }
 
   # we also allow lme4-syntax here: if by = "L4/L3/L2", we assume a nested design
@@ -576,3 +590,13 @@ degroup <- function(
 #' @rdname demean
 #' @export
 detrend <- degroup
+
+
+# helper -----------------------------------------------------------------------
+
+.mixed_design_error <- function() {
+  insight::format_error(
+    "Designs that mix nested and crossed grouping are not supported.",
+    "Use either `/` to separate nested levels, e.g. `by = ~ L3/L2`, or `+` to separate crossed groups, e.g. `by = ~ A + B`, but not both." # nolint
+  )
+}

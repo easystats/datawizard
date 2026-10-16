@@ -360,3 +360,66 @@ test_that("demean for nested designs (by > 1), nested = TRUE", {
 
   expect_equal(rowSums(out[, grepl("^val1", names(out))]), testdf$val1)
 })
+
+
+test_that("degroup, formula in `by` with `/` is nested, with `+` is crossed", {
+  # three nested levels; the ids of B and C repeat across higher clusters
+  d <- data.frame(
+    A = rep(c("I", "II"), each = 6),
+    B = rep(c("a", "a", "b", "b", "c", "c"), 2),
+    C = rep(c("x", "y"), 6),
+    v = c(1, 4, 2, 8, 5, 7, 3, 9, 6, 2, 10, 4)
+  )
+
+  expect_identical(
+    degroup(d, select = "v", by = ~ A / B),
+    degroup(d, select = "v", by = "A/B")
+  )
+  expect_identical(
+    degroup(d, select = "v", by = ~ A / B / C),
+    degroup(d, select = "v", by = "A/B/C")
+  )
+  # a formula with `/` is nested even when `nested = FALSE` is given, as the
+  # string form is
+  expect_identical(
+    degroup(d, select = "v", by = ~ A / B, nested = FALSE),
+    degroup(d, select = "v", by = c("A", "B"), nested = TRUE)
+  )
+  # the nested result differs from the crossed result for these data
+  expect_false(isTRUE(all.equal(
+    degroup(d, select = "v", by = ~ A / B)$v_within,
+    degroup(d, select = "v", by = c("A", "B"))$v_within
+  )))
+
+  expect_identical(
+    degroup(d, select = "v", by = ~ A + B),
+    degroup(d, select = "v", by = c("A", "B"), nested = FALSE)
+  )
+})
+
+
+test_that("degroup, mixed nested and crossed `by` stops with an error", {
+  d <- data.frame(
+    A = rep(c("I", "II"), each = 6),
+    B = rep(c("a", "a", "b", "b", "c", "c"), 2),
+    C = rep(c("x", "y"), 6),
+    v = c(1, 4, 2, 8, 5, 7, 3, 9, 6, 2, 10, 4)
+  )
+
+  expect_error(
+    degroup(d, select = "v", by = ~ C + A / B),
+    regex = "mix nested and crossed grouping are not supported"
+  )
+  expect_error(
+    degroup(d, select = "v", by = ~ A / B + C),
+    regex = "mix nested and crossed grouping are not supported"
+  )
+  expect_error(
+    degroup(d, select = "v", by = c("C", "A/B")),
+    regex = "mix nested and crossed grouping are not supported"
+  )
+  expect_error(
+    demean(d, select = "v", by = c("A/B", "C")),
+    regex = "mix nested and crossed grouping are not supported"
+  )
+})
