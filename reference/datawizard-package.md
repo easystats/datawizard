@@ -55,6 +55,8 @@ Other contributors:
 - Rémi Thériault <remi.theriault@mail.mcgill.ca>
   ([ORCID](https://orcid.org/0000-0003-4315-6788)) \[contributor\]
 
+- Elin Waring <elin.waring@gmail.com> \[contributor\]
+
 - Thomas J. Faulkenberry <faulkenberry@tarleton.edu> \[reviewer\]
 
 - Robert Garrett <rcg4@illinois.edu> \[reviewer\]
