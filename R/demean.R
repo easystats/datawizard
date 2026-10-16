@@ -410,6 +410,11 @@ degroup <- function(
     )
   }
 
+  # warn if the data suggest that `by` does not match the design
+  if (isTRUE(verbose) && length(by) > 1) {
+    .check_grouping_structure(x, by, nested)
+  }
+
   # get data to demean...
   dat <- x[, c(select, by)]
 
@@ -599,4 +604,78 @@ detrend <- degroup
     "Designs that mix nested and crossed grouping are not supported.",
     "Use either `/` to separate nested levels, e.g. `by = ~ L3/L2`, or `+` to separate crossed groups, e.g. `by = ~ A + B`, but not both." # nolint
   )
+}
+
+
+# TRUE if each observed value of `p` occurs with exactly one value of `q`.
+# Only rows where neither is missing count, and unused factor levels are
+# ignored. FALSE if no such row exists.
+.is_nested_in <- function(p, q) {
+  keep <- !is.na(p) & !is.na(q)
+  if (!any(keep)) {
+    return(FALSE)
+  }
+  pairs <- unique(data.frame(
+    p = as.character(p[keep]),
+    q = as.character(q[keep])
+  ))
+  !anyDuplicated(pairs$p)
+}
+
+
+# Warn when the observed values suggest that `by` does not match the design:
+# for crossed designs, when one variable is nested in another; for nested
+# designs, when an adjacent pair is listed from lower to higher level.
+.check_grouping_structure <- function(x, by, nested) {
+  if (nested) {
+    for (i in seq_len(length(by) - 1)) {
+      higher <- by[i]
+      lower <- by[i + 1]
+      if (
+        .is_nested_in(x[[higher]], x[[lower]]) &&
+          !.is_nested_in(x[[lower]], x[[higher]])
+      ) {
+        insight::format_warning(paste0(
+          "`by` lists levels from highest to lowest, but `",
+          higher,
+          "` is nested in `",
+          lower,
+          "` in these data: each value of `",
+          higher,
+          "` occurs with only one value of `",
+          lower,
+          "`. List `",
+          lower,
+          "` before `",
+          higher,
+          "` in `by`."
+        ))
+      }
+    }
+  } else {
+    reported <- character(0)
+    for (inner in by) {
+      for (outer in setdiff(by, inner)) {
+        # a one-to-one pair is reported once
+        if (paste(outer, inner) %in% reported) {
+          next
+        }
+        if (.is_nested_in(x[[inner]], x[[outer]])) {
+          reported <- c(reported, paste(inner, outer))
+          insight::format_warning(paste0(
+            "`",
+            inner,
+            "` is nested in `",
+            outer,
+            "` in these data: each value of `",
+            inner,
+            "` occurs with only one value of `",
+            outer,
+            "`. For a nested design, set `nested = TRUE` and list the levels from highest to lowest in `by`. For a crossed design, set `verbose = FALSE` to silence this warning." # nolint
+          ))
+        }
+      }
+    }
+  }
+  invisible(NULL)
 }

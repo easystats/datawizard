@@ -423,3 +423,126 @@ test_that("degroup, mixed nested and crossed `by` stops with an error", {
     regex = "mix nested and crossed grouping are not supported"
   )
 })
+
+
+# warnings with whitespace collapsed, because insight wraps long messages
+squished_warnings <- function(expr) {
+  gsub("\\s+", " ", testthat::capture_warnings(expr))
+}
+
+
+test_that("degroup, crossed `by` warns when one variable is nested in another", {
+  # nested data with unique class ids, given as crossed. `class` is a factor
+  # with an unused level, and the two rows with a missing class are in
+  # different schools: counted as a value, the missing class would occur with
+  # two schools and hide the nesting.
+  d <- data.frame(
+    school = c("s1", "s1", "s1", "s1", "s2", "s2", "s2", "s2"),
+    class = factor(
+      c("c1", "c1", "c2", NA, "c3", "c3", "c4", NA),
+      levels = c("c1", "c2", "c3", "c4", "c9")
+    ),
+    v = c(1, 3, 2, 6, 5, 9, 4, 8)
+  )
+
+  w <- squished_warnings(
+    out <- degroup(d, select = "v", by = c("school", "class"))
+  )
+  expect_length(w, 1)
+  expect_match(w, "`class` is nested in `school`", fixed = TRUE)
+  expect_match(w, "set `nested = TRUE`", fixed = TRUE)
+  expect_identical(
+    out,
+    degroup(d, select = "v", by = c("school", "class"), verbose = FALSE)
+  )
+  expect_no_warning(
+    degroup(d, select = "v", by = c("school", "class"), verbose = FALSE)
+  )
+
+  # a one-to-one pair warns once
+  d_one <- data.frame(
+    a = c("x", "x", "y", "y"),
+    b = c("p", "p", "q", "q"),
+    v = c(1, 2, 3, 5)
+  )
+  w <- squished_warnings(degroup(d_one, select = "v", by = c("a", "b")))
+  expect_length(w, 1)
+  expect_match(w, "`a` is nested in `b`", fixed = TRUE)
+  expect_match(w, "set `nested = TRUE`", fixed = TRUE)
+
+  # no warning when no row has both values
+  d_na <- data.frame(
+    a = c("x", "x", NA, NA),
+    b = c(NA, NA, "p", "q"),
+    v = c(1, 2, 3, 5)
+  )
+  expect_no_warning(degroup(d_na, select = "v", by = c("a", "b")))
+})
+
+
+test_that("degroup, crossed `by` gives no warning for crossed data", {
+  # balanced crossed fixture
+  d <- expand.grid(person = c("p1", "p2", "p3"), item = c("i1", "i2"))
+  d$v <- c(4, 2, 7, 1, 8, 3)
+  expect_no_warning(degroup(d, select = "v", by = c("person", "item")))
+
+  # data of the cross-classified test above
+  data(efc, package = "datawizard")
+  dat <- na.omit(efc)
+  dat$e42dep <- factor(dat$e42dep)
+  dat$c172code <- factor(dat$c172code)
+  expect_no_warning(
+    degroup(dat, select = "c12hour", by = c("e42dep", "c172code"))
+  )
+})
+
+
+test_that("degroup, nested `by` warns when levels are listed from lowest to highest", {
+  # unique class ids, so each class is in exactly one school. `class` is a
+  # factor with an unused level and has missing values in two schools.
+  d <- data.frame(
+    school = c("s1", "s1", "s1", "s1", "s2", "s2", "s2", "s2"),
+    class = factor(
+      c("c1", "c1", "c2", NA, "c3", "c3", "c4", NA),
+      levels = c("c1", "c2", "c3", "c4", "c9")
+    ),
+    v = c(1, 3, 2, 6, 5, 9, 4, 8)
+  )
+
+  w <- squished_warnings(
+    out <- degroup(d, select = "v", by = c("class", "school"), nested = TRUE)
+  )
+  expect_length(w, 1)
+  expect_match(w, "lists levels from highest to lowest", fixed = TRUE)
+  expect_match(w, "`class` is nested in `school`", fixed = TRUE)
+  expect_identical(
+    out,
+    degroup(
+      d,
+      select = "v",
+      by = c("class", "school"),
+      nested = TRUE,
+      verbose = FALSE
+    )
+  )
+  w <- squished_warnings(degroup(d, select = "v", by = "class/school"))
+  expect_length(w, 1)
+  expect_match(w, "lists levels from highest to lowest", fixed = TRUE)
+  expect_match(w, "`class` is nested in `school`", fixed = TRUE)
+
+  # the correct order gives no warning
+  expect_no_warning(
+    degroup(d, select = "v", by = c("school", "class"), nested = TRUE)
+  )
+
+  # correct order, lower-level ids that repeat across clusters
+  d_rep <- data.frame(
+    school = c("s1", "s1", "s1", "s1", "s2", "s2", "s2", "s2"),
+    class = c("c1", "c1", "c2", "c2", "c1", "c1", "c2", "c2"),
+    v = c(1, 3, 2, 6, 5, 9, 4, 8)
+  )
+  expect_no_warning(
+    degroup(d_rep, select = "v", by = c("school", "class"), nested = TRUE)
+  )
+  expect_no_warning(degroup(d_rep, select = "v", by = "school/class"))
+})
