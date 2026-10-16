@@ -361,7 +361,7 @@ test_that("demean for nested designs (by > 1), nested = TRUE", {
   expect_equal(rowSums(out[, grepl("^val1", names(out))]), testdf$val1)
 })
 
-test_that("demean for nested designs with three or more levels", {
+test_that("degroup for nested designs with three or more levels", {
   # Unbalanced data. B and C ids repeat across higher-level clusters, so a
   # cluster is defined by all variables above it (as in `y ~ (1 | A/B/C)`).
   dat <- data.frame(
@@ -408,9 +408,20 @@ test_that("demean for nested designs with three or more levels", {
     as.vector(tapply(out$x_C_between, paste(dat$A, dat$B), mean)),
     c(0, 0, 0, 0)
   )
+
+  # Oracle (invariant): with several variables in `select`, each variable gets
+  # its own components. y = 2 * x + 1, so the components of y are twice those
+  # of x, plus 1 for the highest level.
+  dat$y <- 2 * dat$x + 1
+  out <- demean(dat, select = c("x", "y"), by = "A/B/C", append = FALSE)
+  expect_equal(out$y_A_between, 2 * expected_A + 1, ignore_attr = TRUE)
+  expect_equal(out$y_B_between, 2 * expected_B, ignore_attr = TRUE)
+  expect_equal(out$y_C_between, 2 * expected_C, ignore_attr = TRUE)
+  expect_equal(out$y_within, 2 * expected_within, ignore_attr = TRUE)
+  expect_equal(out$x_C_between, expected_C, ignore_attr = TRUE)
 })
 
-test_that("demean for nested designs with four levels and median", {
+test_that("degroup for nested designs with four levels and median", {
   # cluster statistic computed with an explicit loop, independent of
   # `stats::ave()`; a cluster is a combination of the given variables
   cluster_stat <- function(x, groups, fun = mean) {
