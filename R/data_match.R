@@ -188,6 +188,15 @@ data_filter <- function(x, ...) {
 
 #' @export
 data_filter.data.frame <- function(x, ...) {
+  dots <- match.call(expand.dots = FALSE)[["..."]]
+  # conditions are evaluated in the environment that called data_filter()
+  .data_filter_rows(x, dots, env = parent.frame())
+}
+
+
+# `env` is the environment that called data_filter(). Names in a condition are
+# looked up in the columns of `x` first, then in `env`.
+.data_filter_rows <- function(x, dots, env) {
   out <- x
 
   # convert tibble to data.frame
@@ -198,8 +207,6 @@ data_filter.data.frame <- function(x, ...) {
     tbl_input <- FALSE
   }
 
-  dots <- match.call(expand.dots = FALSE)[["..."]]
-
   if (any(nzchar(names(dots), keepNA = TRUE))) {
     insight::format_error(
       "Filtering did not work. Please check if you need `==` (instead of `=`) for comparison."
@@ -208,7 +215,7 @@ data_filter.data.frame <- function(x, ...) {
 
   # turn character vector (like `c("mpg <= 20", "cyl == 6")`) into symbols
   if (length(dots) == 1) {
-    character_vector <- .dynEval(dots[[1]], ifnotfound = NULL)
+    character_vector <- .data_filter_lookup(dots[[1]], env)
     if (is.character(character_vector) && length(character_vector) > 1) {
       dots <- lapply(character_vector, str2lang)
     }
@@ -225,17 +232,13 @@ data_filter.data.frame <- function(x, ...) {
     if (!is.null(out)) {
       symbol <- dots[[i]]
       # evaluate, we may have a variable with filter expression
-      eval_symbol <- .dynEval(symbol, ifnotfound = NULL)
-      # validation check: is variable named like a function?
-      if (is.function(eval_symbol)) {
-        eval_symbol <- .dynGet(symbol, ifnotfound = NULL)
-      }
+      eval_symbol <- .data_filter_lookup(symbol, env)
       eval_symbol_numeric <- NULL
-      if (!is.null(eval_symbol)) {
+      if (is.character(eval_symbol)) {
         # when possible to evaluate, do we have a numeric vector provided
         # as string? (e.g. `"5:10"`) - then try to coerce to numeric
         eval_symbol_numeric <- tryCatch(
-          eval(parse(text = eval_symbol)),
+          eval(parse(text = eval_symbol), envir = env),
           error = function(e) NULL
         )
       }
@@ -250,10 +253,15 @@ data_filter.data.frame <- function(x, ...) {
         if (is.character(eval_symbol)) {
           symbol <- str2lang(eval_symbol)
         }
-        # filter data
+        # filter data, like subset(): look up names in the columns first,
+        # then in the environment that called data_filter()
         out <- tryCatch(
-          subset(out, subset = eval(symbol, envir = new.env())),
-          warning = function(e) e,
+          {
+            rows <- eval(symbol, envir = out, enclos = env)
+            if (is.logical(rows)) {
+              out[rows & !is.na(rows), , drop = FALSE]
+            }
+          },
           error = function(e) e
         )
       } else if (is.numeric(eval_symbol)) {
@@ -317,6 +325,7 @@ data_filter.data.frame <- function(x, ...) {
 
 #' @export
 data_filter.grouped_df <- function(x, ...) {
+  env <- parent.frame()
   original_x <- x
   grps <- attr(x, "groups", exact = TRUE)
   grps <- grps[[".rows"]]
@@ -331,9 +340,7 @@ data_filter.grouped_df <- function(x, ...) {
 
   dots <- match.call(expand.dots = FALSE)[["..."]]
   out <- lapply(grps, function(grp) {
-    arguments <- list(x[grp, ])
-    arguments <- c(arguments, dots)
-    do.call("data_filter.data.frame", arguments)
+    .data_filter_rows(x[grp, ], dots, env = env)
   })
 
   out <- do.call(rbind, out)
@@ -355,6 +362,33 @@ data_filter.grouped_df <- function(x, ...) {
 
 
 # helper -------------------
+
+# Evaluate a complete condition, to find out whether it is a variable that
+# holds row numbers or a filter expression as string. We look in `env` (the
+# environment that called data_filter()) first, then in the frames that called
+# `env`. We never look in the frames of data_filter() itself, so that its
+# internal variables (like `x`) cannot hide variables of the user. Returns NULL
+# if the condition cannot be evaluated.
+.data_filter_lookup <- function(condition, env) {
+  frames <- sys.frames()
+  caller <- Position(function(frame) identical(frame, env), frames)
+  if (is.na(caller)) {
+    envs <- list(env)
+  } else {
+    envs <- rev(frames[seq_len(caller)])
+  }
+  for (search_env in envs) {
+    value <- tryCatch(eval(condition, envir = search_env), error = function(e) {
+      NULL
+    })
+    # skip functions, e.g. when a variable is named like a function
+    if (!is.null(value) && !is.function(value)) {
+      return(value)
+    }
+  }
+  NULL
+}
+
 
 .check_filter_syntax <- function(.fcondition) {
   # NOTE: We cannot check for `=` when "filter" is not a character vector
