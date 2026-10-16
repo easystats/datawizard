@@ -275,20 +275,22 @@ more levels. Set \code{nested = TRUE} to explicitly assume a nested design. For
 cross-classified designs, de-meaning is supposed to work for models like
 \code{y ~ x + (1|level3) + (1|level2)}, but \emph{not} for models like
 \code{y ~ x + (1|level3/level2)}. Designs that mix nested and cross-classified
-grouping are not supported and give an error.
+grouping are not supported. A \code{by} that combines \code{/} with \code{+}, or with
+other variables in a character vector, gives an error.
 
 For two crossed variables, J and K, \code{demean()} returns the three components
 of the fully cluster-mean-centered model in \emph{Guo et al. (2024)}, eq. 4: the
 mean of the variable in its J cluster, the mean in its K cluster, and the
 within component, which is the value minus both means. Each mean is taken
-over the rows of the cluster, so clusters with more rows weigh more. The
-components also apply to unbalanced data, with different numbers of rows
-per combination of J and K. For each row where the variable is not
-missing, the components sum to the value. \emph{Guo et al. (2024)} also cover
-three or more crossed variables: footnote 6 and the R function in their
-Appendix C subtract the mean of each crossed variable, and \code{demean()} does
-the same. With \code{degroup()} and a \code{center} other than \code{"mean"}, the cluster
-statistic replaces the mean. \emph{Guo et al. (2024)} use means only.
+over the rows of the cluster, not over cell means, so combinations of J and
+K with more rows weigh more. The components also apply to unbalanced data,
+with different numbers of rows per combination of J and K. For each row
+where the variable is not missing, the components sum to the value.
+\emph{Guo et al. (2024)} also cover three or more crossed variables: footnote 6
+and the R function in their Appendix C subtract the mean of each crossed
+variable, and \code{demean()} does the same. With \code{degroup()} and a \code{center}
+other than \code{"mean"}, the cluster statistic replaces the mean.
+\emph{Guo et al. (2024)} define the components with means.
 }
 
 \section{Checks of the grouping structure}{

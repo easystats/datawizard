@@ -209,20 +209,22 @@
 #' cross-classified designs, de-meaning is supposed to work for models like
 #' `y ~ x + (1|level3) + (1|level2)`, but *not* for models like
 #' `y ~ x + (1|level3/level2)`. Designs that mix nested and cross-classified
-#' grouping are not supported and give an error.
+#' grouping are not supported. A `by` that combines `/` with `+`, or with
+#' other variables in a character vector, gives an error.
 #'
 #' For two crossed variables, J and K, `demean()` returns the three components
 #' of the fully cluster-mean-centered model in _Guo et al. (2024)_, eq. 4: the
 #' mean of the variable in its J cluster, the mean in its K cluster, and the
 #' within component, which is the value minus both means. Each mean is taken
-#' over the rows of the cluster, so clusters with more rows weigh more. The
-#' components also apply to unbalanced data, with different numbers of rows
-#' per combination of J and K. For each row where the variable is not
-#' missing, the components sum to the value. _Guo et al. (2024)_ also cover
-#' three or more crossed variables: footnote 6 and the R function in their
-#' Appendix C subtract the mean of each crossed variable, and `demean()` does
-#' the same. With `degroup()` and a `center` other than `"mean"`, the cluster
-#' statistic replaces the mean. _Guo et al. (2024)_ use means only.
+#' over the rows of the cluster, not over cell means, so combinations of J and
+#' K with more rows weigh more. The components also apply to unbalanced data,
+#' with different numbers of rows per combination of J and K. For each row
+#' where the variable is not missing, the components sum to the value.
+#' _Guo et al. (2024)_ also cover three or more crossed variables: footnote 6
+#' and the R function in their Appendix C subtract the mean of each crossed
+#' variable, and `demean()` does the same. With `degroup()` and a `center`
+#' other than `"mean"`, the cluster statistic replaces the mean.
+#' _Guo et al. (2024)_ define the components with means.
 #'
 #' @section Checks of the grouping structure:
 #'
@@ -626,7 +628,7 @@ detrend <- degroup
 # Returns the variable names in `by` and whether the design is nested.
 .parse_by <- function(by, nested) {
   # A formula with only "/" (e.g. ~ L4/L3/L2) is nested, like the string
-  # "L4/L3/L2". A formula with only "+" is crossed.
+  # "L4/L3/L2". A formula with only "+" keeps the value of `nested`.
   if (inherits(by, "formula")) {
     by_terms <- insight::safe_deparse(by[[length(by)]])
     by_nested <- grepl("/", by_terms, fixed = TRUE)
