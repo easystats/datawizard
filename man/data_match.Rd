@@ -84,9 +84,14 @@ A condition in \code{data_filter()} can use variables of the function that calls
 \code{data_filter()}, for example \code{data_filter(data, value > threshold)} where
 \code{threshold} is defined in that function. Names are found with two rules:
 \itemize{
-\item If the complete condition evaluates to a number or a string in the calling
-code, or in a function further up the call stack, this value is used as
-row indices or as the filter expression.
+\item If the complete condition evaluates to a number or a string, this value is
+used as row indices or as the filter expression. The condition is evaluated
+in the function that called \code{data_filter()} first, then in the functions
+further up the call stack. In each function, the condition can also use
+the environments where that function was defined, such as the global
+environment. For this reason, a name that holds a number or a string is
+used even if \code{x} has a column with the same name. A filter expression found
+this way is then evaluated with the next rule.
 \item Otherwise, the condition is evaluated like in \code{subset()}. Names are looked
 up in the columns of \code{x} first. Then they are looked up in the environment
 that called \code{data_filter()}, and in the environments where the calling

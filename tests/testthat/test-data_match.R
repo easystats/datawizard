@@ -474,7 +474,7 @@ test_that("data_filter works in lapply() with a local variable named x", {
 })
 
 
-test_that("data_filter uses a column before a local variable of the same name", {
+test_that("data_filter uses a column before a local variable of the same name inside a condition", {
   d <- data.frame(item3 = c(1, 2, 3), lim = c(1, 3, 3))
   f_filter <- function(data) {
     lim <- 2
@@ -486,6 +486,14 @@ test_that("data_filter uses a column before a local variable of the same name", 
   }
   expect_identical(f_filter(d), f_subset(d))
   expect_identical(rownames(f_filter(d)), c("1", "3"))
+
+  # a bare name that holds a number in the caller selects rows, even if there
+  # is a column with the same name
+  f_bare <- function(data) {
+    lim <- 2
+    data_filter(data, lim)
+  }
+  expect_identical(f_bare(d), d[2, ])
 })
 
 
@@ -508,4 +516,20 @@ test_that("data_filter returns the filtered data when a condition warns", {
     "NAs introduced by coercion"
   )
   expect_identical(out, suppressWarnings(subset(d, as.numeric(a) > 1)))
+
+  # the warning is given once, also when the condition can be evaluated in the
+  # calling function
+  f_warn <- function(data) {
+    a <- c("1", "y")
+    data_filter(data, as.numeric(a) > 1)
+  }
+  n_warnings <- 0
+  withCallingHandlers(
+    f_warn(d),
+    warning = function(w) {
+      n_warnings <<- n_warnings + 1
+      invokeRestart("muffleWarning")
+    }
+  )
+  expect_identical(n_warnings, 1)
 })

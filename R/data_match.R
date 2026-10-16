@@ -67,9 +67,14 @@
 #' `data_filter()`, for example `data_filter(data, value > threshold)` where
 #' `threshold` is defined in that function. Names are found with two rules:
 #'
-#' - If the complete condition evaluates to a number or a string in the calling
-#'   code, or in a function further up the call stack, this value is used as
-#'   row indices or as the filter expression.
+#' - If the complete condition evaluates to a number or a string, this value is
+#'   used as row indices or as the filter expression. The condition is evaluated
+#'   in the function that called `data_filter()` first, then in the functions
+#'   further up the call stack. In each function, the condition can also use
+#'   the environments where that function was defined, such as the global
+#'   environment. For this reason, a name that holds a number or a string is
+#'   used even if `x` has a column with the same name. A filter expression found
+#'   this way is then evaluated with the next rule.
 #' - Otherwise, the condition is evaluated like in `subset()`. Names are looked
 #'   up in the columns of `x` first. Then they are looked up in the environment
 #'   that called `data_filter()`, and in the environments where the calling
@@ -207,13 +212,16 @@ data_filter <- function(x, ...) {
 #' @export
 data_filter.data.frame <- function(x, ...) {
   dots <- match.call(expand.dots = FALSE)[["..."]]
-  # conditions are evaluated in the environment that called data_filter()
+  # `env` is the environment that called data_filter(), see
+  # .data_filter_rows() and .data_filter_lookup() for how names are found
   .data_filter_rows(x, dots, env = parent.frame())
 }
 
 
-# `env` is the environment that called data_filter(). Names in a condition are
-# looked up in the columns of `x` first, then in `env`.
+# `env` is the environment that called data_filter(). A complete condition
+# that evaluates to a number or a string in `env` (or further up the call
+# stack) is used as row indices or as filter expression. Otherwise, names in a
+# condition are looked up in the columns of `x` first, then in `env`.
 .data_filter_rows <- function(x, dots, env) {
   out <- x
 
@@ -383,10 +391,12 @@ data_filter.grouped_df <- function(x, ...) {
 
 # Evaluate a complete condition, to find out whether it is a variable that
 # holds row numbers or a filter expression as string. We look in `env` (the
-# environment that called data_filter()) first, then in the frames that called
-# `env`. We never look in the frames of data_filter() itself, so that its
-# internal variables (like `x`) cannot hide variables of the user. Returns NULL
-# if the condition cannot be evaluated.
+# environment that called data_filter()) first, then in every frame below
+# `env` on the call stack (innermost first), each with its enclosing
+# environments. We never look in the frames of data_filter() itself, so that
+# its internal variables (like `x`) cannot hide variables of the user. Warnings
+# are suppressed here, because the condition is evaluated again later. Returns
+# NULL if no frame gives a value that is not NULL and not a function.
 .data_filter_lookup <- function(condition, env) {
   frames <- sys.frames()
   caller <- Position(function(frame) identical(frame, env), frames)
@@ -396,9 +406,10 @@ data_filter.grouped_df <- function(x, ...) {
     envs <- rev(frames[seq_len(caller)])
   }
   for (search_env in envs) {
-    value <- tryCatch(eval(condition, envir = search_env), error = function(e) {
-      NULL
-    })
+    value <- tryCatch(
+      suppressWarnings(eval(condition, envir = search_env)),
+      error = function(e) NULL
+    )
     # skip functions, e.g. when a variable is named like a function
     if (!is.null(value) && !is.function(value)) {
       return(value)
