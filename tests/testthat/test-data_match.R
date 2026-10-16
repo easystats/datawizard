@@ -548,3 +548,63 @@ test_that("data_filter returns the filtered data when a condition warns", {
   )
   expect_identical(n_warnings, 1)
 })
+
+
+test_data_filter_warnings <- function(expr) {
+  n_warnings <- 0
+  withCallingHandlers(
+    expr,
+    warning = function(w) {
+      n_warnings <<- n_warnings + 1
+      invokeRestart("muffleWarning")
+    }
+  )
+  n_warnings
+}
+
+
+test_that("data_filter gives warnings of conditions that select row numbers", {
+  expect_identical(
+    test_data_filter_warnings(data_filter(
+      mtcars,
+      as.integer(c("1", "a", "3"))
+    )),
+    1
+  )
+  expect_identical(
+    test_data_filter_warnings(
+      data_filter(mtcars, "as.integer(c('1', 'a', '3'))")
+    ),
+    1
+  )
+})
+
+
+test_that("data_filter does not change variables of the caller", {
+  f <- function() {
+    z <- 1
+    data_filter(mtcars, "(z <- 30) < mpg")
+    z
+  }
+  expect_identical(f(), 1)
+  f_bare <- function() {
+    z <- 1
+    data_filter(mtcars, (z <- 30) < mpg)
+    z
+  }
+  expect_identical(f_bare(), 1)
+})
+
+
+test_that("data_filter finds a condition string up the call stack when the caller is not a frame", {
+  # a magrittr pipe, like do.call() with `envir`, calls data_filter() from an
+  # environment that is not a frame on the call stack
+  inner_fn <- function() {
+    do.call(data_filter, list(mtcars, quote(cond)), envir = new.env())
+  }
+  caller_fn <- function() {
+    cond <- "mpg > 30"
+    inner_fn()
+  }
+  expect_identical(caller_fn(), data_filter(mtcars, "mpg > 30"))
+})

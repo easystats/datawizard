@@ -68,9 +68,10 @@
 #' `threshold` is defined in that function. Names are found with two rules:
 #'
 #' - If the complete condition evaluates to a number or a string, this value is
-#'   used as row indices or as the filter expression. The condition is evaluated
-#'   in the function that called `data_filter()` first, then in the functions
-#'   further up the call stack. In each function, the condition can also use
+#'   used as row indices or as the filter expression. A string that evaluates
+#'   to numbers, like `"5:10"`, is also used as row indices. The condition is
+#'   evaluated in the function that called `data_filter()` first, then in the
+#'   functions further up the call stack. In each function, the condition can also use
 #'   the environments where that function was defined, such as the global
 #'   environment. For this reason, a name that holds a number or a string is
 #'   used even if `x` has a column with the same name. A filter expression found
@@ -241,7 +242,7 @@ data_filter.data.frame <- function(x, ...) {
 
   # turn character vector (like `c("mpg <= 20", "cyl == 6")`) into symbols
   if (length(dots) == 1) {
-    character_vector <- .data_filter_lookup(dots[[1]], env)
+    character_vector <- .data_filter_lookup(dots[[1]], env)$value
     if (is.character(character_vector) && length(character_vector) > 1) {
       dots <- lapply(character_vector, str2lang)
     }
@@ -258,15 +259,14 @@ data_filter.data.frame <- function(x, ...) {
     if (!is.null(out)) {
       symbol <- dots[[i]]
       # evaluate, we may have a variable with filter expression
-      eval_symbol <- .data_filter_lookup(symbol, env)
+      lookup <- .data_filter_lookup(symbol, env)
+      eval_symbol <- lookup$value
       eval_symbol_numeric <- NULL
       if (is.character(eval_symbol)) {
         # when possible to evaluate, do we have a numeric vector provided
         # as string? (e.g. `"5:10"`) - then try to coerce to numeric
-        eval_symbol_numeric <- tryCatch(
-          suppressWarnings(eval(parse(text = eval_symbol), envir = env)),
-          error = function(e) NULL
-        )
+        lookup <- .data_filter_eval(parse(text = eval_symbol), env)
+        eval_symbol_numeric <- lookup$value
       }
 
       # here we go when we have a filter expression, and no numeric vector to slice
@@ -291,12 +291,19 @@ data_filter.data.frame <- function(x, ...) {
           error = function(e) e
         )
       } else if (is.numeric(eval_symbol)) {
-        # if symbol could be evaluated and is numeric, slice
+        # if symbol could be evaluated and is numeric, slice. The condition is
+        # not evaluated again, so we give its warnings now.
+        for (w in lookup$warnings) {
+          warning(w)
+        }
         out <- tryCatch(out[eval_symbol, , drop = FALSE], error = function(e) {
           NULL
         })
       } else if (is.numeric(eval_symbol_numeric)) {
         # if symbol could be evaluated, was string and could be converted to numeric, slice
+        for (w in lookup$warnings) {
+          warning(w)
+        }
         out <- tryCatch(
           out[eval_symbol_numeric, , drop = FALSE],
           error = function(e) NULL
@@ -393,29 +400,64 @@ data_filter.grouped_df <- function(x, ...) {
 # holds row numbers or a filter expression as string. We look in `env` (the
 # environment that called data_filter()) first, then in every frame below
 # `env` on the call stack (innermost first), each with its enclosing
-# environments. We never look in the frames of data_filter() itself, so that
-# its internal variables (like `x`) cannot hide variables of the user. Warnings
-# are suppressed here, because the condition is evaluated again later. Returns
-# NULL if no frame gives a value that is not NULL and not a function.
+# environments. If `env` is not a frame on the call stack (e.g. inside a
+# magrittr pipe), we look in `env` and then in every frame below data_filter().
+# We never look in the frames of data_filter() itself, so that its internal
+# variables (like `x`) cannot hide variables of the user. Returns a list with
+# the value (NULL if no frame gives a value that is not NULL and not a
+# function) and the warnings caught when evaluating it.
 .data_filter_lookup <- function(condition, env) {
   frames <- sys.frames()
   caller <- Position(function(frame) identical(frame, env), frames)
   if (is.na(caller)) {
-    envs <- list(env)
+    # the innermost frame of a data_filter() method, and the frame of the
+    # generic just before it, if the method was called by the generic
+    own <- Position(
+      function(n) {
+        fun <- sys.function(n)
+        identical(fun, data_filter.data.frame) ||
+          identical(fun, data_filter.grouped_df)
+      },
+      seq_along(frames),
+      right = TRUE
+    )
+    if (is.na(own)) {
+      own <- 1
+    } else if (own > 1 && identical(sys.function(own - 1), data_filter)) {
+      own <- own - 1
+    }
+    envs <- c(list(env), rev(frames[seq_len(own - 1)]))
   } else {
     envs <- rev(frames[seq_len(caller)])
   }
   for (search_env in envs) {
-    value <- tryCatch(
-      suppressWarnings(eval(condition, envir = search_env)),
-      error = function(e) NULL
-    )
+    result <- .data_filter_eval(condition, search_env)
     # skip functions, e.g. when a variable is named like a function
-    if (!is.null(value) && !is.function(value)) {
-      return(value)
+    if (!is.null(result$value) && !is.function(result$value)) {
+      return(result)
     }
   }
-  NULL
+  list(value = NULL, warnings = list())
+}
+
+
+# Evaluate an expression in a child environment of `env`, so that assignments
+# in the expression do not change variables of the user. Warnings are caught
+# and returned, because the expression may be evaluated again later. Returns
+# NULL as value if the expression cannot be evaluated.
+.data_filter_eval <- function(expr, env) {
+  caught <- list()
+  value <- tryCatch(
+    withCallingHandlers(
+      eval(expr, envir = new.env(parent = env)),
+      warning = function(w) {
+        caught[[length(caught) + 1L]] <<- w
+        invokeRestart("muffleWarning")
+      }
+    ),
+    error = function(e) NULL
+  )
+  list(value = value, warnings = caught)
 }
 
 
