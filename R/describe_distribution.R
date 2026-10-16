@@ -320,8 +320,8 @@ describe_distribution.factor <- function(
     Max = levels(x)[nlevels(x)],
     Q1 = NA,
     Q3 = NA,
-    Skewness = as.numeric(skewness(x, verbose = verbose)),
-    Kurtosis = as.numeric(kurtosis(x, verbose = verbose)),
+    Skewness = if (shape) as.numeric(skewness(x, verbose = verbose)) else NA,
+    Kurtosis = if (shape) as.numeric(kurtosis(x, verbose = verbose)) else NA,
     n = length(x),
     n_Missing = n_missing,
     stringsAsFactors = FALSE
@@ -391,8 +391,8 @@ describe_distribution.character <- function(
     Max = values[length(values)],
     Q1 = NA,
     Q3 = NA,
-    Skewness = as.numeric(skewness(x, verbose = verbose)),
-    Kurtosis = as.numeric(kurtosis(x, verbose = verbose)),
+    Skewness = if (shape) as.numeric(skewness(x, verbose = verbose)) else NA,
+    Kurtosis = if (shape) as.numeric(kurtosis(x, verbose = verbose)) else NA,
     n = length(x),
     n_Missing = n_missing,
     stringsAsFactors = FALSE

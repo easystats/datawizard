@@ -626,6 +626,25 @@ test_that("describe_distribution - shape: default comes from options", {
   }
 })
 
+test_that("describe_distribution - shape: FALSE skips the calculation", {
+  short <- list(
+    numeric = c(1, 2, 4),
+    factor = factor(c("a", "b", "b")),
+    character = c("a", "b")
+  )
+  for (fixture in names(short)) {
+    expect_warning(
+      describe_distribution(short[[fixture]]),
+      regexp = "Need at least",
+      label = fixture
+    )
+    expect_no_warning(
+      describe_distribution(short[[fixture]], shape = FALSE),
+      message = "Need at least"
+    )
+  }
+})
+
 test_that("describe_distribution - shape: print", {
   for (fixture in c("numeric", "data.frame", "grouped_df")) {
     out <- shape_fixtures[[fixture]](shape = FALSE)
