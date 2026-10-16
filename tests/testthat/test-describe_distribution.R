@@ -554,3 +554,84 @@ test_that("display() method exports to tinytable", {
   out <- describe_distribution(iris)
   expect_snapshot(display(out, format = "tt"))
 })
+
+
+# shape ---------------------------------------
+
+shape_cols <- c("Skewness", "Kurtosis")
+
+shape_fixtures <- list(
+  numeric = function(...) describe_distribution(c(mtcars$mpg, NA), ...),
+  factor = function(...) {
+    describe_distribution(factor(substring("statistics", 1:10, 1:10)), ...)
+  },
+  character = function(...) {
+    describe_distribution(as.character(ToothGrowth$supp), ...)
+  },
+  data.frame = function(...) {
+    describe_distribution(iris, include_factors = TRUE, ...)
+  },
+  grouped_df = function(...) {
+    describe_distribution(data_group(mtcars, "cyl"), select = c("mpg", "hp"), ...)
+  },
+  list = function(...) {
+    describe_distribution(
+      list(mtcars$mpg, factor(mtcars$cyl)),
+      include_factors = TRUE,
+      ...
+    )
+  },
+  by = function(...) {
+    describe_distribution(mtcars, select = c("mpg", "hp"), by = "am", ...)
+  }
+)
+
+test_that("describe_distribution - shape: numeric", {
+  x <- mtcars$mpg
+  x[3] <- NA
+  out_default <- describe_distribution(x)
+  out_false <- describe_distribution(x, shape = FALSE)
+  out_true <- describe_distribution(x, shape = TRUE)
+
+  expect_identical(names(out_false), setdiff(names(out_default), shape_cols))
+  expect_identical(
+    as.list(out_false)[names(out_false)],
+    as.list(out_default)[names(out_false)]
+  )
+  expect_equal(out_true$Skewness, as.numeric(skewness(x)), tolerance = 1e-10)
+  expect_equal(out_true$Kurtosis, as.numeric(kurtosis(x)), tolerance = 1e-10)
+})
+
+test_that("describe_distribution - shape: all methods", {
+  for (fixture in names(shape_fixtures)) {
+    out_false <- shape_fixtures[[fixture]](shape = FALSE)
+    out_true <- shape_fixtures[[fixture]](shape = TRUE)
+    expect_false(any(shape_cols %in% names(out_false)), label = fixture)
+    expect_true(all(shape_cols %in% names(out_true)), label = fixture)
+  }
+})
+
+test_that("describe_distribution - shape: default comes from options", {
+  for (fixture in names(shape_fixtures)) {
+    out <- shape_fixtures[[fixture]]()
+    expect_true(all(shape_cols %in% names(out)), label = fixture)
+  }
+
+  withr::local_options(describe_distribution_shape = FALSE)
+  for (fixture in names(shape_fixtures)) {
+    out_option <- shape_fixtures[[fixture]]()
+    out_true <- shape_fixtures[[fixture]](shape = TRUE)
+    expect_false(any(shape_cols %in% names(out_option)), label = fixture)
+    expect_true(all(shape_cols %in% names(out_true)), label = fixture)
+  }
+})
+
+test_that("describe_distribution - shape: print", {
+  for (fixture in c("numeric", "data.frame", "grouped_df")) {
+    out <- shape_fixtures[[fixture]](shape = FALSE)
+    expect_no_error({
+      printed <- utils::capture.output(print(out))
+    })
+    expect_false(any(grepl("Skewness|Kurtosis", printed)), label = fixture)
+  }
+})
