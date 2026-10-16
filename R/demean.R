@@ -483,12 +483,15 @@ degroup <- function(
     # x(ijk) is the individual value / variable that is measured on level 1
     # xbar(k) <- ave(x_ijk, L3, FUN = mean), the group mean of the variable at highest level
     # xbar(jk) <- ave(x_ijk, L3, L2, FUN = mean), the group mean of the variable at second level
+    # With more levels, each level's component is its group mean minus the
+    # group mean of the level above it.
     group_means_list <- lapply(select, function(i) {
       out <- lapply(seq_along(by), function(k) {
         stats::ave(dat[[i]], dat[, by[1:k], drop = FALSE], FUN = gm_fun)
       })
-      # subtract mean of higher level from lower level
-      for (j in 2:length(by)) {
+      # subtract mean of higher level from lower level. Loop from the lowest
+      # level up, so that the subtracted mean is not yet modified
+      for (j in length(by):2) {
         out[[j]] <- out[[j]] - out[[j - 1]]
       }
       names(out) <- paste0(i, "_", by)
