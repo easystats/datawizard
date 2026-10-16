@@ -546,3 +546,50 @@ test_that("degroup, nested `by` warns when levels are listed from lowest to high
   )
   expect_no_warning(degroup(d_rep, select = "v", by = "school/class"))
 })
+
+
+test_that("degroup, crossed components on unbalanced data follow Guo et al.", {
+  # persons crossed with items, with 1 or 2 rows per cell:
+  # (p1,i1) 2, (p1,i2) 1, (p2,i1) 1, (p2,i2) 1, (p3,i1) 1, (p3,i2) 2
+  d <- data.frame(
+    person = c("p1", "p1", "p1", "p2", "p2", "p3", "p3", "p3"),
+    item = c("i1", "i1", "i2", "i1", "i2", "i2", "i2", "i1"),
+    x = c(2, 4, 9, 5, 1, 6, 10, 3)
+  )
+  out <- demean(d, select = "x", by = c("person", "item"), append = FALSE)
+
+  # Oracle (closed-form, Guo et al. 2024, eq. 4): the components are the
+  # person mean, the item mean, and x minus both. Means over rows:
+  # person: p1 -> (2+4+9)/3 = 5, p2 -> (5+1)/2 = 3, p3 -> (6+10+3)/3 = 19/3
+  # item:   i1 -> (2+4+5+3)/4 = 3.5, i2 -> (9+1+6+10)/4 = 6.5
+  expected_person <- c(5, 5, 5, 3, 3, 19 / 3, 19 / 3, 19 / 3)
+  expected_item <- c(3.5, 3.5, 6.5, 3.5, 6.5, 6.5, 6.5, 3.5)
+  # within: 2-5-3.5 = -6.5, 4-5-3.5 = -4.5, 9-5-6.5 = -2.5, 5-3-3.5 = -1.5,
+  # 1-3-6.5 = -8.5, 6-19/3-6.5 = -41/6, 10-19/3-6.5 = -17/6, 3-19/3-3.5 = -41/6
+  expected_within <- c(-6.5, -4.5, -2.5, -1.5, -8.5, -41 / 6, -17 / 6, -41 / 6)
+  expect_equal(out$x_person_between, expected_person, ignore_attr = TRUE)
+  expect_equal(out$x_item_between, expected_item, ignore_attr = TRUE)
+  expect_equal(out$x_within, expected_within, ignore_attr = TRUE)
+
+  # Oracle (invariant): the components of each row sum to x
+  expect_equal(rowSums(out), d$x, ignore_attr = TRUE)
+
+  # Oracle (reference implementation): the steps of `cc.gmc()` in Guo et al.
+  # 2024, Appendix C: `aggregate()` the mean per cluster, `merge()` it back,
+  # and subtract each cluster mean from x
+  d$row <- seq_len(nrow(d))
+  mn1 <- stats::aggregate(d["x"], d["person"], mean, na.rm = TRUE)
+  mn2 <- stats::aggregate(d["x"], d["item"], mean, na.rm = TRUE)
+  names(mn1)[2] <- "x_mn1"
+  names(mn2)[2] <- "x_mn2"
+  ref <- merge(merge(d, mn1, by = "person"), mn2, by = "item")
+  ref <- ref[order(ref$row), ]
+  ref$x_dev <- ref$x - ref$x_mn1 - ref$x_mn2
+  expect_equal(out$x_person_between, ref$x_mn1, ignore_attr = TRUE)
+  expect_equal(out$x_item_between, ref$x_mn2, ignore_attr = TRUE)
+  expect_equal(out$x_within, ref$x_dev, ignore_attr = TRUE)
+
+  # the means are over rows, so they differ from the mean of the cell means:
+  # p1 -> mean(c(3, 9)) = 6, not 5
+  expect_false(isTRUE(all.equal(out$x_person_between[1], 6)))
+})
