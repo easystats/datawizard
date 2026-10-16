@@ -7,7 +7,7 @@ FIXES
 
 * Fixed `demean()` and `degroup()` for nested designs with three or more
   grouping variables. The group-meaned variables of the third and later
-  variables in `by` were wrong.
+  variables in `by` were wrong (#720).
 
 # datawizard 1.4.0
 
