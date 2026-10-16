@@ -1,15 +1,5 @@
 # Changelog
 
-## datawizard 1.4.1
-
-FIXES
-
-- Fixed an issue in
-  [`data_to_wide()`](https://easystats.github.io/datawizard/reference/data_to_wide.md)
-  where values could be assigned to wrong rows when input data were not
-  sorted by `id_cols`
-  ([\#713](https://github.com/easystats/datawizard/issues/713)).
-
 ## datawizard 1.4.0
 
 CRAN release: 2026-09-10
