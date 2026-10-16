@@ -273,10 +273,24 @@ handle a mix of nested and cross-classified designs in one model.
 nested designs, which is implemented in \code{demean()}. For nested designs, set
 \code{nested = TRUE} \emph{and} specify the variables that indicate the different
 levels in descending order in the \code{by} argument. E.g.,
-\verb{by = c("level4", "level3, "level2")} assumes a model like
+\code{by = c("level4", "level3", "level2")} assumes a model like
 \code{y ~ x + (1|level4/level3/level2)}. An alternative notation for the
 \code{by}-argument would be \code{by = "level4/level3/level2"}, similar to the
 formula notation.
+
+Any number of levels is possible. The group-meaned variable of the highest
+level is the mean within each of its groups. The group-meaned variable of
+each lower level is the mean within each of its groups minus the mean of
+the level above. The de-meaned variable is the value minus the mean of the
+lowest level. For \code{by = "level4/level3/level2"}, the variables are thus the
+\code{level4} mean, the \code{level3} mean minus the \code{level4} mean, the \code{level2} mean
+minus the \code{level3} mean, and the value minus the \code{level2} mean. Together,
+they sum to the original value. A group is defined by its level and all
+levels above it, so IDs of lower levels can repeat across groups of higher
+levels. Means are computed over all non-missing observations of a group, so
+larger groups weigh more (as in \emph{Brincks et al. 2017}). For \code{degroup()}, the
+variables are defined the same way with the statistic selected by \code{center}
+in place of the mean, and they still sum to the original value.
 }
 
 \section{Analysing panel data with mixed models using lme4}{

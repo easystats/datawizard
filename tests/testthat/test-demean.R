@@ -360,3 +360,118 @@ test_that("demean for nested designs (by > 1), nested = TRUE", {
 
   expect_equal(rowSums(out[, grepl("^val1", names(out))]), testdf$val1)
 })
+
+test_that("degroup for nested designs with three or more levels", {
+  # Unbalanced data. B and C ids repeat across higher-level clusters, so a
+  # cluster is defined by all variables above it (as in `y ~ (1 | A/B/C)`).
+  dat <- data.frame(
+    A = c(1, 1, 1, 1, 1, 2, 2, 2),
+    B = c(1, 1, 1, 2, 2, 1, 1, 2),
+    C = c(1, 1, 2, 1, 1, 1, 2, 1),
+    x = c(1, 3, 8, 4, 6, 10, 2, 7)
+  )
+
+  # Oracle (closed-form, Brincks et al. 2017, eq. 8-11, extended to three
+  # nested variables). Means over rows:
+  # A means: A=1 -> (1+3+8+4+6)/5 = 4.4, A=2 -> (10+2+7)/3 = 19/3
+  # A:B means: (1,1) -> 4, (1,2) -> 5, (2,1) -> 6, (2,2) -> 7
+  # A:B:C means: (1,1,1) -> 2, (1,1,2) -> 8, (1,2,1) -> 5, (2,1,1) -> 10,
+  #              (2,1,2) -> 2, (2,2,1) -> 7
+  expected_A <- c(4.4, 4.4, 4.4, 4.4, 4.4, 19 / 3, 19 / 3, 19 / 3)
+  expected_B <- c(4, 4, 4, 5, 5, 6, 6, 7) - expected_A
+  expected_C <- c(2, 2, 8, 5, 5, 10, 2, 7) - c(4, 4, 4, 5, 5, 6, 6, 7)
+  expected_within <- dat$x - c(2, 2, 8, 5, 5, 10, 2, 7)
+
+  for (by in list(c("A", "B", "C"), "A/B/C")) {
+    out <- degroup(
+      dat,
+      select = "x",
+      by = by,
+      nested = TRUE,
+      append = FALSE
+    )
+    expect_equal(out$x_A_between, expected_A, ignore_attr = TRUE)
+    expect_equal(out$x_B_between, expected_B, ignore_attr = TRUE)
+    expect_equal(out$x_C_between, expected_C, ignore_attr = TRUE)
+    expect_equal(out$x_within, expected_within, ignore_attr = TRUE)
+  }
+
+  # Oracle (invariant): the components of each row sum to x, and each
+  # component after the first has mean zero within the clusters above it.
+  out <- degroup(dat, select = "x", by = "A/B/C", append = FALSE)
+  expect_equal(rowSums(out), dat$x, ignore_attr = TRUE)
+  expect_equal(
+    as.vector(tapply(out$x_B_between, dat$A, mean)),
+    c(0, 0)
+  )
+  expect_equal(
+    as.vector(tapply(out$x_C_between, paste(dat$A, dat$B), mean)),
+    c(0, 0, 0, 0)
+  )
+
+  # Oracle (invariant): with several variables in `select`, each variable gets
+  # its own components. y = 2 * x + 1, so the components of y are twice those
+  # of x, plus 1 for the highest level.
+  dat$y <- 2 * dat$x + 1
+  out <- demean(dat, select = c("x", "y"), by = "A/B/C", append = FALSE)
+  expect_equal(out$y_A_between, 2 * expected_A + 1, ignore_attr = TRUE)
+  expect_equal(out$y_B_between, 2 * expected_B, ignore_attr = TRUE)
+  expect_equal(out$y_C_between, 2 * expected_C, ignore_attr = TRUE)
+  expect_equal(out$y_within, 2 * expected_within, ignore_attr = TRUE)
+  expect_equal(out$x_C_between, expected_C, ignore_attr = TRUE)
+})
+
+test_that("degroup for nested designs with four levels and median", {
+  # cluster statistic computed with an explicit loop, independent of
+  # `stats::ave()`; a cluster is a combination of the given variables
+  cluster_stat <- function(x, groups, fun = mean) {
+    key <- do.call(paste, c(groups, sep = "|"))
+    out <- numeric(length(x))
+    for (k in unique(key)) {
+      out[key == k] <- fun(x[key == k])
+    }
+    out
+  }
+
+  set.seed(123)
+  dat <- data.frame(
+    A = sample(1:3, 120, replace = TRUE),
+    B = sample(1:3, 120, replace = TRUE),
+    C = sample(1:2, 120, replace = TRUE),
+    D = sample(1:2, 120, replace = TRUE),
+    x = rnorm(120)
+  )
+
+  # Oracle (closed-form, Brincks et al. 2017, eq. 8-11, extended to four
+  # nested variables): the component of each variable is its cluster mean
+  # minus the cluster mean of the variable above it.
+  m1 <- cluster_stat(dat$x, dat["A"])
+  m2 <- cluster_stat(dat$x, dat[c("A", "B")])
+  m3 <- cluster_stat(dat$x, dat[c("A", "B", "C")])
+  m4 <- cluster_stat(dat$x, dat[c("A", "B", "C", "D")])
+
+  out <- degroup(dat, select = "x", by = "A/B/C/D", append = FALSE)
+  expect_equal(out$x_A_between, m1, ignore_attr = TRUE)
+  expect_equal(out$x_B_between, m2 - m1, ignore_attr = TRUE)
+  expect_equal(out$x_C_between, m3 - m2, ignore_attr = TRUE)
+  expect_equal(out$x_D_between, m4 - m3, ignore_attr = TRUE)
+  expect_equal(out$x_within, dat$x - m4, ignore_attr = TRUE)
+
+  # same definitions with the median in place of the mean, three levels
+  md1 <- cluster_stat(dat$x, dat["A"], stats::median)
+  md2 <- cluster_stat(dat$x, dat[c("A", "B")], stats::median)
+  md3 <- cluster_stat(dat$x, dat[c("A", "B", "C")], stats::median)
+
+  out <- degroup(
+    dat,
+    select = "x",
+    by = c("A", "B", "C"),
+    nested = TRUE,
+    center = "median",
+    append = FALSE
+  )
+  expect_equal(out$x_A_between, md1, ignore_attr = TRUE)
+  expect_equal(out$x_B_between, md2 - md1, ignore_attr = TRUE)
+  expect_equal(out$x_C_between, md3 - md2, ignore_attr = TRUE)
+  expect_equal(out$x_within, dat$x - md3, ignore_attr = TRUE)
+})
