@@ -371,3 +371,131 @@ test_that("data_filter works with tibbles", {
   expect_s3_class(out, "tbl_df")
   expect_named(attr(out, "groups"), c("cyl", ".rows"))
 })
+
+
+test_that("data_filter finds variables of the calling function", {
+  d <- data.frame(
+    id = c(1, 2, 3, 1, 3, 2),
+    item3 = c(NA, 2, 1, 2, 3, 3)
+  )
+
+  # bare condition with a local variable
+  f_filter <- function(data) {
+    lim <- 2
+    data_filter(data, item3 == lim)
+  }
+  f_subset <- function(data) {
+    lim <- 2
+    subset(data, item3 == lim)
+  }
+  expect_identical(f_filter(d), f_subset(d))
+
+  # bare and string condition with an indexed local variable
+  f_index <- function(data) {
+    mi <- c(1, 3)
+    i <- 2
+    data_filter(data, item3 == mi[i])
+  }
+  f_index_string <- function(data) {
+    mi <- c(1, 3)
+    i <- 2
+    data_filter(data, "item3 == mi[i]")
+  }
+  f_index_subset <- function(data) {
+    mi <- c(1, 3)
+    i <- 2
+    subset(data, item3 == mi[i])
+  }
+  expect_identical(f_index(d), f_index_subset(d))
+  expect_identical(f_index_string(d), f_index_subset(d))
+
+  # grouped data frame: same rows as filtering each group with subset()
+  grp <- data_group(d, "id")
+  expected <- do.call(
+    rbind,
+    lapply(attr(grp, "groups")$.rows, function(rows) f_subset(d[rows, ]))
+  )
+  expect_equal(f_filter(grp), expected, ignore_attr = TRUE)
+
+  # tibble
+  skip_if_not_installed("tibble")
+  tbl <- tibble::as_tibble(d)
+  out <- f_filter(tbl)
+  expect_s3_class(out, "tbl_df")
+  expect_equal(out, f_filter(d), ignore_attr = TRUE)
+})
+
+
+test_that("data_filter internal names do not hide the caller's variables", {
+  # a local variable holding 3 must select row 3, whatever its name
+  slice_with <- function(name) {
+    f <- function() NULL
+    body(f) <- bquote({
+      .(as.name(name)) <- 3
+      data_filter(mtcars, .(as.name(name)))
+    })
+    f()
+  }
+  ns <- asNamespace("datawizard")
+  fun_names <- ls(ns, all.names = TRUE, pattern = "data_filter|filter_syntax")
+  internal_names <- unique(unlist(lapply(fun_names, function(fn) {
+    all.vars(body(get(fn, envir = ns)))
+  })))
+  for (name in unique(c("i", "out", "x", internal_names))) {
+    expect_identical(slice_with(name), mtcars[3, ], info = name)
+  }
+
+  # a condition string held in a local variable named like an argument
+  f_string <- function() {
+    x <- "mpg > 30"
+    data_filter(mtcars, x)
+  }
+  expect_identical(f_string(), data_filter(mtcars, "mpg > 30"))
+})
+
+
+test_that("data_filter works in lapply() with a local variable named x", {
+  # https://github.com/easystats/datawizard/issues/379
+  out <- lapply(1, function(x) {
+    dat <- data.frame()
+    test <- c("a", "b", "c")
+    x <- "a"
+    list(data_filter(dat, x %in% test), subset(dat, x %in% test))
+  })
+  expect_identical(out[[1]][[1]], out[[1]][[2]])
+
+  out <- lapply(1, function(x) {
+    dat <- data.frame(g = c("a", "z", "b"))
+    test <- c("a", "b", "c")
+    list(data_filter(dat, g %in% test), subset(dat, g %in% test))
+  })
+  expect_identical(out[[1]][[1]], out[[1]][[2]])
+  expect_identical(rownames(out[[1]][[1]]), c("1", "3"))
+})
+
+
+test_that("data_filter uses a column before a local variable of the same name", {
+  d <- data.frame(item3 = c(1, 2, 3), lim = c(1, 3, 3))
+  f_filter <- function(data) {
+    lim <- 2
+    data_filter(data, item3 == lim)
+  }
+  f_subset <- function(data) {
+    lim <- 2
+    subset(data, item3 == lim)
+  }
+  expect_identical(f_filter(d), f_subset(d))
+  expect_identical(rownames(f_filter(d)), c("1", "3"))
+})
+
+
+test_that("data_filter finds a condition string further up the call stack", {
+  inner_fn <- function() {
+    data_filter(mtcars, cond)
+  }
+  caller_fn <- function() {
+    cond <- "mpg > 30"
+    inner_fn()
+  }
+  expect_identical(caller_fn(), data_filter(mtcars, "mpg > 30"))
+})
