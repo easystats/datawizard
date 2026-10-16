@@ -55,6 +55,7 @@
 #' data(iris)
 #' describe_distribution(iris)
 #' describe_distribution(iris, include_factors = TRUE, quartiles = TRUE)
+#' describe_distribution(iris, shape = FALSE)
 #' describe_distribution(list(mtcars$mpg, mtcars$cyl))
 #' @export
 describe_distribution <- function(x, ...) {
@@ -81,13 +82,13 @@ describe_distribution.list <- function(
   iqr = TRUE,
   range = TRUE,
   quartiles = FALSE,
-  shape = getOption("describe_distribution_shape", TRUE),
   ci = NULL,
   include_factors = FALSE,
   iterations = 100,
   threshold = 0.1,
   verbose = TRUE,
-  ...
+  ...,
+  shape = getOption("describe_distribution_shape", TRUE)
 ) {
   factor_el <- which(vapply(x, is.factor, FUN.VALUE = logical(1L)))
   num_el <- which(vapply(x, is.numeric, FUN.VALUE = logical(1L)))
@@ -177,12 +178,12 @@ describe_distribution.numeric <- function(
   iqr = TRUE,
   range = TRUE,
   quartiles = FALSE,
-  shape = getOption("describe_distribution_shape", TRUE),
   ci = NULL,
   iterations = 100,
   threshold = 0.1,
   verbose = TRUE,
-  ...
+  ...,
+  shape = getOption("describe_distribution_shape", TRUE)
 ) {
   insight::check_if_installed("bayestestR")
   out <- data.frame(.temp = 0)
@@ -302,9 +303,9 @@ describe_distribution.factor <- function(
   x,
   dispersion = TRUE,
   range = TRUE,
-  shape = getOption("describe_distribution_shape", TRUE),
   verbose = TRUE,
-  ...
+  ...,
+  shape = getOption("describe_distribution_shape", TRUE)
 ) {
   # Missing
   n_missing <- sum(is.na(x))
@@ -372,9 +373,9 @@ describe_distribution.character <- function(
   x,
   dispersion = TRUE,
   range = TRUE,
-  shape = getOption("describe_distribution_shape", TRUE),
   verbose = TRUE,
-  ...
+  ...,
+  shape = getOption("describe_distribution_shape", TRUE)
 ) {
   # Missing
   n_missing <- sum(is.na(x))
@@ -448,7 +449,6 @@ describe_distribution.data.frame <- function(
   iqr = TRUE,
   range = TRUE,
   quartiles = FALSE,
-  shape = getOption("describe_distribution_shape", TRUE),
   include_factors = FALSE,
   ci = NULL,
   iterations = 100,
@@ -457,7 +457,8 @@ describe_distribution.data.frame <- function(
   regex = FALSE,
   verbose = TRUE,
   by = NULL,
-  ...
+  ...,
+  shape = getOption("describe_distribution_shape", TRUE)
 ) {
   select <- .select_nse(
     select,
@@ -558,7 +559,6 @@ describe_distribution.grouped_df <- function(
   iqr = TRUE,
   range = TRUE,
   quartiles = FALSE,
-  shape = getOption("describe_distribution_shape", TRUE),
   include_factors = FALSE,
   ci = NULL,
   iterations = 100,
@@ -567,7 +567,8 @@ describe_distribution.grouped_df <- function(
   regex = FALSE,
   verbose = TRUE,
   by = NULL,
-  ...
+  ...,
+  shape = getOption("describe_distribution_shape", TRUE)
 ) {
   if (!is.null(by)) {
     if (!is.character(by)) {

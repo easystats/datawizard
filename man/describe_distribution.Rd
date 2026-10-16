@@ -16,21 +16,21 @@ describe_distribution(x, ...)
   iqr = TRUE,
   range = TRUE,
   quartiles = FALSE,
-  shape = getOption("describe_distribution_shape", TRUE),
   ci = NULL,
   iterations = 100,
   threshold = 0.1,
   verbose = TRUE,
-  ...
+  ...,
+  shape = getOption("describe_distribution_shape", TRUE)
 )
 
 \method{describe_distribution}{factor}(
   x,
   dispersion = TRUE,
   range = TRUE,
-  shape = getOption("describe_distribution_shape", TRUE),
   verbose = TRUE,
-  ...
+  ...,
+  shape = getOption("describe_distribution_shape", TRUE)
 )
 
 \method{describe_distribution}{data.frame}(
@@ -42,7 +42,6 @@ describe_distribution(x, ...)
   iqr = TRUE,
   range = TRUE,
   quartiles = FALSE,
-  shape = getOption("describe_distribution_shape", TRUE),
   include_factors = FALSE,
   ci = NULL,
   iterations = 100,
@@ -51,7 +50,8 @@ describe_distribution(x, ...)
   regex = FALSE,
   verbose = TRUE,
   by = NULL,
-  ...
+  ...,
+  shape = getOption("describe_distribution_shape", TRUE)
 )
 }
 \arguments{
@@ -77,11 +77,6 @@ on \code{\link[stats:IQR]{stats::IQR()}}, using \code{type = 6}).}
 \item{quartiles}{Return the first and third quartiles (25th and 75th
 percentiles).}
 
-\item{shape}{Logical, if \code{TRUE}, skewness and (excess) kurtosis are
-calculated (see \code{\link[=skewness]{skewness()}} and \code{\link[=kurtosis]{kurtosis()}}). Use \code{shape = FALSE} to omit
-them. The default can be changed with
-\code{options(describe_distribution_shape = FALSE)}.}
-
 \item{ci}{Confidence Interval (CI) level. Default is \code{NULL}, i.e. no
 confidence intervals are computed. If not \code{NULL}, confidence intervals are
 based on bootstrap replicates (see \code{iterations}).}
@@ -96,6 +91,11 @@ the fraction (0 to 0.5) of observations to be trimmed from each end of the
 vector before the mean is computed.}
 
 \item{verbose}{Show or silence warnings and messages.}
+
+\item{shape}{Logical, if \code{TRUE}, skewness and (excess) kurtosis are
+calculated (see \code{\link[=skewness]{skewness()}} and \code{\link[=kurtosis]{kurtosis()}}). Use \code{shape = FALSE} to omit
+them. The default can be changed with
+\code{options(describe_distribution_shape = FALSE)}.}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
@@ -191,6 +191,7 @@ describe_distribution(rnorm(100))
 data(iris)
 describe_distribution(iris)
 describe_distribution(iris, include_factors = TRUE, quartiles = TRUE)
+describe_distribution(iris, shape = FALSE)
 describe_distribution(list(mtcars$mpg, mtcars$cyl))
 \dontshow{\}) # examplesIf}
 }

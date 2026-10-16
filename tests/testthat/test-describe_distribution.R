@@ -598,6 +598,8 @@ test_that("describe_distribution - shape: numeric", {
     as.list(out_false)[names(out_false)],
     as.list(out_default)[names(out_false)]
   )
+  # oracle: reference implementation, skewness() and kurtosis() on the same
+  # vector; both drop the NA, as describe_distribution() does
   expect_equal(out_true$Skewness, as.numeric(skewness(x)), tolerance = 1e-10)
   expect_equal(out_true$Kurtosis, as.numeric(kurtosis(x)), tolerance = 1e-10)
 })
@@ -612,6 +614,7 @@ test_that("describe_distribution - shape: all methods", {
 })
 
 test_that("describe_distribution - shape: default comes from options", {
+  withr::local_options(describe_distribution_shape = NULL)
   for (fixture in names(shape_fixtures)) {
     out <- shape_fixtures[[fixture]]()
     expect_true(all(shape_cols %in% names(out)), label = fixture)
@@ -643,6 +646,17 @@ test_that("describe_distribution - shape: FALSE skips the calculation", {
       message = "Need at least"
     )
   }
+})
+
+test_that("describe_distribution - shape: positional and partial arguments", {
+  # `shape` comes after `...`, so positional arguments keep their meaning
+  out <- describe_distribution(iris, NULL, NULL, "mean", TRUE, TRUE, TRUE, FALSE, TRUE)
+  expect_true("Species" %in% out$Variable)
+  out <- describe_distribution(factor(c("a", "b", "b", "c")), TRUE, TRUE, FALSE)
+  expect_true(all(shape_cols %in% names(out)))
+  # ... and `s` still partially matches `select` only
+  out <- describe_distribution(iris, s = "Sepal.Length")
+  expect_identical(out$Variable, "Sepal.Length")
 })
 
 test_that("describe_distribution - shape: print", {
