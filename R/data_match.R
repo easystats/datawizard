@@ -264,7 +264,7 @@ data_filter.data.frame <- function(x, ...) {
         # when possible to evaluate, do we have a numeric vector provided
         # as string? (e.g. `"5:10"`) - then try to coerce to numeric
         eval_symbol_numeric <- tryCatch(
-          eval(parse(text = eval_symbol), envir = env),
+          suppressWarnings(eval(parse(text = eval_symbol), envir = env)),
           error = function(e) NULL
         )
       }

@@ -532,4 +532,19 @@ test_that("data_filter returns the filtered data when a condition warns", {
     }
   )
   expect_identical(n_warnings, 1)
+
+  # same for a condition given as string
+  f_warn_string <- function(data) {
+    a <- c("1", "y")
+    data_filter(data, "as.numeric(a) > 1")
+  }
+  n_warnings <- 0
+  withCallingHandlers(
+    f_warn_string(d),
+    warning = function(w) {
+      n_warnings <<- n_warnings + 1
+      invokeRestart("muffleWarning")
+    }
+  )
+  expect_identical(n_warnings, 1)
 })
