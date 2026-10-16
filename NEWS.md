@@ -1,5 +1,26 @@
 # datawizard 1.4.1
 
+BREAKING CHANGES
+
+* In `demean()` and `degroup()`, a formula in `by` whose terms are separated
+  only by `/`, such as `by = ~ L3/L2`, now means a nested design, like the
+  string `by = "L3/L2"`. Before, such a formula gave a cross-classified design.
+
+* `demean()` and `degroup()` now stop with an error when `by` mixes nested and
+  cross-classified grouping. A formula with both `+` and `/`, such as
+  `by = ~ C + A/B`, gave a cross-classified design before. A character vector
+  such as `by = c("C", "A/B")` gave an error that the variable `"A/B"` was not
+  found.
+
+CHANGES
+
+* `demean()` and `degroup()` now warn when the data do not seem to match `by`.
+  With `nested = FALSE`, the warning comes when each value of one `by`
+  variable occurs with only one value of another, which suggests a nested
+  design. With `nested = TRUE`, it comes when a pair of adjacent `by`
+  variables seems to be listed from the lowest to the highest level. Use
+  `verbose = FALSE` to turn the checks off.
+
 FIXES
 
 * Fixed an issue in `data_to_wide()` where values could be assigned to wrong rows

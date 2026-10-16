@@ -16,8 +16,11 @@
 #'   `by` can also identify two or more variables as group- or cluster-IDs. If
 #'   the data is nested and should be treated as such, set `nested = TRUE`. Else,
 #'   if `by` defines two or more variables and `nested = FALSE`, a cross-classified
-#'   design is assumed. Note that `demean()` and `degroup()` can't handle a mix
-#'   of nested and cross-classified designs in one model.
+#'   design is assumed. `demean()` and `degroup()` do not support designs that
+#'   mix nested and cross-classified grouping. Two forms of `by` stop with an
+#'   error: a formula with both `+` and `/`, such as `~ C + A/B`, and a
+#'   character vector of length two or more with an element that contains `/`,
+#'   such as `c("C", "A/B")`.
 #'
 #'   For nested designs, `by` can be:
 #'   - a character vector with the name of the variable that indicates the
@@ -25,6 +28,15 @@
 #'     `by = c("L4", "L3", "L2")`.
 #'   - a character vector with variable names in the format `by = "L4/L3/L2"`,
 #'     where the levels are separated by `/`.
+#'   - a formula in which the levels are separated by `/`, such as
+#'     `by = ~ L4/L3/L2`. This formula gives the same result as
+#'     `by = "L4/L3/L2"`, and it sets `nested = TRUE`.
+#'
+#'   For cross-classified designs, `by` can be a character vector such as
+#'   `by = c("A", "B")`, or a formula in which the variables are separated by
+#'   `+`, such as `by = ~ A + B`.
+#'
+#'   See also section _Checks of the grouping structure_ below.
 #'
 #'   See also section _De-meaning for cross-classified designs_ and
 #'   _De-meaning for nested designs_ below.
@@ -196,8 +208,43 @@
 #' more levels. Set `nested = TRUE` to explicitly assume a nested design. For
 #' cross-classified designs, de-meaning is supposed to work for models like
 #' `y ~ x + (1|level3) + (1|level2)`, but *not* for models like
-#' `y ~ x + (1|level3/level2)`. Note that `demean()` and `degroup()` can't
-#' handle a mix of nested and cross-classified designs in one model.
+#' `y ~ x + (1|level3/level2)`. Designs that mix nested and cross-classified
+#' grouping are not supported and give an error.
+#'
+#' For two crossed variables, J and K, `demean()` returns the three components
+#' of the fully cluster-mean-centered model in _Guo et al. (2024)_, eq. 4: the
+#' mean of the variable in its J cluster, the mean in its K cluster, and the
+#' within component, which is the value minus both means. Each mean is taken
+#' over the rows of the cluster, so clusters with more rows weigh more. The
+#' components also apply to unbalanced data, with different numbers of rows
+#' per combination of J and K. For each row where the variable is not
+#' missing, the components sum to the value. _Guo et al. (2024)_ also cover
+#' three or more crossed variables: footnote 6 and the R function in their
+#' Appendix C subtract the mean of each crossed variable, and `demean()` does
+#' the same. With `degroup()` and a `center` other than `"mean"`, the cluster
+#' statistic replaces the mean. _Guo et al. (2024)_ use means only.
+#'
+#' @section Checks of the grouping structure:
+#'
+#' With two or more variables in `by` and `verbose = TRUE`, `degroup()` checks
+#' whether the data match `by`. A check uses only the rows where both
+#' variables of a pair are not missing, and it ignores unused factor levels.
+#'
+#' - With `nested = FALSE`, `degroup()` gives a warning when each value of one
+#'   `by` variable occurs with only one value of another `by` variable. Such
+#'   data look nested, so the warning names both variables and suggests
+#'   `nested = TRUE`. Crossed data with this pattern, for example a variable
+#'   with a single value, also give the warning. Nested data whose lower-level
+#'   IDs repeat across clusters (e.g. class `"1"` in each school) look crossed,
+#'   so this check does not find them.
+#' - With `nested = TRUE`, `degroup()` gives a warning for each adjacent pair
+#'   in `by` when each value of the first variable occurs with only one value
+#'   of the second, and some value of the second occurs with two or more
+#'   values of the first. The warning says that `by` lists the levels from
+#'   highest to lowest, and it names both variables.
+#'
+#' The warnings do not change the returned values. Set `verbose = FALSE` to
+#' turn the checks off.
 #'
 #' @section De-meaning for nested designs:
 #'
@@ -208,7 +255,7 @@
 #' `by = c("level4", "level3, "level2")` assumes a model like
 #' `y ~ x + (1|level4/level3/level2)`. An alternative notation for the
 #' `by`-argument would be `by = "level4/level3/level2"`, similar to the
-#' formula notation.
+#' formula notation, or the formula `by = ~ level4/level3/level2`.
 #'
 #' @section Analysing panel data with mixed models using lme4:
 #'
@@ -342,33 +389,10 @@ degroup <- function(
     ))
   }
 
-  # handle different "by" options. A formula with only "/" (e.g. ~ L4/L3/L2)
-  # is nested, like the string "L4/L3/L2". A formula with only "+" is crossed.
-  if (inherits(by, "formula")) {
-    by_terms <- insight::safe_deparse(by[[length(by)]])
-    by_nested <- grepl("/", by_terms, fixed = TRUE)
-    if (by_nested && grepl("+", by_terms, fixed = TRUE)) {
-      .mixed_design_error()
-    }
-    if (by_nested) {
-      nested <- TRUE
-    }
-    by <- all.vars(by)
-  }
-
-  # a character vector such as c("L4", "L3/L2") mixes crossed and nested
-  if (length(by) > 1 && any(grepl("/", by, fixed = TRUE))) {
-    .mixed_design_error()
-  }
-
-  # we also allow lme4-syntax here: if by = "L4/L3/L2", we assume a nested design
-  if (length(by) == 1 && grepl("/", by, fixed = TRUE)) {
-    by <- insight::trim_ws(unlist(
-      strsplit(by, "/", fixed = TRUE),
-      use.names = FALSE
-    ))
-    nested <- TRUE
-  }
+  # handle different "by" options
+  by_parsed <- .parse_by(by, nested)
+  by <- by_parsed$by
+  nested <- by_parsed$nested
 
   # identify interaction terms
   interactions_no <- select[!grepl("(\\*|\\:)", select)]
@@ -478,9 +502,9 @@ degroup <- function(
   )
 
   # we allow disaggregating level-specific effects for cross-classified multilevel
-  # models (see Guo et al. 2024). Two levels should work as proposed by the authors,
-  # more levels also already work, but need to check the formula from the paper
-  # and validate results
+  # models (see Guo et al. 2024). Eq. 4 defines the components for two crossed
+  # variables; footnote 6 and the cc.gmc() function in Appendix C subtract the
+  # mean of each crossed variable for three or more
 
   if (length(by) == 1) {
     # simple case: one level
@@ -599,6 +623,40 @@ detrend <- degroup
 
 # helper -----------------------------------------------------------------------
 
+# Returns the variable names in `by` and whether the design is nested.
+.parse_by <- function(by, nested) {
+  # A formula with only "/" (e.g. ~ L4/L3/L2) is nested, like the string
+  # "L4/L3/L2". A formula with only "+" is crossed.
+  if (inherits(by, "formula")) {
+    by_terms <- insight::safe_deparse(by[[length(by)]])
+    by_nested <- grepl("/", by_terms, fixed = TRUE)
+    if (by_nested && grepl("+", by_terms, fixed = TRUE)) {
+      .mixed_design_error()
+    }
+    if (by_nested) {
+      nested <- TRUE
+    }
+    by <- all.vars(by)
+  }
+
+  # a character vector such as c("L4", "L3/L2") mixes crossed and nested
+  if (length(by) > 1 && any(grepl("/", by, fixed = TRUE))) {
+    .mixed_design_error()
+  }
+
+  # we also allow lme4-syntax here: if by = "L4/L3/L2", we assume a nested design
+  if (length(by) == 1 && grepl("/", by, fixed = TRUE)) {
+    by <- insight::trim_ws(unlist(
+      strsplit(by, "/", fixed = TRUE),
+      use.names = FALSE
+    ))
+    nested <- TRUE
+  }
+
+  list(by = by, nested = nested)
+}
+
+
 .mixed_design_error <- function() {
   insight::format_error(
     "Designs that mix nested and crossed grouping are not supported.",
@@ -615,11 +673,11 @@ detrend <- degroup
   if (!any(keep)) {
     return(FALSE)
   }
-  pairs <- unique(data.frame(
+  observed <- unique(data.frame(
     p = as.character(p[keep]),
     q = as.character(q[keep])
   ))
-  !anyDuplicated(pairs$p)
+  !anyDuplicated(observed$p)
 }
 
 

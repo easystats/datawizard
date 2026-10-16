@@ -55,8 +55,11 @@ indicates the group- or cluster-ID. For cross-classified or nested designs,
 \code{by} can also identify two or more variables as group- or cluster-IDs. If
 the data is nested and should be treated as such, set \code{nested = TRUE}. Else,
 if \code{by} defines two or more variables and \code{nested = FALSE}, a cross-classified
-design is assumed. Note that \code{demean()} and \code{degroup()} can't handle a mix
-of nested and cross-classified designs in one model.
+design is assumed. \code{demean()} and \code{degroup()} do not support designs that
+mix nested and cross-classified grouping. Two forms of \code{by} stop with an
+error: a formula with both \code{+} and \code{/}, such as \code{~ C + A/B}, and a
+character vector of length two or more with an element that contains \code{/},
+such as \code{c("C", "A/B")}.
 
 For nested designs, \code{by} can be:
 \itemize{
@@ -65,7 +68,16 @@ levels, ordered from \emph{highest} level to \emph{lowest} (e.g.
 \code{by = c("L4", "L3", "L2")}.
 \item a character vector with variable names in the format \code{by = "L4/L3/L2"},
 where the levels are separated by \code{/}.
+\item a formula in which the levels are separated by \code{/}, such as
+\code{by = ~ L4/L3/L2}. This formula gives the same result as
+\code{by = "L4/L3/L2"}, and it sets \code{nested = TRUE}.
 }
+
+For cross-classified designs, \code{by} can be a character vector such as
+\code{by = c("A", "B")}, or a formula in which the variables are separated by
+\code{+}, such as \code{by = ~ A + B}.
+
+See also section \emph{Checks of the grouping structure} below.
 
 See also section \emph{De-meaning for cross-classified designs} and
 \emph{De-meaning for nested designs} below.}
@@ -262,8 +274,46 @@ equivalent to de-meaning of nested data structures from models with three or
 more levels. Set \code{nested = TRUE} to explicitly assume a nested design. For
 cross-classified designs, de-meaning is supposed to work for models like
 \code{y ~ x + (1|level3) + (1|level2)}, but \emph{not} for models like
-\code{y ~ x + (1|level3/level2)}. Note that \code{demean()} and \code{degroup()} can't
-handle a mix of nested and cross-classified designs in one model.
+\code{y ~ x + (1|level3/level2)}. Designs that mix nested and cross-classified
+grouping are not supported and give an error.
+
+For two crossed variables, J and K, \code{demean()} returns the three components
+of the fully cluster-mean-centered model in \emph{Guo et al. (2024)}, eq. 4: the
+mean of the variable in its J cluster, the mean in its K cluster, and the
+within component, which is the value minus both means. Each mean is taken
+over the rows of the cluster, so clusters with more rows weigh more. The
+components also apply to unbalanced data, with different numbers of rows
+per combination of J and K. For each row where the variable is not
+missing, the components sum to the value. \emph{Guo et al. (2024)} also cover
+three or more crossed variables: footnote 6 and the R function in their
+Appendix C subtract the mean of each crossed variable, and \code{demean()} does
+the same. With \code{degroup()} and a \code{center} other than \code{"mean"}, the cluster
+statistic replaces the mean. \emph{Guo et al. (2024)} use means only.
+}
+
+\section{Checks of the grouping structure}{
+
+
+With two or more variables in \code{by} and \code{verbose = TRUE}, \code{degroup()} checks
+whether the data match \code{by}. A check uses only the rows where both
+variables of a pair are not missing, and it ignores unused factor levels.
+\itemize{
+\item With \code{nested = FALSE}, \code{degroup()} gives a warning when each value of one
+\code{by} variable occurs with only one value of another \code{by} variable. Such
+data look nested, so the warning names both variables and suggests
+\code{nested = TRUE}. Crossed data with this pattern, for example a variable
+with a single value, also give the warning. Nested data whose lower-level
+IDs repeat across clusters (e.g. class \code{"1"} in each school) look crossed,
+so this check does not find them.
+\item With \code{nested = TRUE}, \code{degroup()} gives a warning for each adjacent pair
+in \code{by} when each value of the first variable occurs with only one value
+of the second, and some value of the second occurs with two or more
+values of the first. The warning says that \code{by} lists the levels from
+highest to lowest, and it names both variables.
+}
+
+The warnings do not change the returned values. Set \code{verbose = FALSE} to
+turn the checks off.
 }
 
 \section{De-meaning for nested designs}{
@@ -276,7 +326,7 @@ levels in descending order in the \code{by} argument. E.g.,
 \verb{by = c("level4", "level3, "level2")} assumes a model like
 \code{y ~ x + (1|level4/level3/level2)}. An alternative notation for the
 \code{by}-argument would be \code{by = "level4/level3/level2"}, similar to the
-formula notation.
+formula notation, or the formula \code{by = ~ level4/level3/level2}.
 }
 
 \section{Analysing panel data with mixed models using lme4}{

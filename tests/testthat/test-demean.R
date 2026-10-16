@@ -470,6 +470,26 @@ test_that("degroup, crossed `by` warns when one variable is nested in another", 
   expect_match(w, "`a` is nested in `b`", fixed = TRUE)
   expect_match(w, "set `nested = TRUE`", fixed = TRUE)
 
+  # a crossed variable with a single value also warns
+  d_single <- data.frame(
+    person = c("p1", "p1", "p2", "p2"),
+    site = c("s1", "s1", "s1", "s1"),
+    v = c(1, 2, 3, 5)
+  )
+  w <- squished_warnings(
+    degroup(d_single, select = "v", by = c("person", "site"))
+  )
+  expect_length(w, 1)
+  expect_match(w, "`person` is nested in `site`", fixed = TRUE)
+
+  # nested data whose class ids repeat across schools look crossed: no warning
+  d_rep <- data.frame(
+    school = c("s1", "s1", "s1", "s1", "s2", "s2", "s2", "s2"),
+    class = c("c1", "c1", "c2", "c2", "c1", "c1", "c2", "c2"),
+    v = c(1, 3, 2, 6, 5, 9, 4, 8)
+  )
+  expect_no_warning(degroup(d_rep, select = "v", by = c("school", "class")))
+
   # no warning when no row has both values
   d_na <- data.frame(
     a = c("x", "x", NA, NA),
@@ -592,4 +612,24 @@ test_that("degroup, crossed components on unbalanced data follow Guo et al.", {
   # the means are over rows, so they differ from the mean of the cell means:
   # p1 -> mean(c(3, 9)) = 6, not 5
   expect_false(isTRUE(all.equal(out$x_person_between[1], 6)))
+
+  # with another `center`, the cluster statistic replaces the mean:
+  # person medians: p1 -> 4, p2 -> 3, p3 -> 6; item medians: i1 -> 3.5,
+  # i2 -> 7.5
+  out <- degroup(
+    d,
+    select = "x",
+    by = c("person", "item"),
+    center = "median",
+    append = FALSE
+  )
+  expected_person <- c(4, 4, 4, 3, 3, 6, 6, 6)
+  expected_item <- c(3.5, 3.5, 7.5, 3.5, 7.5, 7.5, 7.5, 3.5)
+  expect_equal(out$x_person_between, expected_person, ignore_attr = TRUE)
+  expect_equal(out$x_item_between, expected_item, ignore_attr = TRUE)
+  expect_equal(
+    out$x_within,
+    d$x - expected_person - expected_item,
+    ignore_attr = TRUE
+  )
 })
