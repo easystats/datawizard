@@ -7,5 +7,6 @@
       Time   "Time"    "0.986393923832144"
       demand "demand"  "0.406270770677043"
       attr(,"class")
-      [1] "parameters_smoothness" "matrix"                "array"                
+      [1] "datawizard_smoothness" "parameters_smoothness" "matrix"               
+      [4] "array"                
 

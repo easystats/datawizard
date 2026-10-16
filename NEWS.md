@@ -1,5 +1,13 @@
 # datawizard (development)
 
+CHANGES
+
+* `skewness()`, `kurtosis()`, and `smoothness()` now return objects of class
+  `datawizard_skewness`, `datawizard_kurtosis`, and `datawizard_smoothness`.
+  The old class names `parameters_skewness`, `parameters_kurtosis`, and
+  `parameters_smoothness` remain as secondary classes, so code that checks
+  `class(x)[1]` for the old names needs to be updated (#248).
+
 FIXES
 
 * Fixed an issue in `data_to_wide()` where values could be assigned to wrong rows
