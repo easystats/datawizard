@@ -67,6 +67,7 @@ reference:
       - data_tabulate
       - data_peek
       - data_seek
+      - describe_missing
       - means_by_group
       - contains("distribution")
       - kurtosis
