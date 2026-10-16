@@ -264,10 +264,24 @@
 #' nested designs, which is implemented in `demean()`. For nested designs, set
 #' `nested = TRUE` *and* specify the variables that indicate the different
 #' levels in descending order in the `by` argument. E.g.,
-#' `by = c("level4", "level3, "level2")` assumes a model like
+#' `by = c("level4", "level3", "level2")` assumes a model like
 #' `y ~ x + (1|level4/level3/level2)`. An alternative notation for the
 #' `by`-argument would be `by = "level4/level3/level2"`, similar to the
 #' formula notation, or the formula `by = ~ level4/level3/level2`.
+#'
+#' Any number of levels is possible. The group-meaned variable of the highest
+#' level is the mean within each of its groups. The group-meaned variable of
+#' each lower level is the mean within each of its groups minus the mean of
+#' the level above. The de-meaned variable is the value minus the mean of the
+#' lowest level. For `by = "level4/level3/level2"`, the variables are thus the
+#' `level4` mean, the `level3` mean minus the `level4` mean, the `level2` mean
+#' minus the `level3` mean, and the value minus the `level2` mean. Together,
+#' they sum to the original value. A group is defined by its level and all
+#' levels above it, so IDs of lower levels can repeat across groups of higher
+#' levels. Means are computed over all non-missing observations of a group, so
+#' larger groups weigh more (as in _Brincks et al. 2017_). For `degroup()`, the
+#' variables are defined the same way with the statistic selected by `center`
+#' in place of the mean, and they still sum to the original value.
 #'
 #' @section Analysing panel data with mixed models using lme4:
 #'
@@ -538,12 +552,15 @@ degroup <- function(
     # x(ijk) is the individual value / variable that is measured on level 1
     # xbar(k) <- ave(x_ijk, L3, FUN = mean), the group mean of the variable at highest level
     # xbar(jk) <- ave(x_ijk, L3, L2, FUN = mean), the group mean of the variable at second level
+    # With more levels, each level's component is its group mean minus the
+    # group mean of the level above it.
     group_means_list <- lapply(select, function(i) {
       out <- lapply(seq_along(by), function(k) {
         stats::ave(dat[[i]], dat[, by[1:k], drop = FALSE], FUN = gm_fun)
       })
-      # subtract mean of higher level from lower level
-      for (j in 2:length(by)) {
+      # subtract mean of higher level from lower level. Loop from the lowest
+      # level up, so that the subtracted mean is not yet modified
+      for (j in length(by):2) {
         out[[j]] <- out[[j]] - out[[j - 1]]
       }
       names(out) <- paste0(i, "_", by)
