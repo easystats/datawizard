@@ -63,6 +63,18 @@
 #' However, unlike `subset()`, it preserves label attributes and is useful when
 #' working with labelled data.
 #'
+#' A condition in `data_filter()` can use variables of the function that calls
+#' `data_filter()`, for example `data_filter(data, value > threshold)` where
+#' `threshold` is defined in that function. Names are found with two rules:
+#'
+#' - If the complete condition evaluates to a number or a string in the calling
+#'   code, or in a function further up the call stack, this value is used as
+#'   row indices or as the filter expression.
+#' - Otherwise, the condition is evaluated like in `subset()`. Names are looked
+#'   up in the columns of `x` first. Then they are looked up in the environment
+#'   that called `data_filter()`, and in the environments where the calling
+#'   function was defined.
+#'
 #' @examples
 #' data_match(mtcars, data.frame(vs = 0, am = 1))
 #' data_match(mtcars, data.frame(vs = 0, am = c(0, 1)))
@@ -91,6 +103,12 @@
 #'   data_filter(data, condition)
 #' }
 #' my_filter(mtcars, "am != 0")
+#'
+#' # Use a variable of the function in the condition
+#' my_filter <- function(data, threshold) {
+#'   data_filter(data, mpg > threshold)
+#' }
+#' my_filter(mtcars, 30)
 #'
 #' # string can also be used directly as argument
 #' data_filter(mtcars, "am != 0")

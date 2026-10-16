@@ -499,3 +499,13 @@ test_that("data_filter finds a condition string further up the call stack", {
   }
   expect_identical(caller_fn(), data_filter(mtcars, "mpg > 30"))
 })
+
+
+test_that("data_filter returns the filtered data when a condition warns", {
+  d <- data.frame(a = c("1", "x", "3"))
+  expect_warning(
+    out <- data_filter(d, as.numeric(a) > 1),
+    "NAs introduced by coercion"
+  )
+  expect_identical(out, suppressWarnings(subset(d, as.numeric(a) > 1)))
+})
