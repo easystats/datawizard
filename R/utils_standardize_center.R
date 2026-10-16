@@ -12,14 +12,26 @@
   verbose = TRUE,
   reference = NULL,
   center = NULL,
-  scale = NULL
+  scale = NULL,
+  cluster = NULL
 ) {
+  if (!is.null(cluster) && length(cluster) != length(x)) {
+    insight::format_error(
+      "`cluster` must have the same length as the variable to transform."
+    )
+  }
+
   # Warning if all NaNs
   if (all(is.na(x) | is.infinite(x))) {
     return(NULL)
   }
 
-  if (.are_weights(weights)) {
+  if (!is.null(cluster)) {
+    valid_x <- !is.na(x) & !is.infinite(x) & !is.na(cluster)
+    na_values <- is.na(x) | is.na(cluster)
+    inf_values <- is.infinite(x)
+    vals <- x[valid_x]
+  } else if (.are_weights(weights)) {
     valid_x <- !is.na(x) &
       !is.na(weights) &
       !is.infinite(x) &
@@ -48,9 +60,16 @@
     vals <- .factor_to_numeric(vals)
   }
 
+  # with clusters, center and scale are computed from one value per cluster.
+  # Like missing values, infinite values are left out.
+  ref_vals <- vals
+  if (!is.null(cluster)) {
+    ref_vals <- .cluster_values(vals, cluster[valid_x])
+  }
+
   # Get center and scale
   ref <- .get_center_scale(
-    vals,
+    ref_vals,
     robust,
     weights,
     reference,
@@ -68,6 +87,64 @@
     na_values = na_values,
     inf_values = inf_values
   )
+}
+
+
+# cluster-level values ----
+#
+# Reduces `x` to one value per cluster. `x` and `cluster` must not contain
+# missing or infinite values: `.process_std_center()` passes only the rows in
+# `valid_x`.
+#
+#' @keywords internal
+.cluster_values <- function(x, cluster) {
+  cluster_pairs <- unique(data.frame(cluster = cluster, x = x))
+  if (anyDuplicated(cluster_pairs$cluster) > 0) {
+    insight::format_error(
+      "The variable takes more than one value within a cluster. With `cluster`, it must have one value per cluster."
+    )
+  }
+  if (nrow(cluster_pairs) < 2) {
+    insight::format_error(
+      "`cluster` must contain at least two clusters with finite, non-missing values."
+    )
+  }
+  cluster_pairs$x
+}
+
+
+#' @keywords internal
+.check_cluster_args <- function(
+  cluster,
+  weights = NULL,
+  reference = NULL,
+  center = NULL,
+  scale = NULL
+) {
+  if (is.null(cluster)) {
+    return(invisible(NULL))
+  }
+  if (!is.null(weights)) {
+    insight::format_error("`cluster` cannot be combined with `weights`.")
+  }
+  # data frame methods pass `NA` when no center or scale was given
+  has_value <- function(i) is.numeric(i) && !all(is.na(i))
+  if (!is.null(reference) || has_value(center) || has_value(scale)) {
+    insight::format_error(
+      "`cluster` cannot be combined with `reference`, or with values for `center` or `scale`."
+    )
+  }
+  invisible(NULL)
+}
+
+
+#' @keywords internal
+.check_cluster_column <- function(x, cluster) {
+  if (!cluster %in% colnames(x)) {
+    insight::format_error(
+      paste0("Could not find the `cluster` column `", cluster, "`.")
+    )
+  }
 }
 
 
@@ -91,13 +168,31 @@
   .center = NULL,
   .scale = NULL,
   keep_character = FALSE,
-  preserve_value_labels = FALSE
+  preserve_value_labels = FALSE,
+  cluster = NULL
 ) {
   # check append argument, and set default
   if (isFALSE(append)) {
     append <- NULL
   } else if (isTRUE(append)) {
     append <- append_suffix
+  }
+
+  # a single string is the name of the cluster column, which is never
+  # transformed
+  cluster_name <- NULL
+  if (!is.null(cluster)) {
+    # check here, because `.scale` is dropped below when no `.center` is given
+    .check_cluster_args(cluster, weights, reference, .center, .scale)
+    if (is.character(cluster) && length(cluster) == 1L) {
+      .check_cluster_column(x, cluster)
+      cluster_name <- cluster
+      exclude <- c(exclude, cluster)
+    } else if (length(cluster) != nrow(x)) {
+      insight::format_error(
+        "`cluster` must have the same length as the number of rows in the data."
+      )
+    }
   }
 
   if (!is.null(weights) && is.character(weights)) {
@@ -155,6 +250,12 @@
 
   if (!is.null(weights) && is.character(weights)) {
     weights <- x[[weights]]
+  }
+
+  if (!is.null(cluster_name)) {
+    cluster <- x[[cluster_name]]
+  } else if (!is.null(cluster)) {
+    cluster <- cluster[!omit]
   }
 
   # append standardized variables
@@ -235,7 +336,8 @@
     weights = weights,
     append = append,
     center = .center,
-    scale = .scale
+    scale = .scale,
+    cluster = cluster
   )
 }
 
@@ -481,8 +583,20 @@
   append_suffix = "_z",
   reference,
   weights,
-  keep_factors
+  keep_factors,
+  cluster = NULL
 ) {
+  if (!is.null(cluster)) {
+    if (!is.character(cluster) || length(cluster) != 1L) {
+      insight::format_error(
+        "For grouped data frames, `cluster` must be a column name."
+      )
+    }
+    .check_cluster_args(cluster, weights, reference)
+    .check_cluster_column(x, cluster)
+    exclude <- c(exclude, cluster)
+  }
+
   if (!is.null(reference)) {
     insight::format_error(
       "The `reference` argument cannot be used with grouped standardization for now."

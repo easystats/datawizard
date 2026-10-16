@@ -1,5 +1,12 @@
 # datawizard (development)
 
+CHANGES
+
+* `center()` and `standardize()` gain a `cluster` argument. If `cluster` is
+  given, the center and scale come from one value per cluster. Cluster-level
+  variables in unbalanced long-format data are then not weighted by cluster
+  size (#672).
+
 FIXES
 
 * Fixed an issue in `data_to_wide()` where values could be assigned to wrong rows

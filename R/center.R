@@ -114,8 +114,11 @@ center.numeric <- function(
   reference = NULL,
   center = NULL,
   verbose = TRUE,
+  cluster = NULL,
   ...
 ) {
+  .check_cluster_args(cluster, weights, reference, center)
+
   # set default. Furthermore, data.frame methods cannot return a vector
   # of NULLs for each variable - instead they return NA. Thus, we have to
   # treat NA like NULL
@@ -130,7 +133,8 @@ center.numeric <- function(
     verbose,
     reference,
     center,
-    scale = NULL
+    scale = NULL,
+    cluster = cluster
   )
   dot_args <- list(...)
 
@@ -208,6 +212,7 @@ center.data.frame <- function(
   ignore_case = FALSE,
   verbose = TRUE,
   regex = FALSE,
+  cluster = NULL,
   ...
 ) {
   # evaluate select/exclude, may be select-helpers
@@ -232,7 +237,8 @@ center.data.frame <- function(
     remove_na,
     reference,
     .center = center,
-    .scale = NULL
+    .scale = NULL,
+    cluster = cluster
   )
 
   # set new values
@@ -246,6 +252,7 @@ center.data.frame <- function(
       verbose = FALSE,
       reference = reference[[var]],
       center = my_args$center[var],
+      cluster = my_args$cluster,
       force = force,
       add_transform_class = FALSE
     )
@@ -281,6 +288,7 @@ center.grouped_df <- function(
   ignore_case = FALSE,
   verbose = TRUE,
   regex = FALSE,
+  cluster = NULL,
   ...
 ) {
   # evaluate select/exclude, may be select-helpers
@@ -301,7 +309,8 @@ center.grouped_df <- function(
     append_suffix = "_c",
     reference,
     weights,
-    keep_factors = force
+    keep_factors = force,
+    cluster = cluster
   )
 
   for (rows in my_args$grps) {
@@ -311,6 +320,7 @@ center.grouped_df <- function(
       exclude = NULL,
       robust = robust,
       weights = my_args$weights,
+      cluster = cluster,
       remove_na = remove_na,
       verbose = verbose,
       force = force,
