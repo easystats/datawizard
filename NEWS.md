@@ -1,5 +1,11 @@
 # datawizard (development)
 
+CHANGES
+
+* `describe_distribution()` gains a `shape` argument. Use `shape = FALSE` to
+  omit skewness and kurtosis. The default can be changed with
+  `options(describe_distribution_shape = FALSE)` (#687).
+
 FIXES
 
 * Fixed an issue in `data_to_wide()` where values could be assigned to wrong rows

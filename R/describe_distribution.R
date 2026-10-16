@@ -23,6 +23,10 @@
 #'   can also increase the computation time significantly.
 #' @param iqr Logical, if `TRUE`, the interquartile range is calculated (based
 #'   on [stats::IQR()], using `type = 6`).
+#' @param shape Logical, if `TRUE`, skewness and (excess) kurtosis are
+#'   calculated (see [skewness()] and [kurtosis()]). Use `shape = FALSE` to omit
+#'   them. The default can be changed with
+#'   `options(describe_distribution_shape = FALSE)`.
 #' @param verbose Show or silence warnings and messages.
 #' @inheritParams bayestestR::point_estimate
 #' @inheritParams extract_column_names
@@ -51,6 +55,7 @@
 #' data(iris)
 #' describe_distribution(iris)
 #' describe_distribution(iris, include_factors = TRUE, quartiles = TRUE)
+#' describe_distribution(iris, shape = FALSE)
 #' describe_distribution(list(mtcars$mpg, mtcars$cyl))
 #' @export
 describe_distribution <- function(x, ...) {
@@ -82,7 +87,8 @@ describe_distribution.list <- function(
   iterations = 100,
   threshold = 0.1,
   verbose = TRUE,
-  ...
+  ...,
+  shape = getOption("describe_distribution_shape", TRUE)
 ) {
   factor_el <- which(vapply(x, is.factor, FUN.VALUE = logical(1L)))
   num_el <- which(vapply(x, is.numeric, FUN.VALUE = logical(1L)))
@@ -128,6 +134,7 @@ describe_distribution.list <- function(
           iqr = iqr,
           range = range,
           quartiles = quartiles,
+          shape = shape,
           ci = ci,
           iterations = iterations,
           threshold = threshold,
@@ -175,7 +182,8 @@ describe_distribution.numeric <- function(
   iterations = 100,
   threshold = 0.1,
   verbose = TRUE,
-  ...
+  ...,
+  shape = getOption("describe_distribution_shape", TRUE)
 ) {
   insight::check_if_installed("bayestestR")
   out <- data.frame(.temp = 0)
@@ -261,14 +269,16 @@ describe_distribution.numeric <- function(
     )
   }
 
-  # Skewness
-  out <- cbind(
-    out,
-    data.frame(
-      Skewness = as.numeric(skewness(x, verbose = verbose)),
-      Kurtosis = as.numeric(kurtosis(x, verbose = verbose))
+  # Skewness and kurtosis
+  if (shape) {
+    out <- cbind(
+      out,
+      data.frame(
+        Skewness = as.numeric(skewness(x, verbose = verbose)),
+        Kurtosis = as.numeric(kurtosis(x, verbose = verbose))
+      )
     )
-  )
+  }
 
   out$n <- length(x)
   out$n_Missing <- n_missing
@@ -294,7 +304,8 @@ describe_distribution.factor <- function(
   dispersion = TRUE,
   range = TRUE,
   verbose = TRUE,
-  ...
+  ...,
+  shape = getOption("describe_distribution_shape", TRUE)
 ) {
   # Missing
   n_missing <- sum(is.na(x))
@@ -310,8 +321,8 @@ describe_distribution.factor <- function(
     Max = levels(x)[nlevels(x)],
     Q1 = NA,
     Q3 = NA,
-    Skewness = as.numeric(skewness(x, verbose = verbose)),
-    Kurtosis = as.numeric(kurtosis(x, verbose = verbose)),
+    Skewness = if (shape) as.numeric(skewness(x, verbose = verbose)) else NA,
+    Kurtosis = if (shape) as.numeric(kurtosis(x, verbose = verbose)) else NA,
     n = length(x),
     n_Missing = n_missing,
     stringsAsFactors = FALSE
@@ -340,6 +351,11 @@ describe_distribution.factor <- function(
   if (!range) {
     out$Min <- NULL
     out$Max <- NULL
+  }
+
+  if (!shape) {
+    out$Skewness <- NULL
+    out$Kurtosis <- NULL
   }
 
   class(out) <- unique(c(
@@ -358,7 +374,8 @@ describe_distribution.character <- function(
   dispersion = TRUE,
   range = TRUE,
   verbose = TRUE,
-  ...
+  ...,
+  shape = getOption("describe_distribution_shape", TRUE)
 ) {
   # Missing
   n_missing <- sum(is.na(x))
@@ -375,8 +392,8 @@ describe_distribution.character <- function(
     Max = values[length(values)],
     Q1 = NA,
     Q3 = NA,
-    Skewness = as.numeric(skewness(x, verbose = verbose)),
-    Kurtosis = as.numeric(kurtosis(x, verbose = verbose)),
+    Skewness = if (shape) as.numeric(skewness(x, verbose = verbose)) else NA,
+    Kurtosis = if (shape) as.numeric(kurtosis(x, verbose = verbose)) else NA,
     n = length(x),
     n_Missing = n_missing,
     stringsAsFactors = FALSE
@@ -404,6 +421,11 @@ describe_distribution.character <- function(
   if (!range) {
     out$Min <- NULL
     out$Max <- NULL
+  }
+
+  if (!shape) {
+    out$Skewness <- NULL
+    out$Kurtosis <- NULL
   }
 
   class(out) <- unique(c(
@@ -435,7 +457,8 @@ describe_distribution.data.frame <- function(
   regex = FALSE,
   verbose = TRUE,
   by = NULL,
-  ...
+  ...,
+  shape = getOption("describe_distribution_shape", TRUE)
 ) {
   select <- .select_nse(
     select,
@@ -466,6 +489,7 @@ describe_distribution.data.frame <- function(
       iqr = iqr,
       range = range,
       quartiles = quartiles,
+      shape = shape,
       include_factors = include_factors,
       ci = ci,
       iterations = iterations,
@@ -493,6 +517,7 @@ describe_distribution.data.frame <- function(
           iqr = iqr,
           range = range,
           quartiles = quartiles,
+          shape = shape,
           ci = ci,
           iterations = iterations,
           threshold = threshold,
@@ -542,7 +567,8 @@ describe_distribution.grouped_df <- function(
   regex = FALSE,
   verbose = TRUE,
   by = NULL,
-  ...
+  ...,
+  shape = getOption("describe_distribution_shape", TRUE)
 ) {
   if (!is.null(by)) {
     if (!is.character(by)) {
@@ -581,6 +607,7 @@ describe_distribution.grouped_df <- function(
         iqr = iqr,
         range = range,
         quartiles = quartiles,
+        shape = shape,
         include_factors = include_factors,
         ci = ci,
         iterations = iterations,
@@ -737,6 +764,7 @@ plot.parameters_distribution <- function(x, ...) {
     iqr = FALSE,
     range = FALSE,
     quartiles = FALSE,
+    shape = FALSE,
     ci = NULL,
     verbose = FALSE
   )
