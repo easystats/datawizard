@@ -23,6 +23,10 @@
 #'   can also increase the computation time significantly.
 #' @param iqr Logical, if `TRUE`, the interquartile range is calculated (based
 #'   on [stats::IQR()], using `type = 6`).
+#' @param shape Logical, if `TRUE`, skewness and (excess) kurtosis are
+#'   calculated (see [skewness()] and [kurtosis()]). Use `shape = FALSE` to omit
+#'   them. The default can be changed with
+#'   `options(describe_distribution_shape = FALSE)`.
 #' @param verbose Show or silence warnings and messages.
 #' @inheritParams bayestestR::point_estimate
 #' @inheritParams extract_column_names
