@@ -7,14 +7,14 @@ BREAKING CHANGES
   string `by = "L3/L2"`. Before, such a formula gave a cross-classified design
   unless `nested = TRUE` was set. Only the right-hand side of a formula in
   `by` is read now. Before, a variable on the left-hand side was also used as
-  a grouping variable.
+  a grouping variable (#722).
 
 * `demean()` and `degroup()` now stop with an error when `by` mixes nested and
   cross-classified grouping. A formula with both `+` and `/`, such as
   `by = ~ C + A/B`, gave a cross-classified design before, or a nested design
   with `nested = TRUE`. A character vector such as `by = c("C", "A/B")`, with
   no column named `"A/B"`, gave an error that a variable was not found. A
-  string such as `by = "C + A/B"` gave the same error.
+  string such as `by = "C + A/B"` gave the same error (#722).
 
 CHANGES
 
@@ -23,7 +23,7 @@ CHANGES
   variable occurs with only one value of another, which suggests a nested
   design. With `nested = TRUE`, it comes when a pair of adjacent `by`
   variables seems to be listed from the lowest to the highest level. Use
-  `verbose = FALSE` to turn the checks off.
+  `verbose = FALSE` to turn the checks off (#722).
 
 FIXES
 
