@@ -1,4 +1,8 @@
-# datawizard (development)
+# datawizard 1.4.1
+
+CHANGES
+
+* Jeffrey Girard replaces Etienne Bacher as maintainer of `datawizard` (#724).
 
 FIXES
 
