@@ -17,10 +17,12 @@
 #'   the data is nested and should be treated as such, set `nested = TRUE`. Else,
 #'   if `by` defines two or more variables and `nested = FALSE`, a cross-classified
 #'   design is assumed. `demean()` and `degroup()` do not support designs that
-#'   mix nested and cross-classified grouping. Two forms of `by` stop with an
-#'   error: a formula with both `+` and `/`, such as `~ C + A/B`, and a
-#'   character vector of length two or more with an element that contains `/`,
-#'   such as `c("C", "A/B")`.
+#'   mix nested and cross-classified grouping. These forms of `by` stop with an
+#'   error: a formula or a single string with both `+` and `/`, such as
+#'   `~ C + A/B` or `"C + A/B"`, and a character vector of length two or more
+#'   with an element that contains `/`, such as `c("C", "A/B")`, unless that
+#'   element is the name of a column. For a formula, only the right-hand side
+#'   is read.
 #'
 #'   For nested designs, `by` can be:
 #'   - a character vector with the name of the variable that indicates the
@@ -42,7 +44,8 @@
 #'   _De-meaning for nested designs_ below.
 #' @param nested Logical, if `TRUE`, the data is treated as nested. If `FALSE`,
 #'   the data is treated as cross-classified. Only applies if `by` contains more
-#'   than one variable.
+#'   than one variable. A `by` with `/`, such as `by = "L3/L2"` or
+#'   `by = ~ L3/L2`, sets `nested = TRUE`.
 #' @param center Method for centering. `demean()` always performs
 #'   mean-centering, while `degroup()` can use `center = "median"` or
 #'   `center = "mode"` for median- or mode-centering, and also `"min"`
@@ -209,17 +212,20 @@
 #' cross-classified designs, de-meaning is supposed to work for models like
 #' `y ~ x + (1|level3) + (1|level2)`, but *not* for models like
 #' `y ~ x + (1|level3/level2)`. Designs that mix nested and cross-classified
-#' grouping are not supported. A `by` that combines `/` with `+`, or with
-#' other variables in a character vector, gives an error.
+#' grouping are not supported. A `by` that combines `/` with `+`, or a vector
+#' of names in which one name contains `/` and is not a column name, gives an
+#' error.
 #'
 #' For two crossed variables, J and K, `demean()` returns the three components
-#' of the fully cluster-mean-centered model in _Guo et al. (2024)_, eq. 4: the
-#' mean of the variable in its J cluster, the mean in its K cluster, and the
-#' within component, which is the value minus both means. Each mean is taken
-#' over the rows of the cluster, not over cell means, so combinations of J and
-#' K with more rows weigh more. The components also apply to unbalanced data,
-#' with different numbers of rows per combination of J and K. For each row
-#' where the variable is not missing, the components sum to the value.
+#' of the fully cluster-mean-centered model in _Guo et al. (2024)_, equation 4:
+#' the mean of the variable in its J cluster, the mean in its K cluster, and
+#' the within component, which is the value minus both means. Each mean is
+#' taken over the rows of the cluster where the variable is not missing, not
+#' over cell means, so combinations of J and K with more rows weigh more. The
+#' components also apply to unbalanced data, with different numbers of rows
+#' per combination of J and K. For each row where the variable is not
+#' missing, the components sum to the value. For a row with a missing value
+#' in a `by` variable, the mean for that variable is the row's own value.
 #' _Guo et al. (2024)_ also cover three or more crossed variables: footnote 6
 #' and the R function in their Appendix C subtract the mean of each crossed
 #' variable, and `demean()` does the same. With `degroup()` and a `center`
@@ -234,7 +240,7 @@
 #'
 #' - With `nested = FALSE`, `degroup()` gives a warning when each value of one
 #'   `by` variable occurs with only one value of another `by` variable. Such
-#'   data look nested, so the warning names both variables and suggests
+#'   data look nested, so the warning names each such pair and suggests
 #'   `nested = TRUE`. Crossed data with this pattern, for example a variable
 #'   with a single value, also give the warning. Nested data whose lower-level
 #'   IDs repeat across clusters (e.g. class `"1"` in each school) look crossed,
@@ -243,7 +249,11 @@
 #'   in `by` when each value of the first variable occurs with only one value
 #'   of the second, and some value of the second occurs with two or more
 #'   values of the first. The warning says that `by` lists the levels from
-#'   highest to lowest, and it names both variables.
+#'   highest to lowest, and it names both variables. Nested data with a single
+#'   lower-level cluster in each higher-level cluster and lower-level IDs that
+#'   repeat (e.g. class `"1"` alone in each school) also give the warning,
+#'   although the order is correct. A wrong order is not found when the
+#'   lower-level IDs repeat across clusters.
 #'
 #' The warnings do not change the returned values. Set `verbose = FALSE` to
 #' turn the checks off.
@@ -392,7 +402,7 @@ degroup <- function(
   }
 
   # handle different "by" options
-  by_parsed <- .parse_by(by, nested)
+  by_parsed <- .parse_by(by, nested, colnames(x))
   by <- by_parsed$by
   nested <- by_parsed$nested
 
@@ -626,11 +636,14 @@ detrend <- degroup
 # helper -----------------------------------------------------------------------
 
 # Returns the variable names in `by` and whether the design is nested.
-.parse_by <- function(by, nested) {
+# `columns` are the column names of the data.
+.parse_by <- function(by, nested, columns) {
   # A formula with only "/" (e.g. ~ L4/L3/L2) is nested, like the string
-  # "L4/L3/L2". A formula with only "+" keeps the value of `nested`.
+  # "L4/L3/L2". A formula with only "+" keeps the value of `nested`. Only the
+  # right-hand side of the formula is read.
   if (inherits(by, "formula")) {
-    by_terms <- insight::safe_deparse(by[[length(by)]])
+    by_rhs <- by[[length(by)]]
+    by_terms <- insight::safe_deparse(by_rhs)
     by_nested <- grepl("/", by_terms, fixed = TRUE)
     if (by_nested && grepl("+", by_terms, fixed = TRUE)) {
       .mixed_design_error()
@@ -638,16 +651,21 @@ detrend <- degroup
     if (by_nested) {
       nested <- TRUE
     }
-    by <- all.vars(by)
+    by <- all.vars(by_rhs)
   }
 
-  # a character vector such as c("L4", "L3/L2") mixes crossed and nested
-  if (length(by) > 1 && any(grepl("/", by, fixed = TRUE))) {
+  # a character vector such as c("L4", "L3/L2") mixes crossed and nested,
+  # unless the element with "/" is a column name
+  if (length(by) > 1 && any(grepl("/", setdiff(by, columns), fixed = TRUE))) {
     .mixed_design_error()
   }
 
   # we also allow lme4-syntax here: if by = "L4/L3/L2", we assume a nested design
   if (length(by) == 1 && grepl("/", by, fixed = TRUE)) {
+    # a string such as "C + A/B" mixes crossed and nested
+    if (grepl("+", by, fixed = TRUE)) {
+      .mixed_design_error()
+    }
     by <- insight::trim_ws(unlist(
       strsplit(by, "/", fixed = TRUE),
       use.names = FALSE
@@ -667,19 +685,25 @@ detrend <- degroup
 }
 
 
-# TRUE if each observed value of `p` occurs with exactly one value of `q`.
-# Only rows where neither is missing count, and unused factor levels are
-# ignored. FALSE if no such row exists.
-.is_nested_in <- function(p, q) {
+# For a pair of grouping variables, `p_in_q` is TRUE if each observed value of
+# `p` occurs with exactly one value of `q`, and `q_in_p` the reverse. Only
+# rows where neither is missing count, and unused factor levels are ignored.
+# Both are FALSE if no such row exists.
+.nesting_of_pair <- function(p, q) {
   keep <- !is.na(p) & !is.na(q)
   if (!any(keep)) {
-    return(FALSE)
+    return(c(p_in_q = FALSE, q_in_p = FALSE))
   }
-  observed <- unique(data.frame(
-    p = as.character(p[keep]),
-    q = as.character(q[keep])
-  ))
-  !anyDuplicated(observed$p)
+  p <- p[keep]
+  q <- q[keep]
+  # integer codes, and one row for each observed combination of p and q
+  p_id <- match(p, unique(p))
+  q_id <- match(q, unique(q))
+  first <- !duplicated((q_id - 1) * max(p_id) + p_id)
+  c(
+    p_in_q = !anyDuplicated(p_id[first]),
+    q_in_p = !anyDuplicated(q_id[first])
+  )
 }
 
 
@@ -691,10 +715,8 @@ detrend <- degroup
     for (i in seq_len(length(by) - 1)) {
       higher <- by[i]
       lower <- by[i + 1]
-      if (
-        .is_nested_in(x[[higher]], x[[lower]]) &&
-          !.is_nested_in(x[[lower]], x[[higher]])
-      ) {
+      nesting <- .nesting_of_pair(x[[higher]], x[[lower]])
+      if (nesting[["p_in_q"]] && !nesting[["q_in_p"]]) {
         insight::format_warning(paste0(
           "`by` lists levels from highest to lowest, but `",
           higher,
@@ -713,28 +735,32 @@ detrend <- degroup
       }
     }
   } else {
+    # one entry for each pair in which one variable is nested in the other;
+    # a one-to-one pair is reported once
     reported <- character(0)
-    for (inner in by) {
-      for (outer in setdiff(by, inner)) {
-        # a one-to-one pair is reported once
-        if (paste(outer, inner) %in% reported) {
-          next
-        }
-        if (.is_nested_in(x[[inner]], x[[outer]])) {
-          reported <- c(reported, paste(inner, outer))
-          insight::format_warning(paste0(
-            "`",
-            inner,
-            "` is nested in `",
-            outer,
-            "` in these data: each value of `",
-            inner,
-            "` occurs with only one value of `",
-            outer,
-            "`. For a nested design, set `nested = TRUE` and list the levels from highest to lowest in `by`. For a crossed design, set `verbose = FALSE` to silence this warning." # nolint
-          ))
-        }
+    for (pair in utils::combn(by, 2, simplify = FALSE)) {
+      nesting <- .nesting_of_pair(x[[pair[1]]], x[[pair[2]]])
+      if (nesting[["p_in_q"]]) {
+        lower <- pair[1]
+        higher <- pair[2]
+      } else if (nesting[["q_in_p"]]) {
+        lower <- pair[2]
+        higher <- pair[1]
+      } else {
+        next
       }
+      reported <- c(
+        reported,
+        paste0("`", lower, "` is nested in `", higher, "`")
+      )
+    }
+    if (length(reported)) {
+      insight::format_warning(paste0(
+        "In these data, ",
+        toString(reported),
+        ": each value of the first variable occurs with only one value of the second.", # nolint
+        " For a nested design, set `nested = TRUE` and list the levels from highest to lowest in `by`. For a crossed design, set `verbose = FALSE` to silence this warning." # nolint
+      ))
     }
   }
   invisible(NULL)

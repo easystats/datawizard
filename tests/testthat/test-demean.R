@@ -368,11 +368,17 @@ test_that("degroup, formula in `by` with `/` is nested, with `+` is crossed", {
     A = rep(c("I", "II"), each = 6),
     B = rep(c("a", "a", "b", "b", "c", "c"), 2),
     C = rep(c("x", "y"), 6),
-    v = c(1, 4, 2, 8, 5, 7, 3, 9, 6, 2, 10, 4)
+    v = c(1, 4, 2, 8, 5, 7, 3, 9, 6, 2, 10, 4),
+    w = c(3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5, 8)
   )
 
   expect_identical(
-    degroup(d, select = "v", by = ~ A / B),
+    demean(d, select = c("v", "w"), by = ~ A / B),
+    demean(d, select = c("v", "w"), by = "A/B")
+  )
+  # only the right-hand side of a formula is read
+  expect_identical(
+    degroup(d, select = "v", by = v ~ A / B),
     degroup(d, select = "v", by = "A/B")
   )
   expect_identical(
@@ -394,6 +400,11 @@ test_that("degroup, formula in `by` with `/` is nested, with `+` is crossed", {
   expect_identical(
     degroup(d, select = "v", by = ~ A + B),
     degroup(d, select = "v", by = c("A", "B"), nested = FALSE)
+  )
+  # a formula with only `+` keeps the value of `nested`
+  expect_identical(
+    degroup(d, select = "v", by = ~ A + B, nested = TRUE),
+    degroup(d, select = "v", by = c("A", "B"), nested = TRUE)
   )
 })
 
@@ -422,6 +433,18 @@ test_that("degroup, mixed nested and crossed `by` stops with an error", {
     demean(d, select = "v", by = c("A/B", "C")),
     regex = "mix nested and crossed grouping are not supported"
   )
+  expect_error(
+    degroup(d, select = "v", by = "C + A/B"),
+    regex = "mix nested and crossed grouping are not supported"
+  )
+
+  # a column whose name contains `/` is not split in a vector of names
+  d2 <- d
+  names(d2)[names(d2) == "A"] <- "A/B"
+  expect_identical(
+    unname(degroup(d2, select = "v", by = c("A/B", "C"), append = FALSE)),
+    unname(degroup(d, select = "v", by = c("A", "C"), append = FALSE))
+  )
 })
 
 
@@ -445,9 +468,8 @@ test_that("degroup, crossed `by` warns when one variable is nested in another", 
     v = c(1, 3, 2, 6, 5, 9, 4, 8)
   )
 
-  w <- squished_warnings(
-    out <- degroup(d, select = "v", by = c("school", "class"))
-  )
+  w <- squished_warnings(degroup(d, select = "v", by = c("school", "class")))
+  out <- suppressWarnings(degroup(d, select = "v", by = c("school", "class")))
   expect_length(w, 1)
   expect_match(w, "`class` is nested in `school`", fixed = TRUE)
   expect_match(w, "set `nested = TRUE`", fixed = TRUE)
@@ -469,6 +491,21 @@ test_that("degroup, crossed `by` warns when one variable is nested in another", 
   expect_length(w, 1)
   expect_match(w, "`a` is nested in `b`", fixed = TRUE)
   expect_match(w, "set `nested = TRUE`", fixed = TRUE)
+
+  # with three variables, all nested pairs are named in one warning
+  d_three <- data.frame(
+    sch = c("s1", "s1", "s1", "s1", "s2", "s2", "s2", "s2"),
+    cls = c("c1", "c1", "c2", "c2", "c3", "c3", "c4", "c4"),
+    stu = c("u1", "u2", "u3", "u4", "u5", "u6", "u7", "u8"),
+    v = c(1, 3, 2, 6, 5, 9, 4, 8)
+  )
+  w <- squished_warnings(
+    degroup(d_three, select = "v", by = c("sch", "cls", "stu"))
+  )
+  expect_length(w, 1)
+  expect_match(w, "`cls` is nested in `sch`", fixed = TRUE)
+  expect_match(w, "`stu` is nested in `sch`", fixed = TRUE)
+  expect_match(w, "`stu` is nested in `cls`", fixed = TRUE)
 
   # a crossed variable with a single value also warns
   d_single <- data.frame(
@@ -530,7 +567,10 @@ test_that("degroup, nested `by` warns when levels are listed from lowest to high
   )
 
   w <- squished_warnings(
-    out <- degroup(d, select = "v", by = c("class", "school"), nested = TRUE)
+    degroup(d, select = "v", by = c("class", "school"), nested = TRUE)
+  )
+  out <- suppressWarnings(
+    degroup(d, select = "v", by = c("class", "school"), nested = TRUE)
   )
   expect_length(w, 1)
   expect_match(w, "lists levels from highest to lowest", fixed = TRUE)
@@ -565,6 +605,35 @@ test_that("degroup, nested `by` warns when levels are listed from lowest to high
     degroup(d_rep, select = "v", by = c("school", "class"), nested = TRUE)
   )
   expect_no_warning(degroup(d_rep, select = "v", by = "school/class"))
+
+  # three levels: only the adjacent pair in the wrong order is named
+  d_three <- data.frame(
+    sch = c("s1", "s1", "s1", "s1", "s2", "s2", "s2", "s2"),
+    cls = c("c1", "c1", "c2", "c2", "c3", "c3", "c4", "c4"),
+    stu = c("u1", "u2", "u3", "u4", "u5", "u6", "u7", "u8"),
+    v = c(1, 3, 2, 6, 5, 9, 4, 8)
+  )
+  # one class per school with repeated class ids: a warning, although the
+  # order is correct
+  d_one_class <- data.frame(
+    school = c("s1", "s1", "s2", "s2", "s3", "s3"),
+    class = c("1", "1", "1", "1", "1", "1"),
+    v = c(1, 3, 2, 6, 5, 9)
+  )
+  w <- squished_warnings(
+    degroup(d_one_class, select = "v", by = c("school", "class"), nested = TRUE)
+  )
+  expect_length(w, 1)
+  expect_match(w, "`school` is nested in `class`", fixed = TRUE)
+  # wrong order with class ids that repeat across schools: not found
+  expect_no_warning(
+    degroup(d_rep, select = "v", by = c("class", "school"), nested = TRUE)
+  )
+
+  w <- squished_warnings(degroup(d_three, select = "v", by = "sch/stu/cls"))
+  expect_length(w, 1)
+  expect_match(w, "`stu` is nested in `cls`", fixed = TRUE)
+  expect_no_warning(degroup(d_three, select = "v", by = "sch/cls/stu"))
 })
 
 
@@ -593,6 +662,19 @@ test_that("degroup, crossed components on unbalanced data follow Guo et al.", {
 
   # Oracle (invariant): the components of each row sum to x
   expect_equal(rowSums(out), d$x, ignore_attr = TRUE)
+
+  # a missing x is left out of the means, and its within component is NA;
+  # a missing `by` value keeps the row's own value as the mean for that
+  # variable
+  d_na <- d
+  d_na$x[2] <- NA
+  d_na$person[8] <- NA
+  out_na <- demean(d_na, select = "x", by = c("person", "item"), append = FALSE)
+  # person p1 -> (2+9)/2 = 5.5; item i1 -> (2+5+3)/3 = 10/3
+  expect_equal(out_na$x_person_between[1], 5.5)
+  expect_equal(out_na$x_item_between[1], 10 / 3, tolerance = 1e-10)
+  expect_true(is.na(out_na$x_within[2]))
+  expect_identical(out_na$x_person_between[8], 3)
 
   # Oracle (reference implementation): the steps of `cc.gmc()` in Guo et al.
   # 2024, Appendix C: `aggregate()` the mean per cluster, `merge()` it back,
@@ -630,6 +712,49 @@ test_that("degroup, crossed components on unbalanced data follow Guo et al.", {
   expect_equal(
     out$x_within,
     d$x - expected_person - expected_item,
+    ignore_attr = TRUE
+  )
+})
+
+
+test_that("degroup, three crossed variables follow Guo et al.", {
+  d <- data.frame(
+    person = c("p1", "p1", "p2", "p2", "p3", "p3", "p1", "p2", "p3"),
+    item = c("i1", "i2", "i1", "i2", "i1", "i2", "i2", "i1", "i1"),
+    day = c("d1", "d2", "d2", "d1", "d1", "d2", "d1", "d2", "d2"),
+    x = c(2, 7, 4, 1, 9, 3, 5, 8, 6)
+  )
+  out <- demean(
+    d,
+    select = "x",
+    by = c("person", "item", "day"),
+    append = FALSE
+  )
+
+  # Oracle (reference implementation): the steps of `cc.gmc()` in Guo et al.
+  # 2024, Appendix C, which footnote 6 extends to any number of crossed
+  # variables: subtract the mean of each crossed variable from x
+  d$row <- seq_len(nrow(d))
+  ref <- d
+  for (j in c("person", "item", "day")) {
+    mn <- stats::aggregate(d["x"], d[j], mean, na.rm = TRUE)
+    names(mn)[2] <- paste0("x_", j)
+    ref <- merge(ref, mn, by = j)
+  }
+  ref <- ref[order(ref$row), ]
+  ref$x_dev <- ref$x - ref$x_person - ref$x_item - ref$x_day
+
+  expect_equal(out$x_person_between, ref$x_person, ignore_attr = TRUE)
+  expect_equal(out$x_item_between, ref$x_item, ignore_attr = TRUE)
+  expect_equal(out$x_day_between, ref$x_day, ignore_attr = TRUE)
+  expect_equal(out$x_within, ref$x_dev, ignore_attr = TRUE)
+
+  # Oracle (closed-form) for the first row: person p1 -> (2+7+5)/3 = 14/3,
+  # item i1 -> (2+4+9+8+6)/5 = 29/5, day d1 -> (2+1+9+5)/4 = 17/4, so
+  # within = 2 - 14/3 - 29/5 - 17/4
+  expect_equal(
+    out$x_within[1],
+    2 - 14 / 3 - 29 / 5 - 17 / 4,
     ignore_attr = TRUE
   )
 })
