@@ -220,8 +220,9 @@
 #' they sum to the original value. A group is defined by its level and all
 #' levels above it, so IDs of lower levels can repeat across groups of higher
 #' levels. Means are computed over all observations of a group, so larger
-#' groups weigh more (as in _Brincks et al. 2017_). For `degroup()`, the same
-#' applies to the statistic selected by `center`.
+#' groups weigh more (as in _Brincks et al. 2017_). For `degroup()`, the
+#' variables are defined the same way with the statistic selected by `center`
+#' in place of the mean, and they still sum to the original value.
 #'
 #' @section Analysing panel data with mixed models using lme4:
 #'

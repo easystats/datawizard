@@ -288,8 +288,9 @@ minus the \code{level3} mean, and the value minus the \code{level2} mean. Togeth
 they sum to the original value. A group is defined by its level and all
 levels above it, so IDs of lower levels can repeat across groups of higher
 levels. Means are computed over all observations of a group, so larger
-groups weigh more (as in \emph{Brincks et al. 2017}). For \code{degroup()}, the same
-applies to the statistic selected by \code{center}.
+groups weigh more (as in \emph{Brincks et al. 2017}). For \code{degroup()}, the
+variables are defined the same way with the statistic selected by \code{center}
+in place of the mean, and they still sum to the original value.
 }
 
 \section{Analysing panel data with mixed models using lme4}{
