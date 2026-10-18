@@ -2,11 +2,14 @@
 
 ## Authors
 
+- **Jeffrey Girard**. Author, maintainer.
+  [](https://orcid.org/0000-0002-7359-3746)
+
 - **[Indrajeet Patil](https://www.indrapatil.com/)**. Author.
   [](https://orcid.org/0000-0003-1995-6531)
 
-- **[Etienne Bacher](https://www.etiennebacher.com/)**. Author,
-  maintainer. [](https://orcid.org/0000-0002-9271-5075)
+- **[Etienne Bacher](https://www.etiennebacher.com/)**. Author.
+  [](https://orcid.org/0000-0002-9271-5075)
 
 - **[Dominique Makowski](https://dominiquemakowski.github.io/)**.
   Author. [](https://orcid.org/0000-0001-5375-9967)
