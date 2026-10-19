@@ -231,7 +231,11 @@ for (fun_name in c("center", "standardize")) {
       "`cluster` must have the same length"
     )
     # centering needs one cluster, standardizing needs two for the SD
-    min_clusters <- if (fun_name == "center") "at least one cluster" else "at least two clusters"
+    min_clusters <- if (fun_name == "center") {
+      "at least one cluster"
+    } else {
+      "at least two clusters"
+    }
     expect_error(
       fun(c(1, 2, 3), cluster = c(NA, NA, NA)),
       min_clusters
@@ -476,7 +480,11 @@ for (fun_name in c("center", "standardize")) {
       # oracle (closed-form): region "a" has schools 1 and 2, so its center is
       # mean(c(10, 20)) = 15. Region "b" has only school 4, so its center is 5.
       out <- fun(g_one, select = "funding", cluster = "school", verbose = FALSE)
-      expect_equal(out$funding, c(rep(c(-5, 5), times = c(2, 5)), rep(0, 3)), ignore_attr = TRUE)
+      expect_equal(
+        out$funding,
+        c(rep(c(-5, 5), times = c(2, 5)), rep(0, 3)),
+        ignore_attr = TRUE
+      )
     }
   })
 }
