@@ -31,6 +31,12 @@ FIXES
   grouping variables. The group-meaned variables of the third and later
   variables in `by` were wrong (#720).
 
+* `data_filter()` now finds variables of the function that calls it, so
+  conditions like `data_filter(data, x == values[i])` work inside functions
+  and loops. Internal variables of `data_filter()` no longer hide variables of
+  the calling code. A condition that gives a warning now returns the filtered
+  data with that warning (#309, #379).
+
 # datawizard 1.4.1
 
 CHANGES
