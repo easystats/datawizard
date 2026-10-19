@@ -94,6 +94,29 @@ While `data_match()` works with data frames to match conditions against,
 [`subset()`](https://rdrr.io/r/base/subset.html), it preserves label
 attributes and is useful when working with labelled data.
 
+A condition in `data_filter()` can use variables of the function that
+calls `data_filter()`, for example
+`data_filter(data, value > threshold)` where `threshold` is defined in
+that function. Names are found with two rules:
+
+- If the complete condition evaluates to a number or a string, this
+  value is used as row indices or as the filter expression. A string
+  that evaluates to numbers, like `"5:10"`, is also used as row indices.
+  The condition is evaluated in the function that called `data_filter()`
+  first, then in the functions further up the call stack. In each
+  function, the condition can also use the environments where that
+  function was defined, such as the global environment. For this reason,
+  a name that holds a number or a string is used even if `x` has a
+  column with the same name. A filter expression found this way is then
+  evaluated with the next rule, but names that are not columns are
+  looked up in the function where the string was found.
+
+- Otherwise, the condition is evaluated like in
+  [`subset()`](https://rdrr.io/r/base/subset.html). Names are looked up
+  in the columns of `x` first. Then they are looked up in the
+  environment that called `data_filter()`, and in the environments where
+  the calling function was defined.
+
 ## See also
 
 - Add a prefix or suffix to column names:
@@ -287,6 +310,17 @@ my_filter(mtcars, "am != 0")
 #> Ferrari Dino   19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6
 #> Maserati Bora  15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8
 #> Volvo 142E     21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2
+
+# Use a variable of the function in the condition
+my_filter <- function(data, threshold) {
+  data_filter(data, mpg > threshold)
+}
+my_filter(mtcars, 30)
+#>                 mpg cyl disp  hp drat    wt  qsec vs am gear carb
+#> Fiat 128       32.4   4 78.7  66 4.08 2.200 19.47  1  1    4    1
+#> Honda Civic    30.4   4 75.7  52 4.93 1.615 18.52  1  1    4    2
+#> Toyota Corolla 33.9   4 71.1  65 4.22 1.835 19.90  1  1    4    1
+#> Lotus Europa   30.4   4 95.1 113 3.77 1.513 16.90  1  1    5    2
 
 # string can also be used directly as argument
 data_filter(mtcars, "am != 0")
