@@ -30,6 +30,7 @@ standardize(
   center = NULL,
   scale = NULL,
   verbose = TRUE,
+  cluster = NULL,
   ...
 )
 
@@ -61,6 +62,7 @@ standardize(
   ignore_case = FALSE,
   regex = FALSE,
   verbose = TRUE,
+  cluster = NULL,
   ...
 )
 
@@ -166,6 +168,20 @@ unstandardize(
 - verbose:
 
   Toggle warnings and messages on or off.
+
+- cluster:
+
+  Can be `NULL` (for no clustering), or a vector of cluster ids with one
+  element per observation. For data frames, it can also be the name of a
+  column that contains the cluster ids. If given, the center and scale
+  are computed from one value per cluster instead of from all
+  observations, so that a cluster-level (Level 2) variable in long
+  format is not weighted by the number of observations per cluster. The
+  variable must take only one finite value within each cluster (infinite
+  values are treated as missing), and observations with a missing
+  cluster id are returned as `NA`. `cluster` cannot be combined with
+  `weights`, `reference`, or values for `center` and `scale`. For
+  grouped data frames, `cluster` must be a column name.
 
 - force:
 
@@ -402,4 +418,36 @@ standardize(d, center = 1, scale = 3)
 #> 3 -0.3333333 1.3333333
 #> 4  0.0000000 1.6666667
 #> 5  0.3333333 2.0000000
+
+# cluster-level variable in long format: one value per school, but
+# schools have different numbers of students
+d <- data.frame(
+  school = rep(1:3, times = c(2, 3, 10)),
+  funding = rep(c(10, 20, 30), times = c(2, 3, 10))
+)
+# mean and sd are weighted by the number of students per school
+standardize(d$funding)
+#>  [1] -2.0630855 -2.0630855 -0.7175950 -0.7175950 -0.7175950  0.6278956
+#>  [7]  0.6278956  0.6278956  0.6278956  0.6278956  0.6278956  0.6278956
+#> [13]  0.6278956  0.6278956  0.6278956
+#> (center: 25, scale = 7.4)
+#> 
+# mean and sd are computed from one value per school
+standardize(d, select = "funding", cluster = "school")
+#>    school funding
+#> 1       1      -1
+#> 2       1      -1
+#> 3       2       0
+#> 4       2       0
+#> 5       2       0
+#> 6       3       1
+#> 7       3       1
+#> 8       3       1
+#> 9       3       1
+#> 10      3       1
+#> 11      3       1
+#> 12      3       1
+#> 13      3       1
+#> 14      3       1
+#> 15      3       1
 ```

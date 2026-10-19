@@ -40,6 +40,14 @@ CHANGES
   level. Use `verbose = FALSE` to turn the checks off
   ([\#722](https://github.com/easystats/datawizard/issues/722)).
 
+- [`center()`](https://easystats.github.io/datawizard/reference/center.md)
+  and
+  [`standardize()`](https://easystats.github.io/datawizard/reference/standardize.md)
+  gain a `cluster` argument. If `cluster` is given, the center and scale
+  come from one value per cluster. Cluster-level variables in unbalanced
+  long-format data are then not weighted by cluster size
+  ([\#672](https://github.com/easystats/datawizard/issues/672)).
+
 FIXES
 
 - Fixed

@@ -98,6 +98,7 @@ For model standardization, see <code><a href="standardize.default.html">standard
 <span>  center <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  scale <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  cluster <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -129,6 +130,7 @@ For model standardization, see <code><a href="standardize.default.html">standard
 <span>  ignore_case <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  regex <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  cluster <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -229,6 +231,20 @@ rest of the arguments are absent.</p></li>
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Toggle warnings and messages on or off.</p></dd>
+
+
+<dt id="arg-cluster">cluster<a class="anchor" aria-label="anchor" href="#arg-cluster"></a></dt>
+<dd><p>Can be <code>NULL</code> (for no clustering), or a vector of cluster
+ids with one element per observation. For data frames, it can also be the
+name of a column that contains the cluster ids. If given, the center and
+scale are computed from one value per cluster instead of from all
+observations, so that a cluster-level (Level 2) variable in long format is
+not weighted by the number of observations per cluster. The variable must
+take only one finite value within each cluster (infinite values are
+treated as missing), and observations with a missing cluster id are
+returned as <code>NA</code>. <code>cluster</code> cannot be combined with
+<code>weights</code>, <code>reference</code>, or values for <code>center</code> and <code>scale</code>. For grouped
+data frames, <code>cluster</code> must be a column name.</p></dd>
 
 
 <dt id="arg-force">force<a class="anchor" aria-label="anchor" href="#arg-force"></a></dt>
@@ -435,6 +451,38 @@ from the input data frame.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3 -0.3333333 1.3333333</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4  0.0000000 1.6666667</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5  0.3333333 2.0000000</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># cluster-level variable in long format: one value per school, but</span></span></span>
+<span class="r-in"><span><span class="co"># schools have different numbers of students</span></span></span>
+<span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  school <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, times <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  funding <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">30</span><span class="op">)</span>, times <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># mean and sd are weighted by the number of students per school</span></span></span>
+<span class="r-in"><span><span class="fu">standardize</span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">funding</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] -2.0630855 -2.0630855 -0.7175950 -0.7175950 -0.7175950  0.6278956</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7]  0.6278956  0.6278956  0.6278956  0.6278956  0.6278956  0.6278956</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13]  0.6278956  0.6278956  0.6278956</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">(center: 25, scale = 7.4)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="co"># mean and sd are computed from one value per school</span></span></span>
+<span class="r-in"><span><span class="fu">standardize</span><span class="op">(</span><span class="va">d</span>, select <span class="op">=</span> <span class="st">"funding"</span>, cluster <span class="op">=</span> <span class="st">"school"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    school funding</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       1      -1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2       1      -1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3       2       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4       2       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5       2       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6       3       1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7       3       1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8       3       1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9       3       1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10      3       1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11      3       1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12      3       1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13      3       1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14      3       1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15      3       1</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
