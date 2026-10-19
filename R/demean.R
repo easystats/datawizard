@@ -284,6 +284,20 @@
 #' variables are defined the same way with the statistic selected by `center`
 #' in place of the mean, and they still sum to the original value.
 #'
+#' Any number of levels is possible. The group-meaned variable of the highest
+#' level is the mean within each of its groups. The group-meaned variable of
+#' each lower level is the mean within each of its groups minus the mean of
+#' the level above. The de-meaned variable is the value minus the mean of the
+#' lowest level. For `by = "level4/level3/level2"`, the variables are thus the
+#' `level4` mean, the `level3` mean minus the `level4` mean, the `level2` mean
+#' minus the `level3` mean, and the value minus the `level2` mean. Together,
+#' they sum to the original value. A group is defined by its level and all
+#' levels above it, so IDs of lower levels can repeat across groups of higher
+#' levels. Means are computed over all non-missing observations of a group, so
+#' larger groups weigh more (as in _Brincks et al. 2017_). For `degroup()`, the
+#' variables are defined the same way with the statistic selected by `center`
+#' in place of the mean, and they still sum to the original value.
+#'
 #' @section Analysing panel data with mixed models using lme4:
 #'
 #' A description of how to translate the formulas described in *Bell et al. 2018*
