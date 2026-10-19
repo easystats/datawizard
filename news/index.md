@@ -1,5 +1,17 @@
 # Changelog
 
+## datawizard 1.4.2
+
+FIXES
+
+- Fixed
+  [`demean()`](https://easystats.github.io/datawizard/reference/demean.md)
+  and
+  [`degroup()`](https://easystats.github.io/datawizard/reference/demean.md)
+  for nested designs with three or more grouping variables. The
+  group-meaned variables of the third and later variables in `by` were
+  wrong ([\#720](https://github.com/easystats/datawizard/issues/720)).
+
 ## datawizard 1.4.1
 
 CRAN release: 2026-10-17

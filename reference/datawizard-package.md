@@ -27,16 +27,19 @@ Useful links:
 
 ## Author
 
-**Maintainer**: Etienne Bacher <etienne.bacher@protonmail.com>
-([ORCID](https://orcid.org/0000-0002-9271-5075))
+**Maintainer**: Jeffrey Girard <me@jmgirard.com>
+([ORCID](https://orcid.org/0000-0002-7359-3746))
 
 Authors:
 
-- Etienne Bacher <etienne.bacher@protonmail.com>
-  ([ORCID](https://orcid.org/0000-0002-9271-5075))
+- Jeffrey Girard <me@jmgirard.com>
+  ([ORCID](https://orcid.org/0000-0002-7359-3746))
 
 - Indrajeet Patil <patilindrajeet.science@gmail.com>
   ([ORCID](https://orcid.org/0000-0003-1995-6531))
+
+- Etienne Bacher <etienne.bacher@protonmail.com>
+  ([ORCID](https://orcid.org/0000-0002-9271-5075))
 
 - Dominique Makowski <dom.makowski@gmail.com>
   ([ORCID](https://orcid.org/0000-0001-5375-9967))

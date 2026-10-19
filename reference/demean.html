@@ -15,7 +15,7 @@ mean-centering, degroup() can also use the mode or median for centering."><meta 
 
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.1.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,7 +58,7 @@ mean-centering, degroup() can also use the mode or median for centering."><meta 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Compute group-meaned and de-meaned variables</h1>
-      <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/v1.4.1/R/demean.R" class="external-link"><code>R/demean.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/main/R/demean.R" class="external-link"><code>R/demean.R</code></a></small>
       <div class="d-none name"><code>demean.Rd</code></div>
     </div>
 
@@ -357,10 +357,23 @@ handle a mix of nested and cross-classified designs in one model.</p>
 nested designs, which is implemented in <code>demean()</code>. For nested designs, set
 <code>nested = TRUE</code> <em>and</em> specify the variables that indicate the different
 levels in descending order in the <code>by</code> argument. E.g.,
-<code>by = c("level4", "level3, "level2")</code> assumes a model like
+<code>by = c("level4", "level3", "level2")</code> assumes a model like
 <code>y ~ x + (1|level4/level3/level2)</code>. An alternative notation for the
 <code>by</code>-argument would be <code>by = "level4/level3/level2"</code>, similar to the
 formula notation.</p>
+<p>Any number of levels is possible. The group-meaned variable of the highest
+level is the mean within each of its groups. The group-meaned variable of
+each lower level is the mean within each of its groups minus the mean of
+the level above. The de-meaned variable is the value minus the mean of the
+lowest level. For <code>by = "level4/level3/level2"</code>, the variables are thus the
+<code>level4</code> mean, the <code>level3</code> mean minus the <code>level4</code> mean, the <code>level2</code> mean
+minus the <code>level3</code> mean, and the value minus the <code>level2</code> mean. Together,
+they sum to the original value. A group is defined by its level and all
+levels above it, so IDs of lower levels can repeat across groups of higher
+levels. Means are computed over all non-missing observations of a group, so
+larger groups weigh more (as in <em>Brincks et al. 2017</em>). For <code>degroup()</code>, the
+variables are defined the same way with the statistic selected by <code>center</code>
+in place of the mean, and they still sum to the original value.</p>
     </div>
     <div class="section level2">
     <h2 id="analysing-panel-data-with-mixed-models-using-lme-">Analysing panel data with mixed models using lme4<a class="anchor" aria-label="anchor" href="#analysing-panel-data-with-mixed-models-using-lme-"></a></h2>
@@ -518,7 +531,7 @@ to check for heterogeneity bias.</p></div>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Jeffrey Girard, <a href="https://www.indrapatil.com/" class="external-link">Indrajeet Patil</a>, <a href="https://www.etiennebacher.com/" class="external-link">Etienne Bacher</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>.</p>
+  <p>Developed by <a href="https://jmgirard.com" class="external-link">Jeffrey Girard</a>, <a href="https://www.indrapatil.com/" class="external-link">Indrajeet Patil</a>, <a href="https://www.etiennebacher.com/" class="external-link">Etienne Bacher</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
