@@ -230,16 +230,27 @@ for (fun_name in c("center", "standardize")) {
       fun(funding, cluster = school[-1]),
       "`cluster` must have the same length"
     )
-    expect_error(
-      fun(c(1, 1, 1), cluster = c(1, 1, 1), verbose = FALSE),
-      "at least two clusters"
-    )
+    # centering needs one cluster, standardizing needs two for the SD
+    min_clusters <- if (fun_name == "center") "at least one cluster" else "at least two clusters"
     expect_error(
       fun(c(1, 2, 3), cluster = c(NA, NA, NA)),
-      "at least two clusters"
+      min_clusters
     )
+    if (fun_name == "standardize") {
+      expect_error(
+        fun(c(5, 5, 9), cluster = c(1, 1, NA), verbose = FALSE),
+        "at least two clusters"
+      )
+    }
   })
 }
+
+test_that("center, a single cluster", {
+  # oracle (closed-form): the center is the value of the only cluster
+  z <- center(c(5, 5, 9), cluster = c(1, 1, NA), verbose = FALSE)
+  expect_identical(attr(z, "center"), 5)
+  expect_equal(as.vector(z), c(0, 0, NA), ignore_attr = TRUE)
+})
 
 test_that("cluster errors, standardize scale", {
   expect_error(
@@ -416,10 +427,12 @@ for (fun_name in c("center", "standardize")) {
       fun(d, cluster = "district"),
       "Could not find the `cluster` column"
     )
-    expect_error(
-      fun(d[d$school == 1, ], cluster = "school", verbose = FALSE),
-      "at least two clusters"
-    )
+    if (fun_name == "standardize") {
+      expect_error(
+        fun(d[d$school == 1, ], cluster = "school", verbose = FALSE),
+        "at least two clusters"
+      )
+    }
   })
 
   test_that(paste(fun_name, "cluster errors, grouped data frame"), {
@@ -454,9 +467,16 @@ for (fun_name in c("center", "standardize")) {
       "`cluster` must be a column name"
     )
     g_one <- poorman::group_by(g[g$school %in% c(1, 2, 4), ], region)
-    expect_error(
-      fun(g_one, select = "funding", cluster = "school", verbose = FALSE),
-      "at least two clusters"
-    )
+    if (fun_name == "standardize") {
+      expect_error(
+        fun(g_one, select = "funding", cluster = "school", verbose = FALSE),
+        "at least two clusters"
+      )
+    } else {
+      # oracle (closed-form): region "a" has schools 1 and 2, so its center is
+      # mean(c(10, 20)) = 15. Region "b" has only school 4, so its center is 5.
+      out <- fun(g_one, select = "funding", cluster = "school", verbose = FALSE)
+      expect_equal(out$funding, c(rep(c(-5, 5), times = c(2, 5)), rep(0, 3)), ignore_attr = TRUE)
+    }
   })
 }

@@ -61,10 +61,15 @@
   }
 
   # with clusters, center and scale are computed from one value per cluster.
-  # Like missing values, infinite values are left out.
+  # Like missing values, infinite values are left out. `center()` passes
+  # `scale = NULL` and needs one cluster; `standardize()` needs two for the SD.
   ref_vals <- vals
   if (!is.null(cluster)) {
-    ref_vals <- .cluster_values(vals, cluster[valid_x])
+    ref_vals <- .cluster_values(
+      vals,
+      cluster[valid_x],
+      min_clusters = if (is.null(scale)) 1L else 2L
+    )
   }
 
   # Get center and scale
@@ -94,20 +99,22 @@
 #
 # Reduces `x` to one value per cluster. `x` and `cluster` must not contain
 # missing or infinite values: `.process_std_center()` passes only the rows in
-# `valid_x`.
+# `valid_x`. Gives an error if there are fewer than `min_clusters` clusters.
 #
 #' @keywords internal
-.cluster_values <- function(x, cluster) {
+.cluster_values <- function(x, cluster, min_clusters = 2L) {
   cluster_pairs <- unique(data.frame(cluster = cluster, x = x))
   if (anyDuplicated(cluster_pairs$cluster) > 0) {
     insight::format_error(
       "The variable takes more than one value within a cluster. With `cluster`, it must have one value per cluster."
     )
   }
-  if (nrow(cluster_pairs) < 2) {
-    insight::format_error(
-      "`cluster` must contain at least two clusters with finite, non-missing values."
-    )
+  if (nrow(cluster_pairs) < min_clusters) {
+    insight::format_error(paste0(
+      "`cluster` must contain at least ",
+      if (min_clusters == 1L) "one cluster" else "two clusters",
+      " with finite, non-missing values."
+    ))
   }
   cluster_pairs$x
 }
