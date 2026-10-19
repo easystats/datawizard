@@ -15,13 +15,13 @@ test_that("center, cluster", {
   expect_identical(attr(z, "scale"), 1)
   expect_equal(as.vector(z), funding - 30, ignore_attr = TRUE)
   # without cluster, the mean is weighted by cluster size
-  expect_equal(attr(center(funding), "center"), mean(funding))
+  expect_identical(attr(center(funding), "center"), mean(funding))
   expect_false(isTRUE(all.equal(attr(center(funding), "center"), 30)))
 
   # oracle (invariant): same as centering the cluster-level vector
   ref <- center(funding_l2)
   expect_identical(attr(z, "center"), attr(ref, "center"))
-  expect_equal(as.vector(z), expand(ref))
+  expect_identical(as.vector(z), expand(ref))
 })
 
 test_that("standardize, cluster", {
@@ -29,14 +29,14 @@ test_that("standardize, cluster", {
   # oracle (closed-form): deviations from 30 are -20, -10, 0, 10, 20,
   # squares sum to 400 + 100 + 0 + 100 + 400 = 1000, and 1000 / (5 - 1) = 250
   expect_identical(attr(z, "center"), 30)
-  expect_equal(attr(z, "scale"), sqrt(250))
-  expect_equal(as.vector(z), (funding - 30) / sqrt(250))
+  expect_identical(attr(z, "scale"), sqrt(250))
+  expect_identical(as.vector(z), (funding - 30) / sqrt(250))
 
   # oracle (invariant): same as standardizing the cluster-level vector
   ref <- standardize(funding_l2)
   expect_identical(attr(z, "center"), attr(ref, "center"))
   expect_identical(attr(z, "scale"), attr(ref, "scale"))
-  expect_equal(as.vector(z), expand(ref))
+  expect_identical(as.vector(z), expand(ref))
 })
 
 test_that("center and standardize, cluster, robust", {
@@ -46,26 +46,26 @@ test_that("center and standardize, cluster, robust", {
   # 20, 10, 0, 10, 20 with median 10, so MAD = 1.4826 * 10
   expect_identical(attr(zc, "center"), 30)
   expect_identical(attr(zs, "center"), 30)
-  expect_equal(attr(zs, "scale"), 1.4826 * 10)
+  expect_identical(attr(zs, "scale"), 1.4826 * 10)
 
   # oracle (invariant)
   ref_c <- center(funding_l2, robust = TRUE)
   ref_s <- standardize(funding_l2, robust = TRUE)
   expect_identical(attr(zs, "scale"), attr(ref_s, "scale"))
-  expect_equal(as.vector(zc), expand(ref_c))
-  expect_equal(as.vector(zs), expand(ref_s))
+  expect_identical(as.vector(zc), expand(ref_c))
+  expect_identical(as.vector(zs), expand(ref_s))
 })
 
 test_that("standardize, cluster, two_sd", {
   z <- standardize(funding, cluster = school, two_sd = TRUE)
   # the scale attribute keeps the SD, the values are divided by twice the SD
-  expect_equal(attr(z, "scale"), sqrt(250))
-  expect_equal(as.vector(z), (funding - 30) / (2 * sqrt(250)))
+  expect_identical(attr(z, "scale"), sqrt(250))
+  expect_identical(as.vector(z), (funding - 30) / (2 * sqrt(250)))
 
   # oracle (invariant)
   ref <- standardize(funding_l2, two_sd = TRUE)
   expect_identical(attr(z, "scale"), attr(ref, "scale"))
-  expect_equal(as.vector(z), expand(ref))
+  expect_identical(as.vector(z), expand(ref))
 })
 
 test_that("cluster, factor and character ids give the same result", {
@@ -109,7 +109,11 @@ test_that("cluster does not shift positional arguments", {
 
   skip_if_not_installed("poorman")
   g_pos <- poorman::group_by(
-    data.frame(g = rep(c("a", "b"), each = 3), y = c(1, 2, 4, 3, 5, 9)),
+    data.frame(
+      g = rep(c("a", "b"), each = 3),
+      y = c(1, 2, 4, 3, 5, 9),
+      stringsAsFactors = FALSE
+    ),
     g
   )
   expect_identical(
@@ -139,7 +143,7 @@ test_that("cluster, infinite values count as missing", {
   cl <- c(1, 1, 2, 2, 2, 3)
   for (x in list(c(10, 10, Inf, 20, 20, 30), c(10, 10, -Inf, 20, 20, 30))) {
     for (fun in list(center, standardize)) {
-      expect_no_error(z <- fun(x, cluster = cl))
+      expect_no_error(z <- fun(x, cluster = cl)) # nolint: implicit_assignment_linter.
       # oracle (closed-form): cluster-level values are 10, 20, 30, so the
       # mean is 20
       expect_identical(attr(z, "center"), 20)
@@ -150,7 +154,7 @@ test_that("cluster, infinite values count as missing", {
 
     out <- standardize(data.frame(cl = cl, y = x), select = "y", cluster = "cl")
     expect_true(is.na(out$y[3]))
-    expect_equal(out$y[-3], (x[-3] - 20) / 10)
+    expect_identical(out$y[-3], (x[-3] - 20) / 10)
   }
 })
 
@@ -158,9 +162,9 @@ test_that("cluster, factor input with force = TRUE", {
   f <- factor(funding)
   z <- standardize(f, cluster = school, force = TRUE)
   # factor levels 10, 20, ..., 50 are numeric, so they convert to their values
-  expect_equal(as.vector(z), (funding - 30) / sqrt(250))
+  expect_identical(as.vector(z), (funding - 30) / sqrt(250))
   z <- center(f, cluster = school, force = TRUE)
-  expect_equal(as.vector(z), funding - 30)
+  expect_identical(as.vector(z), funding - 30)
 })
 
 test_that("cluster, NA ids are excluded and returned as NA", {
@@ -168,9 +172,12 @@ test_that("cluster, NA ids are excluded and returned as NA", {
   cl <- c(school, NA)
   z <- standardize(x, cluster = cl)
   expect_identical(attr(z, "center"), 30)
-  expect_equal(attr(z, "scale"), sqrt(250))
+  expect_identical(attr(z, "scale"), sqrt(250))
   expect_true(is.na(z[length(z)]))
-  expect_equal(as.vector(z)[seq_along(funding)], (funding - 30) / sqrt(250))
+  expect_identical(
+    as.vector(z)[seq_along(funding)],
+    (funding - 30) / sqrt(250)
+  )
 
   z <- center(x, cluster = cl)
   expect_identical(attr(z, "center"), 30)
@@ -182,7 +189,7 @@ test_that("cluster, a cluster with only Inf values is excluded", {
   # oracle (closed-form): cluster-level values are 10 and 30, so the mean is
   # 20 and sd = sqrt((100 + 100) / 1) = sqrt(200)
   expect_identical(attr(z, "center"), 20)
-  expect_equal(attr(z, "scale"), sqrt(200))
+  expect_identical(attr(z, "scale"), sqrt(200))
   expect_true(all(is.na(z[3:4])))
 })
 
@@ -196,12 +203,12 @@ test_that("cluster, NA in x does not count as a second value", {
 test_that("standardize, cluster, all clusters with the same value", {
   expect_warning(
     expect_message(
-      z <- standardize(rep(3, 6), cluster = rep(1:3, each = 2)),
+      z <- standardize(rep(3, 6), cluster = rep(1:3, each = 2)), # nolint: implicit_assignment_linter.
       "only one unique value"
     ),
     "SD is 0"
   )
-  expect_equal(as.vector(z), rep(0, 6))
+  expect_identical(as.vector(z), rep(0, 6))
 })
 
 
@@ -316,7 +323,8 @@ for (fun_name in c("center", "standardize")) {
     {
       out <- fun(d, cluster = "school", append = TRUE)
       expect_identical(out$school, d$school)
-      expect_false("school_c" %in% names(out) || "school_z" %in% names(out))
+      expect_false("school_c" %in% names(out))
+      expect_false("school_z" %in% names(out))
       expect_named(
         out,
         c(
@@ -370,7 +378,8 @@ for (fun_name in c("center", "standardize")) {
 g <- data.frame(
   region = rep(c("a", "b"), times = c(17, 51)),
   school = rep(1:6, times = c(2, 5, 10, 3, 8, 40)),
-  funding = rep(c(10, 20, 60, 5, 15, 25), times = c(2, 5, 10, 3, 8, 40))
+  funding = rep(c(10, 20, 60, 5, 15, 25), times = c(2, 5, 10, 3, 8, 40)),
+  stringsAsFactors = FALSE
 )
 
 for (fun_name in c("center", "standardize")) {
@@ -443,7 +452,12 @@ for (fun_name in c("center", "standardize")) {
     skip_if_not_installed("poorman")
     gd <- poorman::group_by(g, region)
     g_var <- poorman::group_by(
-      data.frame(region = "a", school = c(1, 1, 2, 2), y = c(1, 2, 3, 4)),
+      data.frame(
+        region = "a",
+        school = c(1, 1, 2, 2),
+        y = c(1, 2, 3, 4),
+        stringsAsFactors = FALSE
+      ),
       region
     )
     expect_error(
