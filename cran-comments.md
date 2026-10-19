@@ -1,1 +1,1 @@
-This fixes R-devel errors reported on 2026-09-03.
+Jeffrey Girard replaces Etienne Bacher as maintainer of `datawizard`.
