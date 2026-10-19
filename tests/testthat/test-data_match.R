@@ -465,7 +465,7 @@ test_that("data_filter works in lapply() with a local variable named x", {
   expect_identical(out[[1]][[1]], out[[1]][[2]])
 
   out <- lapply(1, function(x) {
-    dat <- data.frame(g = c("a", "z", "b"))
+    dat <- data.frame(g = c("a", "z", "b"), stringsAsFactors = FALSE)
     test <- c("a", "b", "c")
     list(data_filter(dat, g %in% test), subset(dat, g %in% test))
   })
@@ -510,9 +510,9 @@ test_that("data_filter finds a condition string further up the call stack", {
 
 
 test_that("data_filter returns the filtered data when a condition warns", {
-  d <- data.frame(a = c("1", "x", "3"))
+  d <- data.frame(a = c("1", "x", "3"), stringsAsFactors = FALSE)
   expect_warning(
-    out <- data_filter(d, as.numeric(a) > 1),
+    out <- data_filter(d, as.numeric(a) > 1), # nolint: implicit_assignment_linter.
     "NAs introduced by coercion"
   )
   expect_identical(out, suppressWarnings(subset(d, as.numeric(a) > 1)))
@@ -589,7 +589,7 @@ test_that("data_filter does not change variables of the caller", {
   expect_identical(f(), 1)
   f_bare <- function() {
     z <- 1
-    data_filter(mtcars, (z <- 30) < mpg)
+    data_filter(mtcars, (z <- 30) < mpg) # nolint: implicit_assignment_linter.
     z
   }
   expect_identical(f_bare(), 1)
