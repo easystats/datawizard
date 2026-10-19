@@ -1,4 +1,4 @@
-# datawizard 1.4.1
+# datawizard 1.4.2
 
 CHANGES
 
@@ -6,6 +6,12 @@ CHANGES
   given, the center and scale come from one value per cluster. Cluster-level
   variables in unbalanced long-format data are then not weighted by cluster
   size (#672).
+
+# datawizard 1.4.1
+
+CHANGES
+
+* Jeffrey Girard replaces Etienne Bacher as maintainer of `datawizard` (#724).
 
 FIXES
 
