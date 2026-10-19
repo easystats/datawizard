@@ -608,3 +608,39 @@ test_that("data_filter finds a condition string up the call stack when the calle
   }
   expect_identical(caller_fn(), data_filter(mtcars, "mpg > 30"))
 })
+
+
+test_that("data_filter evaluates names in a condition string where the string was found", {
+  inner_fn <- function() {
+    data_filter(mtcars, cond)
+  }
+  caller_fn <- function() {
+    cond <- "mpg > lim"
+    lim <- 30
+    inner_fn()
+  }
+  expect_identical(caller_fn(), mtcars[mtcars$mpg > 30, ])
+})
+
+
+test_that("data_filter evaluates a condition once to find it, and not again per group", {
+  counter <- new.env()
+  counter$n <- 0
+  tick <- function(v) {
+    counter$n <- counter$n + 1
+    v
+  }
+
+  # row numbers are found in the first frame and used without evaluating again
+  data_filter(mtcars, tick(1:3))
+  expect_identical(counter$n, 1)
+
+  # a filter expression is evaluated once more per group with the data
+  skip_if_not_installed("poorman")
+  counter$n <- 0
+  data_filter(mtcars, tick(mpg) > 30)
+  n_ungrouped <- counter$n
+  counter$n <- 0
+  data_filter(poorman::group_by(mtcars, cyl), tick(mpg) > 30)
+  expect_identical(counter$n - n_ungrouped, 2)
+})

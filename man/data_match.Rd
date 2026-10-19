@@ -92,7 +92,8 @@ functions further up the call stack. In each function, the condition can also us
 the environments where that function was defined, such as the global
 environment. For this reason, a name that holds a number or a string is
 used even if \code{x} has a column with the same name. A filter expression found
-this way is then evaluated with the next rule.
+this way is then evaluated with the next rule, but names that are not
+columns are looked up in the function where the string was found.
 \item Otherwise, the condition is evaluated like in \code{subset()}. Names are looked
 up in the columns of \code{x} first. Then they are looked up in the environment
 that called \code{data_filter()}, and in the environments where the calling
