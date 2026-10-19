@@ -1,4 +1,15 @@
-# datawizard (devel)
+# datawizard 1.4.1
+
+CHANGES
+
+* Jeffrey Girard replaces Etienne Bacher as maintainer of `datawizard` (#724).
+
+FIXES
+
+* Fixed an issue in `data_to_wide()` where values could be assigned to wrong rows
+  when input data were not sorted by `id_cols` (#713).
+
+# datawizard 1.4.0
 
 CHANGES
 
@@ -15,6 +26,14 @@ CHANGES
 
 * The object returned by `as.table.datawizard.crosstab()` now includes
   dimnames. (#699 @elinw)
+
+* `distribution_mode()` now displays an informative message when mode frequencies
+  are tied, and tied values are stored in output attributes (#702).
+
+FIXES
+
+* Fixed a bug failure on R-devel (#706).
+
 
 # datawizard 1.3.1
 

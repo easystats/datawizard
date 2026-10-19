@@ -44,6 +44,7 @@ Authors:
 Other contributors:
 \itemize{
   \item Rémi Thériault \email{remi.theriault@mail.mcgill.ca} (\href{https://orcid.org/0000-0003-4315-6788}{ORCID}) [contributor]
+  \item Elin Waring \email{elin.waring@gmail.com} [contributor]
   \item Thomas J. Faulkenberry \email{faulkenberry@tarleton.edu} [reviewer]
   \item Robert Garrett \email{rcg4@illinois.edu} [reviewer]
 }
