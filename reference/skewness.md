@@ -29,16 +29,16 @@ kurtosis(
   ...
 )
 
-# S3 method for class 'parameters_kurtosis'
+# S3 method for class 'datawizard_kurtosis'
 print(x, digits = 3, test = FALSE, ...)
 
-# S3 method for class 'parameters_skewness'
+# S3 method for class 'datawizard_skewness'
 print(x, digits = 3, test = FALSE, ...)
 
-# S3 method for class 'parameters_skewness'
+# S3 method for class 'datawizard_skewness'
 summary(object, test = FALSE, ...)
 
-# S3 method for class 'parameters_kurtosis'
+# S3 method for class 'datawizard_kurtosis'
 summary(object, test = FALSE, ...)
 ```
 

@@ -151,10 +151,10 @@ distributions
   : Compute mode for a statistical distribution
 - [`skewness()`](https://easystats.github.io/datawizard/reference/skewness.md)
   [`kurtosis()`](https://easystats.github.io/datawizard/reference/skewness.md)
-  [`print(`*`<parameters_kurtosis>`*`)`](https://easystats.github.io/datawizard/reference/skewness.md)
-  [`print(`*`<parameters_skewness>`*`)`](https://easystats.github.io/datawizard/reference/skewness.md)
-  [`summary(`*`<parameters_skewness>`*`)`](https://easystats.github.io/datawizard/reference/skewness.md)
-  [`summary(`*`<parameters_kurtosis>`*`)`](https://easystats.github.io/datawizard/reference/skewness.md)
+  [`print(`*`<datawizard_kurtosis>`*`)`](https://easystats.github.io/datawizard/reference/skewness.md)
+  [`print(`*`<datawizard_skewness>`*`)`](https://easystats.github.io/datawizard/reference/skewness.md)
+  [`summary(`*`<datawizard_skewness>`*`)`](https://easystats.github.io/datawizard/reference/skewness.md)
+  [`summary(`*`<datawizard_kurtosis>`*`)`](https://easystats.github.io/datawizard/reference/skewness.md)
   : Compute Skewness and (Excess) Kurtosis
 - [`smoothness()`](https://easystats.github.io/datawizard/reference/smoothness.md)
   : Quantify the smoothness of a vector

@@ -50,9 +50,9 @@ plot(x)
 smoothness(x, method = "cor")
 #> [1] 0.9291692
 #> attr(,"class")
-#> [1] "parameters_smoothness" "numeric"              
+#> [1] "datawizard_smoothness" "parameters_smoothness" "numeric"              
 smoothness(x, method = "diff")
 #> [1] 1.584401
 #> attr(,"class")
-#> [1] "parameters_smoothness" "numeric"              
+#> [1] "datawizard_smoothness" "parameters_smoothness" "numeric"              
 ```

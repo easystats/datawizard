@@ -544,7 +544,7 @@ using this package.
 [`smoothness`](https://easystats.github.io/datawizard/reference/smoothness.md)`(``x``, method ``=`` ``"diff"``)`\
 `#> [1] 1.791243`\
 `#> attr(,"class")`\
-`#> [1] "parameters_smoothness" "numeric"`
+`#> [1] "datawizard_smoothness" "parameters_smoothness" "numeric"`
 
 ## Function design and pipe-workflow
 
@@ -749,10 +749,10 @@ distributions
   : Compute mode for a statistical distribution
 - [`skewness()`](https://easystats.github.io/datawizard/reference/skewness.md)
   [`kurtosis()`](https://easystats.github.io/datawizard/reference/skewness.md)
-  [`print(`*`<parameters_kurtosis>`*`)`](https://easystats.github.io/datawizard/reference/skewness.md)
-  [`print(`*`<parameters_skewness>`*`)`](https://easystats.github.io/datawizard/reference/skewness.md)
-  [`summary(`*`<parameters_skewness>`*`)`](https://easystats.github.io/datawizard/reference/skewness.md)
-  [`summary(`*`<parameters_kurtosis>`*`)`](https://easystats.github.io/datawizard/reference/skewness.md)
+  [`print(`*`<datawizard_kurtosis>`*`)`](https://easystats.github.io/datawizard/reference/skewness.md)
+  [`print(`*`<datawizard_skewness>`*`)`](https://easystats.github.io/datawizard/reference/skewness.md)
+  [`summary(`*`<datawizard_skewness>`*`)`](https://easystats.github.io/datawizard/reference/skewness.md)
+  [`summary(`*`<datawizard_kurtosis>`*`)`](https://easystats.github.io/datawizard/reference/skewness.md)
   : Compute Skewness and (Excess) Kurtosis
 - [`smoothness()`](https://easystats.github.io/datawizard/reference/smoothness.md)
   : Quantify the smoothness of a vector

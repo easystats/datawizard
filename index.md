@@ -544,7 +544,7 @@ using this package.
 [`smoothness`](https://easystats.github.io/datawizard/reference/smoothness.md)`(``x``, method ``=`` ``"diff"``)`\
 `#> [1] 1.791243`\
 `#> attr(,"class")`\
-`#> [1] "parameters_smoothness" "numeric"`
+`#> [1] "datawizard_smoothness" "parameters_smoothness" "numeric"`
 
 ## Function design and pipe-workflow
 
