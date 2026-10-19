@@ -445,6 +445,26 @@ test_that("degroup, mixed nested and crossed `by` stops with an error", {
     unname(degroup(d2, select = "v", by = c("A/B", "C"), append = FALSE)),
     unname(degroup(d, select = "v", by = c("A", "C"), append = FALSE))
   )
+
+  # nor in a formula, where the name is backticked
+  expect_identical(
+    unname(degroup(d2, select = "v", by = ~`A/B`, append = FALSE)),
+    unname(degroup(d, select = "v", by = ~A, append = FALSE))
+  )
+  expect_identical(
+    unname(degroup(d2, select = "v", by = ~ C + `A/B`, append = FALSE)),
+    unname(degroup(d, select = "v", by = ~ C + A, append = FALSE))
+  )
+})
+
+
+test_that(".nesting_of_pair handles many levels without integer overflow", {
+  # the product of the numbers of levels exceeds .Machine$integer.max, and
+  # the last value of p occurs with two values of q
+  p <- c(1:50000, 50000)
+  q <- c(1:50000, 49999)
+  expect_silent(nesting <- .nesting_of_pair(p, q))
+  expect_identical(nesting, c(p_in_q = FALSE, q_in_p = FALSE))
 })
 
 

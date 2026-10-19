@@ -302,18 +302,19 @@ other than \code{"mean"}, the cluster statistic replaces the mean.
 \section{Checks of the grouping structure}{
 
 
-With two or more variables in \code{by} and \code{verbose = TRUE}, \code{degroup()} checks
-whether the data match \code{by}. A check uses only the rows where both
-variables of a pair are not missing, and it ignores unused factor levels.
+With two or more variables in \code{by} and \code{verbose = TRUE}, \code{demean()} and
+\code{degroup()} check whether the data match \code{by}. A check uses only the rows
+where both variables of a pair are not missing, and it ignores unused factor
+levels.
 \itemize{
-\item With \code{nested = FALSE}, \code{degroup()} gives a warning when each value of one
+\item With \code{nested = FALSE}, the check gives a warning when each value of one
 \code{by} variable occurs with only one value of another \code{by} variable. Such
 data look nested, so the warning names each such pair and suggests
 \code{nested = TRUE}. Crossed data with this pattern, for example a variable
 with a single value, also give the warning. Nested data whose lower-level
 IDs repeat across clusters (e.g. class \code{"1"} in each school) look crossed,
 so this check does not find them.
-\item With \code{nested = TRUE}, \code{degroup()} gives a warning for each adjacent pair
+\item With \code{nested = TRUE}, the check gives a warning for each adjacent pair
 in \code{by} when each value of the first variable occurs with only one value
 of the second, and some value of the second occurs with two or more
 values of the first. The warning says that \code{by} lists the levels from

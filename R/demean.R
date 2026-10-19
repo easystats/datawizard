@@ -234,18 +234,19 @@
 #'
 #' @section Checks of the grouping structure:
 #'
-#' With two or more variables in `by` and `verbose = TRUE`, `degroup()` checks
-#' whether the data match `by`. A check uses only the rows where both
-#' variables of a pair are not missing, and it ignores unused factor levels.
+#' With two or more variables in `by` and `verbose = TRUE`, `demean()` and
+#' `degroup()` check whether the data match `by`. A check uses only the rows
+#' where both variables of a pair are not missing, and it ignores unused factor
+#' levels.
 #'
-#' - With `nested = FALSE`, `degroup()` gives a warning when each value of one
+#' - With `nested = FALSE`, the check gives a warning when each value of one
 #'   `by` variable occurs with only one value of another `by` variable. Such
 #'   data look nested, so the warning names each such pair and suggests
 #'   `nested = TRUE`. Crossed data with this pattern, for example a variable
 #'   with a single value, also give the warning. Nested data whose lower-level
 #'   IDs repeat across clusters (e.g. class `"1"` in each school) look crossed,
 #'   so this check does not find them.
-#' - With `nested = TRUE`, `degroup()` gives a warning for each adjacent pair
+#' - With `nested = TRUE`, the check gives a warning for each adjacent pair
 #'   in `by` when each value of the first variable occurs with only one value
 #'   of the second, and some value of the second occurs with two or more
 #'   values of the first. The warning says that `by` lists the levels from
@@ -657,18 +658,20 @@ detrend <- degroup
 .parse_by <- function(by, nested, columns) {
   # A formula with only "/" (e.g. ~ L4/L3/L2) is nested, like the string
   # "L4/L3/L2". A formula with only "+" keeps the value of `nested`. Only the
-  # right-hand side of the formula is read.
+  # right-hand side of the formula is read. Operators are read from the calls
+  # in the formula, so a backticked column name such as `A/B` is not split.
   if (inherits(by, "formula")) {
     by_rhs <- by[[length(by)]]
-    by_terms <- insight::safe_deparse(by_rhs)
-    by_nested <- grepl("/", by_terms, fixed = TRUE)
-    if (by_nested && grepl("+", by_terms, fixed = TRUE)) {
+    by_operators <- all.names(by_rhs, functions = TRUE)
+    by_operators <- setdiff(by_operators, all.vars(by_rhs))
+    by_nested <- "/" %in% by_operators
+    if (by_nested && "+" %in% by_operators) {
       .mixed_design_error()
     }
     if (by_nested) {
       nested <- TRUE
     }
-    by <- all.vars(by_rhs)
+    return(list(by = all.vars(by_rhs), nested = nested))
   }
 
   # a character vector such as c("L4", "L3/L2") mixes crossed and nested,
