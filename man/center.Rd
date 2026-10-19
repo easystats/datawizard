@@ -18,6 +18,7 @@ centre(x, ...)
   reference = NULL,
   center = NULL,
   verbose = TRUE,
+  cluster = NULL,
   ...
 )
 
@@ -35,6 +36,7 @@ centre(x, ...)
   ignore_case = FALSE,
   verbose = TRUE,
   regex = FALSE,
+  cluster = NULL,
   ...
 )
 }
@@ -67,6 +69,18 @@ order, unless a named vector is given. In this case, names are matched
 against the names of the selected variables.}
 
 \item{verbose}{Toggle warnings and messages.}
+
+\item{cluster}{Can be \code{NULL} (for no clustering), or a vector of cluster
+ids with one element per observation. For data frames, it can also be the
+name of a column that contains the cluster ids. If given, the center and
+scale are computed from one value per cluster instead of from all
+observations, so that a cluster-level (Level 2) variable in long format is
+not weighted by the number of observations per cluster. The variable must
+take only one finite value within each cluster (infinite values are
+treated as missing), and observations with a missing cluster id are
+returned as \code{NA}. \code{cluster} cannot be combined with
+\code{weights}, \code{reference}, or values for \code{center} and \code{scale}. For grouped
+data frames, \code{cluster} must be a column name.}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either

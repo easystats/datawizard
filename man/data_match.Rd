@@ -79,6 +79,26 @@ While \code{data_match()} works with data frames to match conditions against,
 \code{data_filter()} is basically a wrapper around \verb{subset(subset = <filter>)}.
 However, unlike \code{subset()}, it preserves label attributes and is useful when
 working with labelled data.
+
+A condition in \code{data_filter()} can use variables of the function that calls
+\code{data_filter()}, for example \code{data_filter(data, value > threshold)} where
+\code{threshold} is defined in that function. Names are found with two rules:
+\itemize{
+\item If the complete condition evaluates to a number or a string, this value is
+used as row indices or as the filter expression. A string that evaluates
+to numbers, like \code{"5:10"}, is also used as row indices. The condition is
+evaluated in the function that called \code{data_filter()} first, then in the
+functions further up the call stack. In each function, the condition can also use
+the environments where that function was defined, such as the global
+environment. For this reason, a name that holds a number or a string is
+used even if \code{x} has a column with the same name. A filter expression found
+this way is then evaluated with the next rule, but names that are not
+columns are looked up in the function where the string was found.
+\item Otherwise, the condition is evaluated like in \code{subset()}. Names are looked
+up in the columns of \code{x} first. Then they are looked up in the environment
+that called \code{data_filter()}, and in the environments where the calling
+function was defined.
+}
 }
 \examples{
 data_match(mtcars, data.frame(vs = 0, am = 1))
@@ -108,6 +128,12 @@ my_filter <- function(data, condition) {
   data_filter(data, condition)
 }
 my_filter(mtcars, "am != 0")
+
+# Use a variable of the function in the condition
+my_filter <- function(data, threshold) {
+  data_filter(data, mpg > threshold)
+}
+my_filter(mtcars, 30)
 
 # string can also be used directly as argument
 data_filter(mtcars, "am != 0")

@@ -29,12 +29,13 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Etienne Bacher \email{etienne.bacher@protonmail.com} (\href{https://orcid.org/0000-0002-9271-5075}{ORCID})
+\strong{Maintainer}: Jeffrey Girard \email{me@jmgirard.com} (\href{https://orcid.org/0000-0002-7359-3746}{ORCID})
 
 Authors:
 \itemize{
-  \item Etienne Bacher \email{etienne.bacher@protonmail.com} (\href{https://orcid.org/0000-0002-9271-5075}{ORCID})
+  \item Jeffrey Girard \email{me@jmgirard.com} (\href{https://orcid.org/0000-0002-7359-3746}{ORCID})
   \item Indrajeet Patil \email{patilindrajeet.science@gmail.com} (\href{https://orcid.org/0000-0003-1995-6531}{ORCID})
+  \item Etienne Bacher \email{etienne.bacher@protonmail.com} (\href{https://orcid.org/0000-0002-9271-5075}{ORCID})
   \item Dominique Makowski \email{dom.makowski@gmail.com} (\href{https://orcid.org/0000-0001-5375-9967}{ORCID})
   \item Daniel Lüdecke \email{d.luedecke@uke.de} (\href{https://orcid.org/0000-0002-8895-3206}{ORCID})
   \item Mattan S. Ben-Shachar \email{matanshm@post.bgu.ac.il} (\href{https://orcid.org/0000-0002-4287-4801}{ORCID})
@@ -44,6 +45,7 @@ Authors:
 Other contributors:
 \itemize{
   \item Rémi Thériault \email{remi.theriault@mail.mcgill.ca} (\href{https://orcid.org/0000-0003-4315-6788}{ORCID}) [contributor]
+  \item Elin Waring \email{elin.waring@gmail.com} [contributor]
   \item Thomas J. Faulkenberry \email{faulkenberry@tarleton.edu} [reviewer]
   \item Robert Garrett \email{rcg4@illinois.edu} [reviewer]
 }
