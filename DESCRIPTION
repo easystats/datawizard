@@ -1,11 +1,13 @@
 Type: Package
 Package: datawizard
 Title: Easy Data Wrangling and Statistical Transformations
-Version: 1.4.0.9000
+Version: 1.4.1
 Authors@R: c(
+    person("Jeffrey", "Girard", , "me@jmgirard.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-7359-3746")),
     person("Indrajeet", "Patil", , "patilindrajeet.science@gmail.com", role = "aut",
            comment = c(ORCID = "0000-0003-1995-6531")),
-    person("Etienne", "Bacher", , "etienne.bacher@protonmail.com", role = c("aut", "cre"),
+    person("Etienne", "Bacher", , "etienne.bacher@protonmail.com", role = "aut",
            comment = c(ORCID = "0000-0002-9271-5075")),
     person("Dominique", "Makowski", , "dom.makowski@gmail.com", role = "aut",
            comment = c(ORCID = "0000-0001-5375-9967")),
@@ -21,7 +23,6 @@ Authors@R: c(
     person("Thomas J.", "Faulkenberry", , "faulkenberry@tarleton.edu", role = "rev"),
     person("Robert", "Garrett", , "rcg4@illinois.edu", role = "rev")
   )
-Maintainer: Etienne Bacher <etienne.bacher@protonmail.com>
 Description: A lightweight package to assist in key steps involved in any data
     analysis workflow: (1) wrangling the raw data to get it in the needed form,
     (2) applying preprocessing steps and statistical transformations, and

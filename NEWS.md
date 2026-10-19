@@ -1,5 +1,9 @@
 # datawizard 1.4.1
 
+CHANGES
+
+* Jeffrey Girard replaces Etienne Bacher as maintainer of `datawizard` (#724).
+
 FIXES
 
 * Fixed an issue in `data_to_wide()` where values could be assigned to wrong rows
