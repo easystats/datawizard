@@ -1,8 +1,4 @@
-# datawizard 1.4.1
-
-CHANGES
-
-* Jeffrey Girard replaces Etienne Bacher as maintainer of `datawizard` (#724).
+# datawizard 1.4.2
 
 FIXES
 
@@ -11,6 +7,14 @@ FIXES
   and loops. Internal variables of `data_filter()` no longer hide variables of
   the calling code. A condition that gives a warning now returns the filtered
   data with that warning (#309, #379).
+
+# datawizard 1.4.1
+
+CHANGES
+
+* Jeffrey Girard replaces Etienne Bacher as maintainer of `datawizard` (#724).
+
+FIXES
 
 * Fixed an issue in `data_to_wide()` where values could be assigned to wrong rows
   when input data were not sorted by `id_cols` (#713).
