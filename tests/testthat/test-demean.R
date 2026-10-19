@@ -402,11 +402,13 @@ test_that("degroup for nested designs with three or more levels", {
   expect_equal(rowSums(out), dat$x, ignore_attr = TRUE)
   expect_equal(
     as.vector(tapply(out$x_B_between, dat$A, mean)),
-    c(0, 0)
+    c(0, 0),
+    tolerance = 1e-8
   )
   expect_equal(
     as.vector(tapply(out$x_C_between, paste(dat$A, dat$B), mean)),
-    c(0, 0, 0, 0)
+    c(0, 0, 0, 0),
+    tolerance = 1e-8
   )
 
   # Oracle (invariant): with several variables in `select`, each variable gets
@@ -435,10 +437,10 @@ test_that("degroup for nested designs with four levels and median", {
 
   set.seed(123)
   dat <- data.frame(
-    A = sample(1:3, 120, replace = TRUE),
-    B = sample(1:3, 120, replace = TRUE),
-    C = sample(1:2, 120, replace = TRUE),
-    D = sample(1:2, 120, replace = TRUE),
+    A = sample.int(3, 120, replace = TRUE),
+    B = sample.int(3, 120, replace = TRUE),
+    C = sample.int(2, 120, replace = TRUE),
+    D = sample.int(2, 120, replace = TRUE),
     x = rnorm(120)
   )
 
