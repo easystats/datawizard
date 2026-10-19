@@ -25,6 +25,11 @@ CHANGES
   variables seems to be listed from the lowest to the highest level. Use
   `verbose = FALSE` to turn the checks off (#722).
 
+* `center()` and `standardize()` gain a `cluster` argument. If `cluster` is
+  given, the center and scale come from one value per cluster. Cluster-level
+  variables in unbalanced long-format data are then not weighted by cluster
+  size (#672).
+
 FIXES
 
 * Fixed `demean()` and `degroup()` for nested designs with three or more
