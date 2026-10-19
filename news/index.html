@@ -55,7 +55,13 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.4.2" id="datawizard-142">datawizard 1.4.2<a class="anchor" aria-label="anchor" href="#datawizard-142"></a></h2>
-<p>FIXES</p>
+<p>BREAKING CHANGES</p>
+<ul><li><p>In <code><a href="../reference/demean.html">demean()</a></code> and <code><a href="../reference/demean.html">degroup()</a></code>, a formula in <code>by</code> whose terms are separated only by <code>/</code>, such as <code>by = ~ L3/L2</code>, now means a nested design, like the string <code>by = "L3/L2"</code>. Before, such a formula gave a cross-classified design unless <code>nested = TRUE</code> was set. Only the right-hand side of a formula in <code>by</code> is read now. Before, a variable on the left-hand side was also used as a grouping variable (<a href="https://github.com/easystats/datawizard/issues/722" class="external-link">#722</a>).</p></li>
+<li><p><code><a href="../reference/demean.html">demean()</a></code> and <code><a href="../reference/demean.html">degroup()</a></code> now stop with an error when <code>by</code> mixes nested and cross-classified grouping. A formula with both <code>+</code> and <code>/</code>, such as <code>by = ~ C + A/B</code>, gave a cross-classified design before, or a nested design with <code>nested = TRUE</code>. A character vector such as <code>by = c("C", "A/B")</code>, with no column named <code>"A/B"</code>, gave an error that a variable was not found. A string such as <code>by = "C + A/B"</code> gave the same error (<a href="https://github.com/easystats/datawizard/issues/722" class="external-link">#722</a>).</p></li>
+</ul><p>CHANGES</p>
+<ul><li>
+<code><a href="../reference/demean.html">demean()</a></code> and <code><a href="../reference/demean.html">degroup()</a></code> now warn when the data do not seem to match <code>by</code>. With <code>nested = FALSE</code>, the warning comes when each value of one <code>by</code> variable occurs with only one value of another, which suggests a nested design. With <code>nested = TRUE</code>, it comes when a pair of adjacent <code>by</code> variables seems to be listed from the lowest to the highest level. Use <code>verbose = FALSE</code> to turn the checks off (<a href="https://github.com/easystats/datawizard/issues/722" class="external-link">#722</a>).</li>
+</ul><p>FIXES</p>
 <ul><li>Fixed <code><a href="../reference/demean.html">demean()</a></code> and <code><a href="../reference/demean.html">degroup()</a></code> for nested designs with three or more grouping variables. The group-meaned variables of the third and later variables in <code>by</code> were wrong (<a href="https://github.com/easystats/datawizard/issues/720" class="external-link">#720</a>).</li>
 </ul></div>
     <div class="section level2">

@@ -2,6 +2,44 @@
 
 ## datawizard 1.4.2
 
+BREAKING CHANGES
+
+- In
+  [`demean()`](https://easystats.github.io/datawizard/reference/demean.md)
+  and
+  [`degroup()`](https://easystats.github.io/datawizard/reference/demean.md),
+  a formula in `by` whose terms are separated only by `/`, such as
+  `by = ~ L3/L2`, now means a nested design, like the string
+  `by = "L3/L2"`. Before, such a formula gave a cross-classified design
+  unless `nested = TRUE` was set. Only the right-hand side of a formula
+  in `by` is read now. Before, a variable on the left-hand side was also
+  used as a grouping variable
+  ([\#722](https://github.com/easystats/datawizard/issues/722)).
+
+- [`demean()`](https://easystats.github.io/datawizard/reference/demean.md)
+  and
+  [`degroup()`](https://easystats.github.io/datawizard/reference/demean.md)
+  now stop with an error when `by` mixes nested and cross-classified
+  grouping. A formula with both `+` and `/`, such as `by = ~ C + A/B`,
+  gave a cross-classified design before, or a nested design with
+  `nested = TRUE`. A character vector such as `by = c("C", "A/B")`, with
+  no column named `"A/B"`, gave an error that a variable was not found.
+  A string such as `by = "C + A/B"` gave the same error
+  ([\#722](https://github.com/easystats/datawizard/issues/722)).
+
+CHANGES
+
+- [`demean()`](https://easystats.github.io/datawizard/reference/demean.md)
+  and
+  [`degroup()`](https://easystats.github.io/datawizard/reference/demean.md)
+  now warn when the data do not seem to match `by`. With
+  `nested = FALSE`, the warning comes when each value of one `by`
+  variable occurs with only one value of another, which suggests a
+  nested design. With `nested = TRUE`, it comes when a pair of adjacent
+  `by` variables seems to be listed from the lowest to the highest
+  level. Use `verbose = FALSE` to turn the checks off
+  ([\#722](https://github.com/easystats/datawizard/issues/722)).
+
 FIXES
 
 - Fixed

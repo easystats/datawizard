@@ -130,21 +130,34 @@ indicates the group- or cluster-ID. For cross-classified or nested designs,
 <code>by</code> can also identify two or more variables as group- or cluster-IDs. If
 the data is nested and should be treated as such, set <code>nested = TRUE</code>. Else,
 if <code>by</code> defines two or more variables and <code>nested = FALSE</code>, a cross-classified
-design is assumed. Note that <code>demean()</code> and <code>degroup()</code> can't handle a mix
-of nested and cross-classified designs in one model.</p>
+design is assumed. <code>demean()</code> and <code>degroup()</code> do not support designs that
+mix nested and cross-classified grouping. These forms of <code>by</code> stop with an
+error: a formula or a single string with both <code>+</code> and <code>/</code>, such as
+<code>~ C + A/B</code> or <code>"C + A/B"</code>, and a character vector of length two or more
+with an element that contains <code>/</code>, such as <code>c("C", "A/B")</code>, unless that
+element is the name of a column. For a formula, only the right-hand side
+is read.</p>
 <p>For nested designs, <code>by</code> can be:</p><ul><li><p>a character vector with the name of the variable that indicates the
 levels, ordered from <em>highest</em> level to <em>lowest</em> (e.g.
 <code>by = c("L4", "L3", "L2")</code>.</p></li>
 <li><p>a character vector with variable names in the format <code>by = "L4/L3/L2"</code>,
 where the levels are separated by <code>/</code>.</p></li>
-</ul><p>See also section <em>De-meaning for cross-classified designs</em> and
+<li><p>a formula in which the levels are separated by <code>/</code>, such as
+<code>by = ~ L4/L3/L2</code>. This formula gives the same result as
+<code>by = "L4/L3/L2"</code>, and it sets <code>nested = TRUE</code>.</p></li>
+</ul><p>For cross-classified designs, <code>by</code> can be a character vector such as
+<code>by = c("A", "B")</code>, or a formula in which the variables are separated by
+<code>+</code>, such as <code>by = ~ A + B</code>.</p>
+<p>See also section <em>Checks of the grouping structure</em> below.</p>
+<p>See also section <em>De-meaning for cross-classified designs</em> and
 <em>De-meaning for nested designs</em> below.</p></dd>
 
 
 <dt id="arg-nested">nested<a class="anchor" aria-label="anchor" href="#arg-nested"></a></dt>
 <dd><p>Logical, if <code>TRUE</code>, the data is treated as nested. If <code>FALSE</code>,
 the data is treated as cross-classified. Only applies if <code>by</code> contains more
-than one variable.</p></dd>
+than one variable. A <code>by</code> with <code>/</code>, such as <code>by = "L3/L2"</code> or
+<code>by = ~ L3/L2</code>, sets <code>nested = TRUE</code>.</p></dd>
 
 
 <dt id="arg-suffix-demean-suffix-groupmean">suffix_demean, suffix_groupmean<a class="anchor" aria-label="anchor" href="#arg-suffix-demean-suffix-groupmean"></a></dt>
@@ -345,8 +358,52 @@ equivalent to de-meaning of nested data structures from models with three or
 more levels. Set <code>nested = TRUE</code> to explicitly assume a nested design. For
 cross-classified designs, de-meaning is supposed to work for models like
 <code>y ~ x + (1|level3) + (1|level2)</code>, but <em>not</em> for models like
-<code>y ~ x + (1|level3/level2)</code>. Note that <code>demean()</code> and <code>degroup()</code> can't
-handle a mix of nested and cross-classified designs in one model.</p>
+<code>y ~ x + (1|level3/level2)</code>. Designs that mix nested and cross-classified
+grouping are not supported. A <code>by</code> that combines <code>/</code> with <code>+</code>, or a vector
+of names in which one name contains <code>/</code> and is not a column name, gives an
+error.</p>
+<p>For two crossed variables, J and K, <code>demean()</code> returns the three components
+of the fully cluster-mean-centered model in <em>Guo et al. (2024)</em>, equation 4:
+the mean of the variable in its J cluster, the mean in its K cluster, and
+the within component, which is the value minus both means. Each mean is
+taken over the rows of the cluster where the variable is not missing, not
+over cell means, so combinations of J and K with more rows weigh more. The
+components also apply to unbalanced data, with different numbers of rows
+per combination of J and K. For each row where the variable is not
+missing, the components sum to the value. For a row with a missing value
+in a <code>by</code> variable, the mean for that variable is the row's own value.
+<em>Guo et al. (2024)</em> also cover three or more crossed variables: footnote 6
+and the R function in their Appendix C subtract the mean of each crossed
+variable, and <code>demean()</code> does the same. With <code>degroup()</code> and a <code>center</code>
+other than <code>"mean"</code>, the cluster statistic replaces the mean.
+<em>Guo et al. (2024)</em> define the components with means.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="checks-of-the-grouping-structure">Checks of the grouping structure<a class="anchor" aria-label="anchor" href="#checks-of-the-grouping-structure"></a></h2>
+
+
+
+<p>With two or more variables in <code>by</code> and <code>verbose = TRUE</code>, <code>demean()</code> and
+<code>degroup()</code> check whether the data match <code>by</code>. A check uses only the rows
+where both variables of a pair are not missing, and it ignores unused factor
+levels.</p><ul><li><p>With <code>nested = FALSE</code>, the check gives a warning when each value of one
+<code>by</code> variable occurs with only one value of another <code>by</code> variable. Such
+data look nested, so the warning names each such pair and suggests
+<code>nested = TRUE</code>. Crossed data with this pattern, for example a variable
+with a single value, also give the warning. Nested data whose lower-level
+IDs repeat across clusters (e.g. class <code>"1"</code> in each school) look crossed,
+so this check does not find them.</p></li>
+<li><p>With <code>nested = TRUE</code>, the check gives a warning for each adjacent pair
+in <code>by</code> when each value of the first variable occurs with only one value
+of the second, and some value of the second occurs with two or more
+values of the first. The warning says that <code>by</code> lists the levels from
+highest to lowest, and it names both variables. Nested data with a single
+lower-level cluster in each higher-level cluster and lower-level IDs that
+repeat (e.g. class <code>"1"</code> alone in each school) also give the warning,
+although the order is correct. A wrong order is not found when the
+lower-level IDs repeat across clusters.</p></li>
+</ul><p>The warnings do not change the returned values. Set <code>verbose = FALSE</code> to
+turn the checks off.</p>
     </div>
     <div class="section level2">
     <h2 id="de-meaning-for-nested-designs">De-meaning for nested designs<a class="anchor" aria-label="anchor" href="#de-meaning-for-nested-designs"></a></h2>
@@ -360,7 +417,7 @@ levels in descending order in the <code>by</code> argument. E.g.,
 <code>by = c("level4", "level3", "level2")</code> assumes a model like
 <code>y ~ x + (1|level4/level3/level2)</code>. An alternative notation for the
 <code>by</code>-argument would be <code>by = "level4/level3/level2"</code>, similar to the
-formula notation.</p>
+formula notation, or the formula <code>by = ~ level4/level3/level2</code>.</p>
 <p>Any number of levels is possible. The group-meaned variable of the highest
 level is the mean within each of its groups. The group-meaned variable of
 each lower level is the mean within each of its groups minus the mean of
