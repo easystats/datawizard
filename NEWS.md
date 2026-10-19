@@ -1,3 +1,11 @@
+# datawizard 1.4.2
+
+FIXES
+
+* Fixed `demean()` and `degroup()` for nested designs with three or more
+  grouping variables. The group-meaned variables of the third and later
+  variables in `by` were wrong (#720).
+
 # datawizard 1.4.1
 
 CHANGES
@@ -8,10 +16,6 @@ FIXES
 
 * Fixed an issue in `data_to_wide()` where values could be assigned to wrong rows
   when input data were not sorted by `id_cols` (#713).
-
-* Fixed `demean()` and `degroup()` for nested designs with three or more
-  grouping variables. The group-meaned variables of the third and later
-  variables in `by` were wrong (#720).
 
 # datawizard 1.4.0
 
