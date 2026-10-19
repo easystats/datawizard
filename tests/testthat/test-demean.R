@@ -369,7 +369,8 @@ test_that("degroup, formula in `by` with `/` is nested, with `+` is crossed", {
     B = rep(c("a", "a", "b", "b", "c", "c"), 2),
     C = rep(c("x", "y"), 6),
     v = c(1, 4, 2, 8, 5, 7, 3, 9, 6, 2, 10, 4),
-    w = c(3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5, 8)
+    w = c(3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5, 8),
+    stringsAsFactors = FALSE
   )
 
   expect_identical(
@@ -414,7 +415,8 @@ test_that("degroup, mixed nested and crossed `by` stops with an error", {
     A = rep(c("I", "II"), each = 6),
     B = rep(c("a", "a", "b", "b", "c", "c"), 2),
     C = rep(c("x", "y"), 6),
-    v = c(1, 4, 2, 8, 5, 7, 3, 9, 6, 2, 10, 4)
+    v = c(1, 4, 2, 8, 5, 7, 3, 9, 6, 2, 10, 4),
+    stringsAsFactors = FALSE
   )
 
   expect_error(
@@ -463,7 +465,7 @@ test_that(".nesting_of_pair handles many levels without integer overflow", {
   # the last value of p occurs with two values of q
   p <- c(1:50000, 50000)
   q <- c(1:50000, 49999)
-  expect_silent(nesting <- .nesting_of_pair(p, q))
+  expect_silent(nesting <- .nesting_of_pair(p, q)) # nolint: implicit_assignment_linter.
   expect_identical(nesting, c(p_in_q = FALSE, q_in_p = FALSE))
 })
 
@@ -485,7 +487,8 @@ test_that("degroup, crossed `by` warns when one variable is nested in another", 
       c("c1", "c1", "c2", NA, "c3", "c3", "c4", NA),
       levels = c("c1", "c2", "c3", "c4", "c9")
     ),
-    v = c(1, 3, 2, 6, 5, 9, 4, 8)
+    v = c(1, 3, 2, 6, 5, 9, 4, 8),
+    stringsAsFactors = FALSE
   )
 
   w <- squished_warnings(degroup(d, select = "v", by = c("school", "class")))
@@ -505,7 +508,8 @@ test_that("degroup, crossed `by` warns when one variable is nested in another", 
   d_one <- data.frame(
     a = c("x", "x", "y", "y"),
     b = c("p", "p", "q", "q"),
-    v = c(1, 2, 3, 5)
+    v = c(1, 2, 3, 5),
+    stringsAsFactors = FALSE
   )
   w <- squished_warnings(degroup(d_one, select = "v", by = c("a", "b")))
   expect_length(w, 1)
@@ -517,7 +521,8 @@ test_that("degroup, crossed `by` warns when one variable is nested in another", 
     sch = c("s1", "s1", "s1", "s1", "s2", "s2", "s2", "s2"),
     cls = c("c1", "c1", "c2", "c2", "c3", "c3", "c4", "c4"),
     stu = c("u1", "u2", "u3", "u4", "u5", "u6", "u7", "u8"),
-    v = c(1, 3, 2, 6, 5, 9, 4, 8)
+    v = c(1, 3, 2, 6, 5, 9, 4, 8),
+    stringsAsFactors = FALSE
   )
   w <- squished_warnings(
     degroup(d_three, select = "v", by = c("sch", "cls", "stu"))
@@ -531,7 +536,8 @@ test_that("degroup, crossed `by` warns when one variable is nested in another", 
   d_single <- data.frame(
     person = c("p1", "p1", "p2", "p2"),
     site = c("s1", "s1", "s1", "s1"),
-    v = c(1, 2, 3, 5)
+    v = c(1, 2, 3, 5),
+    stringsAsFactors = FALSE
   )
   w <- squished_warnings(
     degroup(d_single, select = "v", by = c("person", "site"))
@@ -543,7 +549,8 @@ test_that("degroup, crossed `by` warns when one variable is nested in another", 
   d_rep <- data.frame(
     school = c("s1", "s1", "s1", "s1", "s2", "s2", "s2", "s2"),
     class = c("c1", "c1", "c2", "c2", "c1", "c1", "c2", "c2"),
-    v = c(1, 3, 2, 6, 5, 9, 4, 8)
+    v = c(1, 3, 2, 6, 5, 9, 4, 8),
+    stringsAsFactors = FALSE
   )
   expect_no_warning(degroup(d_rep, select = "v", by = c("school", "class")))
 
@@ -551,7 +558,8 @@ test_that("degroup, crossed `by` warns when one variable is nested in another", 
   d_na <- data.frame(
     a = c("x", "x", NA, NA),
     b = c(NA, NA, "p", "q"),
-    v = c(1, 2, 3, 5)
+    v = c(1, 2, 3, 5),
+    stringsAsFactors = FALSE
   )
   expect_no_warning(degroup(d_na, select = "v", by = c("a", "b")))
 })
@@ -583,7 +591,8 @@ test_that("degroup, nested `by` warns when levels are listed from lowest to high
       c("c1", "c1", "c2", NA, "c3", "c3", "c4", NA),
       levels = c("c1", "c2", "c3", "c4", "c9")
     ),
-    v = c(1, 3, 2, 6, 5, 9, 4, 8)
+    v = c(1, 3, 2, 6, 5, 9, 4, 8),
+    stringsAsFactors = FALSE
   )
 
   w <- squished_warnings(
@@ -619,7 +628,8 @@ test_that("degroup, nested `by` warns when levels are listed from lowest to high
   d_rep <- data.frame(
     school = c("s1", "s1", "s1", "s1", "s2", "s2", "s2", "s2"),
     class = c("c1", "c1", "c2", "c2", "c1", "c1", "c2", "c2"),
-    v = c(1, 3, 2, 6, 5, 9, 4, 8)
+    v = c(1, 3, 2, 6, 5, 9, 4, 8),
+    stringsAsFactors = FALSE
   )
   expect_no_warning(
     degroup(d_rep, select = "v", by = c("school", "class"), nested = TRUE)
@@ -631,14 +641,16 @@ test_that("degroup, nested `by` warns when levels are listed from lowest to high
     sch = c("s1", "s1", "s1", "s1", "s2", "s2", "s2", "s2"),
     cls = c("c1", "c1", "c2", "c2", "c3", "c3", "c4", "c4"),
     stu = c("u1", "u2", "u3", "u4", "u5", "u6", "u7", "u8"),
-    v = c(1, 3, 2, 6, 5, 9, 4, 8)
+    v = c(1, 3, 2, 6, 5, 9, 4, 8),
+    stringsAsFactors = FALSE
   )
   # one class per school with repeated class ids: a warning, although the
   # order is correct
   d_one_class <- data.frame(
     school = c("s1", "s1", "s2", "s2", "s3", "s3"),
     class = c("1", "1", "1", "1", "1", "1"),
-    v = c(1, 3, 2, 6, 5, 9)
+    v = c(1, 3, 2, 6, 5, 9),
+    stringsAsFactors = FALSE
   )
   w <- squished_warnings(
     degroup(d_one_class, select = "v", by = c("school", "class"), nested = TRUE)
@@ -663,7 +675,8 @@ test_that("degroup, crossed components on unbalanced data follow Guo et al.", {
   d <- data.frame(
     person = c("p1", "p1", "p1", "p2", "p2", "p3", "p3", "p3"),
     item = c("i1", "i1", "i2", "i1", "i2", "i2", "i2", "i1"),
-    x = c(2, 4, 9, 5, 1, 6, 10, 3)
+    x = c(2, 4, 9, 5, 1, 6, 10, 3),
+    stringsAsFactors = FALSE
   )
   out <- demean(d, select = "x", by = c("person", "item"), append = FALSE)
 
@@ -742,7 +755,8 @@ test_that("degroup, three crossed variables follow Guo et al.", {
     person = c("p1", "p1", "p2", "p2", "p3", "p3", "p1", "p2", "p3"),
     item = c("i1", "i2", "i1", "i2", "i1", "i2", "i2", "i1", "i1"),
     day = c("d1", "d2", "d2", "d1", "d1", "d2", "d1", "d2", "d2"),
-    x = c(2, 7, 4, 1, 9, 3, 5, 8, 6)
+    x = c(2, 7, 4, 1, 9, 3, 5, 8, 6),
+    stringsAsFactors = FALSE
   )
   out <- demean(
     d,
@@ -821,11 +835,13 @@ test_that("degroup for nested designs with three or more levels", {
   expect_equal(rowSums(out), dat$x, ignore_attr = TRUE)
   expect_equal(
     as.vector(tapply(out$x_B_between, dat$A, mean)),
-    c(0, 0)
+    c(0, 0),
+    tolerance = 1e-8
   )
   expect_equal(
     as.vector(tapply(out$x_C_between, paste(dat$A, dat$B), mean)),
-    c(0, 0, 0, 0)
+    c(0, 0, 0, 0),
+    tolerance = 1e-8
   )
 
   # Oracle (invariant): with several variables in `select`, each variable gets
@@ -854,10 +870,10 @@ test_that("degroup for nested designs with four levels and median", {
 
   set.seed(123)
   dat <- data.frame(
-    A = sample(1:3, 120, replace = TRUE),
-    B = sample(1:3, 120, replace = TRUE),
-    C = sample(1:2, 120, replace = TRUE),
-    D = sample(1:2, 120, replace = TRUE),
+    A = sample.int(3, 120, replace = TRUE),
+    B = sample.int(3, 120, replace = TRUE),
+    C = sample.int(2, 120, replace = TRUE),
+    D = sample.int(2, 120, replace = TRUE),
     x = rnorm(120)
   )
 
