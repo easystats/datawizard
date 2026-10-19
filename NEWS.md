@@ -30,6 +30,12 @@ CHANGES
   variables in unbalanced long-format data are then not weighted by cluster
   size (#672).
 
+* `skewness()`, `kurtosis()`, and `smoothness()` now return objects of class
+  `datawizard_skewness`, `datawizard_kurtosis`, and `datawizard_smoothness`.
+  The old class names `parameters_skewness`, `parameters_kurtosis`, and
+  `parameters_smoothness` remain as secondary classes, so code that checks
+  `class(x)[1]` for the old names needs to be updated (#248).
+
 FIXES
 
 * Fixed `demean()` and `degroup()` for nested designs with three or more
