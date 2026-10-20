@@ -167,12 +167,18 @@
     # name at most five missing columns
     shown <- paste0("`", utils::head(missing_columns, 5L), "`")
     listed <- if (n_missing > 5L) {
-      paste0(toString(shown), ", and ", n_missing - 5L, " more")
+      paste0(toString(shown), " and ", n_missing - 5L, " more")
     } else {
       text_concatenate(shown)
     }
+    # unique ids, one per row, are read as names
+    hint <- if (length(cluster) == nrow(x)) {
+      " To use these as cluster ids, give them as a factor."
+    } else {
+      ""
+    }
     insight::format_error(
-      paste0("Could not find the `cluster` columns ", listed, ".")
+      paste0("Could not find the `cluster` columns ", listed, ".", hint)
     )
   }
 }
@@ -191,7 +197,7 @@
 #' @keywords internal
 .cluster_list <- function(cluster) {
   # a POSIXlt vector is a list internally, but it is one id vector
-  if (is.data.frame(cluster) || (is.list(cluster) && !is.object(cluster))) {
+  if (is.list(cluster) && !inherits(cluster, "POSIXlt")) {
     cluster <- as.list(cluster)
   } else {
     cluster <- list(cluster)
@@ -202,7 +208,7 @@
   if (is.null(names(cluster))) {
     names(cluster) <- rep("", length(cluster))
   }
-  unnamed <- !nzchar(names(cluster))
+  unnamed <- is.na(names(cluster)) | !nzchar(names(cluster))
   names(cluster)[unnamed] <- paste0("..", which(unnamed))
   cluster
 }
@@ -254,14 +260,14 @@
   for (r in rows) {
     r <- r[valid[r]]
     n_clusters <- length(unique(codes$all[r]))
-    for (i in names(codes$without)) {
+    for (i in seq_along(codes$without)) {
       without <- codes$without[[i]][r]
       n_without <- length(unique(without))
       # one value per cluster of the others: each of those clusters pairs with
       # one value of x
       pairs <- unique(without + x_code[r] * (length(x) + 1))
       if (n_without < n_clusters && length(pairs) == n_without) {
-        not_needed <- union(not_needed, i)
+        not_needed <- union(not_needed, names(cluster_vars)[i])
       }
     }
   }
@@ -337,7 +343,7 @@
 
   # a character vector with no repeated element names the cluster columns,
   # which are never transformed. One with a repeated element holds id values
-  # (column names never repeat), so it must have one element per row.
+  # (naming one column twice has no use), so it must have one element per row.
   cluster_name <- NULL
   if (!is.null(cluster)) {
     # check here, before `.center` and `.scale` are recycled below
@@ -768,7 +774,7 @@
     }
     if (!is.character(cluster) || anyDuplicated(cluster) > 0L) {
       insight::format_error(
-        "For grouped data frames, `cluster` must be a column name or a character vector of column names." # nolint
+        "For grouped data frames, `cluster` must be a column name or a character vector of distinct column names." # nolint
       )
     }
     .check_cluster_args(cluster, weights, reference)

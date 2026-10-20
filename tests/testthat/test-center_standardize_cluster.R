@@ -680,6 +680,14 @@ for (fun_name in c("center", "standardize")) {
       "Could not find the `cluster` columns"
     )
     expect_error(
+      fun(d_ids, select = "y", cluster = c("p", "q", "r", "u")),
+      "give them as a factor"
+    )
+    expect_identical(
+      fun(d_ids, select = "y", cluster = factor(c("p", "p", "q", "q"))),
+      fun(d_ids, select = "y", cluster = c(1, 1, 2, 2))
+    )
+    expect_error(
       fun(d_ids, select = "y", cluster = c("s1", "s1")),
       "`cluster` must have the same length as the number of rows in the data.",
       fixed = TRUE
@@ -706,7 +714,7 @@ for (fun_name in c("center", "standardize")) {
     )
     expect_match(
       gsub("\\s+", " ", msg8),
-      "`m1`, `m2`, `m3`, `m4`, `m5`, and 3 more",
+      "`m1`, `m2`, `m3`, `m4`, `m5` and 3 more",
       fixed = TRUE
     )
     expect_false(grepl("m6", msg8, fixed = TRUE))
@@ -894,4 +902,26 @@ test_that("cluster warning, a column named with digits and several names", {
   expect_length(w, 1L)
   expect_match(w, "cluster variable 1 or cluster variable 2", fixed = TRUE)
   expect_match(w, "Remove one of them", fixed = TRUE)
+})
+
+test_that("cluster, list names do not change which variables are checked", {
+  # oracle (invariant): both orders of two same-named elements warn, and an
+  # NA name is a position, so a classroom-level variable does not warn
+  expect_warning(
+    center(ml$school_size, cluster = list(g = ml$school, g = ml$classroom)),
+    "Remove it"
+  )
+  expect_warning(
+    center(ml$school_size, cluster = list(g = ml$classroom, g = ml$school)),
+    "Remove it"
+  )
+  expect_no_warning(center(
+    ml$class_size,
+    cluster = stats::setNames(list(ml$school, ml$classroom), c("a", NA))
+  ))
+  # a classed list of id vectors is still a list of cluster variables
+  expect_identical(
+    standardize(ml$class_size, cluster = I(list(ml$school, ml$classroom))),
+    standardize(ml$class_size, cluster = list(ml$school, ml$classroom))
+  )
 })
