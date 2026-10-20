@@ -20,7 +20,8 @@ CHANGES
 
 * `degroup()` accepts a function in `center`, such as
   `center = function(v) mean(v, trim = 0.2)`. The function gets the
-  non-missing values of each group and must return a single number (#21).
+  non-missing values of each group and must return a single number or `NA`
+  (#21).
 
 * `demean()` and `degroup()` gain a `grand_center` argument.
   `grand_center = TRUE` subtracts its mean from each group-meaned and

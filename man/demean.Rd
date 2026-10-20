@@ -375,17 +375,20 @@ in place of the mean, and they still sum to the original value.
 
 With \code{grand_center}, \code{demean()} and \code{degroup()} subtract the mean of a
 group-meaned or de-meaned variable from that variable. The mean is taken
-over the rows where the variable that it comes from is not missing, which
-are the rows that a model can use. Grand centering always subtracts the
-mean, whatever \code{center} is, so each centered variable has a mean of 0 over
-those rows. For cross-classified designs, the de-meaned variable can have
-a mean other than 0 without grand centering. Grand-centered variables no
-longer sum to the original value. \emph{Guo et al. (2024)} note that each of
-these variables can be grand-mean centered, and that this changes only the
-intercept of the model.
+over the rows where the variable that it comes from is not missing. Grand
+centering always subtracts the mean, whatever \code{center} is, so each centered
+variable has a mean of 0 over those rows. If a model drops more rows
+because other variables are missing, the mean over the rows of the model
+can differ from 0. Without grand centering, the de-meaned variable can have
+a mean other than 0 in cross-classified designs, and in any design when
+\code{center} is not the mean. Grand-centered variables no longer sum to the
+original value. For the variables of a cross-classified design, \emph{Guo et
+al. (2024)} note that each of them can be grand-mean centered, and that
+this changes only the intercept of the model.
 
-A \code{by} variable named \code{"within"} cannot be used with a character vector in
-\code{grand_center}. Use \code{grand_center = TRUE} or rename that variable.
+A \code{by} variable named \code{"within"} cannot be used with a non-empty character
+vector in \code{grand_center}. Use \code{grand_center = TRUE} or rename that
+variable.
 }
 
 \section{Analysing panel data with mixed models using lme4}{
