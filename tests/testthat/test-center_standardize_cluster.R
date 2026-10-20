@@ -502,3 +502,220 @@ for (fun_name in c("center", "standardize")) {
     }
   })
 }
+
+
+# several cluster variables -----------------------------------------------
+
+# three-level data: 2 districts, 4 schools (ids unique across districts),
+# 2 classrooms per school (ids repeat across schools), unbalanced classrooms
+ml_cells <- data.frame(
+  district = c("A", "A", "A", "A", "B", "B", "B", "B"),
+  school = c(1, 1, 2, 2, 3, 3, 4, 4),
+  classroom = c(1, 2, 1, 2, 1, 2, 1, 2),
+  n = c(2, 3, 4, 1, 5, 2, 3, 6),
+  school_size = c(10, 10, 20, 20, 40, 40, 80, 80),
+  class_size = c(15, 25, 18, 22, 30, 12, 20, 16),
+  stringsAsFactors = FALSE
+)
+ml <- ml_cells[
+  rep(seq_len(nrow(ml_cells)), ml_cells$n),
+  c("district", "school", "classroom", "school_size", "class_size")
+]
+rownames(ml) <- NULL
+
+# one id per distinct combination, built from per-variable codes so that ids
+# such as "a.b" and "c" never merge with "a" and "b.c"; NA where any id is NA
+combo_id <- function(...) {
+  v <- data.frame(..., stringsAsFactors = FALSE)
+  key <- do.call(paste, c(lapply(v, function(i) match(i, unique(i))), sep = "_"))
+  id <- match(key, unique(key))
+  id[!stats::complete.cases(v)] <- NA
+  id
+}
+
+for (fun_name in c("center", "standardize")) {
+  fun <- get(fun_name)
+
+  test_that(paste(fun_name, "numeric, several cluster vectors"), {
+    room <- ml$classroom
+    room[3] <- NA
+    expected <- fun(ml$class_size, cluster = combo_id(ml$school, room))
+    # oracle (invariant): a list or data frame of id vectors equals one id
+    # vector that labels each distinct combination
+    expect_equal(
+      fun(ml$class_size, cluster = list(ml$school, room)),
+      expected
+    )
+    expect_equal(
+      fun(
+        ml$class_size,
+        cluster = data.frame(school = ml$school, room = room)
+      ),
+      expected
+    )
+    # oracle (closed-form): the value with a missing id is NA
+    expect_true(is.na(fun(ml$class_size, cluster = list(ml$school, room))[3]))
+    expect_error(
+      fun(ml$class_size, cluster = list(ml$school, room[-1])),
+      "`cluster` must have the same length as the variable to transform.",
+      fixed = TRUE
+    )
+  })
+
+  test_that(paste(fun_name, "numeric, ids with dots do not merge"), {
+    x <- c(1, 1, 3, 3)
+    ids <- list(c("a.b", "a.b", "a", "a"), c("c", "c", "b.c", "b.c"))
+    z <- fun(x, cluster = ids)
+    # oracle (closed-form): two clusters with values 1 and 3, so the center
+    # is 2 (interaction() would merge them into one cluster with two values)
+    expect_identical(attr(z, "center"), 2)
+    expect_equal(z, fun(x, cluster = c(1, 1, 2, 2)))
+  })
+
+  test_that(paste(fun_name, "data frame, several cluster columns"), {
+    named <- c("school", "classroom")
+    ml_h <- ml
+    ml_h$h <- combo_id(ml$school, ml$classroom)
+    out <- fun(ml, cluster = named, verbose = FALSE)
+    # oracle (invariant): same as one helper column with the named columns
+    # excluded
+    ref <- fun(ml_h, cluster = "h", exclude = named, verbose = FALSE)
+    expect_identical(out$school, ml$school)
+    expect_identical(out$classroom, ml$classroom)
+    expect_equal(out$class_size, ref$class_size)
+    expect_equal(out$school_size, ref$school_size)
+    expect_identical(attr(out, "center"), attr(ref, "center"))
+    expect_identical(attr(out, "scale"), attr(ref, "scale"))
+
+    # three names: the district is redundant, so the clusters are the same
+    out3 <- fun(
+      ml,
+      select = "class_size",
+      cluster = c("district", "school", "classroom")
+    )
+    ref3 <- fun(ml_h, select = "class_size", cluster = "h")
+    expect_equal(out3$class_size, ref3$class_size)
+    expect_identical(attr(out3, "center"), attr(ref3, "center"))
+
+    # a named column with an NA
+    ml_na <- ml
+    ml_na$classroom[3] <- NA
+    ml_na$h <- combo_id(ml_na$school, ml_na$classroom)
+    out_na <- fun(ml_na, select = "class_size", cluster = named)
+    ref_na <- fun(ml_na, select = "class_size", cluster = "h")
+    expect_equal(out_na$class_size, ref_na$class_size)
+    expect_true(is.na(out_na$class_size[3]))
+
+    # a list of id vectors equals one id vector built the same way
+    out_list <- fun(
+      ml,
+      select = "class_size",
+      cluster = list(ml$school, ml$classroom)
+    )
+    ref_list <- fun(ml, select = "class_size", cluster = ml_h$h)
+    expect_equal(out_list$class_size, ref_list$class_size)
+    expect_identical(attr(out_list, "center"), attr(ref_list, "center"))
+    expect_error(
+      fun(ml, select = "class_size", cluster = list(ml$school, ml$classroom[-1])),
+      "`cluster` must have the same length as the number of rows in the data.",
+      fixed = TRUE
+    )
+  })
+
+  test_that(paste(fun_name, "grouped data frame, several cluster columns"), {
+    skip_if_not_installed("poorman")
+    ml_h <- ml
+    ml_h$h <- combo_id(ml$school, ml$classroom)
+    ml_h$classroom[3] <- NA
+    ml_h$h[3] <- NA
+    gd <- poorman::group_by(ml_h, district)
+    out <- fun(gd, select = "class_size", cluster = c("school", "classroom"))
+    # oracle (invariant): same as the helper column within each group
+    ref <- fun(gd, select = "class_size", cluster = "h")
+    expect_equal(out$class_size, ref$class_size, ignore_attr = TRUE)
+    expect_identical(out$school, ml_h$school)
+    expect_identical(out$classroom, ml_h$classroom)
+    expect_true(is.na(out$class_size[3]))
+
+    # three names, one of them the grouping variable
+    out3 <- fun(
+      gd,
+      select = "class_size",
+      cluster = c("district", "school", "classroom")
+    )
+    expect_equal(out3$class_size, ref$class_size, ignore_attr = TRUE)
+
+    expect_error(
+      fun(gd, select = "class_size", cluster = list(ml$school, ml$classroom)),
+      "For grouped data frames, `cluster` must be a column name"
+    )
+  })
+
+  test_that(paste(fun_name, "data frame, how a character cluster is read"), {
+    d_ids <- data.frame(y = c(1, 1, 3, 3), s1 = c(9, 9, 9, 9))
+    # oracle (invariant): a character vector with one id per row that is not
+    # all column names is read as id values
+    expect_equal(
+      fun(d_ids, select = "y", cluster = c("p", "p", "q", "q"))$y,
+      fun(d_ids, select = "y", cluster = c(1, 1, 2, 2))$y
+    )
+    expect_no_error(
+      fun(ml, select = "class_size", cluster = c("district", "school"))
+    )
+    expect_error(
+      fun(ml, select = "class_size", cluster = c("school", "zone", "room")),
+      "Could not find the `cluster` column.*zone.*room"
+    )
+    skip_if_not_installed("poorman")
+    gd <- poorman::group_by(ml, district)
+    expect_error(
+      fun(gd, select = "class_size", cluster = c("school", "zone")),
+      "Could not find the `cluster` column.*zone"
+    )
+  })
+
+  test_that(paste(fun_name, "warns when a cluster variable is not needed"), {
+    # oracle (invariant): school_size has one value per school, so classroom
+    # only splits schools and weights them by their number of classrooms
+    expect_warning(
+      fun(ml, select = "school_size", cluster = c("school", "classroom")),
+      "classroom"
+    )
+    expect_warning(
+      fun(ml$school_size, cluster = list(sch = ml$school, room = ml$classroom)),
+      "room"
+    )
+    # classroom-level variable: both cluster variables are needed
+    expect_no_warning(
+      fun(ml, select = "class_size", cluster = c("school", "classroom"))
+    )
+    # school ids are unique across districts, so dropping the district leaves
+    # the same clusters
+    expect_no_warning(
+      fun(ml, select = "school_size", cluster = c("district", "school"))
+    )
+    quiet <- fun(
+      ml,
+      select = "school_size",
+      cluster = c("school", "classroom"),
+      verbose = FALSE
+    )
+    expect_no_warning(fun(
+      ml,
+      select = "school_size",
+      cluster = c("school", "classroom"),
+      verbose = FALSE
+    ))
+    loud <- suppressWarnings(
+      fun(ml, select = "school_size", cluster = c("school", "classroom"))
+    )
+    expect_identical(quiet, loud)
+
+    skip_if_not_installed("poorman")
+    gd <- poorman::group_by(ml, district)
+    expect_warning(
+      fun(gd, select = "school_size", cluster = c("school", "classroom")),
+      "classroom"
+    )
+  })
+}
