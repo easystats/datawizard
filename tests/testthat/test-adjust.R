@@ -147,16 +147,18 @@ test_that("adjust passes ... to rstanarm::stan_glm()", {
   )
   # oracle (invariant): `refresh` in `...` replaces the default of 0, so the
   # sampler prints its progress, and the draws stay the same
-  progress <- utils::capture.output(adj_refresh <- suppressWarnings(adjust(
-    d,
-    effect = "Sepal.Width",
-    select = "Sepal.Length",
-    bayesian = TRUE,
-    chains = 1L,
-    iter = 200L,
-    seed = 1L,
-    refresh = 50L
-  )))
+  progress <- utils::capture.output({
+    adj_refresh <- suppressWarnings(adjust(
+      d,
+      effect = "Sepal.Width",
+      select = "Sepal.Length",
+      bayesian = TRUE,
+      chains = 1L,
+      iter = 200L,
+      seed = 1L,
+      refresh = 50L
+    ))
+  })
   expect_true(any(grepl("Iteration", progress, fixed = TRUE)))
   expect_equal(adj_refresh$Sepal.Length, adj$Sepal.Length, tolerance = 1e-6)
 })
@@ -235,17 +237,19 @@ test_that("adjust passes ... to rstanarm::stan_gamm4()", {
   )
   # oracle (invariant): `refresh` in `...` replaces the default of 0, so the
   # sampler prints its progress, and the draws stay the same
-  progress <- utils::capture.output(adj_refresh <- suppressWarnings(adjust(
-    d,
-    effect = "Sepal.Width",
-    select = "Sepal.Length",
-    additive = TRUE,
-    bayesian = TRUE,
-    chains = 1L,
-    iter = 200L,
-    seed = 1L,
-    refresh = 50L
-  )))
+  progress <- utils::capture.output({
+    adj_refresh <- suppressWarnings(adjust(
+      d,
+      effect = "Sepal.Width",
+      select = "Sepal.Length",
+      additive = TRUE,
+      bayesian = TRUE,
+      chains = 1L,
+      iter = 200L,
+      seed = 1L,
+      refresh = 50L
+    ))
+  })
   expect_true(any(grepl("Iteration", progress, fixed = TRUE)))
   expect_equal(adj_refresh$Sepal.Length, adj$Sepal.Length, tolerance = 1e-6)
 })
