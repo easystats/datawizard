@@ -910,3 +910,93 @@ test_that("degroup for nested designs with four levels and median", {
   expect_equal(out$x_C_between, md3 - md2, ignore_attr = TRUE)
   expect_equal(out$x_within, dat$x - md3, ignore_attr = TRUE)
 })
+
+
+test_that("degroup, a function in `center`", {
+  trim_mean <- function(v) mean(v, trim = 0.2)
+  set.seed(42)
+  d <- data.frame(
+    A = rep(1:3, each = 10),
+    B = rep(1:2, 15),
+    C = sample.int(4, 30, replace = TRUE),
+    x = rnorm(30)
+  )
+  d$x[c(3, 17)] <- NA
+
+  # Oracle (closed-form): the trimmed mean of the non-missing values of each
+  # group, computed with `stats::ave()`
+  group_stat <- function(...) {
+    stats::ave(d$x, ..., FUN = function(v) trim_mean(v[!is.na(v)]))
+  }
+
+  # one `by` variable
+  out <- degroup(d, select = "x", by = "A", center = trim_mean, append = FALSE)
+  expect_equal(out$x_between, group_stat(d$A), ignore_attr = TRUE)
+  expect_equal(out$x_within, d$x - group_stat(d$A), ignore_attr = TRUE)
+  # the function is used: the trimmed mean is not the mean here
+  expect_false(isTRUE(all.equal(
+    out$x_between,
+    demean(d, select = "x", by = "A", append = FALSE)$x_between
+  )))
+
+  # two crossed `by` variables
+  out <- degroup(
+    d,
+    select = "x",
+    by = c("A", "C"),
+    center = trim_mean,
+    append = FALSE
+  )
+  expect_equal(out$x_A_between, group_stat(d$A), ignore_attr = TRUE)
+  expect_equal(out$x_C_between, group_stat(d$C), ignore_attr = TRUE)
+  expect_equal(
+    out$x_within,
+    d$x - group_stat(d$A) - group_stat(d$C),
+    ignore_attr = TRUE
+  )
+
+  # two nested `by` variables
+  out <- degroup(d, select = "x", by = "A/B", center = trim_mean, append = FALSE)
+  expect_equal(out$x_A_between, group_stat(d$A), ignore_attr = TRUE)
+  expect_equal(
+    out$x_B_between,
+    group_stat(d$A, d$B) - group_stat(d$A),
+    ignore_attr = TRUE
+  )
+  expect_equal(out$x_within, d$x - group_stat(d$A, d$B), ignore_attr = TRUE)
+
+  # Oracle (invariant): a function and the string that names the same
+  # statistic give the same result
+  for (by in list("A", c("A", "C"), "A/B")) {
+    expect_identical(
+      degroup(d, select = "x", by = by, center = stats::median),
+      degroup(d, select = "x", by = by, center = "median")
+    )
+  }
+})
+
+
+test_that("degroup, a function in `center` must return a single number", {
+  d <- data.frame(g = rep(1:2, each = 3), x = c(1, 2, 4, 3, 5, 9))
+  expect_error(
+    degroup(d, select = "x", by = "g", center = range),
+    "must return a single number",
+    fixed = TRUE
+  )
+  expect_error(
+    degroup(d, select = "x", by = "g", center = function(v) "a"),
+    "must return a single number",
+    fixed = TRUE
+  )
+
+  # a group with only missing values: the function returns `NA`, no error
+  d$x[d$g == 2] <- NA
+  mean_or_na <- function(v) if (length(v)) mean(v) else NA
+  expect_no_error(degroup(d, select = "x", by = "g", center = mean_or_na))
+  out <- degroup(d, select = "x", by = "g", center = mean_or_na, append = FALSE)
+  expect_equal(
+    out$x_between,
+    c(7 / 3, 7 / 3, 7 / 3, NA, NA, NA),
+    ignore_attr = TRUE
+  )
+})

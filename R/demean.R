@@ -398,10 +398,12 @@ degroup <- function(
   original_data <- x
   x <- .coerce_to_dataframe(x)
 
-  center <- match.arg(
-    tolower(center),
-    choices = c("mean", "median", "mode", "min", "max")
-  )
+  if (!is.function(center)) {
+    center <- match.arg(
+      tolower(center),
+      choices = c("mean", "median", "mode", "min", "max")
+    )
+  }
 
   if (inherits(select, "formula")) {
     # formula to character, remove "~", split at "+". We don't use `all.vars()`
@@ -517,16 +519,20 @@ degroup <- function(
   # for variables within each group (the group means). assign
   # mean values to a vector of same length as the data
 
-  gm_fun <- switch(
-    center,
-    mode = function(.gm) {
-      distribution_mode(stats::na.omit(.gm), verbose = verbose)
-    },
-    median = function(.gm) stats::median(.gm, na.rm = TRUE),
-    min = function(.gm) min(.gm, na.rm = TRUE),
-    max = function(.gm) max(.gm, na.rm = TRUE),
-    function(.gm) mean(.gm, na.rm = TRUE)
-  )
+  gm_fun <- if (is.function(center)) {
+    .center_function(center)
+  } else {
+    switch(
+      center,
+      mode = function(.gm) {
+        distribution_mode(stats::na.omit(.gm), verbose = verbose)
+      },
+      median = function(.gm) stats::median(.gm, na.rm = TRUE),
+      min = function(.gm) min(.gm, na.rm = TRUE),
+      max = function(.gm) max(.gm, na.rm = TRUE),
+      function(.gm) mean(.gm, na.rm = TRUE)
+    )
+  }
 
   # we allow disaggregating level-specific effects for cross-classified multilevel
   # models (see Guo et al. 2024). Eq. 4 defines the components for two crossed
@@ -652,6 +658,20 @@ detrend <- degroup
 
 
 # helper -----------------------------------------------------------------------
+
+# Wraps a function given in `center`: it gets the non-missing values of a
+# group and must return a single number (or `NA`).
+.center_function <- function(center) {
+  function(.gm) {
+    out <- center(.gm[!is.na(.gm)])
+    if (length(out) != 1L || !(is.numeric(out) || (is.logical(out) && is.na(out)))) {
+      insight::format_error(
+        "A function in `center` must return a single number for each group."
+      )
+    }
+    out
+  }
+}
 
 # Returns the variable names in `by` and whether the design is nested.
 # `columns` are the column names of the data.
