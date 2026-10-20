@@ -61,6 +61,14 @@ CHANGES
 
 FIXES
 
+- [`skewness()`](https://easystats.github.io/datawizard/reference/skewness.md)
+  and
+  [`kurtosis()`](https://easystats.github.io/datawizard/reference/skewness.md)
+  now return the standard error for the chosen `type`. Before, the `SE`
+  column was the type-1 standard error for every `type`, including the
+  default `type = "2"`. Bootstrapped standard errors (`iterations`) are
+  not changed.
+
 - Fixed
   [`demean()`](https://easystats.github.io/datawizard/reference/demean.md)
   and
