@@ -723,3 +723,61 @@ for (fun_name in c("center", "standardize")) {
     )
   })
 }
+
+
+# TRUE or FALSE in center and scale for data frames ------------------------
+
+test_that("data frame, TRUE or FALSE in center and scale", {
+  args <- list(
+    list(fun = "standardize", center = FALSE),
+    list(fun = "standardize", scale = FALSE),
+    list(fun = "standardize", center = FALSE, scale = FALSE),
+    list(fun = "standardize", center = TRUE),
+    list(fun = "center", center = FALSE)
+  )
+  for (a in args) {
+    fun <- get(a$fun)
+    a$fun <- NULL
+    for (with_cluster in c(FALSE, TRUE)) {
+      df_args <- c(list(d, select = "funding"), a)
+      vec_args <- c(list(d$funding), a)
+      if (with_cluster) {
+        df_args$cluster <- "school"
+        vec_args$cluster <- d$school
+      }
+      out <- do.call(fun, df_args)
+      ref <- do.call(fun, vec_args)
+      # oracle (invariant): the data frame method gives each column what the
+      # numeric method gives it
+      expect_equal(out$funding, ref, ignore_attr = TRUE)
+      expect_named(attr(out, "center"), "funding")
+      expect_identical(unname(attr(out, "center")), attr(ref, "center"))
+      expect_identical(unname(attr(out, "scale")), attr(ref, "scale"))
+    }
+  }
+})
+
+
+# messages count only the values used with cluster -------------------------
+
+test_that("cluster, one-value and two-value messages count used values", {
+  # oracle (closed-form): with the NA id left out, only 5 remains
+  expect_message(
+    center(c(5, 5, 5, 9), cluster = c(1, 1, 1, NA)),
+    "only one unique value"
+  )
+  expect_no_message(
+    center(c(5, 5, 5, 9), cluster = c(1, 1, 1, NA)),
+    message = "two different values"
+  )
+  # oracle (closed-form): NA in x and the row with an NA id are left out
+  expect_message(
+    center(c(5, 5, NA, 9), cluster = list(c(1, 1, 1, 2), c(1, 1, 1, NA))),
+    "only one unique value"
+  )
+  # oracle (closed-form): with the NA id left out, 5 and 9 remain
+  expect_message(
+    standardize(c(5, 5, 9, 7), cluster = c(1, 1, 2, NA)),
+    "only two different values"
+  )
+})
