@@ -48,6 +48,11 @@ FIXES
   the calling code. A condition that gives a warning now returns the filtered
   data with that warning (#309, #379).
 
+* `standardize()` now works with models from the *lmerTest* package. It refits
+  a model coerced with `lmerTest::as_lmerModLmerTest()`. You can also pass a
+  standardized `lme4::lmer()` model to `as_lmerModLmerTest()` or to
+  `update()` (#716).
+
 # datawizard 1.4.1
 
 CHANGES
