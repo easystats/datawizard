@@ -123,9 +123,11 @@ test_that("adjust passes ... to rstanarm::stan_glm()", {
   expect_equal(adj$Sepal.Length, unname(insight::get_residuals(m)))
 })
 
-test_that("adjust passes ... to rstanarm::stan_lmer()", {
+test_that("adjust passes ... to rstanarm::stan_glmer()", {
   skip_on_cran()
   skip_if_not_installed("rstanarm")
+  # the multilevel fit must not depend on rstanarm being attached
+  expect_false("package:rstanarm" %in% search())
   d <- iris[c("Sepal.Length", "Species")]
   adj <- suppressWarnings(adjust(
     d,
@@ -135,9 +137,10 @@ test_that("adjust passes ... to rstanarm::stan_lmer()", {
     iter = 200,
     seed = 1
   ))
-  m <- suppressWarnings(rstanarm::stan_lmer(
+  m <- suppressWarnings(rstanarm::stan_glmer(
     Sepal.Length ~ 1 + (1 | Species),
     data = d,
+    family = "gaussian",
     refresh = 0,
     chains = 1,
     iter = 200,
