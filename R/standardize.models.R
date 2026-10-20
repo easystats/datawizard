@@ -320,6 +320,30 @@ standardize.brmsfit <- function(
 
 
 #' @export
+standardize.lmerMod <- function(
+  x,
+  robust = FALSE,
+  two_sd = FALSE,
+  weights = TRUE,
+  verbose = TRUE,
+  include_response = TRUE,
+  ...
+) {
+  data_std <- NULL # needed to avoid note
+  .standardize_models(
+    x,
+    robust = robust,
+    two_sd = two_sd,
+    weights = weights,
+    verbose = verbose,
+    include_response = include_response,
+    update_expr = .update_lmer(x, data_std),
+    ...
+  )
+}
+
+
+#' @export
 standardize.mixor <- function(
   x,
   robust = FALSE,
@@ -572,6 +596,38 @@ standardize.fixest <- function(
     to = range(temp_data_std[[cov_nm]]),
     range = range(temp_data[[cov_nm]])
   )
+}
+
+
+# lme4's update() and lmerTest::as_lmerModLmerTest() evaluate the model call,
+# including `data = data_std`, in the environment of the model formula. So we
+# refit in an environment that holds the standardized data, and make it the
+# formula environment of the refitted model, which can then be updated or
+# coerced later (#716). We do not use update() here, because lmerTest's
+# update() method coerces the refit in a frame that cannot see `data_std`.
+.update_lmer <- function(x, data_std) {
+  formula_env <- new.env(parent = environment(stats::formula(x)))
+  formula_env$data_std <- data_std
+  model_call <- stats::getCall(x)
+  model_call$data <- quote(data_std)
+  model_std <- eval(model_call, envir = formula_env)
+  model_std <- .set_lmer_formula_env(model_std, formula_env)
+  if (
+    inherits(x, "lmerModLmerTest") &&
+      !inherits(model_std, "lmerModLmerTest")
+  ) {
+    model_std <- lmerTest::as_lmerModLmerTest(model_std)
+  }
+  model_std
+}
+
+.set_lmer_formula_env <- function(x, env) {
+  f <- attr(x@frame, "formula")
+  if (!is.null(f)) {
+    environment(f) <- env
+    attr(x@frame, "formula") <- f
+  }
+  x
 }
 
 
