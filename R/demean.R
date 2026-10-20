@@ -81,8 +81,9 @@
 #' variable followed by the name of the variable that indicates the related
 #' grouping level, e.g. `predictor_L3_between` and `predictor_L2_between`.
 #'
-#' @seealso If grand-mean centering (instead of centering within-clusters)
-#'   is required, see [`center()`]. See [`performance::check_group_variation()`]
+#' @seealso If grand-mean centering of a variable (instead of centering
+#'   within-clusters) is required, see [`center()`]. To grand-mean center the
+#'   group-meaned and de-meaned variables, use `grand_center`. See [`performance::check_group_variation()`]
 #'   to check for heterogeneity bias.
 #'
 #' @section Heterogeneity Bias:
@@ -234,8 +235,9 @@
 #' over cell means, so combinations of J and K with more rows weigh more. The
 #' components also apply to unbalanced data, with different numbers of rows
 #' per combination of J and K. For each row where the variable is not
-#' missing, the components sum to the value. For a row with a missing value
-#' in a `by` variable, the mean for that variable is the row's own value.
+#' missing, the components sum to the value, unless `grand_center` is used.
+#' For a row with a missing value in a `by` variable, the mean for that
+#' variable is the row's own value.
 #' _Guo et al. (2024)_ also cover three or more crossed variables: footnote 6
 #' and the R function in their Appendix C subtract the mean of each crossed
 #' variable, and `demean()` does the same. With `degroup()` and a `center`
@@ -292,15 +294,18 @@
 #' levels. Means are computed over all non-missing observations of a group, so
 #' larger groups weigh more (as in _Brincks et al. 2017_). For `degroup()`, the
 #' variables are defined the same way with the statistic selected by `center`
-#' in place of the mean, and they still sum to the original value.
+#' in place of the mean, and they still sum to the original value, unless
+#' `grand_center` is used.
 #'
 #' @section Grand-mean centering of the components:
 #'
 #' With `grand_center`, `demean()` and `degroup()` subtract the mean of a
 #' group-meaned or de-meaned variable from that variable. The mean is taken
-#' over the rows where the variable that it comes from is not missing. Grand
+#' over the rows where the variable that it comes from is not missing. Rows
+#' where the group-meaned or de-meaned variable itself is missing, for example
+#' because a function in `center` returned `NA`, are left out. Grand
 #' centering always subtracts the mean, whatever `center` is, so each centered
-#' variable has a mean of 0 over those rows. If a model drops more rows
+#' variable has a mean of 0 over the rows used. If a model drops more rows
 #' because other variables are missing, the mean over the rows of the model
 #' can differ from 0. Without grand centering, the de-meaned variable can have
 #' a mean other than 0 in cross-classified designs, and in any design when
@@ -455,9 +460,6 @@ degroup <- function(
   by <- by_parsed$by
   nested <- by_parsed$nested
 
-  # names of the components to grand-center
-  grand_center <- .check_grand_center(grand_center, by)
-
   # identify interaction terms
   interactions_no <- select[!grepl("(\\*|\\:)", select)]
   interactions_yes <- select[grepl("(\\*|\\:)", select)]
@@ -497,6 +499,9 @@ degroup <- function(
       )
     )
   }
+
+  # names of the components to grand-center
+  grand_center <- .check_grand_center(grand_center, by)
 
   # warn if the data suggest that `by` does not match the design
   if (isTRUE(verbose) && length(by) > 1) {

@@ -1000,6 +1000,8 @@ test_that("degroup, a function in `center` must return a single number", {
   mean_or_na <- function(v) if (length(v)) mean(v) else NA
   expect_no_error(degroup(d, select = "x", by = "g", center = mean_or_na))
   out <- degroup(d, select = "x", by = "g", center = mean_or_na, append = FALSE)
+  # Oracle (closed-form): group 1 -> (1 + 2 + 4) / 3 = 7/3; group 2 has no
+  # values, so the function returns NA
   expect_equal(
     out$x_between,
     c(7 / 3, 7 / 3, 7 / 3, NA, NA, NA),
@@ -1116,6 +1118,8 @@ test_that("degroup, `grand_center` with names centers only those components", {
     ]
   }
 
+  # Oracle (invariant) for the checks below: the columns that differ from the
+  # `grand_center = FALSE` result are exactly the named components.
   # "ID" names only the ID column, although "_ID_between" also ends the
   # sub_ID column
   expect_identical(changed(c("ID", "sub_ID"), "ID"), "x_ID_between")
@@ -1136,7 +1140,7 @@ test_that("degroup, `grand_center` with names centers only those components", {
   )
   # an empty vector is the same as FALSE
   expect_identical(changed(c("ID", "sub_ID"), character(0)), character(0))
-  # the named column changes as with `grand_center = TRUE`
+  # Oracle (invariant): the named column changes as with `grand_center = TRUE`
   expect_identical(
     degroup(
       d,
@@ -1152,7 +1156,43 @@ test_that("degroup, `grand_center` with names centers only those components", {
     )$x_ID_between
   )
 
-  # errors
+  # Oracle (invariant): with two selected variables, each column is matched
+  # to its `by` variable for both the nested and the crossed order of columns
+  d$y <- rnorm(20, mean = 5)
+  differs <- function(by, grand_center) {
+    base <- degroup(d, select = c("x", "y"), by = by, append = FALSE)
+    out <- degroup(
+      d,
+      select = c("x", "y"),
+      by = by,
+      append = FALSE,
+      grand_center = grand_center
+    )
+    names(base)[
+      !vapply(
+        names(base),
+        function(i) isTRUE(all.equal(out[[i]], base[[i]])),
+        logical(1)
+      )
+    ]
+  }
+  expect_identical(
+    differs("ID/sub_ID", "ID"),
+    c("x_ID_between", "y_ID_between")
+  )
+  expect_identical(
+    differs(c("ID", "sub_ID"), "sub_ID"),
+    c("x_sub_ID_between", "y_sub_ID_between")
+  )
+  d$y <- NULL
+
+  # errors, each identified by its message; a missing `by` variable is
+  # reported before `grand_center` is checked
+  expect_error(
+    degroup(d, select = "x", by = "G", grand_center = "g"),
+    "Variable \"G\" was not found in the dataset.",
+    fixed = TRUE
+  )
   expect_error(
     degroup(d, select = "x", by = "ID", grand_center = "foo"),
     "`grand_center` can only name these components: \"within\" and \"ID\"",

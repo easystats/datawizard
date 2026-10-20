@@ -304,8 +304,9 @@ taken over the rows of the cluster where the variable is not missing, not
 over cell means, so combinations of J and K with more rows weigh more. The
 components also apply to unbalanced data, with different numbers of rows
 per combination of J and K. For each row where the variable is not
-missing, the components sum to the value. For a row with a missing value
-in a \code{by} variable, the mean for that variable is the row's own value.
+missing, the components sum to the value, unless \code{grand_center} is used.
+For a row with a missing value in a \code{by} variable, the mean for that
+variable is the row's own value.
 \emph{Guo et al. (2024)} also cover three or more crossed variables: footnote 6
 and the R function in their Appendix C subtract the mean of each crossed
 variable, and \code{demean()} does the same. With \code{degroup()} and a \code{center}
@@ -367,7 +368,8 @@ levels above it, so IDs of lower levels can repeat across groups of higher
 levels. Means are computed over all non-missing observations of a group, so
 larger groups weigh more (as in \emph{Brincks et al. 2017}). For \code{degroup()}, the
 variables are defined the same way with the statistic selected by \code{center}
-in place of the mean, and they still sum to the original value.
+in place of the mean, and they still sum to the original value, unless
+\code{grand_center} is used.
 }
 
 \section{Grand-mean centering of the components}{
@@ -375,9 +377,11 @@ in place of the mean, and they still sum to the original value.
 
 With \code{grand_center}, \code{demean()} and \code{degroup()} subtract the mean of a
 group-meaned or de-meaned variable from that variable. The mean is taken
-over the rows where the variable that it comes from is not missing. Grand
+over the rows where the variable that it comes from is not missing. Rows
+where the group-meaned or de-meaned variable itself is missing, for example
+because a function in \code{center} returned \code{NA}, are left out. Grand
 centering always subtracts the mean, whatever \code{center} is, so each centered
-variable has a mean of 0 over those rows. If a model drops more rows
+variable has a mean of 0 over the rows used. If a model drops more rows
 because other variables are missing, the mean over the rows of the model
 can differ from 0. Without grand centering, the de-meaned variable can have
 a mean other than 0 in cross-classified designs, and in any design when
@@ -457,7 +461,8 @@ fluctuation and change. New York: Routledge
 }
 }
 \seealso{
-If grand-mean centering (instead of centering within-clusters)
-is required, see \code{\link[=center]{center()}}. See \code{\link[performance:check_group_variation]{performance::check_group_variation()}}
+If grand-mean centering of a variable (instead of centering
+within-clusters) is required, see \code{\link[=center]{center()}}. To grand-mean center the
+group-meaned and de-meaned variables, use \code{grand_center}. See \code{\link[performance:check_group_variation]{performance::check_group_variation()}}
 to check for heterogeneity bias.
 }

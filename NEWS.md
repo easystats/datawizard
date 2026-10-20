@@ -24,8 +24,8 @@ CHANGES
   (#21).
 
 * `demean()` and `degroup()` gain a `grand_center` argument.
-  `grand_center = TRUE` subtracts its mean from each group-meaned and
-  de-meaned variable. A character vector such as `grand_center = "within"`
+  `grand_center = TRUE` subtracts from each group-meaned and de-meaned
+  variable its own mean. A character vector such as `grand_center = "within"`
   centers only the named variables. In cross-classified designs, the
   de-meaned variable then has a mean of 0 (#637).
 
