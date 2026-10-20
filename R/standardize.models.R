@@ -601,14 +601,14 @@ standardize.fixest <- function(
 
 # lme4's update() and lmerTest::as_lmerModLmerTest() re-evaluate the model
 # call, including `data = data_std`. Both look for it in the formula
-# environment, and otherwise only in the caller's frame and the top call frame,
-# neither of which holds `data_std` once standardize() has returned. So we
-# refit in an environment that holds the standardized data, and make it the
-# formula environment of the refitted model, which can then be updated or
-# coerced later (#716). We do not use update() here: lmerTest's update() method
-# calls as_lmerModLmerTest() on the refit, which searches the update() method's
-# frame, the refit's formula environment, and the top call frame, and none of
-# them holds `data_std`.
+# environment, the caller's frame, and the top call frame (lmerTest also tries
+# `environment(model)`, which is NULL for these models). Once standardize() has
+# returned, none of them holds `data_std`. So we refit in an environment that
+# holds the standardized data, and make it the formula environment of the
+# refitted model, which can then be updated or coerced later (#716). The
+# refitted model therefore carries a copy of the standardized data. We do not
+# use update() here: lmerTest's update() method calls as_lmerModLmerTest() on
+# the refit from a frame that does not hold `data_std` either.
 .update_lmer <- function(x, data_std) {
   formula_env <- new.env(parent = environment(stats::formula(x)))
   formula_env$data_std <- data_std

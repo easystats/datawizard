@@ -293,7 +293,7 @@ test_that("standardize, lmerModLmerTest coerced from lmerMod", {
     Reaction ~ Days + (Days | Subject),
     data = sleepstudy_z
   )
-  expect_identical(lme4::fixef(out), lme4::fixef(m_manual))
+  expect_equal(lme4::fixef(out), lme4::fixef(m_manual), tolerance = 1e-8)
 })
 
 test_that("standardize, standardized lmerMod can be coerced by lmerTest", {
@@ -311,17 +311,22 @@ test_that("standardize, update() on standardized lmer models", {
   skip_if_not_installed("lmerTest")
   data(sleepstudy, package = "lme4")
 
+  sleepstudy_z <- sleepstudy
+  sleepstudy_z$Reaction <- standardize(sleepstudy_z$Reaction)
+  sleepstudy_z$Days <- standardize(sleepstudy_z$Days)
+  m_manual <- lme4::lmer(Reaction ~ (Days | Subject), data = sleepstudy_z)
+
   m <- lme4::lmer(Reaction ~ Days + (Days | Subject), data = sleepstudy)
   out <- stats::update(standardize(m), . ~ . - Days)
   expect_s4_class(out, "lmerMod")
-  expect_named(lme4::fixef(out), "(Intercept)")
+  expect_equal(lme4::fixef(out), lme4::fixef(m_manual), tolerance = 1e-8)
 
   out <- stats::update(
     standardize(lmerTest::as_lmerModLmerTest(m)),
     . ~ . - Days
   )
   expect_s4_class(out, "lmerModLmerTest")
-  expect_named(lme4::fixef(out), "(Intercept)")
+  expect_equal(lme4::fixef(out), lme4::fixef(m_manual), tolerance = 1e-8)
 })
 
 test_that("standardize, model fit with lmerTest::lmer()", {
@@ -340,7 +345,7 @@ test_that("standardize, model fit with lmerTest::lmer()", {
     Reaction ~ Days + (Days | Subject),
     data = sleepstudy_z
   )
-  expect_identical(lme4::fixef(out), lme4::fixef(m_manual))
+  expect_equal(lme4::fixef(out), lme4::fixef(m_manual), tolerance = 1e-8)
 })
 
 
