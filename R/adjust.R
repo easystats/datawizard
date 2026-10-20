@@ -34,7 +34,7 @@
 #'   name is, or partially matches, an argument of `adjust()` is taken by
 #'   `adjust()` and does not reach that function. Any other misspelled name
 #'   goes to that function: [stats::lm()] and [gamm4::gamm4()] then give only
-#'   a warning, and [lme4::lmer()] and [rstanarm::stan_glm()] give an error.
+#'   a warning, and [lme4::lmer()] and the `rstanarm` functions give an error.
 #' @inheritParams extract_column_names
 #' @inheritParams standardize
 #'

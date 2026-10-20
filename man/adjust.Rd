@@ -124,7 +124,7 @@ functions use \code{refresh = 0} unless \code{refresh} is passed. An argument wh
 name is, or partially matches, an argument of \code{adjust()} is taken by
 \code{adjust()} and does not reach that function. Any other misspelled name
 goes to that function: \code{\link[stats:lm]{stats::lm()}} and \code{\link[gamm4:gamm4]{gamm4::gamm4()}} then give only
-a warning, and \code{\link[lme4:lmer]{lme4::lmer()}} and \code{\link[rstanarm:stan_glm]{rstanarm::stan_glm()}} give an error.}
+a warning, and \code{\link[lme4:lmer]{lme4::lmer()}} and the \code{rstanarm} functions give an error.}
 }
 \value{
 A data frame comparable to \code{data}, with adjusted variables.
