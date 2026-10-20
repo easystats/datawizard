@@ -48,8 +48,8 @@ FIXES
   (`iterations`) are not changed.
 
 * If `rstanarm` is not attached, `adjust()` with `multilevel = TRUE` and
-  `bayesian = TRUE` no longer fails with "could not find function
-  "stan_glmer"".
+  `bayesian = TRUE` no longer fails with 'could not find function
+  "stan_glmer"'.
 
 * Fixed `demean()` and `degroup()` for nested designs with three or more
   grouping variables. The group-meaned variables of the third and later

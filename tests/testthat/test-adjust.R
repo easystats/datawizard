@@ -54,11 +54,13 @@ test_that("adjust passes ... to lm()", {
   w <- seq_len(nrow(d)) / nrow(d)
   adj <- adjust(d, multilevel = FALSE, additive = FALSE, weights = w)
   m <- stats::lm(Sepal.Length ~ Species, data = d, weights = w)
+  # oracle (reference fit): the same model, fit by hand with the same arguments
   expect_equal(
     adj$Sepal.Length,
     unname(stats::residuals(m)),
     tolerance = 1e-6
   )
+  # oracle (invariant): without the argument, the result is different
   expect_false(isTRUE(all.equal(adj$Sepal.Length, adjust(d)$Sepal.Length)))
 })
 
@@ -67,15 +69,18 @@ test_that("adjust passes ... to lme4::lmer()", {
   d <- iris[c("Sepal.Length", "Species")]
   adj <- adjust(d, multilevel = TRUE, REML = FALSE)
   m <- lme4::lmer(Sepal.Length ~ (1 | Species), data = d, REML = FALSE)
+  # oracle (reference fit): the same model, fit by hand with the same arguments
   expect_equal(
     adj$Sepal.Length,
     unname(stats::residuals(m)),
     tolerance = 1e-6
   )
+  # oracle (invariant): without the argument, the result is different
   expect_false(isTRUE(all.equal(
     adj$Sepal.Length,
     adjust(d, multilevel = TRUE)$Sepal.Length
   )))
+  # oracle (error identity): the lme4 error for an unknown optimizer
   expect_error(
     adjust(
       d,
@@ -97,6 +102,7 @@ test_that("adjust passes ... to gamm4::gamm4()", {
     REML = FALSE
   )
   m <- gamm4::gamm4(Sepal.Length ~ s(Sepal.Width), data = d, REML = FALSE)
+  # oracle (reference fit): the same model, fit by hand with the same arguments
   expect_equal(
     adj$Sepal.Length,
     unname(insight::get_residuals(m)),
@@ -108,6 +114,7 @@ test_that("adjust passes ... to gamm4::gamm4()", {
     select = "Sepal.Length",
     additive = TRUE
   )
+  # oracle (invariant): without the argument, the result is different
   expect_false(isTRUE(all.equal(adj$Sepal.Length, adj_default$Sepal.Length)))
 })
 
@@ -132,6 +139,7 @@ test_that("adjust passes ... to rstanarm::stan_glm()", {
     iter = 200L,
     seed = 1L
   ))
+  # oracle (reference fit): the same model, fit by hand with the same arguments
   expect_equal(
     adj$Sepal.Length,
     unname(insight::get_residuals(m)),
@@ -142,7 +150,8 @@ test_that("adjust passes ... to rstanarm::stan_glm()", {
 test_that("adjust passes ... to rstanarm::stan_glmer()", {
   skip_on_cran()
   skip_if_not_installed("rstanarm")
-  # the multilevel fit must not depend on rstanarm being attached
+  # oracle (invariant): the multilevel fit must not depend on rstanarm being
+  # attached
   expect_false("package:rstanarm" %in% search())
   d <- iris[c("Sepal.Length", "Species")]
   adj <- suppressWarnings(adjust(
@@ -162,6 +171,7 @@ test_that("adjust passes ... to rstanarm::stan_glmer()", {
     iter = 200L,
     seed = 1L
   ))
+  # oracle (reference fit): the same model, fit by hand with the same arguments
   expect_equal(
     adj$Sepal.Length,
     unname(insight::get_residuals(m)),
@@ -191,6 +201,7 @@ test_that("adjust passes ... to rstanarm::stan_gamm4()", {
     iter = 200L,
     seed = 1L
   ))
+  # oracle (reference fit): the same model, fit by hand with the same arguments
   expect_equal(
     adj$Sepal.Length,
     unname(insight::get_residuals(m)),
