@@ -340,6 +340,14 @@ standardize.data.frame <- function(
   # set new values
   x <- my_args$x
 
+  # with several cluster variables, warn about one that is not needed. The
+  # grouped method checks across groups and turns this check off.
+  if (verbose && !isFALSE(list(...)$.check_cluster)) {
+    for (var in my_args$select) {
+      .check_cluster_levels(x[[var]], my_args$cluster, name = var)
+    }
+  }
+
   # Loop through variables and standardize it
   for (var in my_args$select) {
     x[[var]] <- standardize(
@@ -410,6 +418,17 @@ standardize.grouped_df <- function(
     cluster = cluster
   )
 
+  if (verbose && !is.null(cluster)) {
+    for (var in my_args$select) {
+      .check_cluster_levels(
+        my_args$x[[var]],
+        as.list(my_args$x[cluster]),
+        name = var,
+        rows = my_args$grps
+      )
+    }
+  }
+
   # create column(s) to store dw_transformer attributes
   for (i in select) {
     my_args$info$groups[[paste0("attr_", i)]] <- rep(NA, length(my_args$grps))
@@ -431,6 +450,7 @@ standardize.grouped_df <- function(
       center = center,
       scale = scale,
       add_transform_class = FALSE,
+      .check_cluster = FALSE,
       ...
     )
 

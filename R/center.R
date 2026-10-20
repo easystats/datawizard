@@ -244,6 +244,14 @@ center.data.frame <- function(
   # set new values
   x <- my_args$x
 
+  # with several cluster variables, warn about one that is not needed. The
+  # grouped method checks across groups and turns this check off.
+  if (verbose && !isFALSE(list(...)$.check_cluster)) {
+    for (var in my_args$select) {
+      .check_cluster_levels(x[[var]], my_args$cluster, name = var)
+    }
+  }
+
   for (var in my_args$select) {
     x[[var]] <- center(
       x[[var]],
@@ -313,6 +321,17 @@ center.grouped_df <- function(
     cluster = cluster
   )
 
+  if (verbose && !is.null(cluster)) {
+    for (var in my_args$select) {
+      .check_cluster_levels(
+        my_args$x[[var]],
+        as.list(my_args$x[cluster]),
+        name = var,
+        rows = my_args$grps
+      )
+    }
+  }
+
   for (rows in my_args$grps) {
     my_args$x[rows, ] <- center(
       my_args$x[rows, , drop = FALSE],
@@ -327,6 +346,7 @@ center.grouped_df <- function(
       append = FALSE,
       center = center,
       add_transform_class = FALSE,
+      .check_cluster = FALSE,
       ...
     )
   }

@@ -563,13 +563,17 @@ for (fun_name in c("center", "standardize")) {
   })
 
   test_that(paste(fun_name, "numeric, ids with dots do not merge"), {
-    x <- c(1, 1, 3, 3)
-    ids <- list(c("a.b", "a.b", "a", "a"), c("c", "c", "b.c", "b.c"))
+    x <- c(1, 1, 3, 3, 8, 8)
+    ids <- list(
+      c("a.b", "a.b", "a", "a", "z", "z"),
+      c("c", "c", "b.c", "b.c", "z", "z")
+    )
     z <- fun(x, cluster = ids)
-    # oracle (closed-form): two clusters with values 1 and 3, so the center
-    # is 2 (interaction() would merge them into one cluster with two values)
-    expect_identical(attr(z, "center"), 2)
-    expect_equal(z, fun(x, cluster = c(1, 1, 2, 2)))
+    # oracle (closed-form): three clusters with values 1, 3, and 8, so the
+    # center is 4 (interaction() would merge the first two into one cluster
+    # with two values)
+    expect_identical(attr(z, "center"), 4)
+    expect_equal(z, fun(x, cluster = c(1, 1, 2, 2, 3, 3)))
   })
 
   test_that(paste(fun_name, "data frame, several cluster columns"), {

@@ -24,6 +24,9 @@
       )
     }
     cluster <- .cluster_id(cluster_vars)
+    if (verbose) {
+      .check_cluster_levels(x, cluster_vars)
+    }
   }
 
   # Warning if all NaNs
@@ -203,6 +206,74 @@
   id <- match(key, unique(key))
   id[Reduce(`|`, lapply(cluster_vars, is.na))] <- NA
   id
+}
+
+
+# cluster variables that are not needed ----
+#
+# With two or more cluster variables, a cluster variable is not needed when
+# dropping it leaves fewer clusters and `x` still takes one value per cluster
+# of the others. It then only splits clusters of the others, and each split
+# cluster counts once per part. Clusters are counted among the values with
+# finite, non-missing `x` and no missing id. `rows` holds the row indices of
+# each group of a grouped data frame, so that one warning names every cluster
+# variable that is not needed in any group.
+#
+#' @keywords internal
+.check_cluster_levels <- function(
+  x,
+  cluster_vars,
+  name = NULL,
+  rows = list(seq_along(x))
+) {
+  if (length(cluster_vars) < 2L) {
+    return(invisible(NULL))
+  }
+  not_needed <- character(0)
+  for (r in rows) {
+    x_rows <- x[r]
+    vars_rows <- lapply(cluster_vars, `[`, r)
+    valid <- !is.na(x_rows) & !Reduce(`|`, lapply(vars_rows, is.na))
+    if (is.numeric(x_rows)) {
+      valid <- valid & is.finite(x_rows)
+    }
+    not_needed <- union(
+      not_needed,
+      .cluster_not_needed(x_rows[valid], lapply(vars_rows, `[`, valid))
+    )
+  }
+  if (length(not_needed)) {
+    labels <- ifelse(
+      grepl("^[0-9]+$", not_needed),
+      paste("cluster variable", not_needed),
+      paste0("`", not_needed, "`")
+    )
+    subject <- if (is.null(name)) "The variable" else paste0("`", name, "`")
+    insight::format_warning(paste0(
+      subject,
+      " takes one value per cluster even without ",
+      text_concatenate(labels, last = " or "),
+      " in `cluster`. Such a cluster variable only splits clusters, and each split cluster then counts once per part. Remove it from `cluster`, or set `verbose = FALSE` to silence this warning." # nolint
+    ))
+  }
+  invisible(NULL)
+}
+
+
+#' @keywords internal
+.cluster_not_needed <- function(x, cluster_vars) {
+  n_clusters <- length(unique(.cluster_id(cluster_vars)))
+  out <- character(0)
+  for (i in seq_along(cluster_vars)) {
+    pairs <- unique(data.frame(
+      cluster = .cluster_id(cluster_vars[-i]),
+      x = x
+    ))
+    if (nrow(pairs) < n_clusters && anyDuplicated(pairs$cluster) == 0L) {
+      out <- c(out, names(cluster_vars)[i])
+    }
+  }
+  out
 }
 
 
