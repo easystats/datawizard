@@ -817,7 +817,7 @@ test_that("describe_distribution - invalid indices", {
 })
 
 test_that("describe_distribution - deprecated flags must be TRUE or FALSE", {
-  for (bad in list(NA, "yes", NULL, c(TRUE, FALSE))) {
+  for (bad in list(NA, "yes", "TRUE", 1, 0L, NULL, c(TRUE, FALSE))) {
     expect_error(
       describe_distribution(mtcars$mpg, range = bad),
       regexp = "`range` must be `TRUE` or `FALSE`.",

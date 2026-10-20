@@ -783,8 +783,8 @@ plot.parameters_distribution <- function(x, ...) {
     ))
   }
   for (flag in names(flags)) {
-    value <- as.logical(flags[[flag]])
-    if (length(value) != 1L || is.na(value)) {
+    value <- flags[[flag]]
+    if (!isTRUE(value) && !isFALSE(value)) {
       insight::format_error(paste0("`", flag, "` must be `TRUE` or `FALSE`."))
     }
     insight::format_warning(paste0(
