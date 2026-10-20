@@ -167,3 +167,68 @@ test_that("objects with the old parameters_* classes still work", {
     }
   }
 })
+
+test_that("skewness SE matches the type", {
+  x <- mtcars$mpg
+  n <- length(x)
+  s1 <- skewness(x, type = "1")
+  s2 <- skewness(x, type = "2")
+  s3 <- skewness(x, type = "3")
+  # oracle (closed-form): SE of g1 under normality
+  se1 <- sqrt(6 * (n - 2) / ((n + 1) * (n + 3)))
+  expect_equal(s1$SE, se1, tolerance = 1e-10)
+  # oracle (closed-form): G1 = g1 * sqrt(n * (n - 1)) / (n - 2) and
+  # b1 = g1 * ((n - 1) / n)^1.5, so their SEs scale by the same factors
+  expect_equal(s2$SE, se1 * sqrt(n * (n - 1)) / (n - 2), tolerance = 1e-10)
+  expect_equal(s3$SE, se1 * ((n - 1) / n)^1.5, tolerance = 1e-10)
+  # oracle (invariant): types 2 and 3 are multiples of type 1, so the SE
+  # ratio equals the estimate ratio
+  expect_equal(s2$SE / s1$SE, s2$Skewness / s1$Skewness, tolerance = 1e-10)
+  expect_equal(s3$SE / s1$SE, s3$Skewness / s1$Skewness, tolerance = 1e-10)
+})
+
+test_that("kurtosis SE matches the type", {
+  x <- mtcars$mpg
+  y <- mtcars$wt
+  n <- length(x)
+  k1 <- kurtosis(x, type = "1")
+  k2 <- kurtosis(x, type = "2")
+  k3 <- kurtosis(x, type = "3")
+  # oracle (closed-form): SE of g2 under normality
+  se1 <- sqrt((24 * n * (n - 2) * (n - 3)) / ((n + 1)^2 * (n + 3) * (n + 5)))
+  expect_equal(k1$SE, se1, tolerance = 1e-10)
+  # oracle (closed-form): types 2 and 3 are linear in g2, with slopes
+  # (n + 1) (n - 1) / ((n - 2) (n - 3)) and ((n - 1) / n)^2, so their SEs
+  # scale by those slopes
+  expect_equal(
+    k2$SE,
+    se1 * (n + 1) * (n - 1) / ((n - 2) * (n - 3)),
+    tolerance = 1e-10
+  )
+  expect_equal(k3$SE, se1 * ((n - 1) / n)^2, tolerance = 1e-10)
+  # oracle (invariant): for two samples of the same size, the change in the
+  # type-2 or type-3 estimate per change in the type-1 estimate is the slope
+  d1 <- k1$Kurtosis - kurtosis(y, type = "1")$Kurtosis
+  d2 <- k2$Kurtosis - kurtosis(y, type = "2")$Kurtosis
+  d3 <- k3$Kurtosis - kurtosis(y, type = "3")$Kurtosis
+  expect_equal(k2$SE / k1$SE, d2 / d1, tolerance = 1e-10)
+  expect_equal(k3$SE / k1$SE, d3 / d1, tolerance = 1e-10)
+})
+
+test_that("type-2 SEs match the spread of simulated estimates", {
+  # oracle (simulation-coverage): the SD of type-2 estimates over normal
+  # samples of size n recovers the analytic SE, which is 8% (skewness) and
+  # 30% (kurtosis) above the type-1 SE at n = 20
+  set.seed(123)
+  n <- 20L
+  sims <- matrix(stats::rnorm(n * 20000L), ncol = n)
+  d <- sims - rowMeans(sims)
+  m2 <- rowMeans(d^2)
+  g1 <- rowMeans(d^3) / m2^1.5
+  g2 <- rowMeans(d^4) / m2^2 - 3
+  big_g1 <- g1 * sqrt(n * (n - 1)) / (n - 2)
+  big_g2 <- ((n + 1) * g2 + 6) * (n - 1) / ((n - 2) * (n - 3))
+  x <- sims[1, ]
+  expect_equal(skewness(x)$SE, stats::sd(big_g1), tolerance = 0.025)
+  expect_equal(kurtosis(x)$SE, stats::sd(big_g2), tolerance = 0.05)
+})

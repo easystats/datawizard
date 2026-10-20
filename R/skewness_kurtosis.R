@@ -154,7 +154,7 @@ skewness.numeric <- function(
         remove_na = remove_na,
         type = type
       )
-      out_se <- stats::sd(results$t, na.rm = TRUE)
+      .skewness_se <- stats::sd(results$t, na.rm = TRUE)
     } else {
       insight::format_warning("Package 'boot' needed for bootstrapping SEs.")
     }
@@ -162,7 +162,7 @@ skewness.numeric <- function(
 
   .skewness <- data.frame(
     Skewness = .skewness,
-    SE = out_se
+    SE = .skewness_se
   )
   class(.skewness) <- unique(c(
     "datawizard_skewness",
@@ -315,12 +315,12 @@ kurtosis.numeric <- function(
       remove_na = remove_na,
       type = type
     )
-    out_se <- stats::sd(results$t, na.rm = TRUE)
+    .kurtosis_se <- stats::sd(results$t, na.rm = TRUE)
   }
 
   .kurtosis <- data.frame(
     Kurtosis = .kurtosis,
-    SE = out_se
+    SE = .kurtosis_se
   )
   class(.kurtosis) <- unique(c(
     "datawizard_kurtosis",
