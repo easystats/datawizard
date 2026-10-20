@@ -230,7 +230,7 @@
   if (length(cluster_vars) < 2L) {
     return(invisible(NULL))
   }
-  not_needed <- character(0)
+  not_needed <- character()
   for (r in rows) {
     x_rows <- x[r]
     vars_rows <- lapply(cluster_vars, `[`, r)
@@ -244,7 +244,7 @@
     )
   }
   if (length(not_needed)) {
-    labels <- ifelse(
+    var_labels <- ifelse(
       grepl("^[0-9]+$", not_needed),
       paste("cluster variable", not_needed),
       paste0("`", not_needed, "`")
@@ -253,7 +253,7 @@
     insight::format_warning(paste0(
       subject,
       " takes one value per cluster even without ",
-      text_concatenate(labels, last = " or "),
+      text_concatenate(var_labels, last = " or "),
       " in `cluster`. Such a cluster variable only splits clusters, and each split cluster then counts once per part. Remove it from `cluster`, or set `verbose = FALSE` to silence this warning." # nolint
     ))
   }
@@ -264,13 +264,15 @@
 #' @keywords internal
 .cluster_not_needed <- function(x, cluster_vars) {
   n_clusters <- length(unique(.cluster_id(cluster_vars)))
-  out <- character(0)
+  out <- character()
   for (i in seq_along(cluster_vars)) {
-    pairs <- unique(data.frame(
+    cluster_x <- unique(data.frame(
       cluster = .cluster_id(cluster_vars[-i]),
       x = x
     ))
-    if (nrow(pairs) < n_clusters && anyDuplicated(pairs$cluster) == 0L) {
+    if (
+      nrow(cluster_x) < n_clusters && anyDuplicated(cluster_x$cluster) == 0L
+    ) {
       out <- c(out, names(cluster_vars)[i])
     }
   }
@@ -313,7 +315,7 @@
   # column names holds id values.
   cluster_name <- NULL
   if (!is.null(cluster)) {
-    # check here, because `.scale` is dropped below when no `.center` is given
+    # check here, before `.center` and `.scale` are recycled below
     .check_cluster_args(cluster, weights, reference, .center, .scale)
     is_names <- is.character(cluster) &&
       (all(cluster %in% colnames(x)) ||
@@ -739,7 +741,7 @@
   if (!is.null(cluster)) {
     if (!is.character(cluster)) {
       insight::format_error(
-        "For grouped data frames, `cluster` must be a column name or a character vector of column names."
+        "For grouped data frames, `cluster` must be a column name or a character vector of column names." # nolint
       )
     }
     .check_cluster_args(cluster, weights, reference)

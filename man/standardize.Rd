@@ -140,17 +140,32 @@ rest of the arguments are absent.
 
 \item{verbose}{Toggle warnings and messages on or off.}
 
-\item{cluster}{Can be \code{NULL} (for no clustering), or a vector of cluster
-ids with one element per observation. For data frames, it can also be the
-name of a column that contains the cluster ids. If given, the center and
-scale are computed from one value per cluster instead of from all
-observations, so that a cluster-level (Level 2) variable in long format is
-not weighted by the number of observations per cluster. The variable must
-take only one finite value within each cluster (infinite values are
-treated as missing), and observations with a missing cluster id are
-returned as \code{NA}. \code{cluster} cannot be combined with
-\code{weights}, \code{reference}, or values for \code{center} and \code{scale}. For grouped
-data frames, \code{cluster} must be a column name.}
+\item{cluster}{Can be \code{NULL} (for no clustering), a vector of cluster ids
+with one element per observation, or a list or data frame of such
+vectors. For data frames, it can also be the name of a column, or a
+character vector of column names, that holds the cluster ids. If given,
+the center and scale are computed from one value per cluster instead of
+from all observations, so that a cluster-level (Level 2) variable in long
+format is not weighted by the number of observations per cluster.
+
+With several cluster variables, observations with the same values on all
+of them form one cluster. This works for nested, crossed, and mixed
+designs. One call covers one level: give the variables that identify the
+level of the variables to transform, for example
+\code{cluster = c("school", "classroom")} for a classroom-level variable and
+\code{cluster = "school"} for a school-level variable. If a variable takes one
+value per cluster of the other cluster variables, a cluster variable is
+not needed: it only splits clusters, and each split cluster then counts
+once per part. With \code{verbose = TRUE}, a warning names such a cluster
+variable. On a data frame, a character \code{cluster} is read as column names
+if all its elements are column names, and else as cluster ids if it has
+one element per row.
+
+The variable must take only one finite value within each cluster
+(infinite values are treated as missing), and observations with a missing
+id in any cluster variable are returned as \code{NA}. \code{cluster} cannot be
+combined with \code{weights}, \code{reference}, or values for \code{center} and \code{scale}.
+For grouped data frames, \code{cluster} must be one or more column names.}
 
 \item{force}{Logical, if \code{TRUE}, forces recoding of factors and character
 vectors as well.}

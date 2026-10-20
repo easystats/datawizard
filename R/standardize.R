@@ -26,17 +26,32 @@
 #' - For `data.frame`s: a numeric vector of weights, or a character of the
 #'   name of a column in the `data.frame` that contains the weights.
 #' - For numeric vectors: a numeric vector of weights.
-#' @param cluster Can be `NULL` (for no clustering), or a vector of cluster
-#'   ids with one element per observation. For data frames, it can also be the
-#'   name of a column that contains the cluster ids. If given, the center and
-#'   scale are computed from one value per cluster instead of from all
-#'   observations, so that a cluster-level (Level 2) variable in long format is
-#'   not weighted by the number of observations per cluster. The variable must
-#'   take only one finite value within each cluster (infinite values are
-#'   treated as missing), and observations with a missing cluster id are
-#'   returned as `NA`. `cluster` cannot be combined with
-#'   `weights`, `reference`, or values for `center` and `scale`. For grouped
-#'   data frames, `cluster` must be a column name.
+#' @param cluster Can be `NULL` (for no clustering), a vector of cluster ids
+#'   with one element per observation, or a list or data frame of such
+#'   vectors. For data frames, it can also be the name of a column, or a
+#'   character vector of column names, that holds the cluster ids. If given,
+#'   the center and scale are computed from one value per cluster instead of
+#'   from all observations, so that a cluster-level (Level 2) variable in long
+#'   format is not weighted by the number of observations per cluster.
+#'
+#'   With several cluster variables, observations with the same values on all
+#'   of them form one cluster. This works for nested, crossed, and mixed
+#'   designs. One call covers one level: give the variables that identify the
+#'   level of the variables to transform, for example
+#'   `cluster = c("school", "classroom")` for a classroom-level variable and
+#'   `cluster = "school"` for a school-level variable. If a variable takes one
+#'   value per cluster of the other cluster variables, a cluster variable is
+#'   not needed: it only splits clusters, and each split cluster then counts
+#'   once per part. With `verbose = TRUE`, a warning names such a cluster
+#'   variable. On a data frame, a character `cluster` is read as column names
+#'   if all its elements are column names, and else as cluster ids if it has
+#'   one element per row.
+#'
+#'   The variable must take only one finite value within each cluster
+#'   (infinite values are treated as missing), and observations with a missing
+#'   id in any cluster variable are returned as `NA`. `cluster` cannot be
+#'   combined with `weights`, `reference`, or values for `center` and `scale`.
+#'   For grouped data frames, `cluster` must be one or more column names.
 #' @param verbose Toggle warnings and messages on or off.
 #' @param remove_na How should missing values (`NA`) be treated: if `"none"`
 #'   (default): each column's standardization is done separately, ignoring

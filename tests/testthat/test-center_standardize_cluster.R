@@ -527,7 +527,10 @@ rownames(ml) <- NULL
 # such as "a.b" and "c" never merge with "a" and "b.c"; NA where any id is NA
 combo_id <- function(...) {
   v <- data.frame(..., stringsAsFactors = FALSE)
-  key <- do.call(paste, c(lapply(v, function(i) match(i, unique(i))), sep = "_"))
+  key <- do.call(
+    paste,
+    c(lapply(v, function(i) match(i, unique(i))), sep = "_")
+  )
   id <- match(key, unique(key))
   id[!stats::complete.cases(v)] <- NA
   id
@@ -542,11 +545,11 @@ for (fun_name in c("center", "standardize")) {
     expected <- fun(ml$class_size, cluster = combo_id(ml$school, room))
     # oracle (invariant): a list or data frame of id vectors equals one id
     # vector that labels each distinct combination
-    expect_equal(
+    expect_identical(
       fun(ml$class_size, cluster = list(ml$school, room)),
       expected
     )
-    expect_equal(
+    expect_identical(
       fun(
         ml$class_size,
         cluster = data.frame(school = ml$school, room = room)
@@ -573,7 +576,7 @@ for (fun_name in c("center", "standardize")) {
     # center is 4 (interaction() would merge the first two into one cluster
     # with two values)
     expect_identical(attr(z, "center"), 4)
-    expect_equal(z, fun(x, cluster = c(1, 1, 2, 2, 3, 3)))
+    expect_identical(z, fun(x, cluster = c(1, 1, 2, 2, 3, 3)))
   })
 
   test_that(paste(fun_name, "data frame, several cluster columns"), {
@@ -586,8 +589,8 @@ for (fun_name in c("center", "standardize")) {
     ref <- fun(ml_h, cluster = "h", exclude = named, verbose = FALSE)
     expect_identical(out$school, ml$school)
     expect_identical(out$classroom, ml$classroom)
-    expect_equal(out$class_size, ref$class_size)
-    expect_equal(out$school_size, ref$school_size)
+    expect_identical(out$class_size, ref$class_size)
+    expect_identical(out$school_size, ref$school_size)
     expect_identical(attr(out, "center"), attr(ref, "center"))
     expect_identical(attr(out, "scale"), attr(ref, "scale"))
 
@@ -598,7 +601,7 @@ for (fun_name in c("center", "standardize")) {
       cluster = c("district", "school", "classroom")
     )
     ref3 <- fun(ml_h, select = "class_size", cluster = "h")
-    expect_equal(out3$class_size, ref3$class_size)
+    expect_identical(out3$class_size, ref3$class_size)
     expect_identical(attr(out3, "center"), attr(ref3, "center"))
 
     # a named column with an NA
@@ -607,7 +610,7 @@ for (fun_name in c("center", "standardize")) {
     ml_na$h <- combo_id(ml_na$school, ml_na$classroom)
     out_na <- fun(ml_na, select = "class_size", cluster = named)
     ref_na <- fun(ml_na, select = "class_size", cluster = "h")
-    expect_equal(out_na$class_size, ref_na$class_size)
+    expect_identical(out_na$class_size, ref_na$class_size)
     expect_true(is.na(out_na$class_size[3]))
 
     # a list of id vectors equals one id vector built the same way
@@ -617,10 +620,14 @@ for (fun_name in c("center", "standardize")) {
       cluster = list(ml$school, ml$classroom)
     )
     ref_list <- fun(ml, select = "class_size", cluster = ml_h$h)
-    expect_equal(out_list$class_size, ref_list$class_size)
+    expect_identical(out_list$class_size, ref_list$class_size)
     expect_identical(attr(out_list, "center"), attr(ref_list, "center"))
     expect_error(
-      fun(ml, select = "class_size", cluster = list(ml$school, ml$classroom[-1])),
+      fun(
+        ml,
+        select = "class_size",
+        cluster = list(ml$school, ml$classroom[-1])
+      ),
       "`cluster` must have the same length as the number of rows in the data.",
       fixed = TRUE
     )
@@ -659,7 +666,7 @@ for (fun_name in c("center", "standardize")) {
     d_ids <- data.frame(y = c(1, 1, 3, 3), s1 = c(9, 9, 9, 9))
     # oracle (invariant): a character vector with one id per row that is not
     # all column names is read as id values
-    expect_equal(
+    expect_identical(
       fun(d_ids, select = "y", cluster = c("p", "p", "q", "q"))$y,
       fun(d_ids, select = "y", cluster = c(1, 1, 2, 2))$y
     )
