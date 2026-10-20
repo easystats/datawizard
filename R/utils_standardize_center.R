@@ -15,10 +15,15 @@
   scale = NULL,
   cluster = NULL
 ) {
-  if (!is.null(cluster) && length(cluster) != length(x)) {
-    insight::format_error(
-      "`cluster` must have the same length as the variable to transform."
-    )
+  cluster_vars <- NULL
+  if (!is.null(cluster)) {
+    cluster_vars <- .cluster_list(cluster)
+    if (any(lengths(cluster_vars) != length(x))) {
+      insight::format_error(
+        "`cluster` must have the same length as the variable to transform."
+      )
+    }
+    cluster <- .cluster_id(cluster_vars)
   }
 
   # Warning if all NaNs
@@ -147,11 +152,57 @@
 
 #' @keywords internal
 .check_cluster_column <- function(x, cluster) {
-  if (!cluster %in% colnames(x)) {
+  missing_columns <- setdiff(cluster, colnames(x))
+  if (length(missing_columns) == 1L) {
     insight::format_error(
-      paste0("Could not find the `cluster` column `", cluster, "`.")
+      paste0("Could not find the `cluster` column `", missing_columns, "`.")
     )
+  } else if (length(missing_columns) > 1L) {
+    insight::format_error(paste0(
+      "Could not find the `cluster` columns ",
+      text_concatenate(missing_columns, enclose = "`"),
+      "."
+    ))
   }
+}
+
+
+# several cluster variables ----
+#
+# `.cluster_list()` turns `cluster` into a named list of id vectors: a list or
+# data frame keeps its elements (unnamed ones are named by position), any
+# other vector becomes a list of one. `.cluster_id()` combines the vectors
+# into one id per row, so that rows with equal ids on every vector form one
+# cluster. It builds the id from per-vector codes, because `interaction()`
+# merges ids such as "a.b" with "c" and "a" with "b.c". The id is `NA` where
+# any vector is `NA`.
+#
+#' @keywords internal
+.cluster_list <- function(cluster) {
+  if (is.list(cluster)) {
+    cluster <- as.list(cluster)
+  } else {
+    cluster <- list(cluster)
+  }
+  if (is.null(names(cluster))) {
+    names(cluster) <- rep("", length(cluster))
+  }
+  unnamed <- !nzchar(names(cluster))
+  names(cluster)[unnamed] <- as.character(which(unnamed))
+  cluster
+}
+
+
+#' @keywords internal
+.cluster_id <- function(cluster_vars) {
+  if (length(cluster_vars) == 1L) {
+    return(cluster_vars[[1]])
+  }
+  codes <- lapply(cluster_vars, function(i) match(i, unique(i)))
+  key <- do.call(paste, c(codes, sep = "_"))
+  id <- match(key, unique(key))
+  id[Reduce(`|`, lapply(cluster_vars, is.na))] <- NA
+  id
 }
 
 
@@ -185,17 +236,22 @@
     append <- append_suffix
   }
 
-  # a single string is the name of the cluster column, which is never
-  # transformed
+  # a character vector of column names names the cluster columns, which are
+  # never transformed. A character vector with one id per row that is not all
+  # column names holds id values.
   cluster_name <- NULL
   if (!is.null(cluster)) {
     # check here, because `.scale` is dropped below when no `.center` is given
     .check_cluster_args(cluster, weights, reference, .center, .scale)
-    if (is.character(cluster) && length(cluster) == 1L) {
+    is_names <- is.character(cluster) &&
+      (all(cluster %in% colnames(x)) ||
+        nrow(x) < 2L ||
+        length(cluster) != nrow(x))
+    if (is_names) {
       .check_cluster_column(x, cluster)
       cluster_name <- cluster
       exclude <- c(exclude, cluster)
-    } else if (length(cluster) != nrow(x)) {
+    } else if (any(lengths(.cluster_list(cluster)) != nrow(x))) {
       insight::format_error(
         "`cluster` must have the same length as the number of rows in the data."
       )
@@ -260,9 +316,9 @@
   }
 
   if (!is.null(cluster_name)) {
-    cluster <- x[[cluster_name]]
+    cluster <- as.list(x[cluster_name])
   } else if (!is.null(cluster)) {
-    cluster <- cluster[!omit]
+    cluster <- lapply(.cluster_list(cluster), function(i) i[!omit])
   }
 
   # append standardized variables
@@ -594,9 +650,9 @@
   cluster = NULL
 ) {
   if (!is.null(cluster)) {
-    if (!is.character(cluster) || length(cluster) != 1L) {
+    if (!is.character(cluster)) {
       insight::format_error(
-        "For grouped data frames, `cluster` must be a column name."
+        "For grouped data frames, `cluster` must be a column name or a character vector of column names."
       )
     }
     .check_cluster_args(cluster, weights, reference)

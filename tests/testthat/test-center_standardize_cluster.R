@@ -660,7 +660,7 @@ for (fun_name in c("center", "standardize")) {
       fun(d_ids, select = "y", cluster = c(1, 1, 2, 2))$y
     )
     expect_no_error(
-      fun(ml, select = "class_size", cluster = c("district", "school"))
+      fun(ml, select = "school_size", cluster = c("district", "school"))
     )
     expect_error(
       fun(ml, select = "class_size", cluster = c("school", "zone", "room")),
