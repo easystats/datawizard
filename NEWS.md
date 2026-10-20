@@ -46,7 +46,7 @@ FIXES
   results change for some calls that set them. Before, `scale = FALSE` still
   divided by the SD, and `center = TRUE` only centered (also with
   `reference`) and `center = FALSE` returned the values unchanged. With
-  `cluster`, `center = TRUE` or `center = FALSE` gave an error.
+  `cluster`, `center = TRUE` or `center = FALSE` gave an error (#730).
 
 * `skewness()` and `kurtosis()` now return the standard error for the chosen
   `type`. Before, the `SE` column was the type-1 standard error for every
