@@ -663,12 +663,57 @@ for (fun_name in c("center", "standardize")) {
   })
 
   test_that(paste(fun_name, "data frame, how a character cluster is read"), {
-    d_ids <- data.frame(y = c(1, 1, 3, 3), s1 = c(9, 9, 9, 9))
-    # oracle (invariant): a character vector with one id per row that is not
-    # all column names is read as id values
+    d_ids <- data.frame(
+      y = c(1, 1, 3, 3),
+      s1 = c(9, 9, 9, 9),
+      s2 = c(4, 4, 4, 4)
+    )
+    # oracle (invariant): repeated id values are ids, even when they are all
+    # column names
     expect_identical(
-      fun(d_ids, select = "y", cluster = c("p", "p", "q", "q"))$y,
-      fun(d_ids, select = "y", cluster = c(1, 1, 2, 2))$y
+      fun(d_ids, select = "y", cluster = c("s1", "s1", "s2", "s2")),
+      fun(d_ids, select = "y", cluster = c(1, 1, 2, 2))
+    )
+    # unique character ids, one per row, are read as column names
+    expect_error(
+      fun(d_ids, select = "y", cluster = c("p", "q", "r", "u")),
+      "Could not find the `cluster` columns"
+    )
+    expect_error(
+      fun(d_ids, select = "y", cluster = c("s1", "s1")),
+      "`cluster` must have the same length as the number of rows in the data.",
+      fixed = TRUE
+    )
+    expect_error(
+      fun(data.frame(y = 1), cluster = "a"),
+      "Could not find the `cluster` column `a`",
+      fixed = TRUE
+    )
+    five <- paste0("m", 1:5)
+    msg5 <- tryCatch(
+      fun(d_ids, select = "y", cluster = five),
+      error = conditionMessage
+    )
+    expect_match(
+      gsub("\\s+", " ", msg5),
+      "`m1`, `m2`, `m3`, `m4` and `m5`",
+      fixed = TRUE
+    )
+    expect_false(grepl("more", msg5, fixed = TRUE))
+    msg8 <- tryCatch(
+      fun(d_ids, select = "y", cluster = paste0("m", 1:8)),
+      error = conditionMessage
+    )
+    expect_match(
+      gsub("\\s+", " ", msg8),
+      "`m1`, `m2`, `m3`, `m4`, `m5`, and 3 more",
+      fixed = TRUE
+    )
+    expect_false(grepl("m6", msg8, fixed = TRUE))
+    expect_error(
+      fun(d_ids, select = "y", cluster = character(0)),
+      "`cluster` must contain at least one id vector.",
+      fixed = TRUE
     )
     expect_no_error(
       fun(ml, select = "school_size", cluster = c("district", "school"))
@@ -682,6 +727,15 @@ for (fun_name in c("center", "standardize")) {
     expect_error(
       fun(gd, select = "class_size", cluster = c("school", "zone")),
       "Could not find the `cluster` column.*zone"
+    )
+    expect_error(
+      fun(gd, select = "class_size", cluster = c("zone", "zone")),
+      "For grouped data frames, `cluster` must be a column name"
+    )
+    expect_error(
+      fun(gd, select = "class_size", cluster = character(0)),
+      "`cluster` must contain at least one id vector.",
+      fixed = TRUE
     )
   })
 

@@ -159,9 +159,9 @@ splits clusters of the other cluster variables, and the variable to
 transform still takes one value per cluster of those others, that cluster
 variable is not needed: each split cluster then counts once per part.
 With \code{verbose = TRUE}, a warning names such a cluster variable. On a data
-frame, a character \code{cluster} is read as column names if all its elements
-are column names, and else, if the data have two or more rows and it has
-one element per row, as cluster ids.
+frame, a character \code{cluster} with no repeated element is read as column
+names, and one with a repeated element as cluster ids (one per row). Give
+ids with no repeated value, if any, as a factor or as numbers.
 
 The variable must take only one finite value within each cluster
 (infinite values are treated as missing), and observations with a missing

@@ -158,16 +158,22 @@
 #' @keywords internal
 .check_cluster_column <- function(x, cluster) {
   missing_columns <- setdiff(cluster, colnames(x))
-  if (length(missing_columns) == 1L) {
+  n_missing <- length(missing_columns)
+  if (n_missing == 1L) {
     insight::format_error(
       paste0("Could not find the `cluster` column `", missing_columns, "`.")
     )
-  } else if (length(missing_columns) > 1L) {
-    insight::format_error(paste0(
-      "Could not find the `cluster` columns ",
-      text_concatenate(missing_columns, enclose = "`"),
-      "."
-    ))
+  } else if (n_missing > 1L) {
+    # name at most five missing columns
+    shown <- paste0("`", utils::head(missing_columns, 5L), "`")
+    listed <- if (n_missing > 5L) {
+      paste0(toString(shown), ", and ", n_missing - 5L, " more")
+    } else {
+      text_concatenate(shown)
+    }
+    insight::format_error(
+      paste0("Could not find the `cluster` columns ", listed, ".")
+    )
   }
 }
 
@@ -329,18 +335,17 @@
     append <- append_suffix
   }
 
-  # a character vector of column names names the cluster columns, which are
-  # never transformed. A character vector with one id per row that is not all
-  # column names holds id values.
+  # a character vector with no repeated element names the cluster columns,
+  # which are never transformed. One with a repeated element holds id values
+  # (column names never repeat), so it must have one element per row.
   cluster_name <- NULL
   if (!is.null(cluster)) {
     # check here, before `.center` and `.scale` are recycled below
     .check_cluster_args(cluster, weights, reference, .center, .scale)
-    is_names <- is.character(cluster) &&
-      (all(cluster %in% colnames(x)) ||
-        nrow(x) < 2L ||
-        length(cluster) != nrow(x))
-    if (is_names) {
+    if (is.character(cluster) && !length(cluster)) {
+      insight::format_error("`cluster` must contain at least one id vector.")
+    }
+    if (is.character(cluster) && anyDuplicated(cluster) == 0L) {
       .check_cluster_column(x, cluster)
       cluster_name <- cluster
       exclude <- c(exclude, cluster)
@@ -758,7 +763,10 @@
   cluster = NULL
 ) {
   if (!is.null(cluster)) {
-    if (!is.character(cluster)) {
+    if (is.character(cluster) && !length(cluster)) {
+      insight::format_error("`cluster` must contain at least one id vector.")
+    }
+    if (!is.character(cluster) || anyDuplicated(cluster) > 0L) {
       insight::format_error(
         "For grouped data frames, `cluster` must be a column name or a character vector of column names." # nolint
       )
