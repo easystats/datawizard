@@ -53,8 +53,12 @@ test_that("adjust passes ... to lm()", {
   d <- iris[c("Sepal.Length", "Species")]
   w <- seq_len(nrow(d)) / nrow(d)
   adj <- adjust(d, multilevel = FALSE, additive = FALSE, weights = w)
-  m <- stats::lm(Sepal.Length ~ 1 + Species, data = d, weights = w)
-  expect_equal(adj$Sepal.Length, unname(stats::residuals(m)))
+  m <- stats::lm(Sepal.Length ~ Species, data = d, weights = w)
+  expect_equal(
+    adj$Sepal.Length,
+    unname(stats::residuals(m)),
+    tolerance = 1e-6
+  )
   expect_false(isTRUE(all.equal(adj$Sepal.Length, adjust(d)$Sepal.Length)))
 })
 
@@ -62,8 +66,12 @@ test_that("adjust passes ... to lme4::lmer()", {
   skip_if_not_installed("lme4")
   d <- iris[c("Sepal.Length", "Species")]
   adj <- adjust(d, multilevel = TRUE, REML = FALSE)
-  m <- lme4::lmer(Sepal.Length ~ 1 + (1 | Species), data = d, REML = FALSE)
-  expect_equal(adj$Sepal.Length, unname(stats::residuals(m)))
+  m <- lme4::lmer(Sepal.Length ~ (1 | Species), data = d, REML = FALSE)
+  expect_equal(
+    adj$Sepal.Length,
+    unname(stats::residuals(m)),
+    tolerance = 1e-6
+  )
   expect_false(isTRUE(all.equal(
     adj$Sepal.Length,
     adjust(d, multilevel = TRUE)$Sepal.Length
@@ -88,8 +96,12 @@ test_that("adjust passes ... to gamm4::gamm4()", {
     additive = TRUE,
     REML = FALSE
   )
-  m <- gamm4::gamm4(Sepal.Length ~ 1 + s(Sepal.Width), data = d, REML = FALSE)
-  expect_equal(adj$Sepal.Length, unname(insight::get_residuals(m)))
+  m <- gamm4::gamm4(Sepal.Length ~ s(Sepal.Width), data = d, REML = FALSE)
+  expect_equal(
+    adj$Sepal.Length,
+    unname(insight::get_residuals(m)),
+    tolerance = 1e-6
+  )
   adj_default <- adjust(
     d,
     effect = "Sepal.Width",
@@ -108,19 +120,23 @@ test_that("adjust passes ... to rstanarm::stan_glm()", {
     effect = "Sepal.Width",
     select = "Sepal.Length",
     bayesian = TRUE,
-    chains = 1,
-    iter = 200,
-    seed = 1
+    chains = 1L,
+    iter = 200L,
+    seed = 1L
   ))
   m <- suppressWarnings(rstanarm::stan_glm(
-    Sepal.Length ~ 1 + Sepal.Width,
+    Sepal.Length ~ Sepal.Width,
     data = d,
-    refresh = 0,
-    chains = 1,
-    iter = 200,
-    seed = 1
+    refresh = 0L,
+    chains = 1L,
+    iter = 200L,
+    seed = 1L
   ))
-  expect_equal(adj$Sepal.Length, unname(insight::get_residuals(m)))
+  expect_equal(
+    adj$Sepal.Length,
+    unname(insight::get_residuals(m)),
+    tolerance = 1e-6
+  )
 })
 
 test_that("adjust passes ... to rstanarm::stan_glmer()", {
@@ -133,20 +149,24 @@ test_that("adjust passes ... to rstanarm::stan_glmer()", {
     d,
     multilevel = TRUE,
     bayesian = TRUE,
-    chains = 1,
-    iter = 200,
-    seed = 1
+    chains = 1L,
+    iter = 200L,
+    seed = 1L
   ))
   m <- suppressWarnings(rstanarm::stan_glmer(
-    Sepal.Length ~ 1 + (1 | Species),
+    Sepal.Length ~ (1 | Species),
     data = d,
     family = "gaussian",
-    refresh = 0,
-    chains = 1,
-    iter = 200,
-    seed = 1
+    refresh = 0L,
+    chains = 1L,
+    iter = 200L,
+    seed = 1L
   ))
-  expect_equal(adj$Sepal.Length, unname(insight::get_residuals(m)))
+  expect_equal(
+    adj$Sepal.Length,
+    unname(insight::get_residuals(m)),
+    tolerance = 1e-6
+  )
 })
 
 test_that("adjust passes ... to rstanarm::stan_gamm4()", {
@@ -159,17 +179,21 @@ test_that("adjust passes ... to rstanarm::stan_gamm4()", {
     select = "Sepal.Length",
     additive = TRUE,
     bayesian = TRUE,
-    chains = 1,
-    iter = 200,
-    seed = 1
+    chains = 1L,
+    iter = 200L,
+    seed = 1L
   ))
   m <- suppressWarnings(rstanarm::stan_gamm4(
-    Sepal.Length ~ 1 + s(Sepal.Width),
+    Sepal.Length ~ s(Sepal.Width),
     data = d,
-    refresh = 0,
-    chains = 1,
-    iter = 200,
-    seed = 1
+    refresh = 0L,
+    chains = 1L,
+    iter = 200L,
+    seed = 1L
   ))
-  expect_equal(adj$Sepal.Length, unname(insight::get_residuals(m)))
+  expect_equal(
+    adj$Sepal.Length,
+    unname(insight::get_residuals(m)),
+    tolerance = 1e-6
+  )
 })

@@ -36,12 +36,20 @@ CHANGES
   `parameters_smoothness` remain as secondary classes, so code that checks
   `class(x)[1]` for the old names needs to be updated (#248).
 
+* `adjust()` gains `...`, which passes arguments to the function that fits the
+  model. For example, with `multilevel = TRUE`, `control = lme4::lmerControl()`
+  goes to `lme4::lmer()` (#696).
+
 FIXES
 
 * `skewness()` and `kurtosis()` now return the standard error for the chosen
   `type`. Before, the `SE` column was the type-1 standard error for every
   `type`, including the default `type = "2"`. Bootstrapped standard errors
   (`iterations`) are not changed.
+
+* If `rstanarm` is not attached, `adjust()` with `multilevel = TRUE` and
+  `bayesian = TRUE` no longer fails with "could not find function
+  "stan_glmer"".
 
 * Fixed `demean()` and `degroup()` for nested designs with three or more
   grouping variables. The group-meaned variables of the third and later

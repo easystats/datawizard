@@ -25,6 +25,13 @@
 #'   re-added. This avoids the centering around 0 that happens by default
 #'   when regressing out another variable (see the examples below for a
 #'   visual representation of this).
+#' @param ... Arguments passed to the function that fits the model:
+#'   [stats::lm()], [lme4::lmer()], [gamm4::gamm4()], [rstanarm::stan_glm()],
+#'   [rstanarm::stan_glmer()], or [rstanarm::stan_gamm4()]. For example, with
+#'   `multilevel = TRUE`, use
+#'   `control = lme4::lmerControl(optimizer = "bobyqa")`. An argument that
+#'   `adjust()` does not know goes to that function, so a misspelled argument
+#'   name is handled by that function, not by `adjust()`.
 #' @inheritParams extract_column_names
 #' @inheritParams standardize
 #'
@@ -184,7 +191,7 @@ data_adjust <- adjust
         stats::as.formula(model_formula),
         random = formula_random,
         data = data,
-        refresh = 0,
+        refresh = 0L,
         ...
       )
       # Frequentist
@@ -209,14 +216,14 @@ data_adjust <- adjust
         paste(model_formula, formula_random),
         data = data,
         family = "gaussian",
-        refresh = 0,
+        refresh = 0L,
         ...
       )
     } else {
       model <- rstanarm::stan_glm(
         model_formula,
         data = data,
-        refresh = 0,
+        refresh = 0L,
         ...
       )
     }

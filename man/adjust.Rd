@@ -16,7 +16,8 @@ adjust(
   keep_intercept = FALSE,
   ignore_case = FALSE,
   regex = FALSE,
-  verbose = FALSE
+  verbose = FALSE,
+  ...
 )
 
 data_adjust(
@@ -30,7 +31,8 @@ data_adjust(
   keep_intercept = FALSE,
   ignore_case = FALSE,
   regex = FALSE,
-  verbose = FALSE
+  verbose = FALSE,
+  ...
 )
 }
 \arguments{
@@ -112,6 +114,14 @@ since the select-helpers may not work when called from inside other
 functions (see 'Details'), this argument may be used as workaround.}
 
 \item{verbose}{Toggle warnings.}
+
+\item{...}{Arguments passed to the function that fits the model:
+\code{\link[stats:lm]{stats::lm()}}, \code{\link[lme4:lmer]{lme4::lmer()}}, \code{\link[gamm4:gamm4]{gamm4::gamm4()}}, \code{\link[rstanarm:stan_glm]{rstanarm::stan_glm()}},
+\code{\link[rstanarm:stan_glmer]{rstanarm::stan_glmer()}}, or \code{\link[rstanarm:stan_gamm4]{rstanarm::stan_gamm4()}}. For example, with
+\code{multilevel = TRUE}, use
+\code{control = lme4::lmerControl(optimizer = "bobyqa")}. An argument that
+\code{adjust()} does not know goes to that function, so a misspelled argument
+name is handled by that function, not by \code{adjust()}.}
 }
 \value{
 A data frame comparable to \code{data}, with adjusted variables.
