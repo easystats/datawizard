@@ -66,8 +66,8 @@ describe_distribution(x, ...)
 \code{"mode"} or \code{"all"}.}
 
 \item{dispersion, iqr, range, quartiles}{Deprecated. Please use \code{indices}
-instead. If given, a value of \code{TRUE} adds the column to \code{indices}, and
-\code{FALSE} removes it.}
+instead. If given, \code{TRUE} adds the column to \code{indices}, and \code{FALSE}
+removes it.}
 
 \item{ci}{Confidence Interval (CI) level. Default is \code{NULL}, i.e. no
 confidence intervals are computed. If not \code{NULL}, confidence intervals are
@@ -94,7 +94,8 @@ on \code{\link[stats:IQR]{stats::IQR()}} with \code{type = 6}), \code{"range"} (
 \code{"kurtosis"}. The default is
 \code{c("dispersion", "iqr", "range", "skewness", "kurtosis")}, and
 \code{c("dispersion", "range", "skewness", "kurtosis")} for factors and
-character vectors. \code{NULL} or \code{character(0)} returns none of these columns.}
+character vectors described on their own. \code{NULL} or \code{character(0)}
+returns none of these columns.}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either

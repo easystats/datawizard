@@ -18,10 +18,11 @@
 #'   `"kurtosis"`. The default is
 #'   `c("dispersion", "iqr", "range", "skewness", "kurtosis")`, and
 #'   `c("dispersion", "range", "skewness", "kurtosis")` for factors and
-#'   character vectors. `NULL` or `character(0)` returns none of these columns.
+#'   character vectors described on their own. `NULL` or `character(0)`
+#'   returns none of these columns.
 #' @param dispersion,iqr,range,quartiles Deprecated. Please use `indices`
-#'   instead. If given, a value of `TRUE` adds the column to `indices`, and
-#'   `FALSE` removes it.
+#'   instead. If given, `TRUE` adds the column to `indices`, and `FALSE`
+#'   removes it.
 #' @param include_factors Logical, if `TRUE`, factors are included in the
 #'   output, however, only columns for range (first and last factor levels) as
 #'   well as n and missing will contain information.
@@ -105,17 +106,7 @@ describe_distribution.list <- function(
 ) {
   indices <- .process_indices(
     indices,
-    list(
-      dispersion = dispersion,
-      iqr = iqr,
-      range = range,
-      quartiles = quartiles
-    )[c(
-      !missing(dispersion),
-      !missing(iqr),
-      !missing(range),
-      !missing(quartiles)
-    )]
+    mget(intersect(names(match.call()), .describe_distribution_flags))
   )
 
   factor_el <- which(vapply(x, is.factor, FUN.VALUE = logical(1L)))
@@ -211,17 +202,7 @@ describe_distribution.numeric <- function(
 ) {
   indices <- .process_indices(
     indices,
-    list(
-      dispersion = dispersion,
-      iqr = iqr,
-      range = range,
-      quartiles = quartiles
-    )[c(
-      !missing(dispersion),
-      !missing(iqr),
-      !missing(range),
-      !missing(quartiles)
-    )]
+    mget(intersect(names(match.call()), .describe_distribution_flags))
   )
 
   insight::check_if_installed("bayestestR")
@@ -346,12 +327,9 @@ describe_distribution.factor <- function(
   dot_args <- list(...)
   indices <- .process_indices(
     indices,
-    c(
-      list(dispersion = dispersion, range = range)[
-        c(!missing(dispersion), !missing(range))
-      ],
-      dot_args[intersect(c("iqr", "quartiles"), names(dot_args))]
-    )
+    c(list(dispersion = dispersion, range = range), dot_args)[
+      intersect(names(match.call()), .describe_distribution_flags)
+    ]
   )
 
   # Missing
@@ -404,12 +382,9 @@ describe_distribution.character <- function(
   dot_args <- list(...)
   indices <- .process_indices(
     indices,
-    c(
-      list(dispersion = dispersion, range = range)[
-        c(!missing(dispersion), !missing(range))
-      ],
-      dot_args[intersect(c("iqr", "quartiles"), names(dot_args))]
-    )
+    c(list(dispersion = dispersion, range = range), dot_args)[
+      intersect(names(match.call()), .describe_distribution_flags)
+    ]
   )
 
   # Missing
@@ -475,17 +450,7 @@ describe_distribution.data.frame <- function(
 ) {
   indices <- .process_indices(
     indices,
-    list(
-      dispersion = dispersion,
-      iqr = iqr,
-      range = range,
-      quartiles = quartiles
-    )[c(
-      !missing(dispersion),
-      !missing(iqr),
-      !missing(range),
-      !missing(quartiles)
-    )]
+    mget(intersect(names(match.call()), .describe_distribution_flags))
   )
 
   select <- .select_nse(
@@ -592,17 +557,7 @@ describe_distribution.grouped_df <- function(
 ) {
   indices <- .process_indices(
     indices,
-    list(
-      dispersion = dispersion,
-      iqr = iqr,
-      range = range,
-      quartiles = quartiles
-    )[c(
-      !missing(dispersion),
-      !missing(iqr),
-      !missing(range),
-      !missing(quartiles)
-    )]
+    mget(intersect(names(match.call()), .describe_distribution_flags))
   )
 
   if (!is.null(by)) {
@@ -810,31 +765,34 @@ plot.parameters_distribution <- function(x, ...) {
   "kurtosis"
 )
 
-# check `indices`, then apply the deprecated flags that were given (a named
-# list): each one warns, then adds its name to `indices` when `TRUE` and
-# removes it otherwise
+.describe_distribution_flags <- c("dispersion", "iqr", "range", "quartiles")
+
+# check `indices`, then apply the deprecated flags given in the call
 .process_indices <- function(indices, flags = list()) {
   if (!is.null(indices) && !is.character(indices)) {
     insight::format_error("`indices` must be a character vector or `NULL`.")
   }
   invalid <- setdiff(indices, .describe_distribution_indices)
   if (length(invalid) > 0L) {
-    invalid[is.na(invalid)] <- "NA"
     insight::format_error(paste0(
       "Invalid values in `indices`: ",
-      text_concatenate(invalid, enclose = "\""),
+      toString(paste0("\"", invalid, "\"")),
       ". Valid values are ",
       text_concatenate(.describe_distribution_indices, enclose = "\""),
       "."
     ))
   }
   for (flag in names(flags)) {
+    value <- as.logical(flags[[flag]])
+    if (length(value) != 1L || is.na(value)) {
+      insight::format_error(paste0("`", flag, "` must be `TRUE` or `FALSE`."))
+    }
     insight::format_warning(paste0(
       "Argument `",
       flag,
       "` is deprecated. Please use `indices` instead."
     ))
-    if (isTRUE(as.logical(flags[[flag]]))) {
+    if (value) {
       indices <- union(indices, flag)
     } else {
       indices <- setdiff(indices, flag)
@@ -843,8 +801,7 @@ plot.parameters_distribution <- function(x, ...) {
   indices
 }
 
-# for factors and characters: remove the columns that `indices` does not ask
-# for, and compute skewness and kurtosis only when asked for
+# for factors and characters: keep only the columns `indices` asks for
 .drop_unused_indices <- function(out, x, indices, verbose) {
   if ("skewness" %in% indices) {
     out$Skewness <- as.numeric(skewness(x, verbose = verbose))

@@ -40,7 +40,7 @@ CHANGES
   that names the optional columns to return, such as
   `indices = c("range", "skewness")`. Use it to leave out skewness and
   kurtosis. The arguments `dispersion`, `iqr`, `range`, and `quartiles` are
-  deprecated in favor of `indices` (#687).
+  deprecated in favor of `indices` (#687, #719).
 
 FIXES
 

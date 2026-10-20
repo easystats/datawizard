@@ -41,8 +41,8 @@ test_that("describe_distribution - numeric: works with range", {
     indices = c("dispersion", "iqr", "skewness", "kurtosis")
   )
   expect_identical(dim(x), c(1L, 7L))
-  expect_false("min" %in% names(x))
-  expect_false("max" %in% names(x))
+  expect_false("Min" %in% names(x))
+  expect_false("Max" %in% names(x))
 })
 
 test_that("describe_distribution - NULL for date", {
@@ -92,8 +92,8 @@ test_that("describe_distribution - data frame: works with range", {
     indices = c("dispersion", "iqr", "skewness", "kurtosis")
   )
   expect_identical(dim(x), c(11L, 8L))
-  expect_false("min" %in% names(x))
-  expect_false("max" %in% names(x))
+  expect_false("Min" %in% names(x))
+  expect_false("Max" %in% names(x))
 })
 
 
@@ -208,8 +208,8 @@ test_that("describe_distribution - list: works with range", {
     indices = c("dispersion", "iqr", "skewness", "kurtosis")
   )
   expect_identical(dim(x), c(2L, 8L))
-  expect_false("min" %in% names(x))
-  expect_false("max" %in% names(x))
+  expect_false("Min" %in% names(x))
+  expect_false("Max" %in% names(x))
 })
 
 
@@ -808,6 +808,42 @@ test_that("describe_distribution - invalid indices", {
       fixed = TRUE
     )
   }
+  # an empty string is named in the message
+  expect_error(
+    describe_distribution(mtcars$mpg, indices = c("foo", "")),
+    regexp = "`indices`: \"foo\", \"\".",
+    fixed = TRUE
+  )
+})
+
+test_that("describe_distribution - deprecated flags must be TRUE or FALSE", {
+  for (bad in list(NA, "yes", NULL, c(TRUE, FALSE))) {
+    expect_error(
+      describe_distribution(mtcars$mpg, range = bad),
+      regexp = "`range` must be `TRUE` or `FALSE`.",
+      fixed = TRUE
+    )
+    expect_error(
+      describe_distribution(factor(1L:3L), iqr = bad),
+      regexp = "`iqr` must be `TRUE` or `FALSE`.",
+      fixed = TRUE
+    )
+  }
+  # positional and partially matched flags still warn and apply
+  expect_warning(
+    describe_distribution(mtcars$mpg, "mean", FALSE),
+    regexp = "`dispersion` is deprecated",
+    fixed = TRUE
+  )
+  out <- suppressWarnings(describe_distribution(mtcars$mpg, "mean", FALSE))
+  expect_false("SD" %in% names(out))
+  expect_warning(
+    describe_distribution(mtcars$mpg, quart = TRUE),
+    regexp = "`quartiles` is deprecated",
+    fixed = TRUE
+  )
+  out <- suppressWarnings(describe_distribution(mtcars$mpg, quart = TRUE))
+  expect_true(all(c("Q1", "Q3") %in% names(out)))
 })
 
 test_that("describe_distribution - indices is the last formal before ...", {
