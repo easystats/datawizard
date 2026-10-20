@@ -29,9 +29,9 @@
 #'   [stats::lm()], [lme4::lmer()], [gamm4::gamm4()], [rstanarm::stan_glm()],
 #'   [rstanarm::stan_glmer()], or [rstanarm::stan_gamm4()]. For example, with
 #'   `multilevel = TRUE`, use
-#'   `control = lme4::lmerControl(optimizer = "bobyqa")`. An argument that
-#'   `adjust()` does not know goes to that function, so a misspelled argument
-#'   name is handled by that function, not by `adjust()`.
+#'   `control = lme4::lmerControl(optimizer = "bobyqa")`. An argument whose
+#'   name is, or partially matches, an argument of `adjust()` is taken by
+#'   `adjust()` and does not reach that function.
 #' @inheritParams extract_column_names
 #' @inheritParams standardize
 #'

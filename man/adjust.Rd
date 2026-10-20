@@ -119,9 +119,9 @@ functions (see 'Details'), this argument may be used as workaround.}
 \code{\link[stats:lm]{stats::lm()}}, \code{\link[lme4:lmer]{lme4::lmer()}}, \code{\link[gamm4:gamm4]{gamm4::gamm4()}}, \code{\link[rstanarm:stan_glm]{rstanarm::stan_glm()}},
 \code{\link[rstanarm:stan_glmer]{rstanarm::stan_glmer()}}, or \code{\link[rstanarm:stan_gamm4]{rstanarm::stan_gamm4()}}. For example, with
 \code{multilevel = TRUE}, use
-\code{control = lme4::lmerControl(optimizer = "bobyqa")}. An argument that
-\code{adjust()} does not know goes to that function, so a misspelled argument
-name is handled by that function, not by \code{adjust()}.}
+\code{control = lme4::lmerControl(optimizer = "bobyqa")}. An argument whose
+name is, or partially matches, an argument of \code{adjust()} is taken by
+\code{adjust()} and does not reach that function.}
 }
 \value{
 A data frame comparable to \code{data}, with adjusted variables.
