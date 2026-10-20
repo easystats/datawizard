@@ -10,11 +10,13 @@
 #' existing groups created by `data_group()`.
 #' @param indices Character vector that names the optional columns to return.
 #'   Can include any combination of `"dispersion"` (the dispersion of each
-#'   centrality: `SD` for the mean, `MAD` for the median, none for the MAP),
-#'   `"iqr"` (the interquartile range, based on [stats::IQR()] with `type = 6`),
-#'   `"range"` (min and max), `"quartiles"` (the 25th and 75th percentiles),
-#'   `"skewness"` and `"kurtosis"`. The
-#'   default is `c("dispersion", "iqr", "range", "skewness", "kurtosis")`, and
+#'   centrality: `SD` for the mean and the trimmed mean, `MAD` for the median,
+#'   none for the MAP and the mode), `"iqr"` (the interquartile range, based
+#'   on [stats::IQR()] with `type = 6`), `"range"` (min and max),
+#'   `"quartiles"` (the 25th and 75th percentiles, based on
+#'   [stats::quantile()] with its default `type = 7`), `"skewness"` and
+#'   `"kurtosis"`. The default is
+#'   `c("dispersion", "iqr", "range", "skewness", "kurtosis")`, and
 #'   `c("dispersion", "range", "skewness", "kurtosis")` for factors and
 #'   character vectors. `NULL` or `character(0)` returns none of these columns.
 #' @param dispersion,iqr,range,quartiles Deprecated. Please use `indices`
@@ -809,7 +811,8 @@ plot.parameters_distribution <- function(x, ...) {
 )
 
 # check `indices`, then apply the deprecated flags that were given (a named
-# list): each one warns, and adds its value to `indices` or removes it
+# list): each one warns, then adds its name to `indices` when `TRUE` and
+# removes it otherwise
 .process_indices <- function(indices, flags = list()) {
   if (!is.null(indices) && !is.character(indices)) {
     insight::format_error("`indices` must be a character vector or `NULL`.")

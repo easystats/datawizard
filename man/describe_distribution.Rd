@@ -86,11 +86,13 @@ vector before the mean is computed.}
 
 \item{indices}{Character vector that names the optional columns to return.
 Can include any combination of \code{"dispersion"} (the dispersion of each
-centrality: \code{SD} for the mean, \code{MAD} for the median, none for the MAP),
-\code{"iqr"} (the interquartile range, based on \code{\link[stats:IQR]{stats::IQR()}} with \code{type = 6}),
-\code{"range"} (min and max), \code{"quartiles"} (the 25th and 75th percentiles),
-\code{"skewness"} and \code{"kurtosis"}. The
-default is \code{c("dispersion", "iqr", "range", "skewness", "kurtosis")}, and
+centrality: \code{SD} for the mean and the trimmed mean, \code{MAD} for the median,
+none for the MAP and the mode), \code{"iqr"} (the interquartile range, based
+on \code{\link[stats:IQR]{stats::IQR()}} with \code{type = 6}), \code{"range"} (min and max),
+\code{"quartiles"} (the 25th and 75th percentiles, based on
+\code{\link[stats:quantile]{stats::quantile()}} with its default \code{type = 7}), \code{"skewness"} and
+\code{"kurtosis"}. The default is
+\code{c("dispersion", "iqr", "range", "skewness", "kurtosis")}, and
 \code{c("dispersion", "range", "skewness", "kurtosis")} for factors and
 character vectors. \code{NULL} or \code{character(0)} returns none of these columns.}
 
