@@ -47,3 +47,126 @@ test_that("adjust, invalid column names", {
     regex = "Bad column names"
   )
 })
+
+# passing arguments to the model-fitting function ------------------------------
+test_that("adjust passes ... to lm()", {
+  d <- iris[c("Sepal.Length", "Species")]
+  w <- seq_len(nrow(d)) / nrow(d)
+  adj <- adjust(d, multilevel = FALSE, additive = FALSE, weights = w)
+  m <- stats::lm(Sepal.Length ~ 1 + Species, data = d, weights = w)
+  expect_equal(adj$Sepal.Length, unname(stats::residuals(m)))
+  expect_false(isTRUE(all.equal(adj$Sepal.Length, adjust(d)$Sepal.Length)))
+})
+
+test_that("adjust passes ... to lme4::lmer()", {
+  skip_if_not_installed("lme4")
+  d <- iris[c("Sepal.Length", "Species")]
+  adj <- adjust(d, multilevel = TRUE, REML = FALSE)
+  m <- lme4::lmer(Sepal.Length ~ 1 + (1 | Species), data = d, REML = FALSE)
+  expect_equal(adj$Sepal.Length, unname(stats::residuals(m)))
+  expect_false(isTRUE(all.equal(
+    adj$Sepal.Length,
+    adjust(d, multilevel = TRUE)$Sepal.Length
+  )))
+  expect_error(
+    adjust(
+      d,
+      multilevel = TRUE,
+      control = lme4::lmerControl(optimizer = "nonexistent_opt")
+    ),
+    regexp = "couldn't find optimizer function"
+  )
+})
+
+test_that("adjust passes ... to gamm4::gamm4()", {
+  skip_if_not_installed("gamm4")
+  d <- iris[c("Sepal.Length", "Sepal.Width")]
+  adj <- adjust(
+    d,
+    effect = "Sepal.Width",
+    select = "Sepal.Length",
+    additive = TRUE,
+    REML = FALSE
+  )
+  m <- gamm4::gamm4(Sepal.Length ~ 1 + s(Sepal.Width), data = d, REML = FALSE)
+  expect_equal(adj$Sepal.Length, unname(insight::get_residuals(m)))
+  adj_default <- adjust(
+    d,
+    effect = "Sepal.Width",
+    select = "Sepal.Length",
+    additive = TRUE
+  )
+  expect_false(isTRUE(all.equal(adj$Sepal.Length, adj_default$Sepal.Length)))
+})
+
+test_that("adjust passes ... to rstanarm::stan_glm()", {
+  skip_on_cran()
+  skip_if_not_installed("rstanarm")
+  d <- iris[c("Sepal.Length", "Sepal.Width")]
+  adj <- suppressWarnings(adjust(
+    d,
+    effect = "Sepal.Width",
+    select = "Sepal.Length",
+    bayesian = TRUE,
+    chains = 1,
+    iter = 200,
+    seed = 1
+  ))
+  m <- suppressWarnings(rstanarm::stan_glm(
+    Sepal.Length ~ 1 + Sepal.Width,
+    data = d,
+    refresh = 0,
+    chains = 1,
+    iter = 200,
+    seed = 1
+  ))
+  expect_equal(adj$Sepal.Length, unname(insight::get_residuals(m)))
+})
+
+test_that("adjust passes ... to rstanarm::stan_lmer()", {
+  skip_on_cran()
+  skip_if_not_installed("rstanarm")
+  d <- iris[c("Sepal.Length", "Species")]
+  adj <- suppressWarnings(adjust(
+    d,
+    multilevel = TRUE,
+    bayesian = TRUE,
+    chains = 1,
+    iter = 200,
+    seed = 1
+  ))
+  m <- suppressWarnings(rstanarm::stan_lmer(
+    Sepal.Length ~ 1 + (1 | Species),
+    data = d,
+    refresh = 0,
+    chains = 1,
+    iter = 200,
+    seed = 1
+  ))
+  expect_equal(adj$Sepal.Length, unname(insight::get_residuals(m)))
+})
+
+test_that("adjust passes ... to rstanarm::stan_gamm4()", {
+  skip_on_cran()
+  skip_if_not_installed("rstanarm")
+  d <- iris[c("Sepal.Length", "Sepal.Width")]
+  adj <- suppressWarnings(adjust(
+    d,
+    effect = "Sepal.Width",
+    select = "Sepal.Length",
+    additive = TRUE,
+    bayesian = TRUE,
+    chains = 1,
+    iter = 200,
+    seed = 1
+  ))
+  m <- suppressWarnings(rstanarm::stan_gamm4(
+    Sepal.Length ~ 1 + s(Sepal.Width),
+    data = d,
+    refresh = 0,
+    chains = 1,
+    iter = 200,
+    seed = 1
+  ))
+  expect_equal(adj$Sepal.Length, unname(insight::get_residuals(m)))
+})
