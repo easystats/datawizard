@@ -20,18 +20,10 @@ describe_distribution(x, ...)
   iterations = 100,
   threshold = 0.1,
   verbose = TRUE,
-  ...,
-  shape = getOption("describe_distribution_shape", TRUE)
+  ...
 )
 
-\method{describe_distribution}{factor}(
-  x,
-  dispersion = TRUE,
-  range = TRUE,
-  verbose = TRUE,
-  ...,
-  shape = getOption("describe_distribution_shape", TRUE)
-)
+\method{describe_distribution}{factor}(x, dispersion = TRUE, range = TRUE, verbose = TRUE, ...)
 
 \method{describe_distribution}{data.frame}(
   x,
@@ -50,8 +42,7 @@ describe_distribution(x, ...)
   regex = FALSE,
   verbose = TRUE,
   by = NULL,
-  ...,
-  shape = getOption("describe_distribution_shape", TRUE)
+  ...
 )
 }
 \arguments{
@@ -91,11 +82,6 @@ the fraction (0 to 0.5) of observations to be trimmed from each end of the
 vector before the mean is computed.}
 
 \item{verbose}{Show or silence warnings and messages.}
-
-\item{shape}{Logical, if \code{TRUE}, skewness and (excess) kurtosis are
-calculated (see \code{\link[=skewness]{skewness()}} and \code{\link[=kurtosis]{kurtosis()}}). Use \code{shape = FALSE} to omit
-them. The default can be changed with
-\code{options(describe_distribution_shape = FALSE)}.}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
@@ -191,7 +177,6 @@ describe_distribution(rnorm(100))
 data(iris)
 describe_distribution(iris)
 describe_distribution(iris, include_factors = TRUE, quartiles = TRUE)
-describe_distribution(iris, shape = FALSE)
 describe_distribution(list(mtcars$mpg, mtcars$cyl))
 \dontshow{\}) # examplesIf}
 }

@@ -61,7 +61,11 @@ smoothness.numeric <- function(
     }
   }
 
-  class(smooth_data) <- unique(c("parameters_smoothness", class(smooth_data)))
+  class(smooth_data) <- unique(c(
+    "datawizard_smoothness",
+    "parameters_smoothness",
+    class(smooth_data)
+  ))
   smooth_data
 }
 
@@ -86,7 +90,11 @@ smoothness.data.frame <- function(
     Parameter = names(.smoothness),
     do.call(rbind, .smoothness)
   )
-  class(.smoothness) <- unique(c("parameters_smoothness", class(.smoothness)))
+  class(.smoothness) <- unique(c(
+    "datawizard_smoothness",
+    "parameters_smoothness",
+    class(.smoothness)
+  ))
   .smoothness
 }
 
@@ -123,7 +131,7 @@ smoothness.default <- function(
 # methods -----------------------------------------
 
 #' @export
-as.numeric.parameters_smoothness <- function(x, ...) {
+as.numeric.datawizard_smoothness <- function(x, ...) {
   if (is.data.frame(x)) {
     x$Smoothness
   } else {
@@ -132,4 +140,13 @@ as.numeric.parameters_smoothness <- function(x, ...) {
 }
 
 #' @export
-as.double.parameters_smoothness <- as.numeric.parameters_smoothness
+as.double.datawizard_smoothness <- as.numeric.datawizard_smoothness
+
+
+# methods for the old class name, kept for objects from earlier versions
+
+#' @export
+as.numeric.parameters_smoothness <- as.numeric.datawizard_smoothness
+
+#' @export
+as.double.parameters_smoothness <- as.double.datawizard_smoothness
