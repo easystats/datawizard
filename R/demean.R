@@ -363,7 +363,8 @@ demean <- function(
   suffix_groupmean = "_between",
   append = TRUE,
   add_attributes = TRUE,
-  verbose = TRUE
+  verbose = TRUE,
+  grand_center = FALSE
 ) {
   degroup(
     x = x,
@@ -375,7 +376,8 @@ demean <- function(
     suffix_groupmean = suffix_groupmean,
     append = append,
     add_attributes = add_attributes,
-    verbose = verbose
+    verbose = verbose,
+    grand_center = grand_center
   )
 }
 
@@ -392,7 +394,8 @@ degroup <- function(
   suffix_groupmean = "_between",
   append = TRUE,
   add_attributes = TRUE,
-  verbose = TRUE
+  verbose = TRUE,
+  grand_center = FALSE
 ) {
   # ugly tibbles again... but save original data frame
   original_data <- x
@@ -422,6 +425,9 @@ degroup <- function(
   by_parsed <- .parse_by(by, nested, colnames(x))
   by <- by_parsed$by
   nested <- by_parsed$nested
+
+  # names of the components to grand-center
+  grand_center <- .check_grand_center(grand_center, by)
 
   # identify interaction terms
   interactions_no <- select[!grepl("(\\*|\\:)", select)]
@@ -545,6 +551,9 @@ degroup <- function(
       stats::ave(dat[[i]], dat[[by]], FUN = gm_fun)
     })
     names(group_means_list) <- select
+    # the selected variable and the `by` variable of each group-meaned column
+    group_means_source <- select
+    group_means_by <- rep(by, length(select))
     # create de-meaned variables by subtracting the group mean from each individual value
     person_means_list <- lapply(select, function(i) {
       dat[[i]] - group_means_list[[i]]
@@ -573,6 +582,8 @@ degroup <- function(
       names(out) <- paste0(i, "_", by)
       out
     })
+    group_means_source <- rep(select, each = length(by))
+    group_means_by <- rep(by, times = length(select))
     # create de-meaned variables by subtracting the group mean from each individual value
     person_means_list <- lapply(
       # seq_along(select),
@@ -592,6 +603,8 @@ degroup <- function(
       out
     })
     group_means_list <- unlist(group_means_list, recursive = FALSE)
+    group_means_source <- rep(select, times = length(by))
+    group_means_by <- rep(by, each = length(select))
 
     # de-meaned variables for cross-classified design is simply subtracting
     # all group means from each individual value
@@ -608,6 +621,23 @@ degroup <- function(
 
   group_means <- as.data.frame(group_means_list)
   person_means <- as.data.frame(person_means_list)
+
+  # grand-center the chosen components. Columns are chosen from the recorded
+  # `by` variables, not from their names, which `as.data.frame()` can change
+  for (k in which(group_means_by %in% grand_center)) {
+    group_means[[k]] <- .grand_center_column(
+      group_means[[k]],
+      dat[[group_means_source[k]]]
+    )
+  }
+  if ("within" %in% grand_center) {
+    for (k in seq_along(select)) {
+      person_means[[k]] <- .grand_center_column(
+        person_means[[k]],
+        dat[[select[k]]]
+      )
+    }
+  }
 
   colnames(person_means) <- sprintf(
     "%s%s",
@@ -658,6 +688,44 @@ detrend <- degroup
 
 
 # helper -----------------------------------------------------------------------
+
+# Returns the names of the components to grand-center: "within" for the
+# de-meaned variables and the names of `by` variables for the group-meaned ones.
+.check_grand_center <- function(grand_center, by) {
+  if (isFALSE(grand_center)) {
+    return(character(0))
+  }
+  if (isTRUE(grand_center)) {
+    return(c("within", by))
+  }
+  if (!is.character(grand_center)) {
+    insight::format_error(
+      "`grand_center` must be `TRUE`, `FALSE`, or a character vector of component names."
+    )
+  }
+  if (length(grand_center) && "within" %in% by) {
+    insight::format_error(
+      "A `by` variable is named \"within\", so `grand_center` cannot name components. Rename that variable, or use `grand_center = TRUE`." # nolint
+    )
+  }
+  allowed <- c("within", by)
+  if (anyNA(grand_center) || !all(grand_center %in% allowed)) {
+    insight::format_error(paste0(
+      "`grand_center` can only name these components: ",
+      text_concatenate(allowed, enclose = "\""),
+      "."
+    ))
+  }
+  grand_center
+}
+
+
+# Subtracts from a component its mean over the rows where the variable it
+# comes from is not missing.
+.grand_center_column <- function(component, source) {
+  component - mean(component[!is.na(source)], na.rm = TRUE)
+}
+
 
 # Wraps a function given in `center`: it gets the non-missing values of a
 # group and must return a single number (or `NA`).

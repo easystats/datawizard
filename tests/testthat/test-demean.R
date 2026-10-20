@@ -1000,3 +1000,149 @@ test_that("degroup, a function in `center` must return a single number", {
     ignore_attr = TRUE
   )
 })
+
+
+test_that("degroup, `grand_center = TRUE` subtracts the mean of each component", {
+  trim_mean <- function(v) mean(v, trim = 0.2)
+  set.seed(7)
+  d <- data.frame(
+    A = rep(1:3, each = 8),
+    B = rep(1:4, 6),
+    C = sample.int(2, 24, replace = TRUE),
+    x = as.numeric(sample.int(5, 24, replace = TRUE))
+  )
+  d$x[c(2, 13)] <- NA
+  rows <- !is.na(d$x)
+
+  for (center in list("mean", "median", "mode", trim_mean)) {
+    for (by in list("A", c("A", "B", "C"), "A/B")) {
+      args <- list(d, select = "x", by = by, center = center, append = FALSE)
+      base <- do.call(degroup, c(args, verbose = FALSE))
+      out <- do.call(degroup, c(args, verbose = FALSE, grand_center = TRUE))
+      expect_named(out, names(base))
+      for (col in names(base)) {
+        # Oracle (closed-form): the column minus its mean over the rows where
+        # x is not missing
+        expect_equal(
+          out[[col]],
+          base[[col]] - mean(base[[col]][rows]),
+          ignore_attr = TRUE
+        )
+        # Oracle (invariant): the grand-centered column has mean 0
+        expect_equal(mean(out[[col]][rows]), 0, tolerance = 1e-10)
+      }
+    }
+  }
+
+  # a product column is centered over the rows where the product is not
+  # missing, not over the rows where x is not missing
+  d$w <- rep(c(1, 2, 3), 8)
+  d$w[5] <- NA
+  base <- degroup(d, select = "x*w", by = "A", append = FALSE)
+  out <- degroup(d, select = "x*w", by = "A", append = FALSE, grand_center = TRUE)
+  rows_xw <- !is.na(d$x * d$w)
+  expect_equal(
+    out$x_w_between,
+    base$x_w_between - mean(base$x_w_between[rows_xw]),
+    ignore_attr = TRUE
+  )
+  expect_false(isTRUE(all.equal(
+    out$x_w_between,
+    base$x_w_between - mean(base$x_w_between[rows])
+  )))
+
+  # Oracle (closed-form, issue #637): balanced crossed data whose effects sum
+  # to 0, so mean(y_within) = mean(y) - 3 * mean(y) = -2 * 100
+  mu <- 100
+  ul <- stats::setNames(c(-1, -3, 0, 4), nm = letters[1:4])
+  uL <- stats::setNames(c(10, 30, 0, -40), nm = LETTERS[1:4])
+  um <- stats::setNames(c(100, 150, -250), nm = month.abb[1:3])
+  dat <- expand.grid(l = letters[1:4], L = LETTERS[1:4], m = month.abb[1:3])
+  set.seed(111)
+  e <- round(rnorm(nrow(dat) - 1), 2)
+  e <- append(e, -sum(e))
+  dat$y <- mu + ul[dat$l] + uL[dat$L] + um[dat$m] + e
+  dat_dem <- demean(dat, by = c("l", "L", "m"), select = "y")
+  expect_equal(mean(dat_dem$y_within), -200, tolerance = 1e-8)
+  dat_dem <- demean(dat, by = c("l", "L", "m"), select = "y", grand_center = TRUE)
+  expect_equal(mean(dat_dem$y_within), 0, tolerance = 1e-8)
+})
+
+
+test_that("degroup, `grand_center` with names centers only those components", {
+  set.seed(3)
+  d <- data.frame(
+    ID = rep(1:4, each = 5),
+    sub_ID = rep(1:5, 4),
+    `A B` = rep(1:2, 10),
+    x = rnorm(20),
+    check.names = FALSE
+  )
+
+  changed <- function(by, grand_center, ...) {
+    base <- degroup(d, select = "x", by = by, append = FALSE, ...)
+    out <- degroup(
+      d,
+      select = "x",
+      by = by,
+      append = FALSE,
+      grand_center = grand_center,
+      ...
+    )
+    expect_named(out, names(base))
+    names(base)[!vapply(
+      names(base),
+      function(i) isTRUE(all.equal(out[[i]], base[[i]])),
+      logical(1)
+    )]
+  }
+
+  # "ID" names only the ID column, although "_ID_between" also ends the
+  # sub_ID column
+  expect_identical(changed(c("ID", "sub_ID"), "ID"), "x_ID_between")
+  expect_identical(changed(c("ID", "sub_ID"), "within"), "x_within")
+  expect_identical(
+    sort(changed(c("ID", "sub_ID"), c("within", "sub_ID"))),
+    c("x_sub_ID_between", "x_within")
+  )
+  # with one `by` variable, its name names the `_between` column
+  expect_identical(changed("ID", "ID"), "x_between")
+  # a column name that `as.data.frame()` changes
+  expect_identical(changed(c("A B", "ID"), "A B"), "x_A.B_between")
+  # "within" names the de-meaned columns, whatever `suffix_demean` is
+  # (crossed, so that the de-meaned column does not already have mean 0)
+  expect_identical(
+    changed(c("ID", "sub_ID"), "within", suffix_demean = "_w"),
+    "x_w"
+  )
+  # an empty vector is the same as FALSE
+  expect_identical(changed(c("ID", "sub_ID"), character(0)), character(0))
+  # the named column changes as with `grand_center = TRUE`
+  expect_identical(
+    degroup(d, select = "x", by = c("ID", "sub_ID"), grand_center = "ID")$x_ID_between,
+    degroup(d, select = "x", by = c("ID", "sub_ID"), grand_center = TRUE)$x_ID_between
+  )
+
+  # errors
+  expect_error(
+    degroup(d, select = "x", by = "ID", grand_center = "foo"),
+    "`grand_center` can only name these components: \"within\" and \"ID\"",
+    fixed = TRUE
+  )
+  expect_error(
+    degroup(d, select = "x", by = "ID", grand_center = NA_character_),
+    "`grand_center` can only name these components",
+    fixed = TRUE
+  )
+  d$within <- d$ID
+  expect_error(
+    degroup(d, select = "x", by = "within", grand_center = "within"),
+    "A `by` variable is named \"within\"",
+    fixed = TRUE
+  )
+  expect_error(
+    degroup(d, select = "x", by = "ID", grand_center = 1),
+    "`grand_center` must be `TRUE`, `FALSE`, or a character vector",
+    fixed = TRUE
+  )
+})
