@@ -82,7 +82,8 @@
 #'   the number of selected variables. Values in `center` and `scale` will be
 #'   matched to selected variables in the provided order, unless a named vector
 #'   is given. In this case, names are matched against the names of the selected
-#'   variables.
+#'   variables. A single `TRUE` or `FALSE` turns centering or scaling on or
+#'   off.
 #'
 #' * For `unstandardize()`: \cr
 #'   `center` and `scale` correspond to the center (the mean / median) and the scale (SD / MAD) of
@@ -359,10 +360,25 @@ standardize.data.frame <- function(
 
   # with several cluster variables, warn about one that is not needed. The
   # grouped method checks across groups and turns this check off.
-  if (verbose && !isFALSE(list(...)$.check_cluster)) {
+  if (
+    verbose &&
+      !isFALSE(list(...)$.check_cluster) &&
+      length(my_args$cluster) > 1L
+  ) {
+    codes <- .cluster_codes(my_args$cluster)
     for (var in my_args$select) {
-      .check_cluster_levels(x[[var]], my_args$cluster, name = var)
+      .check_cluster_levels(
+        x[[var]],
+        my_args$cluster,
+        name = var,
+        codes = codes
+      )
     }
+  }
+  # combine the cluster variables once, not once per column
+  cluster_id <- NULL
+  if (!is.null(my_args$cluster)) {
+    cluster_id <- .cluster_id(my_args$cluster)
   }
 
   # Loop through variables and standardize it
@@ -375,7 +391,7 @@ standardize.data.frame <- function(
       reference = reference[[var]],
       center = my_args$center[var],
       scale = my_args$scale[var],
-      cluster = my_args$cluster,
+      cluster = cluster_id,
       verbose = FALSE,
       force = force,
       add_transform_class = FALSE
@@ -435,13 +451,16 @@ standardize.grouped_df <- function(
     cluster = cluster
   )
 
-  if (verbose && !is.null(cluster)) {
+  if (verbose && length(cluster) > 1L) {
+    cluster_vars <- as.list(my_args$x[cluster])
+    codes <- .cluster_codes(cluster_vars)
     for (var in my_args$select) {
       .check_cluster_levels(
         my_args$x[[var]],
-        as.list(my_args$x[cluster]),
+        cluster_vars,
         name = var,
-        rows = my_args$grps
+        rows = my_args$grps,
+        codes = codes
       )
     }
   }

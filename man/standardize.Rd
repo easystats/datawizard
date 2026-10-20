@@ -126,7 +126,8 @@ for standardization. Else, \code{center} and \code{scale} must be of same length
 the number of selected variables. Values in \code{center} and \code{scale} will be
 matched to selected variables in the provided order, unless a named vector
 is given. In this case, names are matched against the names of the selected
-variables.
+variables. A single \code{TRUE} or \code{FALSE} turns centering or scaling on or
+off.
 \item For \code{unstandardize()}: \cr
 \code{center} and \code{scale} correspond to the center (the mean / median) and the scale (SD / MAD) of
 the original non-standardized data (for data frames, should be named, or

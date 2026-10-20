@@ -773,10 +773,8 @@ test_that("cluster, one-value and two-value messages count used values", {
     center(c(5, 5, 5, 9), cluster = c(1, 1, 1, NA)),
     "only one unique value"
   )
-  expect_no_message(
-    center(c(5, 5, 5, 9), cluster = c(1, 1, 1, NA)),
-    message = "two different values"
-  )
+  msgs <- capture_messages(center(c(5, 5, 5, 9), cluster = c(1, 1, 1, NA)))
+  expect_false(any(grepl("two different values", msgs, fixed = TRUE)))
   # oracle (closed-form): NA in x and the row with an NA id are left out
   expect_message(
     center(c(5, 5, NA, 9), cluster = list(c(1, 1, 1, 2), c(1, 1, 1, NA))),
@@ -787,4 +785,59 @@ test_that("cluster, one-value and two-value messages count used values", {
     standardize(c(5, 5, 9, 7), cluster = c(1, 1, 2, NA)),
     "only two different values"
   )
+})
+
+
+# review fixes --------------------------------------------------------------
+
+test_that("cluster, a POSIXlt id vector is one cluster variable", {
+  when <- as.POSIXlt(
+    rep(c("2020-01-01", "2020-02-01", "2020-03-01"), each = 2),
+    tz = "UTC"
+  )
+  x <- c(1, 1, 3, 3, 8, 8)
+  # oracle (invariant): same as the same ids as numbers
+  expect_identical(
+    standardize(x, cluster = when),
+    standardize(x, cluster = rep(1:3, each = 2))
+  )
+})
+
+test_that("cluster, an empty list is an error", {
+  expect_error(
+    center(c(1, 2), cluster = list()),
+    "`cluster` must contain at least one id vector."
+  )
+})
+
+test_that("standardize, scale = FALSE needs only one cluster", {
+  # oracle (closed-form): one cluster with the value 5 is centered to 0, and
+  # the row with a missing id is NA
+  z <- suppressMessages(
+    standardize(c(5, 5, 7), cluster = c(1, 1, NA), scale = FALSE)
+  )
+  expect_identical(as.vector(z), c(0, 0, NA))
+})
+
+test_that("cluster warning, a column named with digits and several names", {
+  d_digits <- data.frame(
+    school = ml$school,
+    `2020` = ml$classroom,
+    school_size = ml$school_size,
+    check.names = FALSE
+  )
+  expect_warning(
+    center(d_digits, select = "school_size", cluster = c("school", "2020")),
+    "even without `2020`"
+  )
+  # oracle (closed-form): a constant variable takes one value per cluster
+  # without either cluster variable, so the warning names both
+  w <- capture_warnings(suppressMessages(center(
+    rep(1, nrow(ml)),
+    cluster = list(ml$school, ml$classroom)
+  )))
+  w <- gsub("\\s+", " ", w)
+  expect_length(w, 1L)
+  expect_match(w, "cluster variable 1 or cluster variable 2", fixed = TRUE)
+  expect_match(w, "Remove one of them", fixed = TRUE)
 })

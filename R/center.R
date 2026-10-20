@@ -246,10 +246,25 @@ center.data.frame <- function(
 
   # with several cluster variables, warn about one that is not needed. The
   # grouped method checks across groups and turns this check off.
-  if (verbose && !isFALSE(list(...)$.check_cluster)) {
+  if (
+    verbose &&
+      !isFALSE(list(...)$.check_cluster) &&
+      length(my_args$cluster) > 1L
+  ) {
+    codes <- .cluster_codes(my_args$cluster)
     for (var in my_args$select) {
-      .check_cluster_levels(x[[var]], my_args$cluster, name = var)
+      .check_cluster_levels(
+        x[[var]],
+        my_args$cluster,
+        name = var,
+        codes = codes
+      )
     }
+  }
+  # combine the cluster variables once, not once per column
+  cluster_id <- NULL
+  if (!is.null(my_args$cluster)) {
+    cluster_id <- .cluster_id(my_args$cluster)
   }
 
   for (var in my_args$select) {
@@ -260,7 +275,7 @@ center.data.frame <- function(
       verbose = FALSE,
       reference = reference[[var]],
       center = my_args$center[var],
-      cluster = my_args$cluster,
+      cluster = cluster_id,
       force = force,
       add_transform_class = FALSE
     )
@@ -321,13 +336,16 @@ center.grouped_df <- function(
     cluster = cluster
   )
 
-  if (verbose && !is.null(cluster)) {
+  if (verbose && length(cluster) > 1L) {
+    cluster_vars <- as.list(my_args$x[cluster])
+    codes <- .cluster_codes(cluster_vars)
     for (var in my_args$select) {
       .check_cluster_levels(
         my_args$x[[var]],
-        as.list(my_args$x[cluster]),
+        cluster_vars,
         name = var,
-        rows = my_args$grps
+        rows = my_args$grps,
+        codes = codes
       )
     }
   }

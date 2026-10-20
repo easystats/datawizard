@@ -71,13 +71,14 @@
 
   # with clusters, center and scale are computed from one value per cluster.
   # Like missing values, infinite values are left out. `center()` passes
-  # `scale = NULL` and needs one cluster; `standardize()` needs two for the SD.
+  # `scale = NULL` and needs one cluster, as does `scale = FALSE`;
+  # `standardize()` needs two for the SD.
   ref_vals <- vals
   if (!is.null(cluster)) {
     ref_vals <- .cluster_values(
       vals,
       cluster[valid_x],
-      min_clusters = if (is.null(scale)) 1L else 2L
+      min_clusters = if (is.null(scale) || isFALSE(scale)) 1L else 2L
     )
   }
 
@@ -147,7 +148,7 @@
   has_value <- function(i) is.numeric(i) && !all(is.na(i))
   if (!is.null(reference) || has_value(center) || has_value(scale)) {
     insight::format_error(
-      "`cluster` cannot be combined with `reference`, or with values for `center` or `scale`."
+      "`cluster` cannot be combined with `reference`, or with numeric values for `center` or `scale`."
     )
   }
   invisible(NULL)
@@ -183,16 +184,20 @@
 #
 #' @keywords internal
 .cluster_list <- function(cluster) {
-  if (is.list(cluster)) {
+  # a POSIXlt vector is a list internally, but it is one id vector
+  if (is.data.frame(cluster) || (is.list(cluster) && !is.object(cluster))) {
     cluster <- as.list(cluster)
   } else {
     cluster <- list(cluster)
+  }
+  if (!length(cluster)) {
+    insight::format_error("`cluster` must contain at least one id vector.")
   }
   if (is.null(names(cluster))) {
     names(cluster) <- rep("", length(cluster))
   }
   unnamed <- !nzchar(names(cluster))
-  names(cluster)[unnamed] <- as.character(which(unnamed))
+  names(cluster)[unnamed] <- paste0("..", which(unnamed))
   cluster
 }
 
@@ -225,58 +230,72 @@
   x,
   cluster_vars,
   name = NULL,
-  rows = list(seq_along(x))
+  rows = list(seq_along(x)),
+  codes = NULL
 ) {
   if (length(cluster_vars) < 2L) {
     return(invisible(NULL))
   }
+  if (is.null(codes)) {
+    codes <- .cluster_codes(cluster_vars)
+  }
+  x_code <- match(x, unique(x))
+  valid <- !is.na(x) & !is.na(codes$all)
+  if (is.numeric(x)) {
+    valid <- valid & is.finite(x)
+  }
   not_needed <- character()
   for (r in rows) {
-    x_rows <- x[r]
-    vars_rows <- lapply(cluster_vars, `[`, r)
-    valid <- !is.na(x_rows) & !Reduce(`|`, lapply(vars_rows, is.na))
-    if (is.numeric(x_rows)) {
-      valid <- valid & is.finite(x_rows)
+    r <- r[valid[r]]
+    n_clusters <- length(unique(codes$all[r]))
+    for (i in names(codes$without)) {
+      without <- codes$without[[i]][r]
+      n_without <- length(unique(without))
+      # one value per cluster of the others: each of those clusters pairs with
+      # one value of x
+      pairs <- unique(without + x_code[r] * (length(x) + 1))
+      if (n_without < n_clusters && length(pairs) == n_without) {
+        not_needed <- union(not_needed, i)
+      }
     }
-    not_needed <- union(
-      not_needed,
-      .cluster_not_needed(x_rows[valid], lapply(vars_rows, `[`, valid))
-    )
   }
   if (length(not_needed)) {
     var_labels <- ifelse(
-      grepl("^[0-9]+$", not_needed),
-      paste("cluster variable", not_needed),
+      grepl("^[.][.][0-9]+$", not_needed),
+      paste("cluster variable", substring(not_needed, 3)),
       paste0("`", not_needed, "`")
     )
     subject <- if (is.null(name)) "The variable" else paste0("`", name, "`")
+    remove <- if (length(not_needed) == 1L) "it" else "one of them"
     insight::format_warning(paste0(
       subject,
       " takes one value per cluster even without ",
       text_concatenate(var_labels, last = " or "),
-      " in `cluster`. Such a cluster variable only splits clusters, and each split cluster then counts once per part. Remove it from `cluster`, or set `verbose = FALSE` to silence this warning." # nolint
+      " in `cluster`. Such a cluster variable only splits clusters, and each split cluster then counts once per part. Remove ", # nolint
+      remove,
+      " from `cluster`, or set `verbose = FALSE` to silence this warning."
     ))
   }
   invisible(NULL)
 }
 
 
+# Integer codes of the combined cluster id, with all cluster variables and
+# without each one in turn; `NA` where any id is `NA`.
+#
 #' @keywords internal
-.cluster_not_needed <- function(x, cluster_vars) {
-  n_clusters <- length(unique(.cluster_id(cluster_vars)))
-  out <- character()
-  for (i in seq_along(cluster_vars)) {
-    cluster_x <- unique(data.frame(
-      cluster = .cluster_id(cluster_vars[-i]),
-      x = x
-    ))
-    if (
-      nrow(cluster_x) < n_clusters && anyDuplicated(cluster_x$cluster) == 0L
-    ) {
-      out <- c(out, names(cluster_vars)[i])
-    }
+.cluster_codes <- function(cluster_vars) {
+  as_code <- function(v) {
+    id <- .cluster_id(v)
+    code <- match(id, unique(id))
+    code[is.na(id)] <- NA
+    code
   }
-  out
+  without <- lapply(seq_along(cluster_vars), function(i) {
+    as_code(cluster_vars[-i])
+  })
+  names(without) <- names(cluster_vars)
+  list(all = as_code(cluster_vars), without = without)
 }
 
 
