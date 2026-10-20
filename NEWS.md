@@ -38,6 +38,11 @@ CHANGES
 
 FIXES
 
+* `skewness()` and `kurtosis()` now return the standard error for the chosen
+  `type`. Before, the `SE` column was the type-1 standard error for every
+  `type`, including the default `type = "2"`. Bootstrapped standard errors
+  (`iterations`) are not changed.
+
 * Fixed `demean()` and `degroup()` for nested designs with three or more
   grouping variables. The group-meaned variables of the third and later
   variables in `by` were wrong (#720).
