@@ -145,6 +145,20 @@ test_that("adjust passes ... to rstanarm::stan_glm()", {
     unname(insight::get_residuals(m)),
     tolerance = 1e-6
   )
+  # oracle (invariant): `refresh` in `...` replaces the default of 0, so the
+  # sampler prints its progress, and the draws stay the same
+  progress <- utils::capture.output(adj_refresh <- suppressWarnings(adjust(
+    d,
+    effect = "Sepal.Width",
+    select = "Sepal.Length",
+    bayesian = TRUE,
+    chains = 1L,
+    iter = 200L,
+    seed = 1L,
+    refresh = 50L
+  )))
+  expect_true(any(grepl("Iteration", progress, fixed = TRUE)))
+  expect_equal(adj_refresh$Sepal.Length, adj$Sepal.Length, tolerance = 1e-6)
 })
 
 test_that("adjust passes ... to rstanarm::stan_glmer()", {
@@ -177,6 +191,17 @@ test_that("adjust passes ... to rstanarm::stan_glmer()", {
     unname(insight::get_residuals(m)),
     tolerance = 1e-6
   )
+  # oracle (reference fit): `family` in `...` is not passed twice
+  adj_family <- suppressWarnings(adjust(
+    d,
+    multilevel = TRUE,
+    bayesian = TRUE,
+    chains = 1L,
+    iter = 200L,
+    seed = 1L,
+    family = "gaussian"
+  ))
+  expect_equal(adj_family$Sepal.Length, adj$Sepal.Length, tolerance = 1e-6)
 })
 
 test_that("adjust passes ... to rstanarm::stan_gamm4()", {
@@ -208,4 +233,19 @@ test_that("adjust passes ... to rstanarm::stan_gamm4()", {
     unname(insight::get_residuals(m)),
     tolerance = 1e-6
   )
+  # oracle (invariant): `refresh` in `...` replaces the default of 0, so the
+  # sampler prints its progress, and the draws stay the same
+  progress <- utils::capture.output(adj_refresh <- suppressWarnings(adjust(
+    d,
+    effect = "Sepal.Width",
+    select = "Sepal.Length",
+    additive = TRUE,
+    bayesian = TRUE,
+    chains = 1L,
+    iter = 200L,
+    seed = 1L,
+    refresh = 50L
+  )))
+  expect_true(any(grepl("Iteration", progress, fixed = TRUE)))
+  expect_equal(adj_refresh$Sepal.Length, adj$Sepal.Length, tolerance = 1e-6)
 })

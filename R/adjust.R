@@ -29,7 +29,8 @@
 #'   [stats::lm()], [lme4::lmer()], [gamm4::gamm4()], [rstanarm::stan_glm()],
 #'   [rstanarm::stan_glmer()], or [rstanarm::stan_gamm4()]. For example, with
 #'   `multilevel = TRUE`, use
-#'   `control = lme4::lmerControl(optimizer = "bobyqa")`. An argument whose
+#'   `control = lme4::lmerControl(optimizer = "bobyqa")`. The `rstanarm`
+#'   functions use `refresh = 0` unless `refresh` is passed. An argument whose
 #'   name is, or partially matches, an argument of `adjust()` is taken by
 #'   `adjust()` and does not reach that function. Any other misspelled name
 #'   goes to that function: [stats::lm()] and [gamm4::gamm4()] then give only
@@ -182,8 +183,12 @@ data_adjust <- adjust
   bayesian = FALSE,
   formula_random = NULL,
   keep_intercept = FALSE,
-  ...
+  ...,
+  refresh = 0L
 ) {
+  # `refresh` is a formal argument so that a value passed in `...` replaces the
+  # default instead of reaching the rstanarm functions twice
+
   # Additive -----------------------
   if (additive) {
     # Bayesian
@@ -193,7 +198,7 @@ data_adjust <- adjust
         stats::as.formula(model_formula),
         random = formula_random,
         data = data,
-        refresh = 0L,
+        refresh = refresh,
         ...
       )
       # Frequentist
@@ -217,15 +222,14 @@ data_adjust <- adjust
       model <- rstanarm::stan_glmer(
         paste(model_formula, formula_random),
         data = data,
-        family = "gaussian",
-        refresh = 0L,
+        refresh = refresh,
         ...
       )
     } else {
       model <- rstanarm::stan_glm(
         model_formula,
         data = data,
-        refresh = 0L,
+        refresh = refresh,
         ...
       )
     }

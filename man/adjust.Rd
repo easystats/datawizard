@@ -119,7 +119,8 @@ functions (see 'Details'), this argument may be used as workaround.}
 \code{\link[stats:lm]{stats::lm()}}, \code{\link[lme4:lmer]{lme4::lmer()}}, \code{\link[gamm4:gamm4]{gamm4::gamm4()}}, \code{\link[rstanarm:stan_glm]{rstanarm::stan_glm()}},
 \code{\link[rstanarm:stan_glmer]{rstanarm::stan_glmer()}}, or \code{\link[rstanarm:stan_gamm4]{rstanarm::stan_gamm4()}}. For example, with
 \code{multilevel = TRUE}, use
-\code{control = lme4::lmerControl(optimizer = "bobyqa")}. An argument whose
+\code{control = lme4::lmerControl(optimizer = "bobyqa")}. The \code{rstanarm}
+functions use \code{refresh = 0} unless \code{refresh} is passed. An argument whose
 name is, or partially matches, an argument of \code{adjust()} is taken by
 \code{adjust()} and does not reach that function. Any other misspelled name
 goes to that function: \code{\link[stats:lm]{stats::lm()}} and \code{\link[gamm4:gamm4]{gamm4::gamm4()}} then give only
