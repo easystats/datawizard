@@ -21,7 +21,14 @@ test_that("describe_distribution - numeric: correctly handles missing values", {
 test_that("describe_distribution - numeric: works with quartiles", {
   x <- describe_distribution(
     mtcars$mpg,
-    indices = c("dispersion", "iqr", "range", "quartiles", "skewness", "kurtosis")
+    indices = c(
+      "dispersion",
+      "iqr",
+      "range",
+      "quartiles",
+      "skewness",
+      "kurtosis"
+    )
   )
   expect_identical(dim(x), c(1L, 11L))
   expect_true("Q1" %in% names(x))
@@ -65,7 +72,14 @@ test_that("describe_distribution - data frame: correctly handles missing values"
 test_that("describe_distribution - data frame: works with quartiles", {
   x <- describe_distribution(
     mtcars,
-    indices = c("dispersion", "iqr", "range", "quartiles", "skewness", "kurtosis")
+    indices = c(
+      "dispersion",
+      "iqr",
+      "range",
+      "quartiles",
+      "skewness",
+      "kurtosis"
+    )
   )
   expect_identical(dim(x), c(11L, 12L))
   expect_true("Q1" %in% names(x))
@@ -174,7 +188,14 @@ test_that("describe_distribution - list: correctly handles missing values", {
 test_that("describe_distribution - list: works with quartiles", {
   x <- describe_distribution(
     list(mtcars$mpg, mtcars$cyl),
-    indices = c("dispersion", "iqr", "range", "quartiles", "skewness", "kurtosis")
+    indices = c(
+      "dispersion",
+      "iqr",
+      "range",
+      "quartiles",
+      "skewness",
+      "kurtosis"
+    )
   )
   expect_identical(dim(x), c(2L, 12L))
   expect_true("Q1" %in% names(x))
@@ -324,7 +345,14 @@ test_that("describe_distribution formatting", {
   data(iris)
   x <- describe_distribution(
     iris$Sepal.Width,
-    indices = c("dispersion", "iqr", "range", "quartiles", "skewness", "kurtosis")
+    indices = c(
+      "dispersion",
+      "iqr",
+      "range",
+      "quartiles",
+      "skewness",
+      "kurtosis"
+    )
   )
   expect_snapshot(format(x))
 })
@@ -587,7 +615,7 @@ dd_columns <- list(
   skewness = "Skewness",
   kurtosis = "Kurtosis"
 )
-dd_optional <- c("SD", "MAD", unlist(dd_columns[-1], use.names = FALSE))
+dd_optional <- c("SD", "MAD", unlist(dd_columns[-1L], use.names = FALSE))
 
 dd_fixtures <- list(
   numeric = function(...) describe_distribution(mtcars$mpg, ...),
@@ -627,23 +655,24 @@ dd_default <- function(name) {
 
 test_that("describe_distribution - indices: every subset on a numeric vector", {
   x <- mtcars$mpg
-  x[3] <- NA
+  x[3L] <- NA
   x_ok <- x[!is.na(x)]
   full <- describe_distribution(x, indices = names(dd_columns))
 
-  # Oracle (closed form): each optional column equals the base R or datawizard
-  # function of `x` without its NA, e.g. SD = sd(x_ok), IQR = IQR(x_ok, type = 6).
-  expect_equal(full$SD, stats::sd(x_ok))
-  expect_equal(full$IQR, stats::IQR(x_ok, type = 6))
-  expect_equal(full$Min, min(x_ok))
-  expect_equal(full$Max, max(x_ok))
-  expect_equal(full$Q1, unname(stats::quantile(x_ok, probs = 0.25)))
-  expect_equal(full$Q3, unname(stats::quantile(x_ok, probs = 0.75)))
-  expect_equal(full$Skewness, as.numeric(skewness(x_ok)))
-  expect_equal(full$Kurtosis, as.numeric(kurtosis(x_ok)))
+  # Oracle (closed form): each optional column equals the base R or
+  # datawizard function of `x` without its NA, for example SD = sd(x_ok) and
+  # IQR = IQR(x_ok, type = 6).
+  expect_identical(full$SD, stats::sd(x_ok))
+  expect_identical(full$IQR, stats::IQR(x_ok, type = 6L))
+  expect_identical(full$Min, min(x_ok))
+  expect_identical(full$Max, max(x_ok))
+  expect_identical(full$Q1, unname(stats::quantile(x_ok, probs = 0.25)))
+  expect_identical(full$Q3, unname(stats::quantile(x_ok, probs = 0.75)))
+  expect_identical(full$Skewness, as.numeric(skewness(x_ok)))
+  expect_identical(full$Kurtosis, as.numeric(kurtosis(x_ok)))
 
   subsets <- unlist(
-    lapply(0:6, function(k) {
+    lapply(0L:6L, function(k) {
       utils::combn(names(dd_columns), k, simplify = FALSE)
     }),
     recursive = FALSE
@@ -651,7 +680,12 @@ test_that("describe_distribution - indices: every subset on a numeric vector", {
   expect_length(subsets, 64L)
 
   for (s in subsets) {
-    keep <- c("Mean", unlist(dd_columns[s], use.names = FALSE), "n", "n_Missing")
+    keep <- c(
+      "Mean",
+      unlist(dd_columns[s], use.names = FALSE),
+      "n",
+      "n_Missing"
+    )
     expected_names <- intersect(names(full), keep)
     out <- describe_distribution(x, indices = s)
     expect_named(out, expected_names)
@@ -664,7 +698,7 @@ test_that("describe_distribution - indices: every subset on a numeric vector", {
 
 test_that("describe_distribution - indices: optional columns of each method", {
   sets <- c(
-    list(NULL, character(0)),
+    list(NULL, character(0L)),
     as.list(names(dd_columns)),
     list(names(dd_columns))
   )
@@ -680,9 +714,20 @@ test_that("describe_distribution - indices: optional columns of each method", {
   }
 
   # printed output has no optional column
+  printed_names <- c(
+    "SD",
+    "MAD",
+    "IQR",
+    "Range",
+    "Quartiles",
+    "Skewness",
+    "Kurtosis"
+  )
   for (name in c("numeric", "data.frame", "grouped_df")) {
-    printed <- utils::capture.output(print(dd_fixtures[[name]](indices = NULL)))
-    for (column in c("SD", "MAD", "IQR", "Range", "Quartiles", "Skewness", "Kurtosis")) {
+    printed <- utils::capture.output(
+      print(dd_fixtures[[name]](indices = NULL))
+    )
+    for (column in printed_names) {
       expect_false(
         any(grepl(paste0("\\b", column, "\\b"), printed)),
         info = paste(name, column)
@@ -692,40 +737,50 @@ test_that("describe_distribution - indices: optional columns of each method", {
 })
 
 test_that("describe_distribution - deprecated flags warn and set indices", {
-  flags <- c("dispersion", "iqr", "range", "quartiles")
-  for (name in names(dd_fixtures)) {
-    for (flag in flags) {
-      for (value in c(TRUE, FALSE)) {
-        for (start in list(NULL, "skewness")) {
-          args <- stats::setNames(list(value), flag)
-          if (is.null(start)) {
-            start_indices <- dd_default(name)
-          } else {
-            args$indices <- start
-            start_indices <- start
-          }
-          info <- paste(name, flag, value, toString(start))
-          warnings <- testthat::capture_warnings(
-            do.call(dd_fixtures[[name]], args)
-          )
-          expect_length(warnings, 1L)
-          expect_match(warnings, paste0("`", flag, "`"), fixed = TRUE, info = info)
-          expect_match(warnings, "`indices`", fixed = TRUE, info = info)
-
-          out <- suppressWarnings(do.call(dd_fixtures[[name]], args))
-          if (value) {
-            expected_indices <- union(start_indices, flag)
-          } else {
-            expected_indices <- setdiff(start_indices, flag)
-          }
-          expect_identical(
-            out,
-            dd_fixtures[[name]](indices = expected_indices),
-            info = info
-          )
-        }
-      }
+  # one deprecated flag, given to one fixture, with or without `indices`
+  dd_check_flag <- function(name, flag, value, start) {
+    call_args <- stats::setNames(list(value), flag)
+    if (is.null(start)) {
+      start_indices <- dd_default(name)
+    } else {
+      call_args$indices <- start
+      start_indices <- start
     }
+    info <- paste(name, flag, value, toString(start))
+    caught <- testthat::capture_warnings(
+      do.call(dd_fixtures[[name]], call_args)
+    )
+    expect_length(caught, 1L)
+    expect_match(caught, paste0("`", flag, "`"), fixed = TRUE, info = info)
+    expect_match(caught, "`indices`", fixed = TRUE, info = info)
+
+    out <- suppressWarnings(do.call(dd_fixtures[[name]], call_args))
+    if (value) {
+      expected_indices <- union(start_indices, flag)
+    } else {
+      expected_indices <- setdiff(start_indices, flag)
+    }
+    expect_identical(
+      out,
+      dd_fixtures[[name]](indices = expected_indices),
+      info = info
+    )
+  }
+
+  settings <- expand.grid(
+    name = names(dd_fixtures),
+    flag = c("dispersion", "iqr", "range", "quartiles"),
+    value = c(TRUE, FALSE),
+    start = c("default", "skewness"),
+    stringsAsFactors = FALSE
+  )
+  for (i in seq_len(nrow(settings))) {
+    dd_check_flag(
+      settings$name[i],
+      settings$flag[i],
+      settings$value[i],
+      if (settings$start[i] == "skewness") "skewness"
+    )
   }
 })
 
@@ -746,7 +801,7 @@ test_that("describe_distribution - invalid indices", {
     describe_distribution(list("a"), indices = "foo"),
     regexp = "`indices`.*foo"
   )
-  for (bad in list("IQR", c("iqr", "foo"), NA_character_, 1)) {
+  for (bad in list("IQR", c("iqr", "foo"), NA_character_, 1.0)) {
     expect_error(
       describe_distribution(mtcars$mpg, indices = bad),
       regexp = "`indices`",
@@ -756,10 +811,23 @@ test_that("describe_distribution - invalid indices", {
 })
 
 test_that("describe_distribution - indices is the last formal before ...", {
-  methods <- c("list", "numeric", "factor", "character", "data.frame", "grouped_df")
+  methods <- c(
+    "list",
+    "numeric",
+    "factor",
+    "character",
+    "data.frame",
+    "grouped_df"
+  )
   for (method in methods) {
-    arguments <- names(formals(utils::getS3method("describe_distribution", method)))
+    arguments <- names(
+      formals(utils::getS3method("describe_distribution", method))
+    )
     expect_false("shape" %in% arguments, info = method)
-    expect_identical(utils::tail(arguments, 2), c("indices", "..."), info = method)
+    expect_identical(
+      utils::tail(arguments, 2L),
+      c("indices", "..."),
+      info = method
+    )
   }
 })

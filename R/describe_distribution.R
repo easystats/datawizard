@@ -8,9 +8,18 @@
 #' @param by Column names indicating how to split the data in various groups
 #' before describing the distribution. `by` groups will be added to potentially
 #' existing groups created by `data_group()`.
-#' @param range Return the range (min and max).
-#' @param quartiles Return the first and third quartiles (25th and 75th
-#'   percentiles).
+#' @param indices Character vector that names the optional columns to return.
+#'   Can include any combination of `"dispersion"` (the dispersion of each
+#'   centrality: `SD` for the mean, `MAD` for the median, none for the MAP),
+#'   `"iqr"` (the interquartile range, based on [stats::IQR()] with `type = 6`),
+#'   `"range"` (min and max), `"quartiles"` (the 25th and 75th percentiles),
+#'   `"skewness"` and `"kurtosis"`. The
+#'   default is `c("dispersion", "iqr", "range", "skewness", "kurtosis")`, and
+#'   `c("dispersion", "range", "skewness", "kurtosis")` for factors and
+#'   character vectors. `NULL` or `character(0)` returns none of these columns.
+#' @param dispersion,iqr,range,quartiles Deprecated. Please use `indices`
+#'   instead. If given, a value of `TRUE` adds the column to `indices`, and
+#'   `FALSE` removes it.
 #' @param include_factors Logical, if `TRUE`, factors are included in the
 #'   output, however, only columns for range (first and last factor levels) as
 #'   well as n and missing will contain information.
@@ -21,8 +30,6 @@
 #'   intervals. Only applies when `ci` is not `NULL`. Defaults to `100`. For
 #'   more stable results, increase the number of `iterations`, but note that this
 #'   can also increase the computation time significantly.
-#' @param iqr Logical, if `TRUE`, the interquartile range is calculated (based
-#'   on [stats::IQR()], using `type = 6`).
 #' @param verbose Show or silence warnings and messages.
 #' @inheritParams bayestestR::point_estimate
 #' @inheritParams extract_column_names
@@ -50,8 +57,17 @@
 #'
 #' data(iris)
 #' describe_distribution(iris)
-#' describe_distribution(iris, include_factors = TRUE, quartiles = TRUE)
+#' describe_distribution(
+#'   iris,
+#'   include_factors = TRUE,
+#'   indices = c(
+#'     "dispersion", "iqr", "range", "quartiles", "skewness", "kurtosis"
+#'   )
+#' )
 #' describe_distribution(list(mtcars$mpg, mtcars$cyl))
+#'
+#' # only the range, skewness and kurtosis
+#' describe_distribution(iris, indices = c("range", "skewness", "kurtosis"))
 #' @export
 describe_distribution <- function(x, ...) {
   UseMethod("describe_distribution")
@@ -92,7 +108,12 @@ describe_distribution.list <- function(
       iqr = iqr,
       range = range,
       quartiles = quartiles
-    )[c(!missing(dispersion), !missing(iqr), !missing(range), !missing(quartiles))]
+    )[c(
+      !missing(dispersion),
+      !missing(iqr),
+      !missing(range),
+      !missing(quartiles)
+    )]
   )
 
   factor_el <- which(vapply(x, is.factor, FUN.VALUE = logical(1L)))
@@ -193,7 +214,12 @@ describe_distribution.numeric <- function(
       iqr = iqr,
       range = range,
       quartiles = quartiles
-    )[c(!missing(dispersion), !missing(iqr), !missing(range), !missing(quartiles))]
+    )[c(
+      !missing(dispersion),
+      !missing(iqr),
+      !missing(range),
+      !missing(quartiles)
+    )]
   )
 
   insight::check_if_installed("bayestestR")
@@ -452,7 +478,12 @@ describe_distribution.data.frame <- function(
       iqr = iqr,
       range = range,
       quartiles = quartiles
-    )[c(!missing(dispersion), !missing(iqr), !missing(range), !missing(quartiles))]
+    )[c(
+      !missing(dispersion),
+      !missing(iqr),
+      !missing(range),
+      !missing(quartiles)
+    )]
   )
 
   select <- .select_nse(
@@ -564,7 +595,12 @@ describe_distribution.grouped_df <- function(
       iqr = iqr,
       range = range,
       quartiles = quartiles
-    )[c(!missing(dispersion), !missing(iqr), !missing(range), !missing(quartiles))]
+    )[c(
+      !missing(dispersion),
+      !missing(iqr),
+      !missing(range),
+      !missing(quartiles)
+    )]
   )
 
   if (!is.null(by)) {
@@ -779,7 +815,7 @@ plot.parameters_distribution <- function(x, ...) {
     insight::format_error("`indices` must be a character vector or `NULL`.")
   }
   invalid <- setdiff(indices, .describe_distribution_indices)
-  if (length(invalid) > 0) {
+  if (length(invalid) > 0L) {
     invalid[is.na(invalid)] <- "NA"
     insight::format_error(paste0(
       "Invalid values in `indices`: ",
