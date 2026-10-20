@@ -463,6 +463,6 @@ fluctuation and change. New York: Routledge
 \seealso{
 If grand-mean centering of a variable (instead of centering
 within-clusters) is required, see \code{\link[=center]{center()}}. To grand-mean center the
-group-meaned and de-meaned variables, use \code{grand_center}. See \code{\link[performance:check_group_variation]{performance::check_group_variation()}}
-to check for heterogeneity bias.
+group-meaned and de-meaned variables, use \code{grand_center}. See
+\code{\link[performance:check_group_variation]{performance::check_group_variation()}} to check for heterogeneity bias.
 }

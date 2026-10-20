@@ -83,8 +83,8 @@
 #'
 #' @seealso If grand-mean centering of a variable (instead of centering
 #'   within-clusters) is required, see [`center()`]. To grand-mean center the
-#'   group-meaned and de-meaned variables, use `grand_center`. See [`performance::check_group_variation()`]
-#'   to check for heterogeneity bias.
+#'   group-meaned and de-meaned variables, use `grand_center`. See
+#'   [`performance::check_group_variation()`] to check for heterogeneity bias.
 #'
 #' @section Heterogeneity Bias:
 #'
