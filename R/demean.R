@@ -6,7 +6,8 @@
 #' used in regression analysis to model the between- and within-subject effect
 #' (person-mean centering or centering within clusters). `degroup()` is more
 #' generic in terms of the centering-operation. While `demean()` always uses
-#' mean-centering, `degroup()` can also use the mode or median for centering.
+#' mean-centering, `degroup()` can also use the mode, the median, or a function
+#' for centering.
 #'
 #' @param x A data frame.
 #' @param select Character vector (or formula) with names of variables to select
@@ -49,7 +50,10 @@
 #' @param center Method for centering. `demean()` always performs
 #'   mean-centering, while `degroup()` can use `center = "median"` or
 #'   `center = "mode"` for median- or mode-centering, and also `"min"`
-#'   or `"max"`.
+#'   or `"max"`. `degroup()` also accepts a function, such as
+#'   `center = function(v) mean(v, trim = 0.2)`. The function gets the
+#'   non-missing values of a variable in one group and must return a single
+#'   number (or `NA`).
 #' @param suffix_demean,suffix_groupmean String value, will be appended to the
 #'   names of the group-meaned and de-meaned variables of `x`. By default,
 #'   de-meaned variables will be suffixed with `"_within"` and
@@ -61,6 +65,12 @@
 #'   attributes to indicate the within- and between-effects. This is only
 #'   relevant when printing `model_parameters()` - in such cases, the
 #'   within- and between-effects are printed in separated blocks.
+#' @param grand_center Logical or character vector. If `FALSE` (default), the
+#'   group-meaned and de-meaned variables are not grand-mean centered. If
+#'   `TRUE`, each of them is grand-mean centered. A character vector names the
+#'   variables to center: `"within"` names the de-meaned variables, and the
+#'   name of a `by` variable names the group-meaned variables for that `by`
+#'   variable. See section _Grand-mean centering of the components_ below.
 #' @inheritParams center
 #'
 #' @return
@@ -283,6 +293,22 @@
 #' larger groups weigh more (as in _Brincks et al. 2017_). For `degroup()`, the
 #' variables are defined the same way with the statistic selected by `center`
 #' in place of the mean, and they still sum to the original value.
+#'
+#' @section Grand-mean centering of the components:
+#'
+#' With `grand_center`, `demean()` and `degroup()` subtract the mean of a
+#' group-meaned or de-meaned variable from that variable. The mean is taken
+#' over the rows where the variable that it comes from is not missing, which
+#' are the rows that a model can use. Grand centering always subtracts the
+#' mean, whatever `center` is, so each centered variable has a mean of 0 over
+#' those rows. For cross-classified designs, the de-meaned variable can have
+#' a mean other than 0 without grand centering. Grand-centered variables no
+#' longer sum to the original value. _Guo et al. (2024)_ note that each of
+#' these variables can be grand-mean centered, and that this changes only the
+#' intercept of the model.
+#'
+#' A `by` variable named `"within"` cannot be used with a character vector in
+#' `grand_center`. Use `grand_center = TRUE` or rename that variable.
 #'
 #' @section Analysing panel data with mixed models using lme4:
 #'

@@ -15,7 +15,8 @@ demean(
   suffix_groupmean = "_between",
   append = TRUE,
   add_attributes = TRUE,
-  verbose = TRUE
+  verbose = TRUE,
+  grand_center = FALSE
 )
 
 degroup(
@@ -28,7 +29,8 @@ degroup(
   suffix_groupmean = "_between",
   append = TRUE,
   add_attributes = TRUE,
-  verbose = TRUE
+  verbose = TRUE,
+  grand_center = FALSE
 )
 
 detrend(
@@ -41,7 +43,8 @@ detrend(
   suffix_groupmean = "_between",
   append = TRUE,
   add_attributes = TRUE,
-  verbose = TRUE
+  verbose = TRUE,
+  grand_center = FALSE
 )
 }
 \arguments{
@@ -105,10 +108,20 @@ within- and between-effects are printed in separated blocks.}
 
 \item{verbose}{Toggle warnings and messages.}
 
+\item{grand_center}{Logical or character vector. If \code{FALSE} (default), the
+group-meaned and de-meaned variables are not grand-mean centered. If
+\code{TRUE}, each of them is grand-mean centered. A character vector names the
+variables to center: \code{"within"} names the de-meaned variables, and the
+name of a \code{by} variable names the group-meaned variables for that \code{by}
+variable. See section \emph{Grand-mean centering of the components} below.}
+
 \item{center}{Method for centering. \code{demean()} always performs
 mean-centering, while \code{degroup()} can use \code{center = "median"} or
 \code{center = "mode"} for median- or mode-centering, and also \code{"min"}
-or \code{"max"}.}
+or \code{"max"}. \code{degroup()} also accepts a function, such as
+\code{center = function(v) mean(v, trim = 0.2)}. The function gets the
+non-missing values of a variable in one group and must return a single
+number (or \code{NA}).}
 }
 \value{
 A data frame with the group-/de-meaned variables, which get the suffix
@@ -123,7 +136,8 @@ grouping level, e.g. \code{predictor_L3_between} and \code{predictor_L2_between}
 used in regression analysis to model the between- and within-subject effect
 (person-mean centering or centering within clusters). \code{degroup()} is more
 generic in terms of the centering-operation. While \code{demean()} always uses
-mean-centering, \code{degroup()} can also use the mode or median for centering.
+mean-centering, \code{degroup()} can also use the mode, the median, or a function
+for centering.
 }
 \section{Heterogeneity Bias}{
 
@@ -354,6 +368,24 @@ levels. Means are computed over all non-missing observations of a group, so
 larger groups weigh more (as in \emph{Brincks et al. 2017}). For \code{degroup()}, the
 variables are defined the same way with the statistic selected by \code{center}
 in place of the mean, and they still sum to the original value.
+}
+
+\section{Grand-mean centering of the components}{
+
+
+With \code{grand_center}, \code{demean()} and \code{degroup()} subtract the mean of a
+group-meaned or de-meaned variable from that variable. The mean is taken
+over the rows where the variable that it comes from is not missing, which
+are the rows that a model can use. Grand centering always subtracts the
+mean, whatever \code{center} is, so each centered variable has a mean of 0 over
+those rows. For cross-classified designs, the de-meaned variable can have
+a mean other than 0 without grand centering. Grand-centered variables no
+longer sum to the original value. \emph{Guo et al. (2024)} note that each of
+these variables can be grand-mean centered, and that this changes only the
+intercept of the model.
+
+A \code{by} variable named \code{"within"} cannot be used with a character vector in
+\code{grand_center}. Use \code{grand_center = TRUE} or rename that variable.
 }
 
 \section{Analysing panel data with mixed models using lme4}{
