@@ -182,6 +182,7 @@ test_that("adjust passes ... to rstanarm::stan_glmer()", {
 test_that("adjust passes ... to rstanarm::stan_gamm4()", {
   skip_on_cran()
   skip_if_not_installed("rstanarm")
+  skip_if_not_installed("mgcv")
   d <- iris[c("Sepal.Length", "Sepal.Width")]
   adj <- suppressWarnings(adjust(
     d,
