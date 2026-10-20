@@ -956,7 +956,13 @@ test_that("degroup, a function in `center`", {
   )
 
   # two nested `by` variables
-  out <- degroup(d, select = "x", by = "A/B", center = trim_mean, append = FALSE)
+  out <- degroup(
+    d,
+    select = "x",
+    by = "A/B",
+    center = trim_mean,
+    append = FALSE
+  )
   expect_equal(out$x_A_between, group_stat(d$A), ignore_attr = TRUE)
   expect_equal(
     out$x_B_between,
@@ -1002,7 +1008,7 @@ test_that("degroup, a function in `center` must return a single number", {
 })
 
 
-test_that("degroup, `grand_center = TRUE` subtracts the mean of each component", {
+test_that("degroup, `grand_center = TRUE` subtracts each component's mean", {
   trim_mean <- function(v) mean(v, trim = 0.2)
   set.seed(7)
   d <- data.frame(
@@ -1039,7 +1045,13 @@ test_that("degroup, `grand_center = TRUE` subtracts the mean of each component",
   d$w <- rep(c(1, 2, 3), 8)
   d$w[5] <- NA
   base <- degroup(d, select = "x*w", by = "A", append = FALSE)
-  out <- degroup(d, select = "x*w", by = "A", append = FALSE, grand_center = TRUE)
+  out <- degroup(
+    d,
+    select = "x*w",
+    by = "A",
+    append = FALSE,
+    grand_center = TRUE
+  )
   rows_xw <- !is.na(d$x * d$w)
   expect_equal(
     out$x_w_between,
@@ -1055,16 +1067,21 @@ test_that("degroup, `grand_center = TRUE` subtracts the mean of each component",
   # to 0, so mean(y_within) = mean(y) - 3 * mean(y) = -2 * 100
   mu <- 100
   ul <- stats::setNames(c(-1, -3, 0, 4), nm = letters[1:4])
-  uL <- stats::setNames(c(10, 30, 0, -40), nm = LETTERS[1:4])
+  ul_upper <- stats::setNames(c(10, 30, 0, -40), nm = LETTERS[1:4])
   um <- stats::setNames(c(100, 150, -250), nm = month.abb[1:3])
   dat <- expand.grid(l = letters[1:4], L = LETTERS[1:4], m = month.abb[1:3])
   set.seed(111)
   e <- round(rnorm(nrow(dat) - 1), 2)
   e <- append(e, -sum(e))
-  dat$y <- mu + ul[dat$l] + uL[dat$L] + um[dat$m] + e
+  dat$y <- mu + ul[dat$l] + ul_upper[dat$L] + um[dat$m] + e
   dat_dem <- demean(dat, by = c("l", "L", "m"), select = "y")
   expect_equal(mean(dat_dem$y_within), -200, tolerance = 1e-8)
-  dat_dem <- demean(dat, by = c("l", "L", "m"), select = "y", grand_center = TRUE)
+  dat_dem <- demean(
+    dat,
+    by = c("l", "L", "m"),
+    select = "y",
+    grand_center = TRUE
+  )
   expect_equal(mean(dat_dem$y_within), 0, tolerance = 1e-8)
 })
 
@@ -1090,11 +1107,13 @@ test_that("degroup, `grand_center` with names centers only those components", {
       ...
     )
     expect_named(out, names(base))
-    names(base)[!vapply(
-      names(base),
-      function(i) isTRUE(all.equal(out[[i]], base[[i]])),
-      logical(1)
-    )]
+    names(base)[
+      !vapply(
+        names(base),
+        function(i) isTRUE(all.equal(out[[i]], base[[i]])),
+        logical(1)
+      )
+    ]
   }
 
   # "ID" names only the ID column, although "_ID_between" also ends the
@@ -1119,8 +1138,18 @@ test_that("degroup, `grand_center` with names centers only those components", {
   expect_identical(changed(c("ID", "sub_ID"), character(0)), character(0))
   # the named column changes as with `grand_center = TRUE`
   expect_identical(
-    degroup(d, select = "x", by = c("ID", "sub_ID"), grand_center = "ID")$x_ID_between,
-    degroup(d, select = "x", by = c("ID", "sub_ID"), grand_center = TRUE)$x_ID_between
+    degroup(
+      d,
+      select = "x",
+      by = c("ID", "sub_ID"),
+      grand_center = "ID"
+    )$x_ID_between,
+    degroup(
+      d,
+      select = "x",
+      by = c("ID", "sub_ID"),
+      grand_center = TRUE
+    )$x_ID_between
   )
 
   # errors

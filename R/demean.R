@@ -726,7 +726,7 @@ detrend <- degroup
   }
   if (!is.character(grand_center)) {
     insight::format_error(
-      "`grand_center` must be `TRUE`, `FALSE`, or a character vector of component names."
+      "`grand_center` must be `TRUE`, `FALSE`, or a character vector of component names." # nolint
     )
   }
   if (length(grand_center) && "within" %in% by) {
@@ -748,8 +748,8 @@ detrend <- degroup
 
 # Subtracts from a component its mean over the rows where the variable it
 # comes from is not missing.
-.grand_center_column <- function(component, source) {
-  component - mean(component[!is.na(source)], na.rm = TRUE)
+.grand_center_column <- function(component, origin) {
+  component - mean(component[!is.na(origin)], na.rm = TRUE)
 }
 
 
@@ -758,7 +758,8 @@ detrend <- degroup
 .center_function <- function(center) {
   function(.gm) {
     out <- center(.gm[!is.na(.gm)])
-    if (length(out) != 1L || !(is.numeric(out) || (is.logical(out) && is.na(out)))) {
+    single_number <- is.numeric(out) || (is.logical(out) && is.na(out))
+    if (length(out) != 1L || !single_number) {
       insight::format_error(
         "A function in `center` must return a single number for each group."
       )
