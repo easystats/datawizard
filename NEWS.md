@@ -41,11 +41,12 @@ CHANGES
 
 FIXES
 
-* For data frames, `center()` and `standardize()` now handle `center` and
-  `scale` given as `TRUE` or `FALSE` as they do for vectors, so results change
-  for data frame calls that set them to `FALSE`. Before, `scale = FALSE` still
-  divided by the SD, and `standardize()` with `center = FALSE` returned the
-  values unchanged, or gave an error with `cluster`.
+* For data frames, `standardize()` now handles `center` and `scale` given as
+  `TRUE` or `FALSE` as it does for vectors, so results change for some data
+  frame calls that set them. Before, `scale = FALSE` still divided by
+  the SD, and `standardize()` with `center = TRUE` only centered and with
+  `center = FALSE` returned the values unchanged. With `cluster`, either gave
+  an error.
 
 * `skewness()` and `kurtosis()` now return the standard error for the chosen
   `type`. Before, the `SE` column was the type-1 standard error for every

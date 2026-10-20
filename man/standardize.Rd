@@ -153,18 +153,20 @@ of them form one cluster. This works for nested, crossed, and mixed
 designs. One call covers one level: give the variables that identify the
 level of the variables to transform, for example
 \code{cluster = c("school", "classroom")} for a classroom-level variable and
-\code{cluster = "school"} for a school-level variable. If a variable takes one
-value per cluster of the other cluster variables, a cluster variable is
-not needed: it only splits clusters, and each split cluster then counts
-once per part. With \code{verbose = TRUE}, a warning names such a cluster
-variable. On a data frame, a character \code{cluster} is read as column names
-if all its elements are column names, and else as cluster ids if it has
-one element per row.
+\code{cluster = "school"} for a school-level variable. If a cluster variable
+splits clusters of the other cluster variables, and the variable to
+transform still takes one value per cluster of those others, that cluster
+variable is not needed: each split cluster then counts once per part.
+With \code{verbose = TRUE}, a warning names such a cluster variable. On a data
+frame, a character \code{cluster} is read as column names if all its elements
+are column names, and else, if the data have two or more rows and it has
+one element per row, as cluster ids.
 
 The variable must take only one finite value within each cluster
 (infinite values are treated as missing), and observations with a missing
 id in any cluster variable are returned as \code{NA}. \code{cluster} cannot be
-combined with \code{weights}, \code{reference}, or values for \code{center} and \code{scale}.
+combined with \code{weights}, \code{reference}, or numeric values for \code{center} and
+\code{scale}.
 For grouped data frames, \code{cluster} must be one or more column names.}
 
 \item{force}{Logical, if \code{TRUE}, forces recoding of factors and character
