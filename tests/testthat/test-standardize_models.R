@@ -272,6 +272,78 @@ test_that("standardize non-Gaussian response", {
 })
 
 
+# lmerTest ----------------------------------------------------------------
+# Oracle (invariant): refitting on standardized data by hand gives the same
+# fixed effects as standardize(model).
+test_that("standardize, lmerModLmerTest coerced from lmerMod", {
+  skip_if_not_installed("lme4")
+  skip_if_not_installed("lmerTest")
+  data(sleepstudy, package = "lme4")
+
+  m <- lme4::lmer(Reaction ~ Days + (Days | Subject), data = sleepstudy)
+  m_lt <- lmerTest::as_lmerModLmerTest(m)
+  out <- standardize(m_lt)
+  expect_s4_class(out, "lmerModLmerTest")
+  expect_true("df" %in% colnames(summary(out)$coefficients))
+
+  sleepstudy_z <- sleepstudy
+  sleepstudy_z$Reaction <- standardize(sleepstudy_z$Reaction)
+  sleepstudy_z$Days <- standardize(sleepstudy_z$Days)
+  m_manual <- lme4::lmer(
+    Reaction ~ Days + (Days | Subject),
+    data = sleepstudy_z
+  )
+  expect_identical(lme4::fixef(out), lme4::fixef(m_manual))
+})
+
+test_that("standardize, standardized lmerMod can be coerced by lmerTest", {
+  skip_if_not_installed("lme4")
+  skip_if_not_installed("lmerTest")
+  data(sleepstudy, package = "lme4")
+
+  m <- lme4::lmer(Reaction ~ Days + (Days | Subject), data = sleepstudy)
+  out <- lmerTest::as_lmerModLmerTest(standardize(m))
+  expect_s4_class(out, "lmerModLmerTest")
+})
+
+test_that("standardize, update() on standardized lmer models", {
+  skip_if_not_installed("lme4")
+  skip_if_not_installed("lmerTest")
+  data(sleepstudy, package = "lme4")
+
+  m <- lme4::lmer(Reaction ~ Days + (Days | Subject), data = sleepstudy)
+  out <- stats::update(standardize(m), . ~ . - Days)
+  expect_s4_class(out, "lmerMod")
+  expect_named(lme4::fixef(out), "(Intercept)")
+
+  out <- stats::update(
+    standardize(lmerTest::as_lmerModLmerTest(m)),
+    . ~ . - Days
+  )
+  expect_s4_class(out, "lmerModLmerTest")
+  expect_named(lme4::fixef(out), "(Intercept)")
+})
+
+test_that("standardize, model fit with lmerTest::lmer()", {
+  skip_if_not_installed("lme4")
+  skip_if_not_installed("lmerTest")
+  data(sleepstudy, package = "lme4")
+
+  m <- lmerTest::lmer(Reaction ~ Days + (Days | Subject), data = sleepstudy)
+  out <- standardize(m)
+  expect_s4_class(out, "lmerModLmerTest")
+
+  sleepstudy_z <- sleepstudy
+  sleepstudy_z$Reaction <- standardize(sleepstudy_z$Reaction)
+  sleepstudy_z$Days <- standardize(sleepstudy_z$Days)
+  m_manual <- lme4::lmer(
+    Reaction ~ Days + (Days | Subject),
+    data = sleepstudy_z
+  )
+  expect_identical(lme4::fixef(out), lme4::fixef(m_manual))
+})
+
+
 # variables evaluated in the environment $$$ ------------------------------
 test_that("variables evaluated in the environment", {
   m <- lm(mtcars$mpg ~ mtcars$cyl + am, data = mtcars)
