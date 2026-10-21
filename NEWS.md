@@ -36,6 +36,11 @@ CHANGES
   `parameters_smoothness` remain as secondary classes, so code that checks
   `class(x)[1]` for the old names needs to be updated (#248).
 
+* `describe_distribution()` gains an `indices` argument, to select the
+  optional columns to return, e.g. to leave out skewness and kurtosis.
+  Arguments `dispersion`, `iqr`, `range`, and `quartiles` are deprecated.
+  Please use `indices` instead (#687).
+
 FIXES
 
 * `skewness()` and `kurtosis()` now return the standard error for the chosen
