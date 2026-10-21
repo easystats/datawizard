@@ -47,8 +47,7 @@ winsorize(data, ...)
 \itemize{
 \item For \code{method = "percentile"}: the amount to winsorize from \emph{each} tail.
 The value of \code{threshold} must be between 0 and 0.5 and of length 1. For
-factors with \code{include_factors = TRUE}, it is the share of non-missing
-values below which a level is rare.
+factors, levels with a smaller share of the values are merged.
 \item For \code{method = "zscore"}: the number of \emph{SD}/\emph{MAD}-deviations from the
 \emph{mean}/\emph{median} (see \code{robust}). The value of \code{threshold} must be greater
 than 0 and of length 1.
@@ -56,8 +55,8 @@ than 0 and of length 1.
 for winsorization.
 }}
 
-\item{method}{One of "percentile" (default), "zscore", or "raw". For factors
-with \code{include_factors = TRUE}, only "percentile" can be used.}
+\item{method}{One of "percentile" (default), "zscore", or "raw". Factors
+only work with "percentile".}
 
 \item{robust}{Logical, if TRUE, winsorizing through the "zscore" method is
 done via the median and the median absolute deviation (MAD); if FALSE, via
@@ -66,8 +65,7 @@ the mean and the standard deviation.}
 \item{verbose}{Not used anymore since \code{datawizard} 0.6.6.}
 
 \item{include_factors}{Logical, if \code{TRUE}, rare levels of factors are merged
-into a level \code{".other"} (see 'Details'). Defaults to \code{FALSE}, which returns
-factors unchanged.}
+into a level \code{".other"} (see 'Details').}
 }
 \value{
 A data frame with winsorized columns or a winsorized vector.
@@ -86,20 +84,11 @@ to the 5th percentile, and data above the 95th percentile set to the 95th
 percentile. Winsorized estimators are usually more robust to outliers than
 their more standard forms.
 
-Factors are returned unchanged unless \code{include_factors = TRUE}. In that
-case, rare levels are merged into one level, \code{".other"}, which becomes the
-last level. In an ordered factor, \code{".other"} is therefore the highest level.
-A level is rare when its share of the non-missing values is less than
-\code{threshold}. Values at an \code{NA} level, such as one added by \code{\link[=addNA]{addNA()}}, are
-missing values, and an \code{NA} level is never rare. Levels without values are
-not rare. If fewer than two levels are rare, the factor is returned
-unchanged. A level \code{".other"} that already exists is never rare, but when
-levels are merged, its values join them. When levels are merged, a
-\code{labels} attribute and a contrasts matrix are dropped, because they were
-made for the old levels. With \code{include_factors = TRUE},
-\code{method} must be \code{"percentile"}, so a data frame with a factor column gives
-an error for any other method. Character and logical vectors are always
-returned unchanged.
+Factors are returned unchanged, unless \code{include_factors = TRUE}. Then,
+levels with a share of the non-missing values below \code{threshold} are merged
+into a new last level, \code{".other"}. Nothing is merged if fewer than two
+levels are rare. \code{NA} levels are never merged. Character and logical vectors
+are returned unchanged.
 }
 \examples{
 hist(iris$Sepal.Length, main = "Original data")

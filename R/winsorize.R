@@ -12,20 +12,11 @@
 #' percentile. Winsorized estimators are usually more robust to outliers than
 #' their more standard forms.
 #'
-#' Factors are returned unchanged unless `include_factors = TRUE`. In that
-#' case, rare levels are merged into one level, `".other"`, which becomes the
-#' last level. In an ordered factor, `".other"` is therefore the highest level.
-#' A level is rare when its share of the non-missing values is less than
-#' `threshold`. Values at an `NA` level, such as one added by [addNA()], are
-#' missing values, and an `NA` level is never rare. Levels without values are
-#' not rare. If fewer than two levels are rare, the factor is returned
-#' unchanged. A level `".other"` that already exists is never rare, but when
-#' levels are merged, its values join them. When levels are merged, a
-#' `labels` attribute and a contrasts matrix are dropped, because they were
-#' made for the old levels. With `include_factors = TRUE`,
-#' `method` must be `"percentile"`, so a data frame with a factor column gives
-#' an error for any other method. Character and logical vectors are always
-#' returned unchanged.
+#' Factors are returned unchanged, unless `include_factors = TRUE`. Then,
+#' levels with a share of the non-missing values below `threshold` are merged
+#' into a new last level, `".other"`. Nothing is merged if fewer than two
+#' levels are rare. `NA` levels are never merged. Character and logical vectors
+#' are returned unchanged.
 #'
 #' @return
 #'
@@ -35,23 +26,21 @@
 #' @param threshold The amount of winsorization, depends on the value of `method`:
 #' - For `method = "percentile"`: the amount to winsorize from *each* tail.
 #'   The value of `threshold` must be between 0 and 0.5 and of length 1. For
-#'   factors with `include_factors = TRUE`, it is the share of non-missing
-#'   values below which a level is rare.
+#'   factors, levels with a smaller share of the values are merged.
 #' - For `method = "zscore"`: the number of *SD*/*MAD*-deviations from the
 #'   *mean*/*median* (see `robust`). The value of `threshold` must be greater
 #'   than 0 and of length 1.
 #' - For `method = "raw"`: a vector of length 2 with the lower and upper bound
 #'   for winsorization.
-#' @param method One of "percentile" (default), "zscore", or "raw". For factors
-#'   with `include_factors = TRUE`, only "percentile" can be used.
+#' @param method One of "percentile" (default), "zscore", or "raw". Factors
+#'   only work with "percentile".
 #' @param robust Logical, if TRUE, winsorizing through the "zscore" method is
 #'   done via the median and the median absolute deviation (MAD); if FALSE, via
 #'   the mean and the standard deviation.
 #' @param ... Currently not used.
 #' @param verbose Not used anymore since `datawizard` 0.6.6.
 #' @param include_factors Logical, if `TRUE`, rare levels of factors are merged
-#'   into a level `".other"` (see 'Details'). Defaults to `FALSE`, which returns
-#'   factors unchanged.
+#'   into a level `".other"` (see 'Details').
 #'
 #' @examples
 #' hist(iris$Sepal.Length, main = "Original data")
@@ -111,8 +100,7 @@ winsorize.factor <- function(
     return(data)
   }
 
-  # levels other than NA and ".other" with at least one value and a share
-  # below threshold
+  # rare levels, without NA and ".other"
   lvls <- levels(data)
   candidates <- setdiff(lvls[!is.na(lvls)], ".other")
   counts <- tabulate(match(values, candidates), nbins = length(candidates))
@@ -125,9 +113,7 @@ winsorize.factor <- function(
   new_levels <- c(setdiff(lvls, merged), ".other")
   values[values %in% merged] <- ".other"
 
-  # rebuild the codes so that the class, an NA level, and other attributes
-  # are kept; NA codes stay NA, and value labels and a contrasts matrix made
-  # for the old levels are dropped
+  # keep class and attributes, but drop labels and contrasts of the old levels
   out <- match(values, new_levels)
   out[is.na(unclass(data))] <- NA_integer_
   attrs <- attributes(data)

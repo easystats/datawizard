@@ -57,7 +57,7 @@ test_that("winsorize on data.frame", {
 
 test_that("winsorize factors, include_factors", {
   x <- factor(c(rep("a", 6), rep("b", 2), "c", "d", NA))
-  # oracle (closed-form): 10 non-missing values, shares a = 0.6, b = 0.2,
+  # 10 non-missing values, shares a = 0.6, b = 0.2,
   # c = 0.1, d = 0.1; c and d are below 0.2, b equals 0.2 and is kept
   expect_identical(
     winsorize(x, include_factors = TRUE),
@@ -66,13 +66,13 @@ test_that("winsorize factors, include_factors", {
       levels = c("a", "b", ".other")
     )
   )
-  # oracle (closed-form): with threshold 0.25, b (0.2) is also below
+  # with threshold 0.25, b (0.2) is also below
   expect_identical(
     winsorize(x, threshold = 0.25, include_factors = TRUE),
     factor(c(rep("a", 6), rep(".other", 4), NA), levels = c("a", ".other"))
   )
 
-  # oracle (closed-form): b, c, d each have share 1 / 10 = 0.1
+  # b, c, d each have share 1 / 10 = 0.1
   x <- factor(c(rep("a", 7), "b", "c", "d"))
   expect_identical(
     winsorize(x, include_factors = TRUE),
@@ -86,7 +86,7 @@ test_that("winsorize factors, ordered and unused levels", {
     levels = c("low", "mid", "high"),
     ordered = TRUE
   )
-  # oracle (closed-form): low and high each have share 1 / 10 = 0.1
+  # low and high each have share 1 / 10 = 0.1
   expect_identical(
     winsorize(x, include_factors = TRUE),
     factor(
@@ -96,7 +96,7 @@ test_that("winsorize factors, ordered and unused levels", {
     )
   )
 
-  # oracle (closed-form): c and d have share 0.1; the unused level e is not
+  # c and d have share 0.1; the unused level e is not
   # counted and stays a level
   x <- factor(
     c(rep("a", 6), rep("b", 2), "c", "d"),
@@ -110,14 +110,14 @@ test_that("winsorize factors, ordered and unused levels", {
     )
   )
 
-  # oracle (closed-form): only b (0.1) is below 0.2, the unused z is not
+  # only b (0.1) is below 0.2, the unused z is not
   # counted, so nothing is merged
   x <- factor(c(rep("a", 9), "b"), levels = c("a", "b", "z"))
   expect_identical(winsorize(x, include_factors = TRUE), x)
 })
 
 test_that("winsorize factors, existing .other level", {
-  # oracle (closed-form): b and c have share 0.1 and are merged, and the
+  # b and c have share 0.1 and are merged, and the
   # values of the existing .other level join them
   x <- factor(
     c(rep("a", 5), rep(".other", 3), "b", "c"),
@@ -128,35 +128,35 @@ test_that("winsorize factors, existing .other level", {
     factor(c(rep("a", 5), rep(".other", 5)), levels = c("a", ".other"))
   )
 
-  # oracle (closed-form): .other is never rare, and b (0.1) is the only
+  # .other is never rare, and b (0.1) is the only
   # level below 0.2, so nothing is merged
   x <- factor(c(rep("a", 6), rep(".other", 3), "b"))
   expect_identical(winsorize(x, include_factors = TRUE), x)
 
-  # oracle (closed-form): .other and b each have share 0.1, but .other is
+  # .other and b each have share 0.1, but .other is
   # never rare, so only b is found and nothing is merged
   x <- factor(c(rep("a", 8), ".other", "b"))
   expect_identical(winsorize(x, include_factors = TRUE), x)
 })
 
 test_that("winsorize factors, nothing to merge", {
-  # oracle (closed-form): c (0.1) is the only level below 0.2
+  # c (0.1) is the only level below 0.2
   x <- factor(c(rep("a", 5), rep("b", 4), "c"))
   expect_identical(winsorize(x, include_factors = TRUE), x)
 
-  # oracle (closed-form): no non-missing values, so no share can be computed
+  # no non-missing values, so no share can be computed
   x <- factor(c(NA, NA), levels = c("a", "b"))
   expect_identical(winsorize(x, include_factors = TRUE), x)
   x <- factor(character(0), levels = c("a", "b"))
   expect_identical(winsorize(x, include_factors = TRUE), x)
 
-  # oracle (closed-form): with threshold 0 no share is below it
+  # with threshold 0 no share is below it
   x <- factor(c(rep("a", 7), "b", "c", "d"))
   expect_identical(winsorize(x, threshold = 0, include_factors = TRUE), x)
 })
 
 test_that("winsorize factors, threshold 0.5 and names", {
-  # oracle (closed-form): shares a = 0.4, b = 0.3, c = 0.3 are all below 0.5,
+  # shares a = 0.4, b = 0.3, c = 0.3 are all below 0.5,
   # so all three levels merge
   x <- factor(c(rep("a", 4), rep("b", 3), rep("c", 3)))
   expect_identical(
@@ -164,7 +164,7 @@ test_that("winsorize factors, threshold 0.5 and names", {
     factor(rep(".other", 10))
   )
 
-  # oracle (closed-form): b and c each have share 0.1; names are kept
+  # b and c each have share 0.1; names are kept
   x <- factor(c(rep("a", 8), "b", "c"))
   names(x) <- letters[1:10]
   out <- winsorize(x, include_factors = TRUE)
@@ -178,7 +178,7 @@ test_that("winsorize factors, NA level, class, and attributes", {
     levels = c(NA, "a", "b", "c", "d"),
     exclude = NULL
   )
-  # oracle (closed-form): the NA level holds a missing value, so the shares
+  # the NA level holds a missing value, so the shares
   # use 10 values: a = 0.6, b = 0.2, c = 0.1, d = 0.1; c and d are merged, and
   # the NA level stays first. Counting the NA level (1 / 11) would make it rare
   # and would make b rare too (2 / 11 < 0.2).
@@ -191,7 +191,7 @@ test_that("winsorize factors, NA level, class, and attributes", {
     )
   )
 
-  # oracle (closed-form): same shares, with the NA level between the merged
+  # same shares, with the NA level between the merged
   # levels c and d; it keeps its place among the kept levels
   x <- factor(
     c(rep("a", 6), rep("b", 2), "c", "d", NA),
@@ -207,12 +207,12 @@ test_that("winsorize factors, NA level, class, and attributes", {
     )
   )
 
-  # oracle (closed-form): c (0.1) is the only level below 0.2 and the NA
+  # c (0.1) is the only level below 0.2 and the NA
   # level is never rare, so nothing is merged
   x <- addNA(factor(c(rep("a", 5), rep("b", 4), "c", NA)))
   expect_identical(winsorize(x, include_factors = TRUE), x)
 
-  # oracle (closed-form): a level named "NA" is an ordinary level; "NA" and
+  # a level named "NA" is an ordinary level; "NA" and
   # b each have share 0.1
   x <- factor(c(rep("a", 8), "NA", "b"))
   expect_identical(
@@ -220,7 +220,7 @@ test_that("winsorize factors, NA level, class, and attributes", {
     factor(c(rep("a", 8), ".other", ".other"), levels = c("a", ".other"))
   )
 
-  # oracle (closed-form): b and c each have share 0.1; the extra class and
+  # b and c each have share 0.1; the extra class and
   # the label are kept
   x <- factor(c(rep("a", 8), "b", "c"))
   class(x) <- c("myfac", "factor")
@@ -233,7 +233,7 @@ test_that("winsorize factors, NA level, class, and attributes", {
   attr(expected, "label") <- "My variable"
   expect_identical(winsorize(x, include_factors = TRUE), expected)
 
-  # oracle (closed-form): value 11 is at the NA level and value 12 has an NA
+  # value 11 is at the NA level and value 12 has an NA
   # code; 10 values remain, c and d (0.1) are merged, and both missing values
   # keep their kind
   x <- addNA(factor(c(rep("a", 6), rep("b", 2), "c", "d", NA, NA)))
@@ -246,7 +246,7 @@ test_that("winsorize factors, NA level, class, and attributes", {
     c(rep("a", 6), rep("b", 2), ".other", ".other", NA, NA)
   )
 
-  # oracle (closed-form): c and d (0.1) are merged into 3 levels, so a 4 x 3
+  # c and d (0.1) are merged into 3 levels, so a 4 x 3
   # contrasts matrix and value labels for a to d no longer fit and are
   # dropped; a contrasts name fits any levels and is kept
   x <- factor(c(rep("a", 6), rep("b", 2), "c", "d"))
@@ -263,7 +263,7 @@ test_that("winsorize factors, NA level, class, and attributes", {
 
 test_that("winsorize factors, positional arguments", {
   x <- factor(c(rep("a", 7), "b", "c", "d"))
-  # oracle (invariant): a positional call equals the call with names; the
+  # a positional call equals the call with names; the
   # fourth argument is `robust`, as for numeric vectors, and the sixth is
   # `include_factors`
   expect_identical(winsorize(x, 0.2, "percentile", TRUE), x)
@@ -281,12 +281,12 @@ test_that("winsorize factors, positional arguments", {
 
 test_that("winsorize factors, include_factors = FALSE", {
   x <- factor(c(rep("a", 7), "b", "c", "d"))
-  # oracle (invariant): without include_factors = TRUE the input comes back
+  # without include_factors = TRUE the input comes back
   # unchanged, although b, c, and d (0.1 each) are below 0.2
   expect_identical(winsorize(x), x)
   expect_identical(winsorize(x, include_factors = FALSE), x)
 
-  # oracle (invariant): character and logical vectors are not changed
+  # character and logical vectors are not changed
   x <- c(rep("a", 7), "b", "c", "d")
   expect_identical(winsorize(x, include_factors = TRUE), x)
   x <- c(rep(TRUE, 7), FALSE, FALSE, NA)
@@ -300,7 +300,7 @@ test_that("winsorize factors in data frames", {
     fac = factor(c(rep("a", 8), "b", "c"))
   )
   out <- winsorize(d, include_factors = TRUE)
-  # oracle (closed-form): b and c each have share 0.1
+  # b and c each have share 0.1
   expect_identical(
     out$fac,
     factor(c(rep("a", 8), ".other", ".other"), levels = c("a", ".other"))
@@ -309,7 +309,7 @@ test_that("winsorize factors in data frames", {
   expect_identical(out$chr, d$chr)
   expect_identical(out$num, winsorize(d$num))
 
-  # oracle (closed-form): with threshold 0.05, the shares of b and c (0.1)
+  # with threshold 0.05, the shares of b and c (0.1)
   # are not below it, so the factor column is unchanged
   out <- winsorize(d, threshold = 0.05, include_factors = TRUE)
   expect_identical(
@@ -318,7 +318,7 @@ test_that("winsorize factors in data frames", {
   )
   expect_identical(out$fac, d$fac)
 
-  # oracle (invariant): by default the factor column is unchanged
+  # by default the factor column is unchanged
   expect_identical(winsorize(d)$fac, d$fac)
 })
 

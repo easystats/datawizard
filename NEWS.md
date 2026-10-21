@@ -36,11 +36,8 @@ CHANGES
   `parameters_smoothness` remain as secondary classes, so code that checks
   `class(x)[1]` for the old names needs to be updated (#248).
 
-* `winsorize()` gains an `include_factors` argument. If `TRUE`, factor levels
-  that hold values but less than a `threshold` share of the non-missing values
-  are merged into one level, `".other"`. An `NA` level and an existing
-  `".other"` level are never rare. If fewer than two levels are rare, nothing
-  is merged. Factors are still returned unchanged by default (#48).
+* `winsorize()` gains an `include_factors` argument. If `TRUE`, rare factor
+  levels are merged into one level, `".other"` (#48).
 
 FIXES
 
