@@ -37,8 +37,7 @@ CHANGES
   `class(x)[1]` for the old names needs to be updated (#248).
 
 * `adjust()` gains `...`, which passes arguments to the function that fits the
-  model. For example, with `multilevel = TRUE`, `control = lme4::lmerControl()`
-  goes to `lme4::lmer()` (#696).
+  model (#696).
 
 FIXES
 

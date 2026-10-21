@@ -27,14 +27,7 @@
 #'   visual representation of this).
 #' @param ... Arguments passed to the function that fits the model:
 #'   [stats::lm()], [lme4::lmer()], [gamm4::gamm4()], [rstanarm::stan_glm()],
-#'   [rstanarm::stan_glmer()], or [rstanarm::stan_gamm4()]. For example, with
-#'   `multilevel = TRUE`, use
-#'   `control = lme4::lmerControl(optimizer = "bobyqa")`. The `rstanarm`
-#'   functions use `refresh = 0` unless `refresh` is passed. An argument whose
-#'   name is, or partially matches, an argument of `adjust()` is taken by
-#'   `adjust()` and does not reach that function. Any other misspelled name
-#'   goes to that function: [stats::lm()] and [gamm4::gamm4()] then give only
-#'   a warning, and [lme4::lmer()] and the `rstanarm` functions give an error.
+#'   [rstanarm::stan_glmer()], or [rstanarm::stan_gamm4()].
 #' @inheritParams extract_column_names
 #' @inheritParams standardize
 #'
