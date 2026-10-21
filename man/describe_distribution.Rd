@@ -65,9 +65,8 @@ describe_distribution(x, ...)
 (see \code{\link[bayestestR:map_estimate]{map_estimate()}}), \code{"trimmed"} (which is just \code{mean(x, trim = threshold)}),
 \code{"mode"} or \code{"all"}.}
 
-\item{dispersion, iqr, range, quartiles}{Deprecated. Please use \code{indices}
-instead. If given, \code{TRUE} adds the column to \code{indices}, and \code{FALSE}
-removes it.}
+\item{dispersion, iqr, range, quartiles}{Deprecated, please use \code{indices}
+instead.}
 
 \item{ci}{Confidence Interval (CI) level. Default is \code{NULL}, i.e. no
 confidence intervals are computed. If not \code{NULL}, confidence intervals are
@@ -84,18 +83,12 @@ vector before the mean is computed.}
 
 \item{verbose}{Show or silence warnings and messages.}
 
-\item{indices}{Character vector that names the optional columns to return.
-Can include any combination of \code{"dispersion"} (the dispersion of each
-centrality: \code{SD} for the mean and the trimmed mean, \code{MAD} for the median,
-none for the MAP and the mode), \code{"iqr"} (the interquartile range, based
-on \code{\link[stats:IQR]{stats::IQR()}} with \code{type = 6}), \code{"range"} (min and max),
-\code{"quartiles"} (the 25th and 75th percentiles, based on
-\code{\link[stats:quantile]{stats::quantile()}} with its default \code{type = 7}), \code{"skewness"} and
-\code{"kurtosis"}. The default is
-\code{c("dispersion", "iqr", "range", "skewness", "kurtosis")}, and
-\code{c("dispersion", "range", "skewness", "kurtosis")} for factors and
-character vectors described on their own. \code{NULL} or \code{character(0)}
-returns none of these columns.}
+\item{indices}{Character vector, indicating which indices to return. Can
+include any combination of \code{"dispersion"} (SD or MAD, depending on
+\code{centrality}), \code{"iqr"} (interquartile range, based on \code{\link[stats:IQR]{stats::IQR()}},
+using \code{type = 6}), \code{"range"} (min and max), \code{"quartiles"} (25th and 75th
+percentiles), \code{"skewness"} and \code{"kurtosis"}. Use \code{NULL} to return none of
+them.}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either

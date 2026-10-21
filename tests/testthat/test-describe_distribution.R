@@ -659,9 +659,8 @@ test_that("describe_distribution - indices: every subset on a numeric vector", {
   x_ok <- x[!is.na(x)]
   full <- describe_distribution(x, indices = names(dd_columns))
 
-  # Oracle (closed form): each optional column equals the base R or
-  # datawizard function of `x` without its NA, for example SD = sd(x_ok) and
-  # IQR = IQR(x_ok, type = 6).
+  # each column equals the base R or datawizard function of `x` without NA,
+  # e.g. SD = sd(x_ok) and IQR = IQR(x_ok, type = 6)
   expect_identical(full$SD, stats::sd(x_ok))
   expect_identical(full$IQR, stats::IQR(x_ok, type = 6L))
   expect_identical(full$Min, min(x_ok))

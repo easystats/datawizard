@@ -8,21 +8,14 @@
 #' @param by Column names indicating how to split the data in various groups
 #' before describing the distribution. `by` groups will be added to potentially
 #' existing groups created by `data_group()`.
-#' @param indices Character vector that names the optional columns to return.
-#'   Can include any combination of `"dispersion"` (the dispersion of each
-#'   centrality: `SD` for the mean and the trimmed mean, `MAD` for the median,
-#'   none for the MAP and the mode), `"iqr"` (the interquartile range, based
-#'   on [stats::IQR()] with `type = 6`), `"range"` (min and max),
-#'   `"quartiles"` (the 25th and 75th percentiles, based on
-#'   [stats::quantile()] with its default `type = 7`), `"skewness"` and
-#'   `"kurtosis"`. The default is
-#'   `c("dispersion", "iqr", "range", "skewness", "kurtosis")`, and
-#'   `c("dispersion", "range", "skewness", "kurtosis")` for factors and
-#'   character vectors described on their own. `NULL` or `character(0)`
-#'   returns none of these columns.
-#' @param dispersion,iqr,range,quartiles Deprecated. Please use `indices`
-#'   instead. If given, `TRUE` adds the column to `indices`, and `FALSE`
-#'   removes it.
+#' @param indices Character vector, indicating which indices to return. Can
+#'   include any combination of `"dispersion"` (SD or MAD, depending on
+#'   `centrality`), `"iqr"` (interquartile range, based on [stats::IQR()],
+#'   using `type = 6`), `"range"` (min and max), `"quartiles"` (25th and 75th
+#'   percentiles), `"skewness"` and `"kurtosis"`. Use `NULL` to return none of
+#'   them.
+#' @param dispersion,iqr,range,quartiles Deprecated, please use `indices`
+#'   instead.
 #' @param include_factors Logical, if `TRUE`, factors are included in the
 #'   output, however, only columns for range (first and last factor levels) as
 #'   well as n and missing will contain information.

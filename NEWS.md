@@ -36,11 +36,10 @@ CHANGES
   `parameters_smoothness` remain as secondary classes, so code that checks
   `class(x)[1]` for the old names needs to be updated (#248).
 
-* `describe_distribution()` gains an `indices` argument, a character vector
-  that names the optional columns to return, such as
-  `indices = c("range", "skewness")`. Use it to leave out skewness and
-  kurtosis. The arguments `dispersion`, `iqr`, `range`, and `quartiles` are
-  deprecated in favor of `indices` (#687, #719).
+* `describe_distribution()` gains an `indices` argument, to select the
+  optional columns to return, e.g. to leave out skewness and kurtosis.
+  Arguments `dispersion`, `iqr`, `range`, and `quartiles` are deprecated.
+  Please use `indices` instead (#687).
 
 FIXES
 
