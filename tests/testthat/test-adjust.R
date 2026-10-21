@@ -54,13 +54,13 @@ test_that("adjust passes ... to lm()", {
   w <- seq_len(nrow(d)) / nrow(d)
   adj <- adjust(d, multilevel = FALSE, additive = FALSE, weights = w)
   m <- stats::lm(Sepal.Length ~ Species, data = d, weights = w)
-  # oracle (reference fit): the same model, fit by hand with the same arguments
+  # same as the model fit by hand
   expect_equal(
     adj$Sepal.Length,
     unname(stats::residuals(m)),
     tolerance = 1e-6
   )
-  # oracle (invariant): without the argument, the result is different
+  # differs from the default
   expect_false(isTRUE(all.equal(adj$Sepal.Length, adjust(d)$Sepal.Length)))
 })
 
@@ -69,18 +69,18 @@ test_that("adjust passes ... to lme4::lmer()", {
   d <- iris[c("Sepal.Length", "Species")]
   adj <- adjust(d, multilevel = TRUE, REML = FALSE)
   m <- lme4::lmer(Sepal.Length ~ (1 | Species), data = d, REML = FALSE)
-  # oracle (reference fit): the same model, fit by hand with the same arguments
+  # same as the model fit by hand
   expect_equal(
     adj$Sepal.Length,
     unname(stats::residuals(m)),
     tolerance = 1e-6
   )
-  # oracle (invariant): without the argument, the result is different
+  # differs from the default
   expect_false(isTRUE(all.equal(
     adj$Sepal.Length,
     adjust(d, multilevel = TRUE)$Sepal.Length
   )))
-  # oracle (error identity): the lme4 error for an unknown optimizer
+  # error comes from lme4
   expect_error(
     adjust(
       d,
@@ -102,7 +102,7 @@ test_that("adjust passes ... to gamm4::gamm4()", {
     REML = FALSE
   )
   m <- gamm4::gamm4(Sepal.Length ~ s(Sepal.Width), data = d, REML = FALSE)
-  # oracle (reference fit): the same model, fit by hand with the same arguments
+  # same as the model fit by hand
   expect_equal(
     adj$Sepal.Length,
     unname(insight::get_residuals(m)),
@@ -114,7 +114,7 @@ test_that("adjust passes ... to gamm4::gamm4()", {
     select = "Sepal.Length",
     additive = TRUE
   )
-  # oracle (invariant): without the argument, the result is different
+  # differs from the default
   expect_false(isTRUE(all.equal(adj$Sepal.Length, adj_default$Sepal.Length)))
 })
 
@@ -139,14 +139,13 @@ test_that("adjust passes ... to rstanarm::stan_glm()", {
     iter = 200L,
     seed = 1L
   ))
-  # oracle (reference fit): the same model, fit by hand with the same arguments
+  # same as the model fit by hand
   expect_equal(
     adj$Sepal.Length,
     unname(insight::get_residuals(m)),
     tolerance = 1e-6
   )
-  # oracle (invariant): `refresh` in `...` replaces the default of 0, so the
-  # sampler prints its progress, and the draws stay the same
+  # `refresh` replaces the default of 0
   progress <- utils::capture.output({
     adj_refresh <- suppressWarnings(adjust(
       d,
@@ -166,8 +165,7 @@ test_that("adjust passes ... to rstanarm::stan_glm()", {
 test_that("adjust passes ... to rstanarm::stan_glmer()", {
   skip_on_cran()
   skip_if_not_installed("rstanarm")
-  # oracle (invariant): the multilevel fit must not depend on rstanarm being
-  # attached
+  # should work without attaching rstanarm
   expect_false("package:rstanarm" %in% search())
   d <- iris[c("Sepal.Length", "Species")]
   adj <- suppressWarnings(adjust(
@@ -187,13 +185,13 @@ test_that("adjust passes ... to rstanarm::stan_glmer()", {
     iter = 200L,
     seed = 1L
   ))
-  # oracle (reference fit): the same model, fit by hand with the same arguments
+  # same as the model fit by hand
   expect_equal(
     adj$Sepal.Length,
     unname(insight::get_residuals(m)),
     tolerance = 1e-6
   )
-  # oracle (reference fit): `family` in `...` is not passed twice
+  # `family` is not passed twice
   adj_family <- suppressWarnings(adjust(
     d,
     multilevel = TRUE,
@@ -229,14 +227,13 @@ test_that("adjust passes ... to rstanarm::stan_gamm4()", {
     iter = 200L,
     seed = 1L
   ))
-  # oracle (reference fit): the same model, fit by hand with the same arguments
+  # same as the model fit by hand
   expect_equal(
     adj$Sepal.Length,
     unname(insight::get_residuals(m)),
     tolerance = 1e-6
   )
-  # oracle (invariant): `refresh` in `...` replaces the default of 0, so the
-  # sampler prints its progress, and the draws stay the same
+  # `refresh` replaces the default of 0
   progress <- utils::capture.output({
     adj_refresh <- suppressWarnings(adjust(
       d,

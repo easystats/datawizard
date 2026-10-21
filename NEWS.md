@@ -46,9 +46,8 @@ FIXES
   `type`, including the default `type = "2"`. Bootstrapped standard errors
   (`iterations`) are not changed.
 
-* If `rstanarm` is not attached, `adjust()` with `multilevel = TRUE` and
-  `bayesian = TRUE` no longer fails with an error that `stan_glmer()` was not
-  found (#726).
+* Fixed an error in `adjust()` with `multilevel = TRUE` and `bayesian = TRUE`
+  when `rstanarm` was not attached (#726).
 
 * Fixed `demean()` and `degroup()` for nested designs with three or more
   grouping variables. The group-meaned variables of the third and later

@@ -179,8 +179,7 @@ data_adjust <- adjust
   ...,
   refresh = 0L
 ) {
-  # `refresh` is a formal argument so that a value passed in `...` replaces the
-  # default instead of reaching the rstanarm functions twice
+  # `refresh` is an argument here, so it is not passed twice to rstanarm
 
   # Additive -----------------------
   if (additive) {
@@ -210,8 +209,7 @@ data_adjust <- adjust
     # Bayesian
     insight::check_if_installed("rstanarm")
     if (multilevel) {
-      # stan_lmer() evaluates a call to stan_glmer() in the calling frame, which
-      # fails when rstanarm is not attached, so call stan_glmer() directly
+      # stan_lmer() fails when rstanarm is not attached
       model <- rstanarm::stan_glmer(
         paste(model_formula, formula_random),
         data = data,
