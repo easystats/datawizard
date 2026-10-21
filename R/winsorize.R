@@ -16,10 +16,11 @@
 #' case, rare levels are merged into one level, `".other"`, which becomes the
 #' last level. A level is rare when its share of the non-missing values is less
 #' than `threshold`. Levels without values are not rare. If fewer than two
-#' levels are rare, the factor is returned unchanged. Values of a level
-#' `".other"` that already exists are merged as well. Only
-#' `method = "percentile"` can be used for factors. Character and logical
-#' vectors are always returned unchanged.
+#' levels are rare, the factor is returned unchanged. A level `".other"` that
+#' already exists is never rare, but when levels are merged, its values join
+#' them. With `include_factors = TRUE`, `method` must be `"percentile"`, so a
+#' data frame with a factor column gives an error for any other method.
+#' Character and logical vectors are always returned unchanged.
 #'
 #' @return
 #'
@@ -91,32 +92,16 @@ winsorize.factor <- function(
     return(data)
   }
 
-  method <- match.arg(method, choices = c("percentile", "zscore", "raw"))
-  if (method != "percentile") {
-    insight::format_error(
-      "Factors can only be winsorized with `method = \"percentile\"`."
-    )
-  }
-
-  if (
-    !is.numeric(threshold) ||
-      length(threshold) != 1L ||
-      is.na(threshold) ||
-      threshold < 0 ||
-      threshold > 0.5
-  ) {
-    insight::format_error(
-      "`threshold` for winsorization must be a scalar between 0 and 0.5."
-    )
-  }
+  .check_factor_args(threshold, method)
 
   counts <- table(data)
   n <- sum(counts)
-  if (n == 0) {
+  if (n == 0L) {
     return(data)
   }
 
-  # levels with at least one value and a share below threshold
+  # levels other than ".other" with at least one value and a share below
+  # threshold
   rare <- names(counts)[
     counts > 0 & counts / n < threshold & names(counts) != ".other"
   ]
@@ -227,5 +212,27 @@ winsorize.numeric <- function(
       is.na(include_factors)
   ) {
     insight::format_error("`include_factors` must be `TRUE` or `FALSE`.")
+  }
+}
+
+
+.check_factor_args <- function(threshold, method) {
+  method <- match.arg(method, choices = c("percentile", "zscore", "raw"))
+  if (method != "percentile") {
+    insight::format_error(
+      "Factors can only be winsorized with `method = \"percentile\"`."
+    )
+  }
+
+  if (
+    !is.numeric(threshold) ||
+      length(threshold) != 1L ||
+      is.na(threshold) ||
+      threshold < 0 ||
+      threshold > 0.5
+  ) {
+    insight::format_error(
+      "`threshold` for winsorization must be a scalar between 0 and 0.5."
+    )
   }
 }

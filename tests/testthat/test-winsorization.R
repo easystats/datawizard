@@ -128,7 +128,7 @@ test_that("winsorize factors, existing .other level", {
     factor(c(rep("a", 5), rep(".other", 5)), levels = c("a", ".other"))
   )
 
-  # oracle (closed-form): .other is not counted, and b (0.1) is the only
+  # oracle (closed-form): .other is never rare, and b (0.1) is the only
   # level below 0.2, so nothing is merged
   x <- factor(c(rep("a", 6), rep(".other", 3), "b"))
   expect_identical(winsorize(x, include_factors = TRUE), x)
@@ -197,10 +197,11 @@ test_that("winsorize factors, errors", {
     fixed = TRUE
   )
 
+  msg <- "`threshold` for winsorization must be a scalar between 0 and 0.5."
   for (th in list(-0.1, 0.6, c(0.1, 0.2), NA, "a")) {
     expect_error(
       winsorize(x, include_factors = TRUE, threshold = th),
-      regexp = "`threshold` for winsorization must be a scalar between 0 and 0.5.",
+      regexp = msg,
       fixed = TRUE
     )
   }

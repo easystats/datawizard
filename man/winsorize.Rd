@@ -85,10 +85,11 @@ Factors are returned unchanged unless \code{include_factors = TRUE}. In that
 case, rare levels are merged into one level, \code{".other"}, which becomes the
 last level. A level is rare when its share of the non-missing values is less
 than \code{threshold}. Levels without values are not rare. If fewer than two
-levels are rare, the factor is returned unchanged. Values of a level
-\code{".other"} that already exists are merged as well. Only
-\code{method = "percentile"} can be used for factors. Character and logical
-vectors are always returned unchanged.
+levels are rare, the factor is returned unchanged. A level \code{".other"} that
+already exists is never rare, but when levels are merged, its values join
+them. With \code{include_factors = TRUE}, \code{method} must be \code{"percentile"}, so a
+data frame with a factor column gives an error for any other method.
+Character and logical vectors are always returned unchanged.
 }
 \examples{
 hist(iris$Sepal.Length, main = "Original data")
