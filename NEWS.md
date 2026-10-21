@@ -18,16 +18,11 @@ BREAKING CHANGES
 
 CHANGES
 
-* `degroup()` accepts a function in `center`, such as
-  `center = function(v) mean(v, trim = 0.2)`. The function gets the
-  non-missing values of each group and must return a single number or `NA`
-  (#21).
+* `degroup()` now also accepts a function in `center`, e.g.
+  `center = function(x) mean(x, trim = 0.2)` (#21).
 
-* `demean()` and `degroup()` gain a `grand_center` argument.
-  `grand_center = TRUE` subtracts from each group-meaned and de-meaned
-  variable its own mean. A character vector such as `grand_center = "within"`
-  centers only the named variables. In cross-classified designs, the
-  de-meaned variable then has a mean of 0 (#637).
+* `demean()` and `degroup()` gain a `grand_center` argument, to grand-mean
+  center the group-meaned and de-meaned variables (#637).
 
 * `demean()` and `degroup()` now warn when the data do not seem to match `by`.
   With `nested = FALSE`, the warning comes when each value of one `by`
