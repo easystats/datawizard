@@ -265,8 +265,8 @@
       n_without <- length(unique(without))
       # one value per cluster of the others: each of those clusters pairs with
       # one value of x
-      pairs <- unique(without + x_code[r] * (length(x) + 1))
-      if (n_without < n_clusters && length(pairs) == n_without) {
+      x_pairs <- unique(without + x_code[r] * (length(x) + 1))
+      if (n_without < n_clusters && length(x_pairs) == n_without) {
         not_needed <- union(not_needed, names(cluster_vars)[i])
       }
     }
@@ -278,13 +278,13 @@
       paste0("`", not_needed, "`")
     )
     subject <- if (is.null(name)) "The variable" else paste0("`", name, "`")
-    remove <- if (length(not_needed) == 1L) "it" else "one of them"
+    to_remove <- if (length(not_needed) == 1L) "it" else "one of them"
     insight::format_warning(paste0(
       subject,
       " takes one value per cluster even without ",
       text_concatenate(var_labels, last = " or "),
       " in `cluster`. Such a cluster variable only splits clusters. Remove ",
-      remove,
+      to_remove,
       " from `cluster`, or set `verbose = FALSE` to silence this warning."
     ))
   }
@@ -341,40 +341,21 @@
     append <- append_suffix
   }
 
-  # a character vector with no repeated element names the cluster columns,
-  # which are never transformed. One with a repeated element holds id values
-  # (naming one column twice has no use), so it must have one element per row.
-  cluster_name <- NULL
-  if (!is.null(cluster)) {
-    # check here, before `.center` and `.scale` are recycled below
-    .check_cluster_args(cluster, weights, reference, .center, .scale)
-    if (is.character(cluster) && !length(cluster)) {
-      insight::format_error("`cluster` must contain at least one id vector.")
-    }
-    if (is.character(cluster) && anyDuplicated(cluster) == 0L) {
-      .check_cluster_column(x, cluster)
-      cluster_name <- cluster
-      exclude <- c(exclude, cluster)
-    } else if (any(lengths(.cluster_list(cluster)) != nrow(x))) {
-      insight::format_error(
-        "`cluster` must have the same length as the number of rows in the data."
-      )
-    }
-  }
+  # cluster columns are never transformed. Check here, before `.center` and
+  # `.scale` are recycled below.
+  cluster_name <- .process_std_cluster(
+    x,
+    cluster,
+    weights,
+    reference,
+    .center,
+    .scale
+  )
+  exclude <- c(exclude, cluster_name)
 
-  if (!is.null(weights) && is.character(weights)) {
-    if (weights %in% colnames(x)) {
-      exclude <- c(exclude, weights)
-    } else {
-      insight::format_warning(
-        paste0(
-          "Could not find weighting column `",
-          weights,
-          "`. Weighting not carried out."
-        )
-      )
-      weights <- NULL
-    }
+  weights <- .process_std_weights(x, weights)
+  if (is.character(weights)) {
+    exclude <- c(exclude, weights)
   }
 
   select <- .select_variables(x, select, exclude, keep_factors, keep_character)
@@ -445,8 +426,92 @@
     select <- colnames(new_variables)
   }
 
-  # check for reference center and scale. A single TRUE or FALSE is passed on
-  # to each column as it is, as the numeric methods take it.
+  center_scale <- .process_std_center_scale(.center, .scale, select)
+
+  # add back variable labels
+  if (length(variable_labels)) {
+    for (i in names(variable_labels)) {
+      attr(x[[i]], "label") <- variable_labels[[i]]
+    }
+  }
+
+  if (preserve_value_labels && length(value_labels)) {
+    for (i in names(value_labels)) {
+      attr(x[[i]], "labels") <- value_labels[[i]]
+    }
+  }
+
+  list(
+    x = x,
+    select = select,
+    exclude = exclude,
+    weights = weights,
+    append = append,
+    center = center_scale$center,
+    scale = center_scale$scale,
+    cluster = cluster
+  )
+}
+
+
+# A character vector with no repeated element names the cluster columns. One
+# with a repeated element holds id values (naming one column twice has no use),
+# so it must have one element per row. Returns the names of the cluster
+# columns, or `NULL` when `cluster` holds id values.
+#
+#' @keywords internal
+.process_std_cluster <- function(
+  x,
+  cluster,
+  weights,
+  reference,
+  .center,
+  .scale
+) {
+  if (is.null(cluster)) {
+    return(NULL)
+  }
+  .check_cluster_args(cluster, weights, reference, .center, .scale)
+  if (is.character(cluster) && !length(cluster)) {
+    insight::format_error("`cluster` must contain at least one id vector.")
+  }
+  if (is.character(cluster) && anyDuplicated(cluster) == 0L) {
+    .check_cluster_column(x, cluster)
+    return(cluster)
+  }
+  if (any(lengths(.cluster_list(cluster)) != nrow(x))) {
+    insight::format_error(
+      "`cluster` must have the same length as the number of rows in the data."
+    )
+  }
+  NULL
+}
+
+
+# A weighting column that is not in the data is dropped with a warning.
+#
+#' @keywords internal
+.process_std_weights <- function(x, weights) {
+  if (is.character(weights) && !weights %in% colnames(x)) {
+    insight::format_warning(
+      paste0(
+        "Could not find weighting column `",
+        weights,
+        "`. Weighting not carried out."
+      )
+    )
+    weights <- NULL
+  }
+  weights
+}
+
+
+# Reference center and scale, one named value per selected variable. A single
+# TRUE or FALSE is passed on to each column as it is, as the numeric methods
+# take it.
+#
+#' @keywords internal
+.process_std_center_scale <- function(.center, .scale, select) {
   is_flag <- function(i) is.logical(i) && length(i) == 1L && !is.na(i)
   if (
     (is_flag(.center) || is.null(.center)) &&
@@ -497,30 +562,7 @@
     .center <- stats::setNames(rep(NA, length(select)), select)
     .scale <- stats::setNames(rep(NA, length(select)), select)
   }
-
-  # add back variable labels
-  if (length(variable_labels)) {
-    for (i in names(variable_labels)) {
-      attr(x[[i]], "label") <- variable_labels[[i]]
-    }
-  }
-
-  if (preserve_value_labels && length(value_labels)) {
-    for (i in names(value_labels)) {
-      attr(x[[i]], "labels") <- value_labels[[i]]
-    }
-  }
-
-  list(
-    x = x,
-    select = select,
-    exclude = exclude,
-    weights = weights,
-    append = append,
-    center = .center,
-    scale = .scale,
-    cluster = cluster
-  )
+  list(center = .center, scale = .scale)
 }
 
 

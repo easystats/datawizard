@@ -908,11 +908,17 @@ test_that("cluster, list names do not change which variables are checked", {
   # oracle (invariant): both orders of two same-named elements warn, and an
   # NA name is a position, so a classroom-level variable does not warn
   expect_warning(
-    center(ml$school_size, cluster = list(g = ml$school, g = ml$classroom)),
+    center(
+      ml$school_size,
+      cluster = stats::setNames(list(ml$school, ml$classroom), c("g", "g"))
+    ),
     "Remove it"
   )
   expect_warning(
-    center(ml$school_size, cluster = list(g = ml$classroom, g = ml$school)),
+    center(
+      ml$school_size,
+      cluster = stats::setNames(list(ml$classroom, ml$school), c("g", "g"))
+    ),
     "Remove it"
   )
   expect_no_warning(center(
