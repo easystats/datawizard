@@ -143,15 +143,13 @@ rest of the arguments are absent.
 
 \item{cluster}{Can be \code{NULL} (for no clustering), a vector of cluster ids
 with one element per observation, or a list of such vectors. For data
-frames, it can also be one or more column names (for grouped data frames,
-it must be). If given, the center and scale are computed from one value
-per cluster, so that a cluster-level variable in long format is not
-weighted by cluster size. With several cluster variables, each combination
-of their values is one cluster, e.g. \code{cluster = c("school", "classroom")}
-for a classroom-level variable. The variable must take one value within
-each cluster, and observations with a missing cluster id are returned as
-\code{NA}. Cannot be combined with \code{weights}, \code{reference}, or numeric \code{center}
-and \code{scale}.}
+frames, it can also be one or more column names (grouped data frames only
+take column names). If given, the center and scale are computed from one
+value per cluster, so that cluster-level variables are not weighted by
+cluster size. With several cluster variables, each combination of their
+values is one cluster. Observations with a missing cluster id are returned
+as \code{NA}. Cannot be combined with \code{weights}, \code{reference}, or numeric
+\code{center} and \code{scale}.}
 
 \item{force}{Logical, if \code{TRUE}, forces recoding of factors and character
 vectors as well.}

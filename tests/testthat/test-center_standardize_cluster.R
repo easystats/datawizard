@@ -482,7 +482,7 @@ for (fun_name in c("center", "standardize")) {
     )
     expect_error(
       fun(gd, select = "funding", cluster = g$school),
-      "`cluster` must be a column name"
+      "`cluster` must be one or more"
     )
     g_one <- poorman::group_by(g[g$school %in% c(1, 2, 4), ], region)
     if (fun_name == "standardize") {
@@ -658,7 +658,7 @@ for (fun_name in c("center", "standardize")) {
 
     expect_error(
       fun(gd, select = "class_size", cluster = list(ml$school, ml$classroom)),
-      "For grouped data frames, `cluster` must be a column name"
+      "For grouped data frames, `cluster` must be one or more"
     )
   })
 
@@ -738,7 +738,7 @@ for (fun_name in c("center", "standardize")) {
     )
     expect_error(
       fun(gd, select = "class_size", cluster = c("zone", "zone")),
-      "For grouped data frames, `cluster` must be a column name"
+      "For grouped data frames, `cluster` must be one or more"
     )
     expect_error(
       fun(gd, select = "class_size", cluster = character(0)),

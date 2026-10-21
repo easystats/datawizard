@@ -28,15 +28,13 @@
 #' - For numeric vectors: a numeric vector of weights.
 #' @param cluster Can be `NULL` (for no clustering), a vector of cluster ids
 #'   with one element per observation, or a list of such vectors. For data
-#'   frames, it can also be one or more column names (for grouped data frames,
-#'   it must be). If given, the center and scale are computed from one value
-#'   per cluster, so that a cluster-level variable in long format is not
-#'   weighted by cluster size. With several cluster variables, each combination
-#'   of their values is one cluster, e.g. `cluster = c("school", "classroom")`
-#'   for a classroom-level variable. The variable must take one value within
-#'   each cluster, and observations with a missing cluster id are returned as
-#'   `NA`. Cannot be combined with `weights`, `reference`, or numeric `center`
-#'   and `scale`.
+#'   frames, it can also be one or more column names (grouped data frames only
+#'   take column names). If given, the center and scale are computed from one
+#'   value per cluster, so that cluster-level variables are not weighted by
+#'   cluster size. With several cluster variables, each combination of their
+#'   values is one cluster. Observations with a missing cluster id are returned
+#'   as `NA`. Cannot be combined with `weights`, `reference`, or numeric
+#'   `center` and `scale`.
 #' @param verbose Toggle warnings and messages on or off.
 #' @param remove_na How should missing values (`NA`) be treated: if `"none"`
 #'   (default): each column's standardization is done separately, ignoring

@@ -283,7 +283,7 @@
       subject,
       " takes one value per cluster even without ",
       text_concatenate(var_labels, last = " or "),
-      " in `cluster`. Such a cluster variable only splits clusters, and each split cluster then counts once per part. Remove ", # nolint
+      " in `cluster`. Such a cluster variable only splits clusters. Remove ",
       remove,
       " from `cluster`, or set `verbose = FALSE` to silence this warning."
     ))
@@ -774,7 +774,7 @@
     }
     if (!is.character(cluster) || anyDuplicated(cluster) > 0L) {
       insight::format_error(
-        "For grouped data frames, `cluster` must be a column name or a character vector of distinct column names." # nolint
+        "For grouped data frames, `cluster` must be one or more distinct column names."
       )
     }
     .check_cluster_args(cluster, weights, reference)
