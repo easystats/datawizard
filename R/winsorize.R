@@ -12,6 +12,15 @@
 #' percentile. Winsorized estimators are usually more robust to outliers than
 #' their more standard forms.
 #'
+#' Factors are returned unchanged unless `include_factors = TRUE`. In that
+#' case, rare levels are merged into one level, `".other"`, which becomes the
+#' last level. A level is rare when its share of the non-missing values is less
+#' than `threshold`. Levels without values are not rare. If fewer than two
+#' levels are rare, the factor is returned unchanged. Values of a level
+#' `".other"` that already exists are merged as well. Only
+#' `method = "percentile"` can be used for factors. Character and logical
+#' vectors are always returned unchanged.
+#'
 #' @return
 #'
 #' A data frame with winsorized columns or a winsorized vector.
@@ -31,6 +40,9 @@
 #'   the mean and the standard deviation.
 #' @param ... Currently not used.
 #' @param verbose Not used anymore since `datawizard` 0.6.6.
+#' @param include_factors Logical, if `TRUE`, rare levels of factors are merged
+#'   into a level `".other"` (see 'Details'). Defaults to `FALSE`, which returns
+#'   factors unchanged.
 #'
 #' @examples
 #' hist(iris$Sepal.Length, main = "Original data")
@@ -53,6 +65,10 @@
 #'
 #' # Also works on a data frame:
 #' winsorize(iris, threshold = 0.2)
+#'
+#' # Merge levels with less than 10% of the values:
+#' x <- factor(c(rep("a", 10), rep("b", 8), "c", "d"))
+#' winsorize(x, threshold = 0.1, include_factors = TRUE)
 #'
 #' @inherit data_rename seealso
 #' @export

@@ -36,6 +36,10 @@ CHANGES
   `parameters_smoothness` remain as secondary classes, so code that checks
   `class(x)[1]` for the old names needs to be updated (#248).
 
+* `winsorize()` gains an `include_factors` argument. If `TRUE`, levels of a
+  factor with a share of values below `threshold` are merged into one level,
+  `".other"`. Factors are still returned unchanged by default (#48).
+
 FIXES
 
 * `skewness()` and `kurtosis()` now return the standard error for the chosen

@@ -2,10 +2,30 @@
 % Please edit documentation in R/winsorize.R
 \name{winsorize}
 \alias{winsorize}
+\alias{winsorize.factor}
+\alias{winsorize.data.frame}
 \alias{winsorize.numeric}
 \title{Winsorize data}
 \usage{
 winsorize(data, ...)
+
+\method{winsorize}{factor}(
+  data,
+  threshold = 0.2,
+  method = "percentile",
+  include_factors = FALSE,
+  ...
+)
+
+\method{winsorize}{data.frame}(
+  data,
+  threshold = 0.2,
+  method = "percentile",
+  robust = FALSE,
+  verbose = TRUE,
+  include_factors = FALSE,
+  ...
+)
 
 \method{winsorize}{numeric}(
   data,
@@ -34,6 +54,10 @@ for winsorization.
 
 \item{method}{One of "percentile" (default), "zscore", or "raw".}
 
+\item{include_factors}{Logical, if \code{TRUE}, rare levels of factors are merged
+into a level \code{".other"} (see 'Details'). Defaults to \code{FALSE}, which returns
+factors unchanged.}
+
 \item{robust}{Logical, if TRUE, winsorizing through the "zscore" method is
 done via the median and the median absolute deviation (MAD); if FALSE, via
 the mean and the standard deviation.}
@@ -56,6 +80,15 @@ example, a \verb{90\%} winsorization would see all data below the 5th percentile
 to the 5th percentile, and data above the 95th percentile set to the 95th
 percentile. Winsorized estimators are usually more robust to outliers than
 their more standard forms.
+
+Factors are returned unchanged unless \code{include_factors = TRUE}. In that
+case, rare levels are merged into one level, \code{".other"}, which becomes the
+last level. A level is rare when its share of the non-missing values is less
+than \code{threshold}. Levels without values are not rare. If fewer than two
+levels are rare, the factor is returned unchanged. Values of a level
+\code{".other"} that already exists are merged as well. Only
+\code{method = "percentile"} can be used for factors. Character and logical
+vectors are always returned unchanged.
 }
 \examples{
 hist(iris$Sepal.Length, main = "Original data")
@@ -78,6 +111,10 @@ hist(winsorize(iris$Sepal.Length, threshold = c(5, 7.5), method = "raw"),
 
 # Also works on a data frame:
 winsorize(iris, threshold = 0.2)
+
+# Merge levels with less than 10\% of the values:
+x <- factor(c(rep("a", 10), rep("b", 8), "c", "d"))
+winsorize(x, threshold = 0.1, include_factors = TRUE)
 
 }
 \seealso{
