@@ -61,17 +61,69 @@ winsorize <- function(data, ...) {
 }
 
 
+#' @rdname winsorize
 #' @export
-winsorize.factor <- function(data, ...) {
+winsorize.factor <- function(
+  data,
+  threshold = 0.2,
+  method = "percentile",
+  include_factors = FALSE,
+  ...
+) {
+  .check_include_factors(include_factors)
+  if (!include_factors) {
+    return(data)
+  }
+
+  method <- match.arg(method, choices = c("percentile", "zscore", "raw"))
+  if (method != "percentile") {
+    insight::format_error(
+      "Factors can only be winsorized with `method = \"percentile\"`."
+    )
+  }
+
+  if (
+    !is.numeric(threshold) ||
+      length(threshold) != 1L ||
+      is.na(threshold) ||
+      threshold < 0 ||
+      threshold > 0.5
+  ) {
+    insight::format_error(
+      "`threshold` for winsorization must be a scalar between 0 and 0.5."
+    )
+  }
+
+  counts <- table(data)
+  n <- sum(counts)
+  if (n == 0) {
+    return(data)
+  }
+
+  # levels with at least one value and a share below threshold
+  rare <- names(counts)[
+    counts > 0 & counts / n < threshold & names(counts) != ".other"
+  ]
+  if (length(rare) < 2L) {
+    return(data)
+  }
+
+  merged <- c(rare, ".other")
+  new_levels <- c(setdiff(levels(data), merged), ".other")
+  out <- as.character(data)
+  out[out %in% merged] <- ".other"
+  factor(out, levels = new_levels, ordered = is.ordered(data))
+}
+
+#' @export
+winsorize.character <- function(data, ...) {
   data
 }
 
 #' @export
-winsorize.character <- winsorize.factor
+winsorize.logical <- winsorize.character
 
-#' @export
-winsorize.logical <- winsorize.factor
-
+#' @rdname winsorize
 #' @export
 winsorize.data.frame <- function(
   data,
@@ -79,15 +131,18 @@ winsorize.data.frame <- function(
   method = "percentile",
   robust = FALSE,
   verbose = TRUE,
+  include_factors = FALSE,
   ...
 ) {
+  .check_include_factors(include_factors)
   data[] <- lapply(
     data,
     winsorize,
     threshold = threshold,
     method = method,
     robust = robust,
-    verbose = verbose
+    verbose = verbose,
+    include_factors = include_factors
   )
   data
 }
@@ -146,4 +201,15 @@ winsorize.numeric <- function(
   data[data < threshold[1]] <- threshold[1]
   data[data > threshold[2]] <- threshold[2]
   return(data)
+}
+
+
+.check_include_factors <- function(include_factors) {
+  if (
+    !is.logical(include_factors) ||
+      length(include_factors) != 1L ||
+      is.na(include_factors)
+  ) {
+    insight::format_error("`include_factors` must be `TRUE` or `FALSE`.")
+  }
 }
