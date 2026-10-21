@@ -45,8 +45,8 @@ winsorize(data, ...)
 \itemize{
 \item For \code{method = "percentile"}: the amount to winsorize from \emph{each} tail.
 The value of \code{threshold} must be between 0 and 0.5 and of length 1. For
-factors with \code{include_factors = TRUE}, it is the share of values below
-which a level is rare.
+factors with \code{include_factors = TRUE}, it is the share of non-missing
+values below which a level is rare.
 \item For \code{method = "zscore"}: the number of \emph{SD}/\emph{MAD}-deviations from the
 \emph{mean}/\emph{median} (see \code{robust}). The value of \code{threshold} must be greater
 than 0 and of length 1.
@@ -59,7 +59,8 @@ with \code{include_factors = TRUE}, only "percentile" can be used.}
 
 \item{include_factors}{Logical, if \code{TRUE}, rare levels of factors are merged
 into a level \code{".other"} (see 'Details'). Defaults to \code{FALSE}, which returns
-factors unchanged. Must be named, because it comes after \code{...}.}
+factors unchanged. Because it comes after \code{...}, it must be named in full,
+as in \code{include_factors = TRUE}. An unnamed or shortened argument is ignored.}
 
 \item{robust}{Logical, if TRUE, winsorizing through the "zscore" method is
 done via the median and the median absolute deviation (MAD); if FALSE, via

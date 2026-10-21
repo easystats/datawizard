@@ -33,8 +33,8 @@
 #' @param threshold The amount of winsorization, depends on the value of `method`:
 #' - For `method = "percentile"`: the amount to winsorize from *each* tail.
 #'   The value of `threshold` must be between 0 and 0.5 and of length 1. For
-#'   factors with `include_factors = TRUE`, it is the share of values below
-#'   which a level is rare.
+#'   factors with `include_factors = TRUE`, it is the share of non-missing
+#'   values below which a level is rare.
 #' - For `method = "zscore"`: the number of *SD*/*MAD*-deviations from the
 #'   *mean*/*median* (see `robust`). The value of `threshold` must be greater
 #'   than 0 and of length 1.
@@ -49,7 +49,8 @@
 #' @param verbose Not used anymore since `datawizard` 0.6.6.
 #' @param include_factors Logical, if `TRUE`, rare levels of factors are merged
 #'   into a level `".other"` (see 'Details'). Defaults to `FALSE`, which returns
-#'   factors unchanged. Must be named, because it comes after `...`.
+#'   factors unchanged. Because it comes after `...`, it must be named in full,
+#'   as in `include_factors = TRUE`. An unnamed or shortened argument is ignored.
 #'
 #' @examples
 #' hist(iris$Sepal.Length, main = "Original data")
