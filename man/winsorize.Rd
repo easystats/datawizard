@@ -13,8 +13,8 @@ winsorize(data, ...)
   data,
   threshold = 0.2,
   method = "percentile",
-  include_factors = FALSE,
-  ...
+  ...,
+  include_factors = FALSE
 )
 
 \method{winsorize}{data.frame}(
@@ -23,8 +23,8 @@ winsorize(data, ...)
   method = "percentile",
   robust = FALSE,
   verbose = TRUE,
-  include_factors = FALSE,
-  ...
+  ...,
+  include_factors = FALSE
 )
 
 \method{winsorize}{numeric}(
@@ -44,7 +44,9 @@ winsorize(data, ...)
 \item{threshold}{The amount of winsorization, depends on the value of \code{method}:
 \itemize{
 \item For \code{method = "percentile"}: the amount to winsorize from \emph{each} tail.
-The value of \code{threshold} must be between 0 and 0.5 and of length 1.
+The value of \code{threshold} must be between 0 and 0.5 and of length 1. For
+factors with \code{include_factors = TRUE}, it is the share of values below
+which a level is rare.
 \item For \code{method = "zscore"}: the number of \emph{SD}/\emph{MAD}-deviations from the
 \emph{mean}/\emph{median} (see \code{robust}). The value of \code{threshold} must be greater
 than 0 and of length 1.
@@ -52,11 +54,12 @@ than 0 and of length 1.
 for winsorization.
 }}
 
-\item{method}{One of "percentile" (default), "zscore", or "raw".}
+\item{method}{One of "percentile" (default), "zscore", or "raw". For factors
+with \code{include_factors = TRUE}, only "percentile" can be used.}
 
 \item{include_factors}{Logical, if \code{TRUE}, rare levels of factors are merged
 into a level \code{".other"} (see 'Details'). Defaults to \code{FALSE}, which returns
-factors unchanged.}
+factors unchanged. Must be named, because it comes after \code{...}.}
 
 \item{robust}{Logical, if TRUE, winsorizing through the "zscore" method is
 done via the median and the median absolute deviation (MAD); if FALSE, via
@@ -83,13 +86,16 @@ their more standard forms.
 
 Factors are returned unchanged unless \code{include_factors = TRUE}. In that
 case, rare levels are merged into one level, \code{".other"}, which becomes the
-last level. A level is rare when its share of the non-missing values is less
-than \code{threshold}. Levels without values are not rare. If fewer than two
-levels are rare, the factor is returned unchanged. A level \code{".other"} that
-already exists is never rare, but when levels are merged, its values join
-them. With \code{include_factors = TRUE}, \code{method} must be \code{"percentile"}, so a
-data frame with a factor column gives an error for any other method.
-Character and logical vectors are always returned unchanged.
+last level. In an ordered factor, \code{".other"} is therefore the highest level.
+A level is rare when its share of the non-missing values is less than
+\code{threshold}. Values at an \code{NA} level, such as one added by \code{\link[=addNA]{addNA()}}, are
+missing values, and an \code{NA} level is never rare. Levels without values are
+not rare. If fewer than two levels are rare, the factor is returned
+unchanged. A level \code{".other"} that already exists is never rare, but when
+levels are merged, its values join them. With \code{include_factors = TRUE},
+\code{method} must be \code{"percentile"}, so a data frame with a factor column gives
+an error for any other method. Character and logical vectors are always
+returned unchanged.
 }
 \examples{
 hist(iris$Sepal.Length, main = "Original data")

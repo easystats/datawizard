@@ -144,6 +144,80 @@ test_that("winsorize factors, nothing to merge", {
   expect_identical(winsorize(x, include_factors = TRUE), x)
 })
 
+test_that("winsorize factors, NA level, class, and attributes", {
+  x <- factor(
+    c(rep("a", 6), rep("b", 2), "c", "d", NA),
+    levels = c(NA, "a", "b", "c", "d"),
+    exclude = NULL
+  )
+  # oracle (closed-form): the NA level holds a missing value, so the shares
+  # use 10 values: a = 0.6, b = 0.2, c = 0.1, d = 0.1; c and d are merged, and
+  # the NA level stays first. Counting the NA level (1 / 11) would make it rare
+  # and would make b rare too (2 / 11 < 0.2).
+  expect_identical(
+    winsorize(x, include_factors = TRUE),
+    factor(
+      c(rep("a", 6), rep("b", 2), ".other", ".other", NA),
+      levels = c(NA, "a", "b", ".other"),
+      exclude = NULL
+    )
+  )
+
+  # oracle (closed-form): same shares, with the NA level between the merged
+  # levels c and d; it keeps its place among the kept levels
+  x <- factor(
+    c(rep("a", 6), rep("b", 2), "c", "d", NA),
+    levels = c("a", "c", NA, "d", "b"),
+    exclude = NULL
+  )
+  expect_identical(
+    winsorize(x, include_factors = TRUE),
+    factor(
+      c(rep("a", 6), rep("b", 2), ".other", ".other", NA),
+      levels = c("a", NA, "b", ".other"),
+      exclude = NULL
+    )
+  )
+
+  # oracle (closed-form): c (0.1) is the only level below 0.2 and the NA
+  # level is never rare, so nothing is merged
+  x <- addNA(factor(c(rep("a", 5), rep("b", 4), "c", NA)))
+  expect_identical(winsorize(x, include_factors = TRUE), x)
+
+  # oracle (closed-form): a level named "NA" is an ordinary level; "NA" and
+  # b each have share 0.1
+  x <- factor(c(rep("a", 8), "NA", "b"))
+  expect_identical(
+    winsorize(x, include_factors = TRUE),
+    factor(c(rep("a", 8), ".other", ".other"), levels = c("a", ".other"))
+  )
+
+  # oracle (closed-form): b and c each have share 0.1; the extra class and
+  # the label are kept
+  x <- factor(c(rep("a", 8), "b", "c"))
+  class(x) <- c("myfac", "factor")
+  attr(x, "label") <- "My variable"
+  expected <- factor(
+    c(rep("a", 8), ".other", ".other"),
+    levels = c("a", ".other")
+  )
+  class(expected) <- c("myfac", "factor")
+  attr(expected, "label") <- "My variable"
+  expect_identical(winsorize(x, include_factors = TRUE), expected)
+})
+
+test_that("winsorize factors, include_factors must be named", {
+  x <- factor(c(rep("a", 7), "b", "c", "d"))
+  # a fourth unnamed argument goes to `...` and does not merge levels
+  expect_identical(winsorize(x, 0.2, "percentile", TRUE), x)
+
+  d <- data.frame(num = 1:10, fac = x)
+  expect_identical(
+    winsorize(d, 0.2, "percentile", FALSE, TRUE, TRUE),
+    winsorize(d)
+  )
+})
+
 test_that("winsorize factors, include_factors = FALSE", {
   x <- factor(c(rep("a", 7), "b", "c", "d"))
   expect_identical(winsorize(x), x)

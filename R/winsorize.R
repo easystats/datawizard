@@ -14,13 +14,16 @@
 #'
 #' Factors are returned unchanged unless `include_factors = TRUE`. In that
 #' case, rare levels are merged into one level, `".other"`, which becomes the
-#' last level. A level is rare when its share of the non-missing values is less
-#' than `threshold`. Levels without values are not rare. If fewer than two
-#' levels are rare, the factor is returned unchanged. A level `".other"` that
-#' already exists is never rare, but when levels are merged, its values join
-#' them. With `include_factors = TRUE`, `method` must be `"percentile"`, so a
-#' data frame with a factor column gives an error for any other method.
-#' Character and logical vectors are always returned unchanged.
+#' last level. In an ordered factor, `".other"` is therefore the highest level.
+#' A level is rare when its share of the non-missing values is less than
+#' `threshold`. Values at an `NA` level, such as one added by [addNA()], are
+#' missing values, and an `NA` level is never rare. Levels without values are
+#' not rare. If fewer than two levels are rare, the factor is returned
+#' unchanged. A level `".other"` that already exists is never rare, but when
+#' levels are merged, its values join them. With `include_factors = TRUE`,
+#' `method` must be `"percentile"`, so a data frame with a factor column gives
+#' an error for any other method. Character and logical vectors are always
+#' returned unchanged.
 #'
 #' @return
 #'
@@ -29,13 +32,16 @@
 #' @param data data frame or vector.
 #' @param threshold The amount of winsorization, depends on the value of `method`:
 #' - For `method = "percentile"`: the amount to winsorize from *each* tail.
-#'   The value of `threshold` must be between 0 and 0.5 and of length 1.
+#'   The value of `threshold` must be between 0 and 0.5 and of length 1. For
+#'   factors with `include_factors = TRUE`, it is the share of values below
+#'   which a level is rare.
 #' - For `method = "zscore"`: the number of *SD*/*MAD*-deviations from the
 #'   *mean*/*median* (see `robust`). The value of `threshold` must be greater
 #'   than 0 and of length 1.
 #' - For `method = "raw"`: a vector of length 2 with the lower and upper bound
 #'   for winsorization.
-#' @param method One of "percentile" (default), "zscore", or "raw".
+#' @param method One of "percentile" (default), "zscore", or "raw". For factors
+#'   with `include_factors = TRUE`, only "percentile" can be used.
 #' @param robust Logical, if TRUE, winsorizing through the "zscore" method is
 #'   done via the median and the median absolute deviation (MAD); if FALSE, via
 #'   the mean and the standard deviation.
@@ -43,7 +49,7 @@
 #' @param verbose Not used anymore since `datawizard` 0.6.6.
 #' @param include_factors Logical, if `TRUE`, rare levels of factors are merged
 #'   into a level `".other"` (see 'Details'). Defaults to `FALSE`, which returns
-#'   factors unchanged.
+#'   factors unchanged. Must be named, because it comes after `...`.
 #'
 #' @examples
 #' hist(iris$Sepal.Length, main = "Original data")
@@ -84,8 +90,8 @@ winsorize.factor <- function(
   data,
   threshold = 0.2,
   method = "percentile",
-  include_factors = FALSE,
-  ...
+  ...,
+  include_factors = FALSE
 ) {
   .check_include_factors(include_factors)
   if (!include_factors) {
@@ -94,26 +100,34 @@ winsorize.factor <- function(
 
   .check_factor_args(threshold, method)
 
-  counts <- table(data)
-  n <- sum(counts)
+  # values at an NA level (see addNA()) are missing, too
+  values <- as.character(data)
+  n <- sum(!is.na(values))
   if (n == 0L) {
     return(data)
   }
 
-  # levels other than ".other" with at least one value and a share below
-  # threshold
-  rare <- names(counts)[
-    counts > 0 & counts / n < threshold & names(counts) != ".other"
-  ]
+  # levels other than NA and ".other" with at least one value and a share
+  # below threshold
+  lvls <- levels(data)
+  candidates <- setdiff(lvls[!is.na(lvls)], ".other")
+  counts <- tabulate(match(values, candidates), nbins = length(candidates))
+  rare <- candidates[counts > 0 & counts / n < threshold]
   if (length(rare) < 2L) {
     return(data)
   }
 
   merged <- c(rare, ".other")
-  new_levels <- c(setdiff(levels(data), merged), ".other")
-  out <- as.character(data)
-  out[out %in% merged] <- ".other"
-  factor(out, levels = new_levels, ordered = is.ordered(data))
+  new_levels <- c(setdiff(lvls, merged), ".other")
+  values[values %in% merged] <- ".other"
+
+  # rebuild the codes so that the class, an NA level, and other attributes
+  # are kept
+  out <- match(values, new_levels)
+  attrs <- attributes(data)
+  attrs$levels <- new_levels
+  attributes(out) <- attrs
+  out
 }
 
 #' @export
@@ -132,8 +146,8 @@ winsorize.data.frame <- function(
   method = "percentile",
   robust = FALSE,
   verbose = TRUE,
-  include_factors = FALSE,
-  ...
+  ...,
+  include_factors = FALSE
 ) {
   .check_include_factors(include_factors)
   data[] <- lapply(
@@ -223,7 +237,11 @@ winsorize.numeric <- function(
       "Factors can only be winsorized with `method = \"percentile\"`."
     )
   }
+  .check_factor_threshold(threshold)
+}
 
+
+.check_factor_threshold <- function(threshold) {
   if (
     !is.numeric(threshold) ||
       length(threshold) != 1L ||
