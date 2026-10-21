@@ -121,7 +121,8 @@ mean-centering, while \code{degroup()} can use \code{center = "median"} or
 or \code{"max"}. \code{degroup()} also accepts a function, such as
 \code{center = function(v) mean(v, trim = 0.2)}. The function gets the
 non-missing values of a variable in one group and must return a single
-number (or \code{NA}).}
+number (or \code{NA}). In a group with only missing values, it gets a vector
+of length 0, and it must still return a single number or \code{NA}.}
 }
 \value{
 A data frame with the group-/de-meaned variables, which get the suffix
