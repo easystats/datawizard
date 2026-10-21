@@ -37,9 +37,9 @@ CHANGES
   `class(x)[1]` for the old names needs to be updated (#248).
 
 * `winsorize()` gains an `include_factors` argument. If `TRUE` and at least
-  two levels of a factor have a share of values below `threshold`, these
-  levels are merged into one level, `".other"`. Factors are still returned
-  unchanged by default (#48).
+  two levels of a factor have a share of non-missing values below
+  `threshold`, these levels are merged into one level, `".other"`. Factors are
+  still returned unchanged by default (#48).
 
 FIXES
 

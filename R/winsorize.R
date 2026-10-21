@@ -50,7 +50,8 @@
 #' @param include_factors Logical, if `TRUE`, rare levels of factors are merged
 #'   into a level `".other"` (see 'Details'). Defaults to `FALSE`, which returns
 #'   factors unchanged. Because it comes after `...`, it must be named in full,
-#'   as in `include_factors = TRUE`. An unnamed or shortened argument is ignored.
+#'   as in `include_factors = TRUE`. An unnamed or shortened argument is
+#'   ignored.
 #'
 #' @examples
 #' hist(iris$Sepal.Length, main = "Original data")
@@ -123,10 +124,13 @@ winsorize.factor <- function(
   values[values %in% merged] <- ".other"
 
   # rebuild the codes so that the class, an NA level, and other attributes
-  # are kept
+  # are kept; NA codes stay NA, and contrasts made for the old levels are
+  # dropped
   out <- match(values, new_levels)
+  out[is.na(unclass(data))] <- NA_integer_
   attrs <- attributes(data)
   attrs$levels <- new_levels
+  attrs$contrasts <- NULL
   attributes(out) <- attrs
   out
 }
@@ -246,9 +250,7 @@ winsorize.numeric <- function(
   if (
     !is.numeric(threshold) ||
       length(threshold) != 1L ||
-      is.na(threshold) ||
-      threshold < 0 ||
-      threshold > 0.5
+      !isTRUE(threshold >= 0 && threshold <= 0.5)
   ) {
     insight::format_error(
       "`threshold` for winsorization must be a scalar between 0 and 0.5."

@@ -60,7 +60,8 @@ with \code{include_factors = TRUE}, only "percentile" can be used.}
 \item{include_factors}{Logical, if \code{TRUE}, rare levels of factors are merged
 into a level \code{".other"} (see 'Details'). Defaults to \code{FALSE}, which returns
 factors unchanged. Because it comes after \code{...}, it must be named in full,
-as in \code{include_factors = TRUE}. An unnamed or shortened argument is ignored.}
+as in \code{include_factors = TRUE}. An unnamed or shortened argument is
+ignored.}
 
 \item{robust}{Logical, if TRUE, winsorizing through the "zscore" method is
 done via the median and the median absolute deviation (MAD); if FALSE, via

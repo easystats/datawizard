@@ -204,6 +204,26 @@ test_that("winsorize factors, NA level, class, and attributes", {
   class(expected) <- c("myfac", "factor")
   attr(expected, "label") <- "My variable"
   expect_identical(winsorize(x, include_factors = TRUE), expected)
+
+  # oracle (closed-form): value 11 is at the NA level and value 12 has an NA
+  # code; 10 values remain, c and d (0.1) are merged, and both missing values
+  # keep their kind
+  x <- addNA(factor(c(rep("a", 6), rep("b", 2), "c", "d", NA, NA)))
+  is.na(x) <- 12
+  out <- winsorize(x, include_factors = TRUE)
+  expect_identical(levels(out), c("a", "b", NA, ".other"))
+  expect_identical(is.na(out), is.na(x))
+  expect_identical(
+    as.character(out),
+    c(rep("a", 6), rep("b", 2), ".other", ".other", NA, NA)
+  )
+
+  # contrasts made for the old levels are dropped
+  x <- factor(c(rep("a", 6), rep("b", 2), "c", "d"))
+  contrasts(x) <- stats::contr.sum(4)
+  out <- winsorize(x, include_factors = TRUE)
+  expect_null(attr(out, "contrasts"))
+  expect_identical(levels(out), c("a", "b", ".other"))
 })
 
 test_that("winsorize factors, include_factors must be named", {
