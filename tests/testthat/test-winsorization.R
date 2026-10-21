@@ -139,9 +139,32 @@ test_that("winsorize factors, nothing to merge", {
   x <- factor(c(rep("a", 5), rep("b", 4), "c"))
   expect_identical(winsorize(x, include_factors = TRUE), x)
 
-  # no non-missing values
+  # oracle (closed-form): no non-missing values, so no share can be computed
   x <- factor(c(NA, NA), levels = c("a", "b"))
   expect_identical(winsorize(x, include_factors = TRUE), x)
+  x <- factor(character(0), levels = c("a", "b"))
+  expect_identical(winsorize(x, include_factors = TRUE), x)
+
+  # oracle (closed-form): with threshold 0 no share is below it
+  x <- factor(c(rep("a", 7), "b", "c", "d"))
+  expect_identical(winsorize(x, threshold = 0, include_factors = TRUE), x)
+})
+
+test_that("winsorize factors, threshold 0.5 and names", {
+  # oracle (closed-form): shares a = 0.4, b = 0.3, c = 0.3 are all below 0.5,
+  # so all three levels merge
+  x <- factor(c(rep("a", 4), rep("b", 3), rep("c", 3)))
+  expect_identical(
+    winsorize(x, threshold = 0.5, include_factors = TRUE),
+    factor(rep(".other", 10))
+  )
+
+  # oracle (closed-form): b and c each have share 0.1; names are kept
+  x <- factor(c(rep("a", 8), "b", "c"))
+  names(x) <- letters[1:10]
+  out <- winsorize(x, include_factors = TRUE)
+  expect_named(out, letters[1:10])
+  expect_identical(levels(out), c("a", ".other"))
 })
 
 test_that("winsorize factors, NA level, class, and attributes", {
@@ -218,23 +241,35 @@ test_that("winsorize factors, NA level, class, and attributes", {
     c(rep("a", 6), rep("b", 2), ".other", ".other", NA, NA)
   )
 
-  # contrasts made for the old levels are dropped
+  # oracle (closed-form): c and d (0.1) are merged into 3 levels, so a 4 x 3
+  # contrasts matrix and value labels for a to d no longer fit and are
+  # dropped; a contrasts name fits any levels and is kept
   x <- factor(c(rep("a", 6), rep("b", 2), "c", "d"))
   contrasts(x) <- stats::contr.sum(4)
+  attr(x, "labels") <- c(a = 1, b = 2, c = 3, d = 4)
   out <- winsorize(x, include_factors = TRUE)
   expect_null(attr(out, "contrasts"))
+  expect_null(attr(out, "labels"))
   expect_identical(levels(out), c("a", "b", ".other"))
+  attr(x, "contrasts") <- "contr.sum"
+  out <- winsorize(x, include_factors = TRUE)
+  expect_identical(attr(out, "contrasts"), "contr.sum")
 })
 
-test_that("winsorize factors, include_factors must be named", {
+test_that("winsorize factors, positional arguments", {
   x <- factor(c(rep("a", 7), "b", "c", "d"))
-  # a fourth unnamed argument goes to `...` and does not merge levels
+  # the fourth argument is `robust`, as for numeric vectors, and the sixth is
+  # `include_factors`
   expect_identical(winsorize(x, 0.2, "percentile", TRUE), x)
+  expect_identical(
+    winsorize(x, 0.2, "percentile", FALSE, TRUE, TRUE),
+    winsorize(x, include_factors = TRUE)
+  )
 
   d <- data.frame(num = 1:10, fac = x)
   expect_identical(
     winsorize(d, 0.2, "percentile", FALSE, TRUE, TRUE),
-    winsorize(d)
+    winsorize(d, include_factors = TRUE)
   )
 })
 
@@ -266,6 +301,8 @@ test_that("winsorize factors in data frames", {
   expect_identical(out$chr, d$chr)
   expect_identical(out$num, winsorize(d$num))
 
+  # oracle (closed-form): with threshold 0.05, the shares of b and c (0.1)
+  # are not below it, so the factor column is unchanged
   out <- winsorize(d, threshold = 0.05, include_factors = TRUE)
   expect_identical(
     out$fac,

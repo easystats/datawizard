@@ -49,9 +49,7 @@
 #' @param verbose Not used anymore since `datawizard` 0.6.6.
 #' @param include_factors Logical, if `TRUE`, rare levels of factors are merged
 #'   into a level `".other"` (see 'Details'). Defaults to `FALSE`, which returns
-#'   factors unchanged. Because it comes after `...`, it must be named in full,
-#'   as in `include_factors = TRUE`. An unnamed or shortened argument is
-#'   ignored.
+#'   factors unchanged.
 #'
 #' @examples
 #' hist(iris$Sepal.Length, main = "Original data")
@@ -92,8 +90,10 @@ winsorize.factor <- function(
   data,
   threshold = 0.2,
   method = "percentile",
-  ...,
-  include_factors = FALSE
+  robust = FALSE,
+  verbose = TRUE,
+  include_factors = FALSE,
+  ...
 ) {
   .check_include_factors(include_factors)
   if (!include_factors) {
@@ -124,13 +124,16 @@ winsorize.factor <- function(
   values[values %in% merged] <- ".other"
 
   # rebuild the codes so that the class, an NA level, and other attributes
-  # are kept; NA codes stay NA, and contrasts made for the old levels are
-  # dropped
+  # are kept; NA codes stay NA, and value labels and a contrasts matrix made
+  # for the old levels are dropped
   out <- match(values, new_levels)
   out[is.na(unclass(data))] <- NA_integer_
   attrs <- attributes(data)
   attrs$levels <- new_levels
-  attrs$contrasts <- NULL
+  attrs$labels <- NULL
+  if (is.matrix(attrs$contrasts)) {
+    attrs$contrasts <- NULL
+  }
   attributes(out) <- attrs
   out
 }
@@ -151,8 +154,8 @@ winsorize.data.frame <- function(
   method = "percentile",
   robust = FALSE,
   verbose = TRUE,
-  ...,
-  include_factors = FALSE
+  include_factors = FALSE,
+  ...
 ) {
   .check_include_factors(include_factors)
   data[] <- lapply(
