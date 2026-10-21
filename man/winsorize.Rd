@@ -94,7 +94,9 @@ A level is rare when its share of the non-missing values is less than
 missing values, and an \code{NA} level is never rare. Levels without values are
 not rare. If fewer than two levels are rare, the factor is returned
 unchanged. A level \code{".other"} that already exists is never rare, but when
-levels are merged, its values join them. With \code{include_factors = TRUE},
+levels are merged, its values join them. When levels are merged, a
+\code{labels} attribute and a contrasts matrix are dropped, because they were
+made for the old levels. With \code{include_factors = TRUE},
 \code{method} must be \code{"percentile"}, so a data frame with a factor column gives
 an error for any other method. Character and logical vectors are always
 returned unchanged.

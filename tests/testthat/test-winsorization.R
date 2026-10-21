@@ -132,6 +132,11 @@ test_that("winsorize factors, existing .other level", {
   # level below 0.2, so nothing is merged
   x <- factor(c(rep("a", 6), rep(".other", 3), "b"))
   expect_identical(winsorize(x, include_factors = TRUE), x)
+
+  # oracle (closed-form): .other and b each have share 0.1, but .other is
+  # never rare, so only b is found and nothing is merged
+  x <- factor(c(rep("a", 8), ".other", "b"))
+  expect_identical(winsorize(x, include_factors = TRUE), x)
 })
 
 test_that("winsorize factors, nothing to merge", {
@@ -258,7 +263,8 @@ test_that("winsorize factors, NA level, class, and attributes", {
 
 test_that("winsorize factors, positional arguments", {
   x <- factor(c(rep("a", 7), "b", "c", "d"))
-  # the fourth argument is `robust`, as for numeric vectors, and the sixth is
+  # oracle (invariant): a positional call equals the call with names; the
+  # fourth argument is `robust`, as for numeric vectors, and the sixth is
   # `include_factors`
   expect_identical(winsorize(x, 0.2, "percentile", TRUE), x)
   expect_identical(
@@ -275,10 +281,12 @@ test_that("winsorize factors, positional arguments", {
 
 test_that("winsorize factors, include_factors = FALSE", {
   x <- factor(c(rep("a", 7), "b", "c", "d"))
+  # oracle (invariant): without include_factors = TRUE the input comes back
+  # unchanged, although b, c, and d (0.1 each) are below 0.2
   expect_identical(winsorize(x), x)
   expect_identical(winsorize(x, include_factors = FALSE), x)
 
-  # character and logical vectors are not changed
+  # oracle (invariant): character and logical vectors are not changed
   x <- c(rep("a", 7), "b", "c", "d")
   expect_identical(winsorize(x, include_factors = TRUE), x)
   x <- c(rep(TRUE, 7), FALSE, FALSE, NA)
@@ -310,6 +318,7 @@ test_that("winsorize factors in data frames", {
   )
   expect_identical(out$fac, d$fac)
 
+  # oracle (invariant): by default the factor column is unchanged
   expect_identical(winsorize(d)$fac, d$fac)
 })
 

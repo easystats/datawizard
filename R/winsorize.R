@@ -20,7 +20,9 @@
 #' missing values, and an `NA` level is never rare. Levels without values are
 #' not rare. If fewer than two levels are rare, the factor is returned
 #' unchanged. A level `".other"` that already exists is never rare, but when
-#' levels are merged, its values join them. With `include_factors = TRUE`,
+#' levels are merged, its values join them. When levels are merged, a
+#' `labels` attribute and a contrasts matrix are dropped, because they were
+#' made for the old levels. With `include_factors = TRUE`,
 #' `method` must be `"percentile"`, so a data frame with a factor column gives
 #' an error for any other method. Character and logical vectors are always
 #' returned unchanged.
