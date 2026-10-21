@@ -38,8 +38,9 @@ CHANGES
 
 * `winsorize()` gains an `include_factors` argument. If `TRUE`, factor levels
   that hold values but less than a `threshold` share of the non-missing values
-  are merged into one level, `".other"`. If fewer than two levels are rare,
-  nothing is merged. Factors are still returned unchanged by default (#48).
+  are merged into one level, `".other"`. An `NA` level and an existing
+  `".other"` level are never rare. If fewer than two levels are rare, nothing
+  is merged. Factors are still returned unchanged by default (#48).
 
 FIXES
 
