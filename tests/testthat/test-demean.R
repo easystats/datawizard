@@ -910,3 +910,143 @@ test_that("degroup for nested designs with four levels and median", {
   expect_equal(out$x_C_between, md3 - md2, ignore_attr = TRUE)
   expect_equal(out$x_within, dat$x - md3, ignore_attr = TRUE)
 })
+
+
+test_that("degroup, a function in `center`", {
+  trim_mean <- function(v) mean(v, trim = 0.2)
+  set.seed(42)
+  d <- data.frame(A = rep(1:3, each = 10), x = rnorm(30))
+  d$x[c(3, 17)] <- NA
+  gm <- stats::ave(d$x, d$A, FUN = function(v) trim_mean(v[!is.na(v)]))
+
+  out <- degroup(d, select = "x", by = "A", center = trim_mean, append = FALSE)
+  expect_equal(out$x_between, gm, ignore_attr = TRUE)
+  expect_equal(out$x_within, d$x - gm, ignore_attr = TRUE)
+})
+
+
+test_that("degroup, a function in `center` must return a single number", {
+  d <- data.frame(g = rep(1:2, each = 3), x = c(1, 2, 4, 3, 5, 9))
+  expect_error(
+    degroup(d, select = "x", by = "g", center = range),
+    "must return a single number",
+    fixed = TRUE
+  )
+  expect_error(
+    degroup(d, select = "x", by = "g", center = function(v) "a"),
+    "must return a single number",
+    fixed = TRUE
+  )
+
+  # a group with only missing values
+  d$x[d$g == 2] <- NA
+  mean_or_na <- function(v) if (length(v)) mean(v) else NA
+  out <- degroup(d, select = "x", by = "g", center = mean_or_na, append = FALSE)
+  expect_equal(out$x_between, rep(c(7 / 3, NA), each = 3), ignore_attr = TRUE)
+})
+
+
+test_that("degroup, `grand_center = TRUE`", {
+  set.seed(7)
+  d <- data.frame(
+    A = rep(1:3, each = 8),
+    B = rep(1:4, 6),
+    C = sample.int(2, 24, replace = TRUE),
+    x = as.numeric(sample.int(5, 24, replace = TRUE))
+  )
+  d$x[c(2, 13)] <- NA
+  rows <- !is.na(d$x)
+
+  for (by in list("A", c("A", "B", "C"), "A/B")) {
+    args <- list(d, select = "x", by = by, center = "median", append = FALSE)
+    base <- do.call(degroup, c(args, verbose = FALSE))
+    out <- do.call(degroup, c(args, verbose = FALSE, grand_center = TRUE))
+    for (col in names(base)) {
+      expect_equal(
+        out[[col]],
+        base[[col]] - mean(base[[col]][rows]),
+        ignore_attr = TRUE
+      )
+    }
+  }
+
+  # a product column is centered over the rows where the product is not missing
+  d$w <- rep(c(1, 2, 3), 8)
+  d$w[5] <- NA
+  base <- degroup(d, select = "x*w", by = "A", append = FALSE)
+  out <- degroup(
+    d,
+    select = "x*w",
+    by = "A",
+    append = FALSE,
+    grand_center = TRUE
+  )
+  rows_xw <- !is.na(d$x * d$w)
+  expect_equal(
+    out$x_w_between,
+    base$x_w_between - mean(base$x_w_between[rows_xw]),
+    ignore_attr = TRUE
+  )
+})
+
+
+test_that("degroup, `grand_center` with names centers only those components", {
+  set.seed(3)
+  d <- data.frame(
+    ID = rep(1:4, each = 5),
+    sub_ID = rep(1:5, 4),
+    `A B` = rep(1:2, 10),
+    x = rnorm(20),
+    y = rnorm(20, mean = 5),
+    check.names = FALSE
+  )
+
+  changed <- function(by, grand_center, select = "x") {
+    base <- degroup(d, select = select, by = by, append = FALSE)
+    out <- degroup(
+      d,
+      select = select,
+      by = by,
+      append = FALSE,
+      grand_center = grand_center
+    )
+    names(base)[
+      !vapply(
+        names(base),
+        function(i) isTRUE(all.equal(out[[i]], base[[i]])),
+        logical(1)
+      )
+    ]
+  }
+
+  expect_identical(changed(c("ID", "sub_ID"), "ID"), "x_ID_between")
+  expect_identical(changed(c("ID", "sub_ID"), "within"), "x_within")
+  expect_identical(changed("ID", "ID"), "x_between")
+  expect_identical(changed(c("A B", "ID"), "A B"), "x_A.B_between")
+  expect_identical(
+    changed("ID/sub_ID", "ID", select = c("x", "y")),
+    c("x_ID_between", "y_ID_between")
+  )
+  expect_identical(
+    changed(c("ID", "sub_ID"), "sub_ID", select = c("x", "y")),
+    c("x_sub_ID_between", "y_sub_ID_between")
+  )
+
+  # errors
+  expect_error(
+    degroup(d, select = "x", by = "ID", grand_center = "foo"),
+    "`grand_center` can only name these components: \"within\" and \"ID\"",
+    fixed = TRUE
+  )
+  expect_error(
+    degroup(d, select = "x", by = "ID", grand_center = 1),
+    "`grand_center` must be `TRUE`, `FALSE`, or a character vector",
+    fixed = TRUE
+  )
+  d$within <- d$ID
+  expect_error(
+    degroup(d, select = "x", by = "within", grand_center = "within"),
+    "A `by` variable is named \"within\"",
+    fixed = TRUE
+  )
+})
