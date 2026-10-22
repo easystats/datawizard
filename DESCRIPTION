@@ -57,6 +57,7 @@ Suggests:
     httr,
     knitr,
     lme4,
+    lmerTest,
     mediation,
     modelbased,
     nanoparquet,

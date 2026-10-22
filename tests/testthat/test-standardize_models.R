@@ -272,6 +272,39 @@ test_that("standardize non-Gaussian response", {
 })
 
 
+# lmerTest ----------------------------------------------------------------
+test_that("standardize, lmerTest models (#716)", {
+  skip_if_not_installed("lme4")
+  skip_if_not_installed("lmerTest")
+  data(sleepstudy, package = "lme4")
+  sleepstudy_z <- sleepstudy
+  sleepstudy_z$Reaction <- standardize(sleepstudy_z$Reaction)
+  sleepstudy_z$Days <- standardize(sleepstudy_z$Days)
+
+  m <- lme4::lmer(Reaction ~ Days + (Days | Subject), data = sleepstudy)
+  m_manual <- lme4::lmer(
+    Reaction ~ Days + (Days | Subject),
+    data = sleepstudy_z
+  )
+
+  out_lt <- standardize(lmerTest::as_lmerModLmerTest(m))
+  expect_s4_class(out_lt, "lmerModLmerTest")
+  expect_equal(lme4::fixef(out_lt), lme4::fixef(m_manual), tolerance = 1e-8)
+
+  out <- standardize(m)
+  expect_s4_class(lmerTest::as_lmerModLmerTest(out), "lmerModLmerTest")
+
+  # update()
+  m_manual <- lme4::lmer(Reaction ~ (Days | Subject), data = sleepstudy_z)
+  out <- stats::update(out, . ~ . - Days)
+  expect_s4_class(out, "lmerMod")
+  expect_equal(lme4::fixef(out), lme4::fixef(m_manual), tolerance = 1e-8)
+  out_lt <- stats::update(out_lt, . ~ . - Days)
+  expect_s4_class(out_lt, "lmerModLmerTest")
+  expect_equal(lme4::fixef(out_lt), lme4::fixef(m_manual), tolerance = 1e-8)
+})
+
+
 # variables evaluated in the environment $$$ ------------------------------
 test_that("variables evaluated in the environment", {
   m <- lm(mtcars$mpg ~ mtcars$cyl + am, data = mtcars)
