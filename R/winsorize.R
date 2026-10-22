@@ -12,6 +12,12 @@
 #' percentile. Winsorized estimators are usually more robust to outliers than
 #' their more standard forms.
 #'
+#' Factors are returned unchanged, unless `include_factors = TRUE`. Then,
+#' levels with a share of the non-missing values below `threshold` are merged
+#' into a new last level, `".other"`. Nothing is merged if fewer than two
+#' levels are rare. `NA` levels are never merged. Character and logical vectors
+#' are returned unchanged.
+#'
 #' @return
 #'
 #' A data frame with winsorized columns or a winsorized vector.
@@ -19,18 +25,22 @@
 #' @param data data frame or vector.
 #' @param threshold The amount of winsorization, depends on the value of `method`:
 #' - For `method = "percentile"`: the amount to winsorize from *each* tail.
-#'   The value of `threshold` must be between 0 and 0.5 and of length 1.
+#'   The value of `threshold` must be between 0 and 0.5 and of length 1. For
+#'   factors, levels with a smaller share of the values are merged.
 #' - For `method = "zscore"`: the number of *SD*/*MAD*-deviations from the
 #'   *mean*/*median* (see `robust`). The value of `threshold` must be greater
 #'   than 0 and of length 1.
 #' - For `method = "raw"`: a vector of length 2 with the lower and upper bound
 #'   for winsorization.
-#' @param method One of "percentile" (default), "zscore", or "raw".
+#' @param method One of "percentile" (default), "zscore", or "raw". Factors
+#'   only work with "percentile".
 #' @param robust Logical, if TRUE, winsorizing through the "zscore" method is
 #'   done via the median and the median absolute deviation (MAD); if FALSE, via
 #'   the mean and the standard deviation.
 #' @param ... Currently not used.
 #' @param verbose Not used anymore since `datawizard` 0.6.6.
+#' @param include_factors Logical, if `TRUE`, rare levels of factors are merged
+#'   into a level `".other"` (see 'Details').
 #'
 #' @examples
 #' hist(iris$Sepal.Length, main = "Original data")
@@ -54,6 +64,10 @@
 #' # Also works on a data frame:
 #' winsorize(iris, threshold = 0.2)
 #'
+#' # Merge levels with less than 10% of the values:
+#' x <- factor(c(rep("a", 10), rep("b", 8), "c", "d"))
+#' winsorize(x, threshold = 0.1, include_factors = TRUE)
+#'
 #' @inherit data_rename seealso
 #' @export
 winsorize <- function(data, ...) {
@@ -61,17 +75,66 @@ winsorize <- function(data, ...) {
 }
 
 
+#' @rdname winsorize
 #' @export
-winsorize.factor <- function(data, ...) {
+winsorize.factor <- function(
+  data,
+  threshold = 0.2,
+  method = "percentile",
+  robust = FALSE,
+  verbose = TRUE,
+  include_factors = FALSE,
+  ...
+) {
+  .check_include_factors(include_factors)
+  if (!include_factors) {
+    return(data)
+  }
+
+  .check_factor_args(threshold, method)
+
+  # values at an NA level (see addNA()) are missing, too
+  values <- as.character(data)
+  n <- sum(!is.na(values))
+  if (n == 0L) {
+    return(data)
+  }
+
+  # rare levels, without NA and ".other"
+  lvls <- levels(data)
+  candidates <- setdiff(lvls[!is.na(lvls)], ".other")
+  counts <- tabulate(match(values, candidates), nbins = length(candidates))
+  rare <- candidates[counts > 0 & counts / n < threshold]
+  if (length(rare) < 2L) {
+    return(data)
+  }
+
+  merged <- c(rare, ".other")
+  new_levels <- c(setdiff(lvls, merged), ".other")
+  values[values %in% merged] <- ".other"
+
+  # keep class and attributes, but drop labels and contrasts of the old levels
+  out <- match(values, new_levels)
+  out[is.na(unclass(data))] <- NA_integer_
+  attrs <- attributes(data)
+  attrs$levels <- new_levels
+  attrs$labels <- NULL
+  if (is.matrix(attrs$contrasts)) {
+    attrs$contrasts <- NULL
+  }
+  attributes(out) <- attrs
+  out
+}
+
+#' @export
+winsorize.character <- function(data, ...) {
   data
 }
 
 #' @export
-winsorize.character <- winsorize.factor
+winsorize.logical <- winsorize.character
 
-#' @export
-winsorize.logical <- winsorize.factor
-
+#' @rdname winsorize
 #' @export
 winsorize.data.frame <- function(
   data,
@@ -79,15 +142,18 @@ winsorize.data.frame <- function(
   method = "percentile",
   robust = FALSE,
   verbose = TRUE,
+  include_factors = FALSE,
   ...
 ) {
+  .check_include_factors(include_factors)
   data[] <- lapply(
     data,
     winsorize,
     threshold = threshold,
     method = method,
     robust = robust,
-    verbose = verbose
+    verbose = verbose,
+    include_factors = include_factors
   )
   data
 }
@@ -146,4 +212,39 @@ winsorize.numeric <- function(
   data[data < threshold[1]] <- threshold[1]
   data[data > threshold[2]] <- threshold[2]
   return(data)
+}
+
+
+.check_include_factors <- function(include_factors) {
+  if (
+    !is.logical(include_factors) ||
+      length(include_factors) != 1L ||
+      is.na(include_factors)
+  ) {
+    insight::format_error("`include_factors` must be `TRUE` or `FALSE`.")
+  }
+}
+
+
+.check_factor_args <- function(threshold, method) {
+  method <- match.arg(method, choices = c("percentile", "zscore", "raw"))
+  if (method != "percentile") {
+    insight::format_error(
+      "Factors can only be winsorized with `method = \"percentile\"`."
+    )
+  }
+  .check_factor_threshold(threshold)
+}
+
+
+.check_factor_threshold <- function(threshold) {
+  if (
+    !is.numeric(threshold) ||
+      length(threshold) != 1L ||
+      !isTRUE(threshold >= 0 && threshold <= 0.5)
+  ) {
+    insight::format_error(
+      "`threshold` for winsorization must be a scalar between 0 and 0.5."
+    )
+  }
 }
