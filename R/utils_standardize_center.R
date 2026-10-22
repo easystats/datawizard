@@ -15,10 +15,18 @@
   scale = NULL,
   cluster = NULL
 ) {
-  if (!is.null(cluster) && length(cluster) != length(x)) {
-    insight::format_error(
-      "`cluster` must have the same length as the variable to transform."
-    )
+  cluster_vars <- NULL
+  if (!is.null(cluster)) {
+    cluster_vars <- .cluster_list(cluster)
+    if (any(lengths(cluster_vars) != length(x))) {
+      insight::format_error(
+        "`cluster` must have the same length as the variable to transform."
+      )
+    }
+    cluster <- .cluster_id(cluster_vars)
+    if (verbose) {
+      .check_cluster_levels(x, cluster_vars)
+    }
   }
 
   # Warning if all NaNs
@@ -47,9 +55,10 @@
     vals <- x[valid_x]
   }
 
-  # validation checks
+  # validation checks. With `cluster`, count only the values that center and
+  # scale are computed from.
   check <- .check_standardize_numeric(
-    x,
+    if (is.null(cluster)) x else x[valid_x],
     name = NULL,
     verbose = verbose,
     reference = reference,
@@ -62,13 +71,14 @@
 
   # with clusters, center and scale are computed from one value per cluster.
   # Like missing values, infinite values are left out. `center()` passes
-  # `scale = NULL` and needs one cluster; `standardize()` needs two for the SD.
+  # `scale = NULL` and needs one cluster, as does `scale = FALSE`;
+  # `standardize()` needs two for the SD.
   ref_vals <- vals
   if (!is.null(cluster)) {
     ref_vals <- .cluster_values(
       vals,
       cluster[valid_x],
-      min_clusters = if (is.null(scale)) 1L else 2L
+      min_clusters = if (is.null(scale) || isFALSE(scale)) 1L else 2L
     )
   }
 
@@ -138,7 +148,7 @@
   has_value <- function(i) is.numeric(i) && !all(is.na(i))
   if (!is.null(reference) || has_value(center) || has_value(scale)) {
     insight::format_error(
-      "`cluster` cannot be combined with `reference`, or with values for `center` or `scale`."
+      "`cluster` cannot be combined with `reference`, or with numeric values for `center` or `scale`."
     )
   }
   invisible(NULL)
@@ -147,11 +157,157 @@
 
 #' @keywords internal
 .check_cluster_column <- function(x, cluster) {
-  if (!cluster %in% colnames(x)) {
+  missing_columns <- setdiff(cluster, colnames(x))
+  n_missing <- length(missing_columns)
+  if (n_missing == 1L) {
     insight::format_error(
-      paste0("Could not find the `cluster` column `", cluster, "`.")
+      paste0("Could not find the `cluster` column `", missing_columns, "`.")
+    )
+  } else if (n_missing > 1L) {
+    # name at most five missing columns
+    shown <- paste0("`", utils::head(missing_columns, 5L), "`")
+    listed <- if (n_missing > 5L) {
+      paste0(toString(shown), " and ", n_missing - 5L, " more")
+    } else {
+      text_concatenate(shown)
+    }
+    # unique ids, one per row, are read as names
+    hint <- if (length(cluster) == nrow(x)) {
+      " To use these as cluster ids, give them as a factor."
+    } else {
+      ""
+    }
+    insight::format_error(
+      paste0("Could not find the `cluster` columns ", listed, ".", hint)
     )
   }
+}
+
+
+# several cluster variables ----
+#
+# `.cluster_list()` turns `cluster` into a named list of id vectors: a list or
+# data frame keeps its elements (unnamed ones are named by position), any
+# other vector becomes a list of one. `.cluster_id()` combines the vectors
+# into one id per row, so that rows with equal ids on every vector form one
+# cluster. It builds the id from per-vector codes, because `interaction()`
+# merges ids such as "a.b" with "c" and "a" with "b.c". The id is `NA` where
+# any vector is `NA`.
+#
+#' @keywords internal
+.cluster_list <- function(cluster) {
+  # a POSIXlt vector is a list internally, but it is one id vector
+  if (is.list(cluster) && !inherits(cluster, "POSIXlt")) {
+    cluster <- as.list(cluster)
+  } else {
+    cluster <- list(cluster)
+  }
+  if (!length(cluster)) {
+    insight::format_error("`cluster` must contain at least one id vector.")
+  }
+  if (is.null(names(cluster))) {
+    names(cluster) <- rep("", length(cluster))
+  }
+  unnamed <- is.na(names(cluster)) | !nzchar(names(cluster))
+  names(cluster)[unnamed] <- paste0("..", which(unnamed))
+  cluster
+}
+
+
+#' @keywords internal
+.cluster_id <- function(cluster_vars) {
+  if (length(cluster_vars) == 1L) {
+    return(cluster_vars[[1]])
+  }
+  codes <- lapply(cluster_vars, function(i) match(i, unique(i)))
+  key <- do.call(paste, c(codes, sep = "_"))
+  id <- match(key, unique(key))
+  id[Reduce(`|`, lapply(cluster_vars, is.na))] <- NA
+  id
+}
+
+
+# cluster variables that are not needed ----
+#
+# With two or more cluster variables, a cluster variable is not needed when
+# dropping it leaves fewer clusters and `x` still takes one value per cluster
+# of the others. It then only splits clusters of the others, and each split
+# cluster counts once per part. Clusters are counted among the values with
+# finite, non-missing `x` and no missing id. `rows` holds the row indices of
+# each group of a grouped data frame, so that one warning names every cluster
+# variable that is not needed in any group.
+#
+#' @keywords internal
+.check_cluster_levels <- function(
+  x,
+  cluster_vars,
+  name = NULL,
+  rows = list(seq_along(x)),
+  codes = NULL
+) {
+  if (length(cluster_vars) < 2L) {
+    return(invisible(NULL))
+  }
+  if (is.null(codes)) {
+    codes <- .cluster_codes(cluster_vars)
+  }
+  x_code <- match(x, unique(x))
+  valid <- !is.na(x) & !is.na(codes$all)
+  if (is.numeric(x)) {
+    valid <- valid & is.finite(x)
+  }
+  not_needed <- character()
+  for (r in rows) {
+    r <- r[valid[r]]
+    n_clusters <- length(unique(codes$all[r]))
+    for (i in seq_along(codes$without)) {
+      without <- codes$without[[i]][r]
+      n_without <- length(unique(without))
+      # one value per cluster of the others: each of those clusters pairs with
+      # one value of x
+      x_pairs <- unique(without + x_code[r] * (length(x) + 1))
+      if (n_without < n_clusters && length(x_pairs) == n_without) {
+        not_needed <- union(not_needed, names(cluster_vars)[i])
+      }
+    }
+  }
+  if (length(not_needed)) {
+    var_labels <- ifelse(
+      grepl("^[.][.][0-9]+$", not_needed),
+      paste("cluster variable", substring(not_needed, 3)),
+      paste0("`", not_needed, "`")
+    )
+    subject <- if (is.null(name)) "The variable" else paste0("`", name, "`")
+    to_remove <- if (length(not_needed) == 1L) "it" else "one of them"
+    insight::format_warning(paste0(
+      subject,
+      " takes one value per cluster even without ",
+      text_concatenate(var_labels, last = " or "),
+      " in `cluster`. Such a cluster variable only splits clusters. Remove ",
+      to_remove,
+      " from `cluster`, or set `verbose = FALSE` to silence this warning."
+    ))
+  }
+  invisible(NULL)
+}
+
+
+# Integer codes of the combined cluster id, with all cluster variables and
+# without each one in turn; `NA` where any id is `NA`.
+#
+#' @keywords internal
+.cluster_codes <- function(cluster_vars) {
+  as_code <- function(v) {
+    id <- .cluster_id(v)
+    code <- match(id, unique(id))
+    code[is.na(id)] <- NA
+    code
+  }
+  without <- lapply(seq_along(cluster_vars), function(i) {
+    as_code(cluster_vars[-i])
+  })
+  names(without) <- names(cluster_vars)
+  list(all = as_code(cluster_vars), without = without)
 }
 
 
@@ -185,36 +341,21 @@
     append <- append_suffix
   }
 
-  # a single string is the name of the cluster column, which is never
-  # transformed
-  cluster_name <- NULL
-  if (!is.null(cluster)) {
-    # check here, because `.scale` is dropped below when no `.center` is given
-    .check_cluster_args(cluster, weights, reference, .center, .scale)
-    if (is.character(cluster) && length(cluster) == 1L) {
-      .check_cluster_column(x, cluster)
-      cluster_name <- cluster
-      exclude <- c(exclude, cluster)
-    } else if (length(cluster) != nrow(x)) {
-      insight::format_error(
-        "`cluster` must have the same length as the number of rows in the data."
-      )
-    }
-  }
+  # cluster columns are never transformed. Check here, before `.center` and
+  # `.scale` are recycled below.
+  cluster_name <- .process_std_cluster(
+    x,
+    cluster,
+    weights,
+    reference,
+    .center,
+    .scale
+  )
+  exclude <- c(exclude, cluster_name)
 
-  if (!is.null(weights) && is.character(weights)) {
-    if (weights %in% colnames(x)) {
-      exclude <- c(exclude, weights)
-    } else {
-      insight::format_warning(
-        paste0(
-          "Could not find weighting column `",
-          weights,
-          "`. Weighting not carried out."
-        )
-      )
-      weights <- NULL
-    }
+  weights <- .process_std_weights(x, weights)
+  if (is.character(weights)) {
+    exclude <- c(exclude, weights)
   }
 
   select <- .select_variables(x, select, exclude, keep_factors, keep_character)
@@ -260,9 +401,9 @@
   }
 
   if (!is.null(cluster_name)) {
-    cluster <- x[[cluster_name]]
+    cluster <- as.list(x[cluster_name])
   } else if (!is.null(cluster)) {
-    cluster <- cluster[!omit]
+    cluster <- lapply(.cluster_list(cluster), function(i) i[!omit])
   }
 
   # append standardized variables
@@ -285,8 +426,107 @@
     select <- colnames(new_variables)
   }
 
-  # check for reference center and scale
-  if (!is.null(.center)) {
+  center_scale <- .process_std_center_scale(.center, .scale, select)
+
+  # add back variable labels
+  if (length(variable_labels)) {
+    for (i in names(variable_labels)) {
+      attr(x[[i]], "label") <- variable_labels[[i]]
+    }
+  }
+
+  if (preserve_value_labels && length(value_labels)) {
+    for (i in names(value_labels)) {
+      attr(x[[i]], "labels") <- value_labels[[i]]
+    }
+  }
+
+  list(
+    x = x,
+    select = select,
+    exclude = exclude,
+    weights = weights,
+    append = append,
+    center = center_scale$center,
+    scale = center_scale$scale,
+    cluster = cluster
+  )
+}
+
+
+# A character vector with no repeated element names the cluster columns. One
+# with a repeated element holds id values (naming one column twice has no use),
+# so it must have one element per row. Returns the names of the cluster
+# columns, or `NULL` when `cluster` holds id values.
+#
+#' @keywords internal
+.process_std_cluster <- function(
+  x,
+  cluster,
+  weights,
+  reference,
+  .center,
+  .scale
+) {
+  if (is.null(cluster)) {
+    return(NULL)
+  }
+  .check_cluster_args(cluster, weights, reference, .center, .scale)
+  if (is.character(cluster) && !length(cluster)) {
+    insight::format_error("`cluster` must contain at least one id vector.")
+  }
+  if (is.character(cluster) && anyDuplicated(cluster) == 0L) {
+    .check_cluster_column(x, cluster)
+    return(cluster)
+  }
+  if (any(lengths(.cluster_list(cluster)) != nrow(x))) {
+    insight::format_error(
+      "`cluster` must have the same length as the number of rows in the data."
+    )
+  }
+  NULL
+}
+
+
+# A weighting column that is not in the data is dropped with a warning.
+#
+#' @keywords internal
+.process_std_weights <- function(x, weights) {
+  if (is.character(weights) && !weights %in% colnames(x)) {
+    insight::format_warning(
+      paste0(
+        "Could not find weighting column `",
+        weights,
+        "`. Weighting not carried out."
+      )
+    )
+    weights <- NULL
+  }
+  weights
+}
+
+
+# Reference center and scale, one named value per selected variable. A single
+# TRUE or FALSE is passed on to each column as it is, as the numeric methods
+# take it.
+#
+#' @keywords internal
+.process_std_center_scale <- function(.center, .scale, select) {
+  is_flag <- function(i) is.logical(i) && length(i) == 1L && !is.na(i)
+  if (
+    (is_flag(.center) || is.null(.center)) &&
+      (is_flag(.scale) || is.null(.scale)) &&
+      (is_flag(.center) || is_flag(.scale))
+  ) {
+    .center <- stats::setNames(
+      rep(if (is_flag(.center)) .center else NA, length(select)),
+      select
+    )
+    .scale <- stats::setNames(
+      rep(if (is_flag(.scale)) .scale else NA, length(select)),
+      select
+    )
+  } else if (!is.null(.center)) {
     # for center(), we have no scale - set it to default value
     if (is.null(.scale)) {
       .scale <- rep(1, length(.center))
@@ -322,30 +562,7 @@
     .center <- stats::setNames(rep(NA, length(select)), select)
     .scale <- stats::setNames(rep(NA, length(select)), select)
   }
-
-  # add back variable labels
-  if (length(variable_labels)) {
-    for (i in names(variable_labels)) {
-      attr(x[[i]], "label") <- variable_labels[[i]]
-    }
-  }
-
-  if (preserve_value_labels && length(value_labels)) {
-    for (i in names(value_labels)) {
-      attr(x[[i]], "labels") <- value_labels[[i]]
-    }
-  }
-
-  list(
-    x = x,
-    select = select,
-    exclude = exclude,
-    weights = weights,
-    append = append,
-    center = .center,
-    scale = .scale,
-    cluster = cluster
-  )
+  list(center = .center, scale = .scale)
 }
 
 
@@ -594,9 +811,12 @@
   cluster = NULL
 ) {
   if (!is.null(cluster)) {
-    if (!is.character(cluster) || length(cluster) != 1L) {
+    if (is.character(cluster) && !length(cluster)) {
+      insight::format_error("`cluster` must contain at least one id vector.")
+    }
+    if (!is.character(cluster) || anyDuplicated(cluster) > 0L) {
       insight::format_error(
-        "For grouped data frames, `cluster` must be a column name."
+        "For grouped data frames, `cluster` must be one or more distinct column names."
       )
     }
     .check_cluster_args(cluster, weights, reference)

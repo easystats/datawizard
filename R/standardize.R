@@ -26,17 +26,15 @@
 #' - For `data.frame`s: a numeric vector of weights, or a character of the
 #'   name of a column in the `data.frame` that contains the weights.
 #' - For numeric vectors: a numeric vector of weights.
-#' @param cluster Can be `NULL` (for no clustering), or a vector of cluster
-#'   ids with one element per observation. For data frames, it can also be the
-#'   name of a column that contains the cluster ids. If given, the center and
-#'   scale are computed from one value per cluster instead of from all
-#'   observations, so that a cluster-level (Level 2) variable in long format is
-#'   not weighted by the number of observations per cluster. The variable must
-#'   take only one finite value within each cluster (infinite values are
-#'   treated as missing), and observations with a missing cluster id are
-#'   returned as `NA`. `cluster` cannot be combined with
-#'   `weights`, `reference`, or values for `center` and `scale`. For grouped
-#'   data frames, `cluster` must be a column name.
+#' @param cluster Can be `NULL` (for no clustering), a vector of cluster ids
+#'   with one element per observation, or a list of such vectors. For data
+#'   frames, it can also be one or more column names (grouped data frames only
+#'   take column names). If given, the center and scale are computed from one
+#'   value per cluster, so that cluster-level variables are not weighted by
+#'   cluster size. With several cluster variables, each combination of their
+#'   values is one cluster. Observations with a missing cluster id are returned
+#'   as `NA`. Cannot be combined with `weights`, `reference`, or numeric
+#'   `center` and `scale`.
 #' @param verbose Toggle warnings and messages on or off.
 #' @param remove_na How should missing values (`NA`) be treated: if `"none"`
 #'   (default): each column's standardization is done separately, ignoring
@@ -65,7 +63,8 @@
 #'   the number of selected variables. Values in `center` and `scale` will be
 #'   matched to selected variables in the provided order, unless a named vector
 #'   is given. In this case, names are matched against the names of the selected
-#'   variables.
+#'   variables. A single `TRUE` or `FALSE` turns centering or scaling on or
+#'   off.
 #'
 #' * For `unstandardize()`: \cr
 #'   `center` and `scale` correspond to the center (the mean / median) and the scale (SD / MAD) of
@@ -340,6 +339,29 @@ standardize.data.frame <- function(
   # set new values
   x <- my_args$x
 
+  # with several cluster variables, warn about one that is not needed. The
+  # grouped method checks across groups and turns this check off.
+  if (
+    verbose &&
+      !isFALSE(list(...)$.check_cluster) &&
+      length(my_args$cluster) > 1L
+  ) {
+    codes <- .cluster_codes(my_args$cluster)
+    for (var in my_args$select) {
+      .check_cluster_levels(
+        x[[var]],
+        my_args$cluster,
+        name = var,
+        codes = codes
+      )
+    }
+  }
+  # combine the cluster variables once, not once per column
+  cluster_id <- NULL
+  if (!is.null(my_args$cluster)) {
+    cluster_id <- .cluster_id(my_args$cluster)
+  }
+
   # Loop through variables and standardize it
   for (var in my_args$select) {
     x[[var]] <- standardize(
@@ -350,7 +372,7 @@ standardize.data.frame <- function(
       reference = reference[[var]],
       center = my_args$center[var],
       scale = my_args$scale[var],
-      cluster = my_args$cluster,
+      cluster = cluster_id,
       verbose = FALSE,
       force = force,
       add_transform_class = FALSE
@@ -410,6 +432,20 @@ standardize.grouped_df <- function(
     cluster = cluster
   )
 
+  if (verbose && length(cluster) > 1L) {
+    cluster_vars <- as.list(my_args$x[cluster])
+    codes <- .cluster_codes(cluster_vars)
+    for (var in my_args$select) {
+      .check_cluster_levels(
+        my_args$x[[var]],
+        cluster_vars,
+        name = var,
+        rows = my_args$grps,
+        codes = codes
+      )
+    }
+  }
+
   # create column(s) to store dw_transformer attributes
   for (i in select) {
     my_args$info$groups[[paste0("attr_", i)]] <- rep(NA, length(my_args$grps))
@@ -431,6 +467,7 @@ standardize.grouped_df <- function(
       center = center,
       scale = scale,
       add_transform_class = FALSE,
+      .check_cluster = FALSE,
       ...
     )
 
