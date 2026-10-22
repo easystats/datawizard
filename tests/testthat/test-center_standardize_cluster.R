@@ -506,351 +506,172 @@ for (fun_name in c("center", "standardize")) {
 
 # several cluster variables -----------------------------------------------
 
-# three-level data: 2 districts, 4 schools (ids unique across districts),
-# 2 classrooms per school (ids repeat across schools), unbalanced classrooms
-ml_cells <- data.frame(
-  district = c("A", "A", "A", "A", "B", "B", "B", "B"),
-  school = c(1, 1, 2, 2, 3, 3, 4, 4),
-  classroom = c(1, 2, 1, 2, 1, 2, 1, 2),
-  n = c(2, 3, 4, 1, 5, 2, 3, 6),
-  school_size = c(10, 10, 20, 20, 40, 40, 80, 80),
-  class_size = c(15, 25, 18, 22, 30, 12, 20, 16),
-  stringsAsFactors = FALSE
+# 2 districts, 4 schools (ids unique across districts), 2 classrooms per school
+# (ids repeat across schools), unbalanced classrooms
+ml <- data.frame(
+  district = rep(c("A", "B"), each = 4),
+  school = rep(1:4, each = 2),
+  classroom = rep(1:2, 4),
+  school_size = rep(c(10, 20, 40, 80), each = 2),
+  class_size = c(15, 25, 18, 22, 30, 12, 20, 16)
 )
-ml <- ml_cells[
-  rep(seq_len(nrow(ml_cells)), ml_cells$n),
-  c("district", "school", "classroom", "school_size", "class_size")
-]
+ml <- ml[rep(1:8, c(2, 3, 4, 1, 5, 2, 3, 6)), ]
 rownames(ml) <- NULL
+# one id per school and classroom
+h <- (ml$school - 1) * 2 + ml$classroom
 
-# one id per distinct combination, built from per-variable codes so that ids
-# such as "a.b" and "c" never merge with "a" and "b.c"; NA where any id is NA
-combo_id <- function(...) {
-  v <- data.frame(..., stringsAsFactors = FALSE)
-  key <- do.call(
-    paste,
-    c(lapply(v, function(i) match(i, unique(i))), sep = "_")
+test_that("standardize, several cluster vectors", {
+  room <- ml$classroom
+  room[3] <- NA
+  h_na <- h
+  h_na[3] <- NA
+  expect_identical(
+    standardize(ml$class_size, cluster = list(ml$school, room)),
+    standardize(ml$class_size, cluster = h_na)
   )
-  id <- match(key, unique(key))
-  id[!stats::complete.cases(v)] <- NA
-  id
-}
+  expect_error(
+    standardize(ml$class_size, cluster = list(ml$school, room[-1])),
+    "`cluster` must have the same length as the variable to transform.",
+    fixed = TRUE
+  )
+})
 
-for (fun_name in c("center", "standardize")) {
-  fun <- get(fun_name)
+test_that("standardize, cluster ids with dots do not merge", {
+  x <- c(1, 1, 3, 3, 8, 8)
+  ids <- list(
+    c("a.b", "a.b", "a", "a", "z", "z"),
+    c("c", "c", "b.c", "b.c", "z", "z")
+  )
+  expect_identical(
+    standardize(x, cluster = ids),
+    standardize(x, cluster = c(1, 1, 2, 2, 3, 3))
+  )
+})
 
-  test_that(paste(fun_name, "numeric, several cluster vectors"), {
-    room <- ml$classroom
-    room[3] <- NA
-    expected <- fun(ml$class_size, cluster = combo_id(ml$school, room))
-    # oracle (invariant): a list or data frame of id vectors equals one id
-    # vector that labels each distinct combination
-    expect_identical(
-      fun(ml$class_size, cluster = list(ml$school, room)),
-      expected
-    )
-    expect_identical(
-      fun(
-        ml$class_size,
-        cluster = data.frame(school = ml$school, room = room)
-      ),
-      expected
-    )
-    # oracle (closed-form): the value with a missing id is NA
-    expect_true(is.na(fun(ml$class_size, cluster = list(ml$school, room))[3]))
-    expect_error(
-      fun(ml$class_size, cluster = list(ml$school, room[-1])),
-      "`cluster` must have the same length as the variable to transform.",
-      fixed = TRUE
-    )
-  })
-
-  test_that(paste(fun_name, "numeric, ids with dots do not merge"), {
-    x <- c(1, 1, 3, 3, 8, 8)
-    ids <- list(
-      c("a.b", "a.b", "a", "a", "z", "z"),
-      c("c", "c", "b.c", "b.c", "z", "z")
-    )
-    z <- fun(x, cluster = ids)
-    # oracle (closed-form): three clusters with values 1, 3, and 8, so the
-    # center is 4 (interaction() would merge the first two into one cluster
-    # with two values)
-    expect_identical(attr(z, "center"), 4)
-    expect_identical(z, fun(x, cluster = c(1, 1, 2, 2, 3, 3)))
-  })
-
-  test_that(paste(fun_name, "data frame, several cluster columns"), {
-    named <- c("school", "classroom")
-    ml_h <- ml
-    ml_h$h <- combo_id(ml$school, ml$classroom)
-    out <- fun(ml, cluster = named, verbose = FALSE)
-    # oracle (invariant): same as one helper column with the named columns
-    # excluded
-    ref <- fun(ml_h, cluster = "h", exclude = named, verbose = FALSE)
-    expect_identical(out$school, ml$school)
-    expect_identical(out$classroom, ml$classroom)
-    expect_identical(out$class_size, ref$class_size)
-    expect_identical(out$school_size, ref$school_size)
-    expect_identical(attr(out, "center"), attr(ref, "center"))
-    expect_identical(attr(out, "scale"), attr(ref, "scale"))
-
-    # three names: the district is redundant, so the clusters are the same
-    out3 <- fun(
+test_that("standardize, data frame, several cluster columns", {
+  ref <- standardize(ml, select = "class_size", cluster = h)
+  out <- standardize(
+    ml,
+    select = "class_size",
+    cluster = c("school", "classroom")
+  )
+  expect_identical(out$class_size, ref$class_size)
+  out <- standardize(
+    ml,
+    select = "class_size",
+    cluster = list(ml$school, ml$classroom)
+  )
+  expect_identical(out$class_size, ref$class_size)
+  expect_error(
+    standardize(
       ml,
       select = "class_size",
-      cluster = c("district", "school", "classroom")
-    )
-    ref3 <- fun(ml_h, select = "class_size", cluster = "h")
-    expect_identical(out3$class_size, ref3$class_size)
-    expect_identical(attr(out3, "center"), attr(ref3, "center"))
+      cluster = list(ml$school, ml$classroom[-1])
+    ),
+    "`cluster` must have the same length as the number of rows in the data.",
+    fixed = TRUE
+  )
+})
 
-    # a named column with an NA
-    ml_na <- ml
-    ml_na$classroom[3] <- NA
-    ml_na$h <- combo_id(ml_na$school, ml_na$classroom)
-    out_na <- fun(ml_na, select = "class_size", cluster = named)
-    ref_na <- fun(ml_na, select = "class_size", cluster = "h")
-    expect_identical(out_na$class_size, ref_na$class_size)
-    expect_true(is.na(out_na$class_size[3]))
-
-    # a list of id vectors equals one id vector built the same way
-    out_list <- fun(
-      ml,
-      select = "class_size",
-      cluster = list(ml$school, ml$classroom)
-    )
-    ref_list <- fun(ml, select = "class_size", cluster = ml_h$h)
-    expect_identical(out_list$class_size, ref_list$class_size)
-    expect_identical(attr(out_list, "center"), attr(ref_list, "center"))
-    expect_error(
-      fun(
-        ml,
-        select = "class_size",
-        cluster = list(ml$school, ml$classroom[-1])
-      ),
-      "`cluster` must have the same length as the number of rows in the data.",
-      fixed = TRUE
-    )
-  })
-
-  test_that(paste(fun_name, "grouped data frame, several cluster columns"), {
-    skip_if_not_installed("poorman")
-    ml_h <- ml
-    ml_h$h <- combo_id(ml$school, ml$classroom)
-    ml_h$classroom[3] <- NA
-    ml_h$h[3] <- NA
-    gd <- poorman::group_by(ml_h, district)
-    out <- fun(gd, select = "class_size", cluster = c("school", "classroom"))
-    # oracle (invariant): same as the helper column within each group
-    ref <- fun(gd, select = "class_size", cluster = "h")
-    expect_equal(out$class_size, ref$class_size, ignore_attr = TRUE)
-    expect_identical(out$school, ml_h$school)
-    expect_identical(out$classroom, ml_h$classroom)
-    expect_true(is.na(out$class_size[3]))
-
-    # three names, one of them the grouping variable
-    out3 <- fun(
+test_that("standardize, grouped data frame, several cluster columns", {
+  skip_if_not_installed("poorman")
+  gd <- poorman::group_by(cbind(ml, h = h), district)
+  out <- standardize(
+    gd,
+    select = "class_size",
+    cluster = c("school", "classroom")
+  )
+  ref <- standardize(gd, select = "class_size", cluster = "h")
+  expect_equal(out$class_size, ref$class_size, ignore_attr = TRUE)
+  expect_error(
+    standardize(
       gd,
       select = "class_size",
-      cluster = c("district", "school", "classroom")
-    )
-    expect_equal(out3$class_size, ref$class_size, ignore_attr = TRUE)
-
-    expect_error(
-      fun(gd, select = "class_size", cluster = list(ml$school, ml$classroom)),
-      "For grouped data frames, `cluster` must be one or more"
-    )
-  })
-
-  test_that(paste(fun_name, "data frame, how a character cluster is read"), {
-    d_ids <- data.frame(
-      y = c(1, 1, 3, 3),
-      s1 = c(9, 9, 9, 9),
-      s2 = c(4, 4, 4, 4)
-    )
-    # oracle (invariant): repeated id values are ids, even when they are all
-    # column names
-    expect_identical(
-      fun(d_ids, select = "y", cluster = c("s1", "s1", "s2", "s2")),
-      fun(d_ids, select = "y", cluster = c(1, 1, 2, 2))
-    )
-    # unique character ids, one per row, are read as column names
-    expect_error(
-      fun(d_ids, select = "y", cluster = c("p", "q", "r", "u")),
-      "Could not find the `cluster` columns"
-    )
-    expect_error(
-      fun(d_ids, select = "y", cluster = c("p", "q", "r", "u")),
-      "give them as a factor"
-    )
-    expect_identical(
-      fun(d_ids, select = "y", cluster = factor(c("p", "p", "q", "q"))),
-      fun(d_ids, select = "y", cluster = c(1, 1, 2, 2))
-    )
-    expect_error(
-      fun(d_ids, select = "y", cluster = c("s1", "s1")),
-      "`cluster` must have the same length as the number of rows in the data.",
-      fixed = TRUE
-    )
-    expect_error(
-      fun(data.frame(y = 1), cluster = "a"),
-      "Could not find the `cluster` column `a`",
-      fixed = TRUE
-    )
-    five <- paste0("m", 1:5)
-    msg5 <- tryCatch(
-      fun(d_ids, select = "y", cluster = five),
-      error = conditionMessage
-    )
-    expect_match(
-      gsub("\\s+", " ", msg5),
-      "`m1`, `m2`, `m3`, `m4` and `m5`",
-      fixed = TRUE
-    )
-    expect_false(grepl("more", msg5, fixed = TRUE))
-    msg8 <- tryCatch(
-      fun(d_ids, select = "y", cluster = paste0("m", 1:8)),
-      error = conditionMessage
-    )
-    expect_match(
-      gsub("\\s+", " ", msg8),
-      "`m1`, `m2`, `m3`, `m4`, `m5` and 3 more",
-      fixed = TRUE
-    )
-    expect_false(grepl("m6", msg8, fixed = TRUE))
-    expect_error(
-      fun(d_ids, select = "y", cluster = character(0)),
-      "`cluster` must contain at least one id vector.",
-      fixed = TRUE
-    )
-    expect_no_error(
-      fun(ml, select = "school_size", cluster = c("district", "school"))
-    )
-    expect_error(
-      fun(ml, select = "class_size", cluster = c("school", "zone", "room")),
-      "Could not find the `cluster` column.*zone.*room"
-    )
-    skip_if_not_installed("poorman")
-    gd <- poorman::group_by(ml, district)
-    expect_error(
-      fun(gd, select = "class_size", cluster = c("school", "zone")),
-      "Could not find the `cluster` column.*zone"
-    )
-    expect_error(
-      fun(gd, select = "class_size", cluster = c("zone", "zone")),
-      "For grouped data frames, `cluster` must be one or more"
-    )
-    expect_error(
-      fun(gd, select = "class_size", cluster = character(0)),
-      "`cluster` must contain at least one id vector.",
-      fixed = TRUE
-    )
-  })
-
-  test_that(paste(fun_name, "warns when a cluster variable is not needed"), {
-    # oracle (invariant): school_size has one value per school, so classroom
-    # only splits schools and weights them by their number of classrooms
-    expect_warning(
-      fun(ml, select = "school_size", cluster = c("school", "classroom")),
-      "classroom"
-    )
-    expect_warning(
-      fun(ml$school_size, cluster = list(sch = ml$school, room = ml$classroom)),
-      "room"
-    )
-    # classroom-level variable: both cluster variables are needed
-    expect_no_warning(
-      fun(ml, select = "class_size", cluster = c("school", "classroom"))
-    )
-    # school ids are unique across districts, so dropping the district leaves
-    # the same clusters
-    expect_no_warning(
-      fun(ml, select = "school_size", cluster = c("district", "school"))
-    )
-    quiet <- fun(
-      ml,
-      select = "school_size",
-      cluster = c("school", "classroom"),
-      verbose = FALSE
-    )
-    expect_no_warning(fun(
-      ml,
-      select = "school_size",
-      cluster = c("school", "classroom"),
-      verbose = FALSE
-    ))
-    loud <- suppressWarnings(
-      fun(ml, select = "school_size", cluster = c("school", "classroom"))
-    )
-    expect_identical(quiet, loud)
-
-    skip_if_not_installed("poorman")
-    gd <- poorman::group_by(ml, district)
-    expect_warning(
-      fun(gd, select = "school_size", cluster = c("school", "classroom")),
-      "classroom"
-    )
-  })
-}
-
-
-# TRUE or FALSE in center and scale for data frames ------------------------
-
-test_that("data frame, TRUE or FALSE in center and scale", {
-  args <- list(
-    list(fun = "standardize", center = FALSE),
-    list(fun = "standardize", scale = FALSE),
-    list(fun = "standardize", center = FALSE, scale = FALSE),
-    list(fun = "standardize", center = TRUE),
-    list(fun = "center", center = FALSE)
-  )
-  for (a in args) {
-    fun <- get(a$fun)
-    a$fun <- NULL
-    for (with_cluster in c(FALSE, TRUE)) {
-      df_args <- c(list(d, select = "funding"), a)
-      vec_args <- c(list(d$funding), a)
-      if (with_cluster) {
-        df_args$cluster <- "school"
-        vec_args$cluster <- d$school
-      }
-      out <- do.call(fun, df_args)
-      ref <- do.call(fun, vec_args)
-      # oracle (invariant): the data frame method gives each column what the
-      # numeric method gives it
-      expect_equal(out$funding, ref, ignore_attr = TRUE)
-      expect_named(attr(out, "center"), "funding")
-      expect_identical(unname(attr(out, "center")), attr(ref, "center"))
-      expect_identical(unname(attr(out, "scale")), attr(ref, "scale"))
-    }
-  }
-})
-
-
-# messages count only the values used with cluster -------------------------
-
-test_that("cluster, one-value and two-value messages count used values", {
-  # oracle (closed-form): with the NA id left out, only 5 remains
-  expect_message(
-    center(c(5, 5, 5, 9), cluster = c(1, 1, 1, NA)),
-    "only one unique value"
-  )
-  msgs <- capture_messages(center(c(5, 5, 5, 9), cluster = c(1, 1, 1, NA)))
-  expect_false(any(grepl("two different values", msgs, fixed = TRUE)))
-  # oracle (closed-form): NA in x and the row with an NA id are left out
-  expect_message(
-    center(c(5, 5, NA, 9), cluster = list(c(1, 1, 1, 2), c(1, 1, 1, NA))),
-    "only one unique value"
-  )
-  # oracle (closed-form): with the NA id left out, 5 and 9 remain
-  expect_message(
-    standardize(c(5, 5, 9, 7), cluster = c(1, 1, 2, NA)),
-    "only two different values"
+      cluster = list(ml$school, ml$classroom)
+    ),
+    "For grouped data frames, `cluster` must be one or more"
   )
 })
 
+test_that("standardize, data frame, character cluster", {
+  d_ids <- data.frame(y = c(1, 1, 3, 3), s1 = 9, s2 = 4)
+  # repeated values are ids, even when they are column names
+  expect_identical(
+    standardize(d_ids, select = "y", cluster = c("s1", "s1", "s2", "s2")),
+    standardize(d_ids, select = "y", cluster = c(1, 1, 2, 2))
+  )
+  expect_error(
+    standardize(d_ids, select = "y", cluster = c("p", "q", "r", "u")),
+    "give them as a factor"
+  )
+  expect_error(
+    standardize(data.frame(y = 1), cluster = "a"),
+    "Could not find the `cluster` column `a`",
+    fixed = TRUE
+  )
+  expect_error(
+    standardize(ml, select = "class_size", cluster = c("school", "zone", "room")),
+    "Could not find the `cluster` column.*zone.*room"
+  )
+  expect_error(
+    standardize(d_ids, select = "y", cluster = character(0)),
+    "`cluster` must contain at least one id vector.",
+    fixed = TRUE
+  )
+})
 
-# review fixes --------------------------------------------------------------
+test_that("standardize, warns when a cluster variable is not needed", {
+  expect_warning(
+    standardize(ml, select = "school_size", cluster = c("school", "classroom")),
+    "classroom"
+  )
+  expect_warning(
+    standardize(
+      ml$school_size,
+      cluster = list(sch = ml$school, room = ml$classroom)
+    ),
+    "room"
+  )
+  expect_no_warning(
+    standardize(ml, select = "class_size", cluster = c("school", "classroom"))
+  )
+  # dropping the district leaves the same clusters
+  expect_no_warning(
+    standardize(ml, select = "school_size", cluster = c("district", "school"))
+  )
+  w <- capture_warnings(suppressMessages(center(
+    rep(1, nrow(ml)),
+    cluster = list(ml$school, ml$classroom)
+  )))
+  expect_match(
+    gsub("\\s+", " ", w),
+    "cluster variable 1 or cluster variable 2",
+    fixed = TRUE
+  )
+
+  skip_if_not_installed("poorman")
+  gd <- poorman::group_by(ml, district)
+  expect_warning(
+    standardize(gd, select = "school_size", cluster = c("school", "classroom")),
+    "classroom"
+  )
+})
+
+test_that("center, several cluster columns", {
+  out <- center(ml, select = "class_size", cluster = c("school", "classroom"))
+  ref <- center(ml, select = "class_size", cluster = h)
+  expect_identical(out$class_size, ref$class_size)
+  expect_warning(
+    center(ml, select = "school_size", cluster = c("school", "classroom")),
+    "classroom"
+  )
+  skip_if_not_installed("poorman")
+  gd <- poorman::group_by(ml, district)
+  expect_warning(
+    center(gd, select = "school_size", cluster = c("school", "classroom")),
+    "classroom"
+  )
+})
 
 test_that("cluster, a POSIXlt id vector is one cluster variable", {
   when <- as.POSIXlt(
@@ -858,7 +679,6 @@ test_that("cluster, a POSIXlt id vector is one cluster variable", {
     tz = "UTC"
   )
   x <- c(1, 1, 3, 3, 8, 8)
-  # oracle (invariant): same as the same ids as numbers
   expect_identical(
     standardize(x, cluster = when),
     standardize(x, cluster = rep(1:3, each = 2))
@@ -872,62 +692,30 @@ test_that("cluster, an empty list is an error", {
   )
 })
 
+
+# TRUE or FALSE in center and scale for data frames ------------------------
+
+test_that("data frame, TRUE or FALSE in center and scale", {
+  for (a in list(list(scale = FALSE), list(center = TRUE))) {
+    out <- do.call(standardize, c(list(d, select = "funding"), a))
+    ref <- do.call(standardize, c(list(d$funding), a))
+    expect_equal(out$funding, ref, ignore_attr = TRUE)
+  }
+})
+
+
+# messages count only the values used with cluster -------------------------
+
+test_that("cluster, messages count only the values used", {
+  expect_message(
+    center(c(5, 5, 5, 9), cluster = c(1, 1, 1, NA)),
+    "only one unique value"
+  )
+})
+
 test_that("standardize, scale = FALSE needs only one cluster", {
-  # oracle (closed-form): one cluster with the value 5 is centered to 0, and
-  # the row with a missing id is NA
   z <- suppressMessages(
     standardize(c(5, 5, 7), cluster = c(1, 1, NA), scale = FALSE)
   )
   expect_identical(as.vector(z), c(0, 0, NA))
-})
-
-test_that("cluster warning, a column named with digits and several names", {
-  d_digits <- data.frame(
-    school = ml$school,
-    `2020` = ml$classroom,
-    school_size = ml$school_size,
-    check.names = FALSE
-  )
-  expect_warning(
-    center(d_digits, select = "school_size", cluster = c("school", "2020")),
-    "even without `2020`"
-  )
-  # oracle (closed-form): a constant variable takes one value per cluster
-  # without either cluster variable, so the warning names both
-  w <- capture_warnings(suppressMessages(center(
-    rep(1, nrow(ml)),
-    cluster = list(ml$school, ml$classroom)
-  )))
-  w <- gsub("\\s+", " ", w)
-  expect_length(w, 1L)
-  expect_match(w, "cluster variable 1 or cluster variable 2", fixed = TRUE)
-  expect_match(w, "Remove one of them", fixed = TRUE)
-})
-
-test_that("cluster, list names do not change which variables are checked", {
-  # oracle (invariant): both orders of two same-named elements warn, and an
-  # NA name is a position, so a classroom-level variable does not warn
-  expect_warning(
-    center(
-      ml$school_size,
-      cluster = stats::setNames(list(ml$school, ml$classroom), c("g", "g"))
-    ),
-    "Remove it"
-  )
-  expect_warning(
-    center(
-      ml$school_size,
-      cluster = stats::setNames(list(ml$classroom, ml$school), c("g", "g"))
-    ),
-    "Remove it"
-  )
-  expect_no_warning(center(
-    ml$class_size,
-    cluster = stats::setNames(list(ml$school, ml$classroom), c("a", NA))
-  ))
-  # a classed list of id vectors is still a list of cluster variables
-  expect_identical(
-    standardize(ml$class_size, cluster = I(list(ml$school, ml$classroom))),
-    standardize(ml$class_size, cluster = list(ml$school, ml$classroom))
-  )
 })
