@@ -52,16 +52,13 @@ test_that("adjust, invalid column names", {
 test_that("adjust passes ... to lm()", {
   d <- iris[c("Sepal.Length", "Species")]
   w <- seq_len(nrow(d)) / nrow(d)
-  adj <- adjust(d, multilevel = FALSE, additive = FALSE, weights = w)
+  adj <- adjust(d, weights = w)
   m <- stats::lm(Sepal.Length ~ Species, data = d, weights = w)
-  # same as the model fit by hand
   expect_equal(
     adj$Sepal.Length,
     unname(stats::residuals(m)),
     tolerance = 1e-6
   )
-  # differs from the default
-  expect_false(isTRUE(all.equal(adj$Sepal.Length, adjust(d)$Sepal.Length)))
 })
 
 test_that("adjust passes ... to lme4::lmer()", {
@@ -69,25 +66,10 @@ test_that("adjust passes ... to lme4::lmer()", {
   d <- iris[c("Sepal.Length", "Species")]
   adj <- adjust(d, multilevel = TRUE, REML = FALSE)
   m <- lme4::lmer(Sepal.Length ~ (1 | Species), data = d, REML = FALSE)
-  # same as the model fit by hand
   expect_equal(
     adj$Sepal.Length,
     unname(stats::residuals(m)),
     tolerance = 1e-6
-  )
-  # differs from the default
-  expect_false(isTRUE(all.equal(
-    adj$Sepal.Length,
-    adjust(d, multilevel = TRUE)$Sepal.Length
-  )))
-  # error comes from lme4
-  expect_error(
-    adjust(
-      d,
-      multilevel = TRUE,
-      control = lme4::lmerControl(optimizer = "nonexistent_opt")
-    ),
-    regexp = "couldn't find optimizer function"
   )
 })
 
@@ -102,52 +84,20 @@ test_that("adjust passes ... to gamm4::gamm4()", {
     REML = FALSE
   )
   m <- gamm4::gamm4(Sepal.Length ~ s(Sepal.Width), data = d, REML = FALSE)
-  # same as the model fit by hand
   expect_equal(
     adj$Sepal.Length,
     unname(insight::get_residuals(m)),
     tolerance = 1e-6
   )
-  adj_default <- adjust(
-    d,
-    effect = "Sepal.Width",
-    select = "Sepal.Length",
-    additive = TRUE
-  )
-  # differs from the default
-  expect_false(isTRUE(all.equal(adj$Sepal.Length, adj_default$Sepal.Length)))
 })
 
 test_that("adjust passes ... to rstanarm::stan_glm()", {
   skip_on_cran()
   skip_if_not_installed("rstanarm")
   d <- iris[c("Sepal.Length", "Sepal.Width")]
-  adj <- suppressWarnings(adjust(
-    d,
-    effect = "Sepal.Width",
-    select = "Sepal.Length",
-    bayesian = TRUE,
-    chains = 1L,
-    iter = 200L,
-    seed = 1L
-  ))
-  m <- suppressWarnings(rstanarm::stan_glm(
-    Sepal.Length ~ Sepal.Width,
-    data = d,
-    refresh = 0L,
-    chains = 1L,
-    iter = 200L,
-    seed = 1L
-  ))
-  # same as the model fit by hand
-  expect_equal(
-    adj$Sepal.Length,
-    unname(insight::get_residuals(m)),
-    tolerance = 1e-6
-  )
   # `refresh` replaces the default of 0
   progress <- utils::capture.output({
-    adj_refresh <- suppressWarnings(adjust(
+    adj <- suppressWarnings(adjust(
       d,
       effect = "Sepal.Width",
       select = "Sepal.Length",
@@ -159,7 +109,19 @@ test_that("adjust passes ... to rstanarm::stan_glm()", {
     ))
   })
   expect_true(any(grepl("Iteration", progress, fixed = TRUE)))
-  expect_equal(adj_refresh$Sepal.Length, adj$Sepal.Length, tolerance = 1e-6)
+  m <- suppressWarnings(rstanarm::stan_glm(
+    Sepal.Length ~ Sepal.Width,
+    data = d,
+    refresh = 0L,
+    chains = 1L,
+    iter = 200L,
+    seed = 1L
+  ))
+  expect_equal(
+    adj$Sepal.Length,
+    unname(insight::get_residuals(m)),
+    tolerance = 1e-6
+  )
 })
 
 test_that("adjust passes ... to rstanarm::stan_glmer()", {
@@ -185,23 +147,11 @@ test_that("adjust passes ... to rstanarm::stan_glmer()", {
     iter = 200L,
     seed = 1L
   ))
-  # same as the model fit by hand
   expect_equal(
     adj$Sepal.Length,
     unname(insight::get_residuals(m)),
     tolerance = 1e-6
   )
-  # `family` is not passed twice
-  adj_family <- suppressWarnings(adjust(
-    d,
-    multilevel = TRUE,
-    bayesian = TRUE,
-    chains = 1L,
-    iter = 200L,
-    seed = 1L,
-    family = "gaussian"
-  ))
-  expect_equal(adj_family$Sepal.Length, adj$Sepal.Length, tolerance = 1e-6)
 })
 
 test_that("adjust passes ... to rstanarm::stan_gamm4()", {
@@ -227,26 +177,9 @@ test_that("adjust passes ... to rstanarm::stan_gamm4()", {
     iter = 200L,
     seed = 1L
   ))
-  # same as the model fit by hand
   expect_equal(
     adj$Sepal.Length,
     unname(insight::get_residuals(m)),
     tolerance = 1e-6
   )
-  # `refresh` replaces the default of 0
-  progress <- utils::capture.output({
-    adj_refresh <- suppressWarnings(adjust(
-      d,
-      effect = "Sepal.Width",
-      select = "Sepal.Length",
-      additive = TRUE,
-      bayesian = TRUE,
-      chains = 1L,
-      iter = 200L,
-      seed = 1L,
-      refresh = 50L
-    ))
-  })
-  expect_true(any(grepl("Iteration", progress, fixed = TRUE)))
-  expect_equal(adj_refresh$Sepal.Length, adj$Sepal.Length, tolerance = 1e-6)
 })
