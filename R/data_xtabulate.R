@@ -7,8 +7,11 @@
   remove_na = FALSE,
   proportions = NULL,
   obj_name = NULL,
-  group_variable = NULL
+  group_variable = NULL,
+  chisq = NULL
 ) {
+  chi_square <- chisq.test(x, by)
+
   if (!is.null(proportions)) {
     proportions <- match.arg(proportions, c("row", "column", "full"))
   }
@@ -96,6 +99,19 @@
 
   if (!is.null(by_name)) {
     attr(out, "by") <- by_name
+  }
+  attr(out, "chi_square") <- chi_square
+  if (chisq) {
+    attr(out, "chisq_caption") <- paste0(
+      chi_square$method,
+      "\n ",
+      round(chi_square$statistic, 3),
+      ", ",
+      "df = ",
+      chi_square[["parameter"]][["df"]],
+      ", p = ",
+      round(chi_square$p.value, 3)
+    )
   }
 
   attr(out, "grouped_df") <- !is.null(group_variable)
@@ -311,6 +327,9 @@ print_html.datawizard_crosstab <- function(x, big_mark = NULL, ...) {
   } else {
     caption <- paste0("Grouped by ", x[["Group"]][1])
     x$Group <- NULL
+  }
+  if (!is.null(attr(x, "chisq_caption"))) {
+    caption <- paste0(caption, attr(x, "chisq_caption"))
   }
 
   # this function is used by all four supported format, markdown, text, html

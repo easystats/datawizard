@@ -20,6 +20,7 @@ data_tabulate(x, ...)
   name = NULL,
   verbose = TRUE,
   metrics = c("N", "raw", "valid", "cumulative"),
+  chisq = FALSE,
   ...
 )
 
@@ -80,6 +81,8 @@ included. Only applies to frequencies, i.e. when \code{by} is \code{NULL}. Can i
 any combination of \code{N} (frequencies including \code{NA}), \code{"raw"} (percentage
 including \code{NA} values), \code{"valid"} (percentage excluding \code{NA} values) and
 \code{"cumulative"} (percentage excluding \code{NA} values).}
+
+\item{chisq}{include chi square for two dimensional tables}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either

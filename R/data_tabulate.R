@@ -44,6 +44,7 @@
 #' any combination of `N` (frequencies including `NA`), `"raw"` (percentage
 #' including `NA` values), `"valid"` (percentage excluding `NA` values) and
 #' `"cumulative"` (percentage excluding `NA` values).
+#' @param chisq include chi square for two dimensional tables
 #' @param ... not used.
 #' @inheritParams extract_column_names
 #'
@@ -163,6 +164,7 @@ data_tabulate.default <- function(
   name = NULL,
   verbose = TRUE,
   metrics = c("N", "raw", "valid", "cumulative"),
+  chisq = FALSE,
   ...
 ) {
   # save label attribute, before it gets lost...
@@ -211,7 +213,8 @@ data_tabulate.default <- function(
       remove_na = remove_na,
       proportions = proportions,
       obj_name = obj_name,
-      group_variable = group_variable
+      group_variable = group_variable,
+      chisq = chisq
     ))
   }
   # frequency table
@@ -318,7 +321,7 @@ data_tabulate.default <- function(
   if (!"N" %in% metrics) {
     out <- data_select(out, exclude = "N")
   }
-
+  cs2 <<- chisq
   # save information
   attr(out, "type") <- .variable_type(x)
   attr(out, "varname") <- name
@@ -334,6 +337,7 @@ data_tabulate.default <- function(
     attr(out, "by") <- NULL
   } else {
     attr(out, "by") <- by_name
+    attr(out, "chi_square") <- chisq
   }
 
   class(out) <- c("datawizard_table", "data.frame")
