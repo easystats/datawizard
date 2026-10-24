@@ -10,7 +10,12 @@
   group_variable = NULL,
   chisq = NULL
 ) {
-  chi_square <- chisq.test(x, by)
+  chi_square <- suppressWarnings(chisq.test(x, by))
+  chi_square2 <- tryCatch(
+    chisq.test(x, by),
+    warning = function(w) chisqwarning <<- w
+  )
+  chi_square_warning <- chisqwarning$message
 
   if (!is.null(proportions)) {
     proportions <- match.arg(proportions, c("row", "column", "full"))
@@ -105,15 +110,16 @@
     attr(out, "chisq_caption") <- paste0(
       chi_square$method,
       "\n ",
-      round(chi_square$statistic, 3),
+      "X-squared = ",
+      round(chi_square[["statistic"]], 3),
       ", ",
       "df = ",
       chi_square[["parameter"]][["df"]],
       ", p = ",
       round(chi_square$p.value, 3)
     )
+    attr(out, "chi_square_warning") <- chi_square_warning
   }
-
   attr(out, "grouped_df") <- !is.null(group_variable)
   attr(out, "prop_table") <- .prop_table(out)
 
@@ -330,6 +336,13 @@ print_html.datawizard_crosstab <- function(x, big_mark = NULL, ...) {
   }
   if (!is.null(attr(x, "chisq_caption"))) {
     caption <- paste0(caption, attr(x, "chisq_caption"))
+  }
+  if (!is.null(attr(x, "chi_square_warning"))) {
+    paste0(
+      caption,
+      "\n",
+      insight::format_warning(attr(x, "chi_square_warning"))
+    )
   }
 
   # this function is used by all four supported format, markdown, text, html

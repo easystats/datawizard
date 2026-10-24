@@ -37,6 +37,7 @@ data_tabulate(x, ...)
   proportions = NULL,
   collapse = FALSE,
   verbose = TRUE,
+  chisq = FALSE,
   ...
 )
 

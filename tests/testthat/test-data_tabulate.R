@@ -318,7 +318,12 @@ test_that("data_tabulate data.frame with wrong value for 'metrics'", {
 
 test_that("data_tabulate data.frame by", {
   data(efc, package = "datawizard")
-  x <- data_tabulate(efc, "c172code", by = "e16sex")
+  #  x <- factor(efc$c172code, labels = attr(efc$c172code, "labels") |> names())
+  by <- factor(efc$e16sex, labels = attr(efc$e16sex, "labels") |> names())
+  x <- factor(efc$c172code)
+  # by <- factor(efc$e16sex)
+  chisq <- suppressWarnings(chisq.test(x, by))
+  x <- data_tabulate(efc, "c172code", by = "e16sex", chisq = FALSE)
   expect_s3_class(x, c("datawizard_crosstab", "list"))
   expect_length(x, 1L)
   expect_identical(
@@ -335,6 +340,7 @@ test_that("data_tabulate data.frame by", {
       total_n = 100L,
       varname = "c172code",
       by = "e16sex",
+      chi_square = chisq,
       grouped_df = FALSE
     )
   )
@@ -342,6 +348,11 @@ test_that("data_tabulate data.frame by", {
 
 test_that("data_tabulate default by", {
   data(efc, package = "datawizard")
+  #  x <- factor(efc$c172code, labels = attr(efc$c172code, "labels") |> names())
+  by <- factor(efc$e16sex, labels = attr(efc$e16sex, "labels") |> names())
+  x <- factor(efc$c172code)
+  # by <- factor(efc$e16sex)
+  chisq <- suppressWarnings(chisq.test(x, by))
   x <- data_tabulate(efc$c172code, by = efc$e16sex)
   expect_s3_class(x, c("datawizard_crosstab", "data.frame"))
   expect_length(x, 4L)
@@ -359,6 +370,7 @@ test_that("data_tabulate default by", {
       total_n = 100L,
       varname = "efc$c172code",
       by = "efc$e16sex",
+      chi_square = chisq,
       grouped_df = FALSE
     )
   )
@@ -367,6 +379,11 @@ test_that("data_tabulate default by", {
 test_that("data_tabulate grouped data.frame by", {
   skip_if_not_installed("poorman")
   data(efc, package = "datawizard")
+  #  x <- factor(efc$c172code, labels = attr(efc$c172code, "labels") |> names())
+  x <- factor(efc$e16sex, labels = attr(efc$e16sex, "labels") |> names())
+  by <- factor(efc$c172code)
+  # by <- factor(efc$e16sex)
+  chisq <- suppressWarnings(chisq.test(x, by))
   x <- data_tabulate(poorman::group_by(efc, e16sex), "c172code", by = "e42dep")
   expect_identical(
     attributes(x[[1]]),
@@ -385,6 +402,7 @@ test_that("data_tabulate grouped data.frame by", {
       total_n = 46L,
       varname = "c172code",
       by = "e42dep",
+      chi_square = chisq,
       grouped_df = TRUE
     )
   )

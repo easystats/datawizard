@@ -321,7 +321,7 @@ data_tabulate.default <- function(
   if (!"N" %in% metrics) {
     out <- data_select(out, exclude = "N")
   }
-  cs2 <<- chisq
+
   # save information
   attr(out, "type") <- .variable_type(x)
   attr(out, "varname") <- name
@@ -361,6 +361,7 @@ data_tabulate.data.frame <- function(
   proportions = NULL,
   collapse = FALSE,
   verbose = TRUE,
+  chisq = FALSE,
   ...
 ) {
   if (!is.null(by)) {
@@ -395,6 +396,7 @@ data_tabulate.data.frame <- function(
       remove_na = remove_na,
       name = i,
       verbose = verbose,
+      chisq = chisq,
       ...
     )
   })
