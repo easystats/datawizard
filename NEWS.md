@@ -36,12 +36,18 @@ CHANGES
   `parameters_smoothness` remain as secondary classes, so code that checks
   `class(x)[1]` for the old names needs to be updated (#248).
 
+* `adjust()` gains `...`, which passes arguments to the function that fits the
+  model (#696).
+
 FIXES
 
 * `skewness()` and `kurtosis()` now return the standard error for the chosen
   `type`. Before, the `SE` column was the type-1 standard error for every
   `type`, including the default `type = "2"`. Bootstrapped standard errors
   (`iterations`) are not changed.
+
+* Fixed an error in `adjust()` with `multilevel = TRUE` and `bayesian = TRUE`
+  when `rstanarm` was not attached (#726).
 
 * Fixed `demean()` and `degroup()` for nested designs with three or more
   grouping variables. The group-meaned variables of the third and later
