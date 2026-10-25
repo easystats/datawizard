@@ -59,6 +59,10 @@ CHANGES
   checks `class(x)[1]` for the old names needs to be updated
   ([\#248](https://github.com/easystats/datawizard/issues/248)).
 
+- [`adjust()`](https://easystats.github.io/datawizard/reference/adjust.md)
+  gains `...`, which passes arguments to the function that fits the
+  model ([\#696](https://github.com/easystats/datawizard/issues/696)).
+
 FIXES
 
 - [`skewness()`](https://easystats.github.io/datawizard/reference/skewness.md)
@@ -68,6 +72,12 @@ FIXES
   column was the type-1 standard error for every `type`, including the
   default `type = "2"`. Bootstrapped standard errors (`iterations`) are
   not changed.
+
+- Fixed an error in
+  [`adjust()`](https://easystats.github.io/datawizard/reference/adjust.md)
+  with `multilevel = TRUE` and `bayesian = TRUE` when `rstanarm` was not
+  attached
+  ([\#726](https://github.com/easystats/datawizard/issues/726)).
 
 - Fixed
   [`demean()`](https://easystats.github.io/datawizard/reference/demean.md)

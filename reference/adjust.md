@@ -25,7 +25,8 @@ adjust(
   keep_intercept = FALSE,
   ignore_case = FALSE,
   regex = FALSE,
-  verbose = FALSE
+  verbose = FALSE,
+  ...
 )
 
 data_adjust(
@@ -39,7 +40,8 @@ data_adjust(
   keep_intercept = FALSE,
   ignore_case = FALSE,
   regex = FALSE,
-  verbose = FALSE
+  verbose = FALSE,
+  ...
 )
 ```
 
@@ -161,6 +163,17 @@ data_adjust(
 - verbose:
 
   Toggle warnings.
+
+- ...:
+
+  Arguments passed to the function that fits the model:
+  [`stats::lm()`](https://rdrr.io/r/stats/lm.html),
+  [`lme4::lmer()`](https://rdrr.io/pkg/lme4/man/lmer.html),
+  [`gamm4::gamm4()`](https://rdrr.io/pkg/gamm4/man/gamm4.html),
+  [`rstanarm::stan_glm()`](https://mc-stan.org/rstanarm/reference/stan_glm.html),
+  [`rstanarm::stan_glmer()`](https://mc-stan.org/rstanarm/reference/stan_glmer.html),
+  or
+  [`rstanarm::stan_gamm4()`](https://mc-stan.org/rstanarm/reference/stan_gamm4.html).
 
 ## Value
 

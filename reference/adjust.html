@@ -95,7 +95,8 @@ equivalent to the partial correlation between them.</p>
 <span>  keep_intercept <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  ignore_case <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  regex <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">data_adjust</span><span class="op">(</span></span>
@@ -109,7 +110,8 @@ equivalent to the partial correlation between them.</p>
 <span>  keep_intercept <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  ignore_case <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  regex <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -212,6 +214,12 @@ functions (see 'Details'), this argument may be used as workaround.</p></dd>
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Toggle warnings.</p></dd>
+
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>Arguments passed to the function that fits the model:
+<code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">stats::lm()</a></code>, <code><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lme4::lmer()</a></code>, <code><a href="https://rdrr.io/pkg/gamm4/man/gamm4.html" class="external-link">gamm4::gamm4()</a></code>, <code><a href="https://mc-stan.org/rstanarm/reference/stan_glm.html" class="external-link">rstanarm::stan_glm()</a></code>,
+<code><a href="https://mc-stan.org/rstanarm/reference/stan_glmer.html" class="external-link">rstanarm::stan_glmer()</a></code>, or <code><a href="https://mc-stan.org/rstanarm/reference/stan_gamm4.html" class="external-link">rstanarm::stan_gamm4()</a></code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
