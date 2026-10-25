@@ -37,6 +37,9 @@ CHANGES
   `parameters_smoothness` remain as secondary classes, so code that checks
   `class(x)[1]` for the old names needs to be updated (#248).
 
+* `adjust()` gains `...`, which passes arguments to the function that fits the
+  model (#696).
+
 FIXES
 
 * Fixed an issue in `standardize()` for data frames, where `center` and
@@ -48,6 +51,9 @@ FIXES
   `type`, including the default `type = "2"`. Bootstrapped standard errors
   (`iterations`) are not changed.
 
+* Fixed an error in `adjust()` with `multilevel = TRUE` and `bayesian = TRUE`
+  when `rstanarm` was not attached (#726).
+
 * Fixed `demean()` and `degroup()` for nested designs with three or more
   grouping variables. The group-meaned variables of the third and later
   variables in `by` were wrong (#720).
@@ -57,6 +63,10 @@ FIXES
   and loops. Internal variables of `data_filter()` no longer hide variables of
   the calling code. A condition that gives a warning now returns the filtered
   data with that warning (#309, #379).
+
+* `standardize()` now works with models coerced with
+  `lmerTest::as_lmerModLmerTest()`. You can also pass a standardized
+  `lme4::lmer()` model to `as_lmerModLmerTest()` or to `update()` (#716).
 
 # datawizard 1.4.1
 
