@@ -28,8 +28,8 @@ CHANGES
 * `center()` and `standardize()` gain a `cluster` argument. If `cluster` is
   given, the center and scale come from one value per cluster. Cluster-level
   variables in unbalanced long-format data are then not weighted by cluster
-  size. `cluster` can also be several column names, or a list of cluster
-  id vectors (#672).
+  size. `cluster` can also be several column names, or a list of cluster id
+  vectors (#672).
 
 * `skewness()`, `kurtosis()`, and `smoothness()` now return objects of class
   `datawizard_skewness`, `datawizard_kurtosis`, and `datawizard_smoothness`.
@@ -41,10 +41,6 @@ CHANGES
   model (#696).
 
 FIXES
-
-* Fixed an issue in `standardize()` for data frames, where `center` and
-  `scale` set to `TRUE` or `FALSE` were not handled as for vectors (e.g.,
-  `scale = FALSE` still divided by the SD) (#730).
 
 * `skewness()` and `kurtosis()` now return the standard error for the chosen
   `type`. Before, the `SE` column was the type-1 standard error for every

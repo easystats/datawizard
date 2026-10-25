@@ -72,13 +72,16 @@ against the names of the selected variables.}
 
 \item{cluster}{Can be \code{NULL} (for no clustering), a vector of cluster ids
 with one element per observation, or a list of such vectors. For data
-frames, it can also be one or more column names (grouped data frames only
-take column names). If given, the center and scale are computed from one
-value per cluster, so that cluster-level variables are not weighted by
-cluster size. With several cluster variables, each combination of their
-values is one cluster. Observations with a missing cluster id are returned
-as \code{NA}. Using \code{cluster} together with \code{weights}, \code{reference}, or
-numeric \code{center} or \code{scale} gives an error.}
+frames, it can also be the names of columns that contain the cluster ids.
+With several cluster variables, each combination of their values is one
+cluster. If given, the center and scale are computed from one value per
+cluster instead of from all observations, so that a cluster-level
+(Level 2) variable in long format is not weighted by the number of
+observations per cluster. The variable must take only one finite value
+within each cluster (infinite values are treated as missing), and
+observations with a missing cluster id are returned as \code{NA}. Using \code{cluster} together with \code{weights}, \code{reference}, or
+numeric \code{center} or \code{scale} gives an error. For grouped data frames,
+\code{cluster} must be column names.}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
