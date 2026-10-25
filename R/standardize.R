@@ -33,8 +33,8 @@
 #'   value per cluster, so that cluster-level variables are not weighted by
 #'   cluster size. With several cluster variables, each combination of their
 #'   values is one cluster. Observations with a missing cluster id are returned
-#'   as `NA`. Cannot be combined with `weights`, `reference`, or numeric
-#'   `center` and `scale`.
+#'   as `NA`. Using `cluster` together with `weights`, `reference`, or
+#'   numeric `center` or `scale` gives an error.
 #' @param verbose Toggle warnings and messages on or off.
 #' @param remove_na How should missing values (`NA`) be treated: if `"none"`
 #'   (default): each column's standardization is done separately, ignoring

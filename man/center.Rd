@@ -77,8 +77,8 @@ take column names). If given, the center and scale are computed from one
 value per cluster, so that cluster-level variables are not weighted by
 cluster size. With several cluster variables, each combination of their
 values is one cluster. Observations with a missing cluster id are returned
-as \code{NA}. Cannot be combined with \code{weights}, \code{reference}, or numeric
-\code{center} and \code{scale}.}
+as \code{NA}. Using \code{cluster} together with \code{weights}, \code{reference}, or
+numeric \code{center} or \code{scale} gives an error.}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
