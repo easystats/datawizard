@@ -321,11 +321,12 @@ test_that("data_tabulate data.frame by", {
   by <- factor(efc$e16sex, labels = attr(efc$e16sex, "labels") |> names())
   x <- factor(efc$c172code)
   set.seed(456)
-  if (length(unique(x)) > 1 & length(unique(by)) > 1) {
+  if (length(levels(x)) > 1 & length(levels(by)) > 1) {
     chi_square <- chisq.test(x, by, simulate.p.value = TRUE)
   } else {
-    chi_square <- "Both 'by' and 'x' must have at least 2 unique values\n
-    in order to calculate chi square."
+    chi_square <-
+      "Both 'by' and 'x' must have at least 2 unique values
+      in order to calculate chi square."
   }
   set.seed(456)
   x <- data_tabulate(efc, "c172code", by = "e16sex", chisq = FALSE)
@@ -359,8 +360,11 @@ test_that("data_tabulate default by", {
   if (length(unique(x)) > 1 & length(unique(by)) > 1) {
     chi_square <- chisq.test(x, by, simulate.p.value = TRUE)
   } else {
-    chi_square <- "Both 'by' and 'x' must have at least 2 unique values\n
+    chi_square <- list(
+      "Both 'by' and 'x' must have at least 2 unique values\n
     in order to calculate chi square."
+    )
+    class(chi_square) <- "htest"
   }
   set.seed(456)
   x <- data_tabulate(efc$c172code, by = efc$e16sex)
@@ -396,12 +400,9 @@ test_that("data_tabulate grouped data.frame by", {
   by <- factor(efc_group1$e42dep)
   Group <- factor(efc_group1$e16sex)
   set.seed(456)
-  if (length(unique(x)) > 1 & length(unique(by)) > 1) {
-    chi_square <- chisq.test(x, by, simulate.p.value = TRUE)
-  } else {
-    chi_square <- "Both 'by' and 'x' must have at least 2 unique values\n
+  chi_square <-
+    "Both 'by' and 'x' must have at least 2 unique levels\n
     in order to calculate chi square."
-  }
   set.seed(456)
   x <- data_tabulate(poorman::group_by(efc, e16sex), "c172code", by = "e42dep")
   expect_identical(

@@ -8,14 +8,18 @@
   proportions = NULL,
   obj_name = NULL,
   group_variable = NULL,
-  chisq = NULL
+  chisq = FALSE
 ) {
-  if (length(unique(x)) > 1 & length(unique(by)) > 1) {
+  if (is.null(group_variable) & is.null(attr(x, "groups"))) {
+    chi_square <- chisq.test(x, by, simulate.p.value = TRUE)
+  } else if (length(levels(x)) > 1 & length(levels(by)) > 1) {
     chi_square <- chisq.test(x, by, simulate.p.value = TRUE)
   } else {
-    chi_square <- "Both 'by' and 'x' must have at least 2 unique values\n
+    chi_square <-
+      "Both 'by' and 'x' must have at least 2 unique levels\n
     in order to calculate chi square."
   }
+
   if (!is.null(proportions)) {
     proportions <- match.arg(proportions, c("row", "column", "full"))
   }
@@ -117,7 +121,6 @@
       ", p = ",
       round(chi_square$p.value, 3)
     )
-    attr(out, "chi_square_warning") <- chi_square_warning
   }
   attr(out, "grouped_df") <- !is.null(group_variable)
   attr(out, "prop_table") <- .prop_table(out)
