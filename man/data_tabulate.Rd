@@ -83,7 +83,8 @@ any combination of \code{N} (frequencies including \code{NA}), \code{"raw"} (per
 including \code{NA} values), \code{"valid"} (percentage excluding \code{NA} values) and
 \code{"cumulative"} (percentage excluding \code{NA} values).}
 
-\item{chisq}{include chi square for two dimensional tables}
+\item{chisq}{include chi square for two dimensional tables. This is always
+calculated with the \code{chisq.test()} \code{simulate.p.value = TRUE}.}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either

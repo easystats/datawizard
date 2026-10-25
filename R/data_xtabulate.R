@@ -10,13 +10,12 @@
   group_variable = NULL,
   chisq = NULL
 ) {
-  chi_square <- suppressWarnings(chisq.test(x, by))
-  chi_square2 <- tryCatch(
-    chisq.test(x, by),
-    warning = function(w) chisqwarning <<- w
-  )
-  chi_square_warning <- chisqwarning$message
-
+  if (length(unique(x)) > 1 & length(unique(by)) > 1) {
+    chi_square <- chisq.test(x, by, simulate.p.value = TRUE)
+  } else {
+    chi_square <- "Both 'by' and 'x' must have at least 2 unique values\n
+    in order to calculate chi square."
+  }
   if (!is.null(proportions)) {
     proportions <- match.arg(proportions, c("row", "column", "full"))
   }

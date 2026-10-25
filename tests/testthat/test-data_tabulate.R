@@ -318,11 +318,16 @@ test_that("data_tabulate data.frame with wrong value for 'metrics'", {
 
 test_that("data_tabulate data.frame by", {
   data(efc, package = "datawizard")
-  #  x <- factor(efc$c172code, labels = attr(efc$c172code, "labels") |> names())
   by <- factor(efc$e16sex, labels = attr(efc$e16sex, "labels") |> names())
   x <- factor(efc$c172code)
-  # by <- factor(efc$e16sex)
-  chisq <- suppressWarnings(chisq.test(x, by))
+  set.seed(456)
+  if (length(unique(x)) > 1 & length(unique(by)) > 1) {
+    chi_square <- chisq.test(x, by, simulate.p.value = TRUE)
+  } else {
+    chi_square <- "Both 'by' and 'x' must have at least 2 unique values\n
+    in order to calculate chi square."
+  }
+  set.seed(456)
   x <- data_tabulate(efc, "c172code", by = "e16sex", chisq = FALSE)
   expect_s3_class(x, c("datawizard_crosstab", "list"))
   expect_length(x, 1L)
@@ -340,7 +345,7 @@ test_that("data_tabulate data.frame by", {
       total_n = 100L,
       varname = "c172code",
       by = "e16sex",
-      chi_square = chisq,
+      chi_square = chi_square,
       grouped_df = FALSE
     )
   )
@@ -348,11 +353,16 @@ test_that("data_tabulate data.frame by", {
 
 test_that("data_tabulate default by", {
   data(efc, package = "datawizard")
-  #  x <- factor(efc$c172code, labels = attr(efc$c172code, "labels") |> names())
   by <- factor(efc$e16sex, labels = attr(efc$e16sex, "labels") |> names())
   x <- factor(efc$c172code)
-  # by <- factor(efc$e16sex)
-  chisq <- suppressWarnings(chisq.test(x, by))
+  set.seed(456)
+  if (length(unique(x)) > 1 & length(unique(by)) > 1) {
+    chi_square <- chisq.test(x, by, simulate.p.value = TRUE)
+  } else {
+    chi_square <- "Both 'by' and 'x' must have at least 2 unique values\n
+    in order to calculate chi square."
+  }
+  set.seed(456)
   x <- data_tabulate(efc$c172code, by = efc$e16sex)
   expect_s3_class(x, c("datawizard_crosstab", "data.frame"))
   expect_length(x, 4L)
@@ -370,7 +380,7 @@ test_that("data_tabulate default by", {
       total_n = 100L,
       varname = "efc$c172code",
       by = "efc$e16sex",
-      chi_square = chisq,
+      chi_square = chi_square,
       grouped_df = FALSE
     )
   )
@@ -379,11 +389,20 @@ test_that("data_tabulate default by", {
 test_that("data_tabulate grouped data.frame by", {
   skip_if_not_installed("poorman")
   data(efc, package = "datawizard")
-  #  x <- factor(efc$c172code, labels = attr(efc$c172code, "labels") |> names())
-  x <- factor(efc$e16sex, labels = attr(efc$e16sex, "labels") |> names())
-  by <- factor(efc$c172code)
-  # by <- factor(efc$e16sex)
-  chisq <- suppressWarnings(chisq.test(x, by))
+  efc_group1 <- subset(efc, efc$e16sex == 1)
+  x <- factor(
+    efc_group1$c172code
+  )
+  by <- factor(efc_group1$e42dep)
+  Group <- factor(efc_group1$e16sex)
+  set.seed(456)
+  if (length(unique(x)) > 1 & length(unique(by)) > 1) {
+    chi_square <- chisq.test(x, by, simulate.p.value = TRUE)
+  } else {
+    chi_square <- "Both 'by' and 'x' must have at least 2 unique values\n
+    in order to calculate chi square."
+  }
+  set.seed(456)
   x <- data_tabulate(poorman::group_by(efc, e16sex), "c172code", by = "e42dep")
   expect_identical(
     attributes(x[[1]]),
@@ -402,7 +421,7 @@ test_that("data_tabulate grouped data.frame by", {
       total_n = 46L,
       varname = "c172code",
       by = "e42dep",
-      chi_square = chisq,
+      chi_square = chi_square,
       grouped_df = TRUE
     )
   )

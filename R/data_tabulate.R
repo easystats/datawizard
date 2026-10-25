@@ -44,7 +44,8 @@
 #' any combination of `N` (frequencies including `NA`), `"raw"` (percentage
 #' including `NA` values), `"valid"` (percentage excluding `NA` values) and
 #' `"cumulative"` (percentage excluding `NA` values).
-#' @param chisq include chi square for two dimensional tables
+#' @param chisq include chi square for two dimensional tables. This is always
+#' calculated with the `chisq.test()` `simulate.p.value = TRUE`.
 #' @param ... not used.
 #' @inheritParams extract_column_names
 #'
@@ -428,6 +429,7 @@ data_tabulate.grouped_df <- function(
   remove_na = FALSE,
   collapse = FALSE,
   verbose = TRUE,
+  chisq = FALSE,
   ...
 ) {
   grps <- attr(x, "groups", exact = TRUE)
