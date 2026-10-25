@@ -10,9 +10,9 @@
   group_variable = NULL,
   chisq = FALSE
 ) {
-  if (is.null(group_variable) & is.null(attr(x, "groups"))) {
+  if (is.null(group_variable) && is.null(attr(x, "groups"))) {
     chi_square <- chisq.test(x, by, simulate.p.value = TRUE)
-  } else if (length(levels(x)) > 1 & length(levels(by)) > 1) {
+  } else if (nlevels(x) > 1 && nlevels(x) > 1) {
     chi_square <- chisq.test(x, by, simulate.p.value = TRUE)
   } else {
     chi_square <-

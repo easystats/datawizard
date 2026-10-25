@@ -321,7 +321,7 @@ test_that("data_tabulate data.frame by", {
   by <- factor(efc$e16sex, labels = attr(efc$e16sex, "labels") |> names())
   x <- factor(efc$c172code)
   set.seed(456)
-  if (length(levels(x)) > 1 & length(levels(by)) > 1) {
+  if (nlevels(x) > 1 && nlevels(x) > 1) {
     chi_square <- chisq.test(x, by, simulate.p.value = TRUE)
   } else {
     chi_square <-
@@ -1121,7 +1121,7 @@ test_that("data_tabulate, as.data.frame, cross tables", {
   )
   expect_length(out$table, 1L)
   expect_named(out$table[[1]], c("cyl", "0", "1", "NA"))
-  expect_identical(nrow(out$table[[1]]), 4L)
+  expect_shape(out$table[[1]], nrow = 4L)
   # cross tables
   x <- data_tabulate(mtcars, c("cyl", "vs"), by = "am")
   out <- as.data.frame(x)
@@ -1133,7 +1133,7 @@ test_that("data_tabulate, as.data.frame, cross tables", {
   )
   expect_length(out$table, 2L)
   expect_named(out$table[[1]], c("cyl", "0", "1", "NA"))
-  expect_identical(nrow(out$table[[1]]), 4L)
+  expect_shape(out$table[[1]], nrow = 4L)
 })
 
 
@@ -1149,7 +1149,7 @@ test_that("data_tabulate, as.data.frame, cross tables with total N", {
   )
   expect_length(out$table, 1L)
   expect_named(out$table[[1]], c("cyl", "0", "1", "<NA>", "Total"))
-  expect_identical(nrow(out$table[[1]]), 5L)
+  expect_shape(out$table[[1]], nrow = 5L)
   expect_identical(out$table[[1]]$cyl, c("4", "6", "8", NA, "Total"))
   # cross tables, with total
   x <- data_tabulate(mtcars, c("cyl", "vs"), by = "am")
@@ -1162,7 +1162,7 @@ test_that("data_tabulate, as.data.frame, cross tables with total N", {
   )
   expect_length(out$table, 2L)
   expect_named(out$table[[1]], c("cyl", "0", "1", "<NA>", "Total"))
-  expect_identical(nrow(out$table[[1]]), 5L)
+  expect_shape(out$table[[1]], nrow = 5L)
   expect_identical(out$table[[1]]$cyl, c("4", "6", "8", NA, "Total"))
 })
 
