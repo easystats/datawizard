@@ -97,6 +97,15 @@ FIXES
   ([\#309](https://github.com/easystats/datawizard/issues/309),
   [\#379](https://github.com/easystats/datawizard/issues/379)).
 
+- [`standardize()`](https://easystats.github.io/datawizard/reference/standardize.md)
+  now works with models coerced with
+  [`lmerTest::as_lmerModLmerTest()`](https://rdrr.io/pkg/lmerTest/man/as_lmerModLmerTest.html).
+  You can also pass a standardized
+  [`lme4::lmer()`](https://rdrr.io/pkg/lme4/man/lmer.html) model to
+  `as_lmerModLmerTest()` or to
+  [`update()`](https://rdrr.io/r/stats/update.html)
+  ([\#716](https://github.com/easystats/datawizard/issues/716)).
+
 ## datawizard 1.4.1
 
 CRAN release: 2026-10-17
