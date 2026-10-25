@@ -63,6 +63,25 @@
 #' However, unlike `subset()`, it preserves label attributes and is useful when
 #' working with labelled data.
 #'
+#' A condition in `data_filter()` can use variables of the function that calls
+#' `data_filter()`, for example `data_filter(data, value > threshold)` where
+#' `threshold` is defined in that function. Names are found with two rules:
+#'
+#' - If the complete condition evaluates to a number or a string, this value is
+#'   used as row indices or as the filter expression. A string that evaluates
+#'   to numbers, like `"5:10"`, is also used as row indices. The condition is
+#'   evaluated in the function that called `data_filter()` first, then in the
+#'   functions further up the call stack. In each function, the condition can also use
+#'   the environments where that function was defined, such as the global
+#'   environment. For this reason, a name that holds a number or a string is
+#'   used even if `x` has a column with the same name. A filter expression found
+#'   this way is then evaluated with the next rule, but names that are not
+#'   columns are looked up in the function where the string was found.
+#' - Otherwise, the condition is evaluated like in `subset()`. Names are looked
+#'   up in the columns of `x` first. Then they are looked up in the environment
+#'   that called `data_filter()`, and in the environments where the calling
+#'   function was defined.
+#'
 #' @examples
 #' data_match(mtcars, data.frame(vs = 0, am = 1))
 #' data_match(mtcars, data.frame(vs = 0, am = c(0, 1)))
@@ -91,6 +110,12 @@
 #'   data_filter(data, condition)
 #' }
 #' my_filter(mtcars, "am != 0")
+#'
+#' # Use a variable of the function in the condition
+#' my_filter <- function(data, threshold) {
+#'   data_filter(data, mpg > threshold)
+#' }
+#' my_filter(mtcars, 30)
 #'
 #' # string can also be used directly as argument
 #' data_filter(mtcars, "am != 0")
@@ -188,6 +213,86 @@ data_filter <- function(x, ...) {
 
 #' @export
 data_filter.data.frame <- function(x, ...) {
+  dots <- match.call(expand.dots = FALSE)[["..."]]
+  # `env` is the environment that called data_filter(), see
+  # .data_filter_conditions() and .data_filter_lookup() for how names are found
+  conditions <- .data_filter_conditions(dots, env = parent.frame())
+  .data_filter_rows(x, conditions)
+}
+
+
+# `env` is the environment that called data_filter(). A complete condition
+# that evaluates to a number or a string in `env` (or further up the call
+# stack) is used as row indices or as filter expression. Otherwise, names in a
+# condition are looked up in the columns of `x` first, then in `env`.
+#
+# Each condition is resolved once, before any rows are filtered and not again
+# for each group of a grouped data frame. It becomes a list with either `rows`
+# (row indices to slice) or `expr` (a filter expression) and `enclos` (where
+# names in `expr` that are not columns are looked up). For a filter expression
+# given as string, `enclos` is the environment where the string was found.
+.data_filter_conditions <- function(dots, env) {
+  if (any(nzchar(names(dots), keepNA = TRUE))) {
+    insight::format_error(
+      "Filtering did not work. Please check if you need `==` (instead of `=`) for comparison."
+    )
+  }
+
+  # turn character vector (like `c("mpg <= 20", "cyl == 6")`) into symbols.
+  # Otherwise, the lookup of a single condition is used again below.
+  lookups <- vector("list", length(dots))
+  if (length(dots) == 1) {
+    lookups[[1]] <- .data_filter_lookup(dots[[1]], env)
+    character_vector <- lookups[[1]]$value
+    if (is.character(character_vector) && length(character_vector) > 1) {
+      dots <- lapply(character_vector, str2lang)
+      lookups <- vector("list", length(dots))
+    }
+  }
+
+  # Check syntax of the filter. Must be done *before* filtering
+  # (cf easystats/datawizard#237)
+  for (.fcondition in dots) {
+    .check_filter_syntax(insight::safe_deparse(.fcondition))
+  }
+
+  conditions <- vector("list", length(dots))
+  for (i in seq_along(dots)) {
+    # evaluate, we may have a variable with filter expression
+    lookup <- lookups[[i]]
+    if (is.null(lookup)) {
+      lookup <- .data_filter_lookup(dots[[i]], env)
+    }
+    value <- lookup$value
+    if (is.character(value)) {
+      # do we have a numeric vector provided as string? (e.g. `"5:10"`) - then
+      # slice. Otherwise, the string is a filter expression.
+      found_env <- lookup$env
+      lookup <- .data_filter_eval(parse(text = value), found_env)
+      if (is.numeric(lookup$value)) {
+        value <- lookup$value
+      } else {
+        conditions[[i]] <- list(expr = str2lang(value), enclos = found_env)
+        next
+      }
+    }
+    if (is.numeric(value)) {
+      # the condition is not evaluated again, so we give its warnings now
+      for (w in lookup$warnings) {
+        warning(w)
+      }
+      conditions[[i]] <- list(rows = value)
+    } else {
+      # filter expression, like subset(): look up names in the columns first,
+      # then in the environment that called data_filter()
+      conditions[[i]] <- list(expr = dots[[i]], enclos = env)
+    }
+  }
+  conditions
+}
+
+
+.data_filter_rows <- function(x, conditions) {
   out <- x
 
   # convert tibble to data.frame
@@ -198,73 +303,23 @@ data_filter.data.frame <- function(x, ...) {
     tbl_input <- FALSE
   }
 
-  dots <- match.call(expand.dots = FALSE)[["..."]]
-
-  if (any(nzchar(names(dots), keepNA = TRUE))) {
-    insight::format_error(
-      "Filtering did not work. Please check if you need `==` (instead of `=`) for comparison."
-    )
-  }
-
-  # turn character vector (like `c("mpg <= 20", "cyl == 6")`) into symbols
-  if (length(dots) == 1) {
-    character_vector <- .dynEval(dots[[1]], ifnotfound = NULL)
-    if (is.character(character_vector) && length(character_vector) > 1) {
-      dots <- lapply(character_vector, str2lang)
-    }
-  }
-
-  # Check syntax of the filter. Must be done *before* calling subset()
-  # (cf easystats/datawizard#237)
-  for (.fcondition in dots) {
-    .check_filter_syntax(insight::safe_deparse(.fcondition))
-  }
-
-  for (i in seq_along(dots)) {
+  for (condition in conditions) {
     # only proceed when result is still valid
     if (!is.null(out)) {
-      symbol <- dots[[i]]
-      # evaluate, we may have a variable with filter expression
-      eval_symbol <- .dynEval(symbol, ifnotfound = NULL)
-      # validation check: is variable named like a function?
-      if (is.function(eval_symbol)) {
-        eval_symbol <- .dynGet(symbol, ifnotfound = NULL)
-      }
-      eval_symbol_numeric <- NULL
-      if (!is.null(eval_symbol)) {
-        # when possible to evaluate, do we have a numeric vector provided
-        # as string? (e.g. `"5:10"`) - then try to coerce to numeric
-        eval_symbol_numeric <- tryCatch(
-          eval(parse(text = eval_symbol)),
-          error = function(e) NULL
-        )
-      }
-
-      # here we go when we have a filter expression, and no numeric vector to slice
-      if (
-        is.null(eval_symbol) ||
-          (!is.numeric(eval_symbol) && !is.numeric(eval_symbol_numeric))
-      ) {
-        # could be evaluated? Then filter expression is a string and we need
-        # to convert into symbol
-        if (is.character(eval_symbol)) {
-          symbol <- str2lang(eval_symbol)
-        }
-        # filter data
+      if (is.null(condition$rows)) {
+        # filter data: look up names in the columns first, then in `enclos`
         out <- tryCatch(
-          subset(out, subset = eval(symbol, envir = new.env())),
-          warning = function(e) e,
+          {
+            rows <- eval(condition$expr, envir = out, enclos = condition$enclos)
+            if (is.logical(rows)) {
+              out[rows & !is.na(rows), , drop = FALSE]
+            }
+          },
           error = function(e) e
         )
-      } else if (is.numeric(eval_symbol)) {
-        # if symbol could be evaluated and is numeric, slice
-        out <- tryCatch(out[eval_symbol, , drop = FALSE], error = function(e) {
-          NULL
-        })
-      } else if (is.numeric(eval_symbol_numeric)) {
-        # if symbol could be evaluated, was string and could be converted to numeric, slice
+      } else {
         out <- tryCatch(
-          out[eval_symbol_numeric, , drop = FALSE],
+          out[condition$rows, , drop = FALSE],
           error = function(e) NULL
         )
       }
@@ -317,6 +372,7 @@ data_filter.data.frame <- function(x, ...) {
 
 #' @export
 data_filter.grouped_df <- function(x, ...) {
+  env <- parent.frame()
   original_x <- x
   grps <- attr(x, "groups", exact = TRUE)
   grps <- grps[[".rows"]]
@@ -330,10 +386,9 @@ data_filter.grouped_df <- function(x, ...) {
   }
 
   dots <- match.call(expand.dots = FALSE)[["..."]]
+  conditions <- .data_filter_conditions(dots, env = env)
   out <- lapply(grps, function(grp) {
-    arguments <- list(x[grp, ])
-    arguments <- c(arguments, dots)
-    do.call("data_filter.data.frame", arguments)
+    .data_filter_rows(x[grp, ], conditions)
   })
 
   out <- do.call(rbind, out)
@@ -355,6 +410,73 @@ data_filter.grouped_df <- function(x, ...) {
 
 
 # helper -------------------
+
+# Evaluate a complete condition, to find out whether it is a variable that
+# holds row numbers or a filter expression as string. We look in `env` (the
+# environment that called data_filter()) first, then in every frame below
+# `env` on the call stack (innermost first), each with its enclosing
+# environments. If `env` is not a frame on the call stack (e.g. inside a
+# magrittr pipe), we look in `env` and then in every frame below data_filter().
+# We never look in the frames of data_filter() itself, so that its internal
+# variables (like `x`) cannot hide variables of the user. Returns a list with
+# the value (NULL if no frame gives a value that is not NULL and not a
+# function), the warnings caught when evaluating it, and the environment where
+# the value was found (`env` if none was found).
+.data_filter_lookup <- function(condition, env) {
+  frames <- sys.frames()
+  caller <- Position(function(frame) identical(frame, env), frames)
+  if (is.na(caller)) {
+    # the innermost frame of a data_filter() method, and the frame of the
+    # generic just before it, if the method was called by the generic
+    own <- Position(
+      function(n) {
+        fun <- sys.function(n)
+        identical(fun, data_filter.data.frame) ||
+          identical(fun, data_filter.grouped_df)
+      },
+      seq_along(frames),
+      right = TRUE
+    )
+    if (is.na(own)) {
+      own <- 1
+    } else if (own > 1 && identical(sys.function(own - 1), data_filter)) {
+      own <- own - 1
+    }
+    envs <- c(list(env), rev(frames[seq_len(own - 1)]))
+  } else {
+    envs <- rev(frames[seq_len(caller)])
+  }
+  for (search_env in envs) {
+    result <- .data_filter_eval(condition, search_env)
+    # skip functions, e.g. when a variable is named like a function
+    if (!is.null(result$value) && !is.function(result$value)) {
+      result$env <- search_env
+      return(result)
+    }
+  }
+  list(value = NULL, warnings = list(), env = env)
+}
+
+
+# Evaluate an expression in a child environment of `env`, so that assignments
+# in the expression do not change variables of the user. Warnings are caught
+# and returned, because the expression may be evaluated again later. Returns
+# NULL as value if the expression cannot be evaluated.
+.data_filter_eval <- function(expr, env) {
+  caught <- list()
+  value <- tryCatch(
+    withCallingHandlers(
+      eval(expr, envir = new.env(parent = env)),
+      warning = function(w) {
+        caught[[length(caught) + 1L]] <<- w
+        invokeRestart("muffleWarning")
+      }
+    ),
+    error = function(e) NULL
+  )
+  list(value = value, warnings = caught)
+}
+
 
 .check_filter_syntax <- function(.fcondition) {
   # NOTE: We cannot check for `=` when "filter" is not a character vector

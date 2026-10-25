@@ -15,7 +15,8 @@ demean(
   suffix_groupmean = "_between",
   append = TRUE,
   add_attributes = TRUE,
-  verbose = TRUE
+  verbose = TRUE,
+  grand_center = FALSE
 )
 
 degroup(
@@ -28,7 +29,8 @@ degroup(
   suffix_groupmean = "_between",
   append = TRUE,
   add_attributes = TRUE,
-  verbose = TRUE
+  verbose = TRUE,
+  grand_center = FALSE
 )
 
 detrend(
@@ -41,7 +43,8 @@ detrend(
   suffix_groupmean = "_between",
   append = TRUE,
   add_attributes = TRUE,
-  verbose = TRUE
+  verbose = TRUE,
+  grand_center = FALSE
 )
 }
 \arguments{
@@ -55,8 +58,13 @@ indicates the group- or cluster-ID. For cross-classified or nested designs,
 \code{by} can also identify two or more variables as group- or cluster-IDs. If
 the data is nested and should be treated as such, set \code{nested = TRUE}. Else,
 if \code{by} defines two or more variables and \code{nested = FALSE}, a cross-classified
-design is assumed. Note that \code{demean()} and \code{degroup()} can't handle a mix
-of nested and cross-classified designs in one model.
+design is assumed. \code{demean()} and \code{degroup()} do not support designs that
+mix nested and cross-classified grouping. These forms of \code{by} stop with an
+error: a formula or a single string with both \code{+} and \code{/}, such as
+\code{~ C + A/B} or \code{"C + A/B"}, and a character vector of length two or more
+with an element that contains \code{/}, such as \code{c("C", "A/B")}, unless that
+element is the name of a column. For a formula, only the right-hand side
+is read.
 
 For nested designs, \code{by} can be:
 \itemize{
@@ -65,14 +73,24 @@ levels, ordered from \emph{highest} level to \emph{lowest} (e.g.
 \code{by = c("L4", "L3", "L2")}.
 \item a character vector with variable names in the format \code{by = "L4/L3/L2"},
 where the levels are separated by \code{/}.
+\item a formula in which the levels are separated by \code{/}, such as
+\code{by = ~ L4/L3/L2}. This formula gives the same result as
+\code{by = "L4/L3/L2"}, and it sets \code{nested = TRUE}.
 }
+
+For cross-classified designs, \code{by} can be a character vector such as
+\code{by = c("A", "B")}, or a formula in which the variables are separated by
+\code{+}, such as \code{by = ~ A + B}.
+
+See also section \emph{Checks of the grouping structure} below.
 
 See also section \emph{De-meaning for cross-classified designs} and
 \emph{De-meaning for nested designs} below.}
 
 \item{nested}{Logical, if \code{TRUE}, the data is treated as nested. If \code{FALSE},
 the data is treated as cross-classified. Only applies if \code{by} contains more
-than one variable.}
+than one variable. A \code{by} with \code{/}, such as \code{by = "L3/L2"} or
+\code{by = ~ L3/L2}, sets \code{nested = TRUE}.}
 
 \item{suffix_demean, suffix_groupmean}{String value, will be appended to the
 names of the group-meaned and de-meaned variables of \code{x}. By default,
@@ -90,10 +108,19 @@ within- and between-effects are printed in separated blocks.}
 
 \item{verbose}{Toggle warnings and messages.}
 
+\item{grand_center}{Logical or character vector. If \code{TRUE}, the group-meaned
+and de-meaned variables are grand-mean centered. A character vector names
+the variables to center: \code{"within"} for the de-meaned variables, or the
+name of a \code{by} variable for its group-meaned variables. Default is \code{FALSE}.
+See section \emph{Grand-mean centering of the components}.}
+
 \item{center}{Method for centering. \code{demean()} always performs
 mean-centering, while \code{degroup()} can use \code{center = "median"} or
 \code{center = "mode"} for median- or mode-centering, and also \code{"min"}
-or \code{"max"}.}
+or \code{"max"}. \code{degroup()} also accepts a function, such as
+\code{center = function(x) mean(x, trim = 0.2)}, which is applied to the
+non-missing values of each group (a vector of length 0 for groups with
+only missing values) and must return a single number or \code{NA}.}
 }
 \value{
 A data frame with the group-/de-meaned variables, which get the suffix
@@ -108,7 +135,8 @@ grouping level, e.g. \code{predictor_L3_between} and \code{predictor_L2_between}
 used in regression analysis to model the between- and within-subject effect
 (person-mean centering or centering within clusters). \code{degroup()} is more
 generic in terms of the centering-operation. While \code{demean()} always uses
-mean-centering, \code{degroup()} can also use the mode or median for centering.
+mean-centering, \code{degroup()} can also use the mode, the median, or a function
+for centering.
 }
 \section{Heterogeneity Bias}{
 
@@ -262,8 +290,57 @@ equivalent to de-meaning of nested data structures from models with three or
 more levels. Set \code{nested = TRUE} to explicitly assume a nested design. For
 cross-classified designs, de-meaning is supposed to work for models like
 \code{y ~ x + (1|level3) + (1|level2)}, but \emph{not} for models like
-\code{y ~ x + (1|level3/level2)}. Note that \code{demean()} and \code{degroup()} can't
-handle a mix of nested and cross-classified designs in one model.
+\code{y ~ x + (1|level3/level2)}. Designs that mix nested and cross-classified
+grouping are not supported. A \code{by} that combines \code{/} with \code{+}, or a vector
+of names in which one name contains \code{/} and is not a column name, gives an
+error.
+
+For two crossed variables, J and K, \code{demean()} returns the three components
+of the fully cluster-mean-centered model in \emph{Guo et al. (2024)}, equation 4:
+the mean of the variable in its J cluster, the mean in its K cluster, and
+the within component, which is the value minus both means. Each mean is
+taken over the rows of the cluster where the variable is not missing, not
+over cell means, so combinations of J and K with more rows weigh more. The
+components also apply to unbalanced data, with different numbers of rows
+per combination of J and K. For each row where the variable is not
+missing, the components sum to the value, unless \code{grand_center} is used.
+For a row with a missing value in a \code{by} variable, the mean for that
+variable is the row's own value.
+\emph{Guo et al. (2024)} also cover three or more crossed variables: footnote 6
+and the R function in their Appendix C subtract the mean of each crossed
+variable, and \code{demean()} does the same. With \code{degroup()} and a \code{center}
+other than \code{"mean"}, the cluster statistic replaces the mean.
+\emph{Guo et al. (2024)} define the components with means.
+}
+
+\section{Checks of the grouping structure}{
+
+
+With two or more variables in \code{by} and \code{verbose = TRUE}, \code{demean()} and
+\code{degroup()} check whether the data match \code{by}. A check uses only the rows
+where both variables of a pair are not missing, and it ignores unused factor
+levels.
+\itemize{
+\item With \code{nested = FALSE}, the check gives a warning when each value of one
+\code{by} variable occurs with only one value of another \code{by} variable. Such
+data look nested, so the warning names each such pair and suggests
+\code{nested = TRUE}. Crossed data with this pattern, for example a variable
+with a single value, also give the warning. Nested data whose lower-level
+IDs repeat across clusters (e.g. class \code{"1"} in each school) look crossed,
+so this check does not find them.
+\item With \code{nested = TRUE}, the check gives a warning for each adjacent pair
+in \code{by} when each value of the first variable occurs with only one value
+of the second, and some value of the second occurs with two or more
+values of the first. The warning says that \code{by} lists the levels from
+highest to lowest, and it names both variables. Nested data with a single
+lower-level cluster in each higher-level cluster and lower-level IDs that
+repeat (e.g. class \code{"1"} alone in each school) also give the warning,
+although the order is correct. A wrong order is not found when the
+lower-level IDs repeat across clusters.
+}
+
+The warnings do not change the returned values. Set \code{verbose = FALSE} to
+turn the checks off.
 }
 
 \section{De-meaning for nested designs}{
@@ -273,10 +350,39 @@ handle a mix of nested and cross-classified designs in one model.
 nested designs, which is implemented in \code{demean()}. For nested designs, set
 \code{nested = TRUE} \emph{and} specify the variables that indicate the different
 levels in descending order in the \code{by} argument. E.g.,
-\verb{by = c("level4", "level3, "level2")} assumes a model like
+\code{by = c("level4", "level3", "level2")} assumes a model like
 \code{y ~ x + (1|level4/level3/level2)}. An alternative notation for the
 \code{by}-argument would be \code{by = "level4/level3/level2"}, similar to the
-formula notation.
+formula notation, or the formula \code{by = ~ level4/level3/level2}.
+
+Any number of levels is possible. The group-meaned variable of the highest
+level is the mean within each of its groups. The group-meaned variable of
+each lower level is the mean within each of its groups minus the mean of
+the level above. The de-meaned variable is the value minus the mean of the
+lowest level. For \code{by = "level4/level3/level2"}, the variables are thus the
+\code{level4} mean, the \code{level3} mean minus the \code{level4} mean, the \code{level2} mean
+minus the \code{level3} mean, and the value minus the \code{level2} mean. Together,
+they sum to the original value. A group is defined by its level and all
+levels above it, so IDs of lower levels can repeat across groups of higher
+levels. Means are computed over all non-missing observations of a group, so
+larger groups weigh more (as in \emph{Brincks et al. 2017}). For \code{degroup()}, the
+variables are defined the same way with the statistic selected by \code{center}
+in place of the mean, and they still sum to the original value, unless
+\code{grand_center} is used.
+}
+
+\section{Grand-mean centering of the components}{
+
+
+In cross-classified designs, or when \code{center} is not the mean, the
+de-meaned variables usually do not have a mean of 0. \code{grand_center}
+subtracts the mean from the group-meaned and de-meaned variables, using the
+rows where the original variable is not missing. The mean is used whatever
+\code{center} is, and the centered variables no longer sum to the original
+value. For cross-classified designs, \emph{Guo et al. (2024)} note that each
+component can be grand-mean centered, which only changes the intercept of
+the model. A character vector in \code{grand_center} cannot be used when a \code{by}
+variable is named \code{"within"}.
 }
 
 \section{Analysing panel data with mixed models using lme4}{
@@ -346,6 +452,6 @@ fluctuation and change. New York: Routledge
 }
 \seealso{
 If grand-mean centering (instead of centering within-clusters)
-is required, see \code{\link[=center]{center()}}. See \code{\link[performance:check_group_variation]{performance::check_group_variation()}}
-to check for heterogeneity bias.
+is required, see \code{\link[=center]{center()}} or argument \code{grand_center}. See
+\code{\link[performance:check_group_variation]{performance::check_group_variation()}} to check for heterogeneity bias.
 }

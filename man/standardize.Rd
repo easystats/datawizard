@@ -25,6 +25,7 @@ standardise(x, ...)
   center = NULL,
   scale = NULL,
   verbose = TRUE,
+  cluster = NULL,
   ...
 )
 
@@ -54,6 +55,7 @@ standardise(x, ...)
   ignore_case = FALSE,
   regex = FALSE,
   verbose = TRUE,
+  cluster = NULL,
   ...
 )
 
@@ -137,6 +139,18 @@ rest of the arguments are absent.
 }}
 
 \item{verbose}{Toggle warnings and messages on or off.}
+
+\item{cluster}{Can be \code{NULL} (for no clustering), or a vector of cluster
+ids with one element per observation. For data frames, it can also be the
+name of a column that contains the cluster ids. If given, the center and
+scale are computed from one value per cluster instead of from all
+observations, so that a cluster-level (Level 2) variable in long format is
+not weighted by the number of observations per cluster. The variable must
+take only one finite value within each cluster (infinite values are
+treated as missing), and observations with a missing cluster id are
+returned as \code{NA}. \code{cluster} cannot be combined with
+\code{weights}, \code{reference}, or values for \code{center} and \code{scale}. For grouped
+data frames, \code{cluster} must be a column name.}
 
 \item{force}{Logical, if \code{TRUE}, forces recoding of factors and character
 vectors as well.}
@@ -274,6 +288,17 @@ standardize(d, center = c(3, 4), scale = c(2, 4))
 
 # standardization, taking same mean and sd for each variable
 standardize(d, center = 1, scale = 3)
+
+# cluster-level variable in long format: one value per school, but
+# schools have different numbers of students
+d <- data.frame(
+  school = rep(1:3, times = c(2, 3, 10)),
+  funding = rep(c(10, 20, 30), times = c(2, 3, 10))
+)
+# mean and sd are weighted by the number of students per school
+standardize(d$funding)
+# mean and sd are computed from one value per school
+standardize(d, select = "funding", cluster = "school")
 }
 \seealso{
 See \code{\link[=center]{center()}} for grand-mean centering of variables, and

@@ -26,6 +26,17 @@
 #' - For `data.frame`s: a numeric vector of weights, or a character of the
 #'   name of a column in the `data.frame` that contains the weights.
 #' - For numeric vectors: a numeric vector of weights.
+#' @param cluster Can be `NULL` (for no clustering), or a vector of cluster
+#'   ids with one element per observation. For data frames, it can also be the
+#'   name of a column that contains the cluster ids. If given, the center and
+#'   scale are computed from one value per cluster instead of from all
+#'   observations, so that a cluster-level (Level 2) variable in long format is
+#'   not weighted by the number of observations per cluster. The variable must
+#'   take only one finite value within each cluster (infinite values are
+#'   treated as missing), and observations with a missing cluster id are
+#'   returned as `NA`. `cluster` cannot be combined with
+#'   `weights`, `reference`, or values for `center` and `scale`. For grouped
+#'   data frames, `cluster` must be a column name.
 #' @param verbose Toggle warnings and messages on or off.
 #' @param remove_na How should missing values (`NA`) be treated: if `"none"`
 #'   (default): each column's standardization is done separately, ignoring
@@ -118,6 +129,17 @@
 #'
 #' # standardization, taking same mean and sd for each variable
 #' standardize(d, center = 1, scale = 3)
+#'
+#' # cluster-level variable in long format: one value per school, but
+#' # schools have different numbers of students
+#' d <- data.frame(
+#'   school = rep(1:3, times = c(2, 3, 10)),
+#'   funding = rep(c(10, 20, 30), times = c(2, 3, 10))
+#' )
+#' # mean and sd are weighted by the number of students per school
+#' standardize(d$funding)
+#' # mean and sd are computed from one value per school
+#' standardize(d, select = "funding", cluster = "school")
 #' @export
 standardize <- function(x, ...) {
   UseMethod("standardize")
@@ -148,8 +170,11 @@ standardize.numeric <- function(
   center = NULL,
   scale = NULL,
   verbose = TRUE,
+  cluster = NULL,
   ...
 ) {
+  .check_cluster_args(cluster, weights, reference, center, scale)
+
   # set default - need to fix this, else we don't know whether this
   # comes from "center()" or "standardize()". Furthermore, data.frame
   # methods cannot return a vector of NULLs for each variable - instead
@@ -168,7 +193,8 @@ standardize.numeric <- function(
     verbose,
     reference,
     center,
-    scale
+    scale,
+    cluster = cluster
   )
   dot_args <- list(...)
 
@@ -282,6 +308,7 @@ standardize.data.frame <- function(
   ignore_case = FALSE,
   regex = FALSE,
   verbose = TRUE,
+  cluster = NULL,
   ...
 ) {
   # evaluate select/exclude, may be select-helpers
@@ -306,7 +333,8 @@ standardize.data.frame <- function(
     remove_na,
     reference,
     .center = center,
-    .scale = scale
+    .scale = scale,
+    cluster = cluster
   )
 
   # set new values
@@ -322,6 +350,7 @@ standardize.data.frame <- function(
       reference = reference[[var]],
       center = my_args$center[var],
       scale = my_args$scale[var],
+      cluster = my_args$cluster,
       verbose = FALSE,
       force = force,
       add_transform_class = FALSE
@@ -356,6 +385,7 @@ standardize.grouped_df <- function(
   ignore_case = FALSE,
   regex = FALSE,
   verbose = TRUE,
+  cluster = NULL,
   ...
 ) {
   # evaluate select/exclude, may be select-helpers
@@ -376,7 +406,8 @@ standardize.grouped_df <- function(
     append_suffix = "_z",
     reference,
     weights,
-    keep_factors = force
+    keep_factors = force,
+    cluster = cluster
   )
 
   # create column(s) to store dw_transformer attributes
@@ -392,6 +423,7 @@ standardize.grouped_df <- function(
       robust = robust,
       two_sd = two_sd,
       weights = my_args$weights,
+      cluster = cluster,
       remove_na = remove_na,
       verbose = verbose,
       force = force,

@@ -1,3 +1,74 @@
+# datawizard 1.4.2
+
+BREAKING CHANGES
+
+* In `demean()` and `degroup()`, a formula in `by` whose terms are separated
+  only by `/`, such as `by = ~ L3/L2`, now means a nested design, like the
+  string `by = "L3/L2"`. Before, such a formula gave a cross-classified design
+  unless `nested = TRUE` was set. Only the right-hand side of a formula in
+  `by` is read now. Before, a variable on the left-hand side was also used as
+  a grouping variable (#722).
+
+* `demean()` and `degroup()` now stop with an error when `by` mixes nested and
+  cross-classified grouping. A formula with both `+` and `/`, such as
+  `by = ~ C + A/B`, gave a cross-classified design before, or a nested design
+  with `nested = TRUE`. A character vector such as `by = c("C", "A/B")`, with
+  no column named `"A/B"`, gave an error that a variable was not found. A
+  string such as `by = "C + A/B"` gave the same error (#722).
+
+CHANGES
+
+* `degroup()` now also accepts a function in `center`, e.g.
+  `center = function(x) mean(x, trim = 0.2)` (#21).
+
+* `demean()` and `degroup()` gain a `grand_center` argument, to grand-mean
+  center the group-meaned and de-meaned variables (#637).
+
+* `demean()` and `degroup()` now warn when the data do not seem to match `by`.
+  With `nested = FALSE`, the warning comes when each value of one `by`
+  variable occurs with only one value of another, which suggests a nested
+  design. With `nested = TRUE`, it comes when a pair of adjacent `by`
+  variables seems to be listed from the lowest to the highest level. Use
+  `verbose = FALSE` to turn the checks off (#722).
+
+* `center()` and `standardize()` gain a `cluster` argument. If `cluster` is
+  given, the center and scale come from one value per cluster. Cluster-level
+  variables in unbalanced long-format data are then not weighted by cluster
+  size (#672).
+
+* `skewness()`, `kurtosis()`, and `smoothness()` now return objects of class
+  `datawizard_skewness`, `datawizard_kurtosis`, and `datawizard_smoothness`.
+  The old class names `parameters_skewness`, `parameters_kurtosis`, and
+  `parameters_smoothness` remain as secondary classes, so code that checks
+  `class(x)[1]` for the old names needs to be updated (#248).
+
+* `adjust()` gains `...`, which passes arguments to the function that fits the
+  model (#696).
+
+FIXES
+
+* `skewness()` and `kurtosis()` now return the standard error for the chosen
+  `type`. Before, the `SE` column was the type-1 standard error for every
+  `type`, including the default `type = "2"`. Bootstrapped standard errors
+  (`iterations`) are not changed.
+
+* Fixed an error in `adjust()` with `multilevel = TRUE` and `bayesian = TRUE`
+  when `rstanarm` was not attached (#726).
+
+* Fixed `demean()` and `degroup()` for nested designs with three or more
+  grouping variables. The group-meaned variables of the third and later
+  variables in `by` were wrong (#720).
+
+* `data_filter()` now finds variables of the function that calls it, so
+  conditions like `data_filter(data, x == values[i])` work inside functions
+  and loops. Internal variables of `data_filter()` no longer hide variables of
+  the calling code. A condition that gives a warning now returns the filtered
+  data with that warning (#309, #379).
+
+* `standardize()` now works with models coerced with
+  `lmerTest::as_lmerModLmerTest()`. You can also pass a standardized
+  `lme4::lmer()` model to `as_lmerModLmerTest()` or to `update()` (#716).
+
 # datawizard 1.4.1
 
 CHANGES

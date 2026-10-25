@@ -1,7 +1,7 @@
 Type: Package
 Package: datawizard
 Title: Easy Data Wrangling and Statistical Transformations
-Version: 1.4.1
+Version: 1.4.1.9000
 Authors@R: c(
     person("Jeffrey", "Girard", , "me@jmgirard.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-7359-3746")),
@@ -57,6 +57,7 @@ Suggests:
     httr,
     knitr,
     lme4,
+    lmerTest,
     mediation,
     modelbased,
     nanoparquet,
