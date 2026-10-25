@@ -29,6 +29,18 @@ BREAKING CHANGES
 
 CHANGES
 
+- [`degroup()`](https://easystats.github.io/datawizard/reference/demean.md)
+  now also accepts a function in `center`, e.g.
+  `center = function(x) mean(x, trim = 0.2)`
+  ([\#21](https://github.com/easystats/datawizard/issues/21)).
+
+- [`demean()`](https://easystats.github.io/datawizard/reference/demean.md)
+  and
+  [`degroup()`](https://easystats.github.io/datawizard/reference/demean.md)
+  gain a `grand_center` argument, to grand-mean center the group-meaned
+  and de-meaned variables
+  ([\#637](https://github.com/easystats/datawizard/issues/637)).
+
 - [`demean()`](https://easystats.github.io/datawizard/reference/demean.md)
   and
   [`degroup()`](https://easystats.github.io/datawizard/reference/demean.md)

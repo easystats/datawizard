@@ -3,11 +3,13 @@
 used in regression analysis to model the between- and within-subject effect
 (person-mean centering or centering within clusters). degroup() is more
 generic in terms of the centering-operation. While demean() always uses
-mean-centering, degroup() can also use the mode or median for centering."><meta property="og:description" content="demean() computes group- and de-meaned versions of a variable that can be
+mean-centering, degroup() can also use the mode, the median, or a function
+for centering."><meta property="og:description" content="demean() computes group- and de-meaned versions of a variable that can be
 used in regression analysis to model the between- and within-subject effect
 (person-mean centering or centering within clusters). degroup() is more
 generic in terms of the centering-operation. While demean() always uses
-mean-centering, degroup() can also use the mode or median for centering."><meta property="og:image" content="https://easystats.github.io/datawizard/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"></head><body>
+mean-centering, degroup() can also use the mode, the median, or a function
+for centering."><meta property="og:image" content="https://easystats.github.io/datawizard/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -67,7 +69,8 @@ mean-centering, degroup() can also use the mode or median for centering."><meta 
 used in regression analysis to model the between- and within-subject effect
 (person-mean centering or centering within clusters). <code>degroup()</code> is more
 generic in terms of the centering-operation. While <code>demean()</code> always uses
-mean-centering, <code>degroup()</code> can also use the mode or median for centering.</p>
+mean-centering, <code>degroup()</code> can also use the mode, the median, or a function
+for centering.</p>
     </div>
 
     <div class="section level2">
@@ -81,7 +84,8 @@ mean-centering, <code>degroup()</code> can also use the mode or median for cente
 <span>  suffix_groupmean <span class="op">=</span> <span class="st">"_between"</span>,</span>
 <span>  append <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  add_attributes <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  grand_center <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">degroup</span><span class="op">(</span></span>
@@ -94,7 +98,8 @@ mean-centering, <code>degroup()</code> can also use the mode or median for cente
 <span>  suffix_groupmean <span class="op">=</span> <span class="st">"_between"</span>,</span>
 <span>  append <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  add_attributes <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  grand_center <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">detrend</span><span class="op">(</span></span>
@@ -107,7 +112,8 @@ mean-centering, <code>degroup()</code> can also use the mode or median for cente
 <span>  suffix_groupmean <span class="op">=</span> <span class="st">"_between"</span>,</span>
 <span>  append <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  add_attributes <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  grand_center <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -184,11 +190,22 @@ within- and between-effects are printed in separated blocks.</p></dd>
 <dd><p>Toggle warnings and messages.</p></dd>
 
 
+<dt id="arg-grand-center">grand_center<a class="anchor" aria-label="anchor" href="#arg-grand-center"></a></dt>
+<dd><p>Logical or character vector. If <code>TRUE</code>, the group-meaned
+and de-meaned variables are grand-mean centered. A character vector names
+the variables to center: <code>"within"</code> for the de-meaned variables, or the
+name of a <code>by</code> variable for its group-meaned variables. Default is <code>FALSE</code>.
+See section <em>Grand-mean centering of the components</em>.</p></dd>
+
+
 <dt id="arg-center">center<a class="anchor" aria-label="anchor" href="#arg-center"></a></dt>
 <dd><p>Method for centering. <code>demean()</code> always performs
 mean-centering, while <code>degroup()</code> can use <code>center = "median"</code> or
 <code>center = "mode"</code> for median- or mode-centering, and also <code>"min"</code>
-or <code>"max"</code>.</p></dd>
+or <code>"max"</code>. <code>degroup()</code> also accepts a function, such as
+<code>center = function(x) mean(x, trim = 0.2)</code>, which is applied to the
+non-missing values of each group (a vector of length 0 for groups with
+only missing values) and must return a single number or <code>NA</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -370,8 +387,9 @@ taken over the rows of the cluster where the variable is not missing, not
 over cell means, so combinations of J and K with more rows weigh more. The
 components also apply to unbalanced data, with different numbers of rows
 per combination of J and K. For each row where the variable is not
-missing, the components sum to the value. For a row with a missing value
-in a <code>by</code> variable, the mean for that variable is the row's own value.
+missing, the components sum to the value, unless <code>grand_center</code> is used.
+For a row with a missing value in a <code>by</code> variable, the mean for that
+variable is the row's own value.
 <em>Guo et al. (2024)</em> also cover three or more crossed variables: footnote 6
 and the R function in their Appendix C subtract the mean of each crossed
 variable, and <code>demean()</code> does the same. With <code>degroup()</code> and a <code>center</code>
@@ -430,7 +448,23 @@ levels above it, so IDs of lower levels can repeat across groups of higher
 levels. Means are computed over all non-missing observations of a group, so
 larger groups weigh more (as in <em>Brincks et al. 2017</em>). For <code>degroup()</code>, the
 variables are defined the same way with the statistic selected by <code>center</code>
-in place of the mean, and they still sum to the original value.</p>
+in place of the mean, and they still sum to the original value, unless
+<code>grand_center</code> is used.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="grand-mean-centering-of-the-components">Grand-mean centering of the components<a class="anchor" aria-label="anchor" href="#grand-mean-centering-of-the-components"></a></h2>
+
+
+
+<p>In cross-classified designs, or when <code>center</code> is not the mean, the
+de-meaned variables usually do not have a mean of 0. <code>grand_center</code>
+subtracts the mean from the group-meaned and de-meaned variables, using the
+rows where the original variable is not missing. The mean is used whatever
+<code>center</code> is, and the centered variables no longer sum to the original
+value. For cross-classified designs, <em>Guo et al. (2024)</em> note that each
+component can be grand-mean centered, which only changes the intercept of
+the model. A character vector in <code>grand_center</code> cannot be used when a <code>by</code>
+variable is named <code>"within"</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="analysing-panel-data-with-mixed-models-using-lme-">Analysing panel data with mixed models using lme4<a class="anchor" aria-label="anchor" href="#analysing-panel-data-with-mixed-models-using-lme-"></a></h2>
@@ -475,8 +509,8 @@ fluctuation and change. New York: Routledge</p></li>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>If grand-mean centering (instead of centering within-clusters)
-is required, see <code><a href="center.html">center()</a></code>. See <code><a href="https://easystats.github.io/performance/reference/check_group_variation.html" class="external-link">performance::check_group_variation()</a></code>
-to check for heterogeneity bias.</p></div>
+is required, see <code><a href="center.html">center()</a></code> or argument <code>grand_center</code>. See
+<code><a href="https://easystats.github.io/performance/reference/check_group_variation.html" class="external-link">performance::check_group_variation()</a></code> to check for heterogeneity bias.</p></div>
     </div>
 
     <div class="section level2">

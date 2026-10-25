@@ -4,8 +4,8 @@
 be used in regression analysis to model the between- and within-subject
 effect (person-mean centering or centering within clusters). `degroup()`
 is more generic in terms of the centering-operation. While `demean()`
-always uses mean-centering, `degroup()` can also use the mode or median
-for centering.
+always uses mean-centering, `degroup()` can also use the mode, the
+median, or a function for centering.
 
 ## Usage
 
@@ -19,7 +19,8 @@ demean(
   suffix_groupmean = "_between",
   append = TRUE,
   add_attributes = TRUE,
-  verbose = TRUE
+  verbose = TRUE,
+  grand_center = FALSE
 )
 
 degroup(
@@ -32,7 +33,8 @@ degroup(
   suffix_groupmean = "_between",
   append = TRUE,
   add_attributes = TRUE,
-  verbose = TRUE
+  verbose = TRUE,
+  grand_center = FALSE
 )
 
 detrend(
@@ -45,7 +47,8 @@ detrend(
   suffix_groupmean = "_between",
   append = TRUE,
   add_attributes = TRUE,
-  verbose = TRUE
+  verbose = TRUE,
+  grand_center = FALSE
 )
 ```
 
@@ -129,11 +132,23 @@ detrend(
 
   Toggle warnings and messages.
 
+- grand_center:
+
+  Logical or character vector. If `TRUE`, the group-meaned and de-meaned
+  variables are grand-mean centered. A character vector names the
+  variables to center: `"within"` for the de-meaned variables, or the
+  name of a `by` variable for its group-meaned variables. Default is
+  `FALSE`. See section *Grand-mean centering of the components*.
+
 - center:
 
   Method for centering. `demean()` always performs mean-centering, while
   `degroup()` can use `center = "median"` or `center = "mode"` for
-  median- or mode-centering, and also `"min"` or `"max"`.
+  median- or mode-centering, and also `"min"` or `"max"`. `degroup()`
+  also accepts a function, such as
+  `center = function(x) mean(x, trim = 0.2)`, which is applied to the
+  non-missing values of each group (a vector of length 0 for groups with
+  only missing values) and must return a single number or `NA`.
 
 ## Value
 
@@ -296,14 +311,14 @@ both means. Each mean is taken over the rows of the cluster where the
 variable is not missing, not over cell means, so combinations of J and K
 with more rows weigh more. The components also apply to unbalanced data,
 with different numbers of rows per combination of J and K. For each row
-where the variable is not missing, the components sum to the value. For
-a row with a missing value in a `by` variable, the mean for that
-variable is the row's own value. *Guo et al. (2024)* also cover three or
-more crossed variables: footnote 6 and the R function in their Appendix
-C subtract the mean of each crossed variable, and `demean()` does the
-same. With `degroup()` and a `center` other than `"mean"`, the cluster
-statistic replaces the mean. *Guo et al. (2024)* define the components
-with means.
+where the variable is not missing, the components sum to the value,
+unless `grand_center` is used. For a row with a missing value in a `by`
+variable, the mean for that variable is the row's own value. *Guo et al.
+(2024)* also cover three or more crossed variables: footnote 6 and the R
+function in their Appendix C subtract the mean of each crossed variable,
+and `demean()` does the same. With `degroup()` and a `center` other than
+`"mean"`, the cluster statistic replaces the mean. *Guo et al. (2024)*
+define the components with means.
 
 ## Checks of the grouping structure
 
@@ -357,7 +372,20 @@ levels can repeat across groups of higher levels. Means are computed
 over all non-missing observations of a group, so larger groups weigh
 more (as in *Brincks et al. 2017*). For `degroup()`, the variables are
 defined the same way with the statistic selected by `center` in place of
-the mean, and they still sum to the original value.
+the mean, and they still sum to the original value, unless
+`grand_center` is used.
+
+## Grand-mean centering of the components
+
+In cross-classified designs, or when `center` is not the mean, the
+de-meaned variables usually do not have a mean of 0. `grand_center`
+subtracts the mean from the group-meaned and de-meaned variables, using
+the rows where the original variable is not missing. The mean is used
+whatever `center` is, and the centered variables no longer sum to the
+original value. For cross-classified designs, *Guo et al. (2024)* note
+that each component can be grand-mean centered, which only changes the
+intercept of the model. A character vector in `grand_center` cannot be
+used when a `by` variable is named `"within"`.
 
 ## Analysing panel data with mixed models using lme4
 
@@ -407,8 +435,8 @@ vignette](https://easystats.github.io/parameters/articles/demean.html).
 
 If grand-mean centering (instead of centering within-clusters) is
 required, see
-[`center()`](https://easystats.github.io/datawizard/reference/center.md).
-See
+[`center()`](https://easystats.github.io/datawizard/reference/center.md)
+or argument `grand_center`. See
 [`performance::check_group_variation()`](https://easystats.github.io/performance/reference/check_group_variation.html)
 to check for heterogeneity bias.
 
