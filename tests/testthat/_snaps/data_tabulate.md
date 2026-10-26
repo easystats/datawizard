@@ -861,6 +861,26 @@
       |e42dep   |     4| 32  (50.8%)| 28 (44.4%)| 3 (4.8%) |    63|
       |e42dep   |  (NA)|  1  (33.3%)|  2 (66.7%)| 0 (0.0%) |     3|
 
+---
+
+    Code
+      display(data_tabulate(efc, "c172code", by = "e16sex", proportions = "column",
+        remove_na = TRUE, weights = "weights", chisq = TRUE))
+    Output
+      
+      
+      Table: Pearson's Chi-squared test with simulated p-value
+      	 (based on 2000 replicates)
+       X-squared = 4.217, df = NA, p = 0.117
+      
+      |c172code |       male|     female| Total|
+      |:--------|----------:|----------:|-----:|
+      |1        |  5 (12.5%)|  3  (6.5%)|     8|
+      |2        | 32 (80.0%)| 32 (69.6%)|    64|
+      |3        |  3  (7.5%)| 11 (23.9%)|    14|
+      |         |           |           |      |
+      |Total    |         40|         46|    86|
+
 # data_tabulate, correct 0% for proportions
 
     Code

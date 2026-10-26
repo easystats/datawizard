@@ -364,7 +364,6 @@ test_that("data_tabulate default by", {
       "Both 'by' and 'x' must have at least 2 unique values\n
     in order to calculate chi square."
     )
-    class(chi_square) <- "htest"
   }
   set.seed(456)
   x <- data_tabulate(efc$c172code, by = efc$e16sex)
@@ -388,6 +387,14 @@ test_that("data_tabulate default by", {
       grouped_df = FALSE
     )
   )
+})
+
+test_that("data_tabulate default by with chisq", {
+  expect_no_error(data_tabulate(
+    x = efc$e16sex,
+    by = efc$c172code,
+    chisq = TRUE
+  ))
 })
 
 test_that("data_tabulate grouped data.frame by", {
@@ -427,6 +434,19 @@ test_that("data_tabulate grouped data.frame by", {
     )
   )
 })
+
+
+test_that("data_tabulate grouped data.frame by with chi square", {
+  skip_if_not_installed("poorman")
+  data(efc, package = "datawizard")
+  expect_no_warning(data_tabulate(
+    poorman::group_by(efc, e16sex),
+    "c172code",
+    by = "e42dep",
+    chisq = TRUE
+  ))
+})
+
 test_that("data_tabulate unsupported class", {
   data(mtcars)
   expect_warning(
@@ -434,7 +454,6 @@ test_that("data_tabulate unsupported class", {
     regex = "Can't compute frequency tables"
   )
 })
-
 
 test_that("data_tabulate print", {
   set.seed(123)
@@ -995,14 +1014,16 @@ test_that("data_tabulate, cross tables, markdown", {
     remove_na = TRUE,
     weights = efc$weights
   ))) # nolint
-  expect_snapshot(print_md(data_tabulate(
-    efc,
-    "c172code",
-    by = "e16sex",
-    proportions = "column",
-    remove_na = TRUE,
-    weights = "weights"
-  ))) # nolint
+  expect_snapshot(
+    print_md(data_tabulate(
+      efc,
+      "c172code",
+      by = "e16sex",
+      proportions = "column",
+      remove_na = TRUE,
+      weights = "weights"
+    ))
+  ) # nolint
   expect_snapshot(print_md(data_tabulate(
     efc,
     c("c172code", "e42dep"),
@@ -1022,9 +1043,18 @@ test_that("data_tabulate, cross tables, markdown", {
     c("c172code", "e42dep"),
     by = "e16sex",
     proportions = "row"
+  ))) # nolint
+  set.seed(123)
+  expect_snapshot(display(data_tabulate(
+    efc,
+    "c172code",
+    by = "e16sex",
+    proportions = "column",
+    remove_na = TRUE,
+    weights = "weights",
+    chisq = TRUE
   ))) # nolint
 })
-
 
 # validate against table -------------------------
 

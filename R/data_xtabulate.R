@@ -110,17 +110,23 @@
   }
   attr(out, "chi_square") <- chi_square
   if (chisq) {
-    attr(out, "chisq_caption") <- paste0(
-      chi_square$method,
-      "\n ",
-      "X-squared = ",
-      round(chi_square[["statistic"]], 3),
-      ", ",
-      "df = ",
-      chi_square[["parameter"]][["df"]],
-      ", p = ",
-      round(chi_square$p.value, 3)
-    )
+    if (is.list(chi_square)) {
+      attr(out, "chisq_caption") <- paste0(
+        chi_square$method,
+        "\n ",
+        "X-squared = ",
+        round(chi_square[["statistic"]], 3),
+        ", ",
+        "df = ",
+        chi_square[["parameter"]][["df"]],
+        ", p = ",
+        round(chi_square$p.value, 3)
+      )
+    } else {
+      if (is.character(chi_square)) {
+        attr(out, "chisq_caption") <- chi_square
+      }
+    }
   }
   attr(out, "grouped_df") <- !is.null(group_variable)
   attr(out, "prop_table") <- .prop_table(out)
