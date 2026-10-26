@@ -270,6 +270,31 @@
       5     | 2002107 | 20.02 |   20.02 |       100.00
       <NA>  |       0 |  0.00 |    <NA> |         <NA>
 
+# data_tabulate default by with chisq
+
+    Code
+      data_tabulate(x = efc$e16sex, by = efc$c172code, chisq = TRUE)
+    Output
+      Pearson's Chi-squared test with simulated p-value
+      	 (based on 2000 replicates)
+       X-squared = 3.88, df = NA, p = 0.163
+      
+      efc$e16sex | low level of education | intermediate level of education
+      -----------+------------------------+--------------------------------
+      1          |                      5 |                              32
+      2          |                      3 |                              34
+      <NA>       |                      0 |                               0
+      -----------+------------------------+--------------------------------
+      Total      |                      8 |                              66
+      
+      efc$e16sex | high level of education | <NA> | Total
+      -----------+-------------------------+------+------
+      1          |                       4 |    5 |    46
+      2          |                      12 |    5 |    54
+      <NA>       |                       0 |    0 |     0
+      -----------+-------------------------+------+------
+      Total      |                      16 |   10 |   100
+
 # data_tabulate print multiple, collapse
 
     Code

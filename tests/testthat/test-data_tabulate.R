@@ -496,6 +496,15 @@ test_that("data_tabulate big numbers", {
   expect_snapshot(print(data_tabulate(x), big_mark = ""))
 })
 
+test_that("data_tabulate default by with chisq", {
+  data(efc, package = "datawizard")
+  set.seed(123)
+  expect_snapshot(data_tabulate(
+    x = efc$e16sex,
+    by = efc$c172code,
+    chisq = TRUE
+  ))
+})
 
 test_that("data_tabulate print multiple, collapse", {
   data(efc, package = "datawizard")
