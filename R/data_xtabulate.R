@@ -122,10 +122,8 @@
         ", p = ",
         round(chi_square$p.value, 3)
       )
-    } else {
-      if (is.character(chi_square)) {
-        attr(out, "chisq_caption") <- chi_square
-      }
+    } else if (is.character(chi_square)) {
+      attr(out, "chisq_caption") <- chi_square
     }
   }
   attr(out, "grouped_df") <- !is.null(group_variable)
