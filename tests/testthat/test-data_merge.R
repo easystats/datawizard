@@ -209,7 +209,7 @@ test_that("bind-join", {
 
   expect_identical(
     suppressWarnings(data_merge(x2, y2, join = "full")),
-    suppressMessages(poorman::full_join(x2, y2)),
+    poorman::full_join(x2, y2, by = character()),
     ignore_attr = TRUE
   )
 

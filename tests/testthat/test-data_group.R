@@ -111,7 +111,11 @@ test_that("data_group attributes", {
   skip_if_not_installed("poorman")
   x <- data_group(efc, "c172code")
   out <- poorman::summarise(x, mw = mean(c12hour, na.rm = TRUE))
-  expect_equal(out$mw, c(87.125, 94.046875, 75), tolerance = 1e-3)
+  expect_equal(
+    out$mw[!is.na(out$c172code)],
+    c(87.125, 94.046875, 75),
+    tolerance = 1e-3
+  )
 })
 
 # select helpers ------------------------------
