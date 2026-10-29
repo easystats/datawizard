@@ -44,6 +44,8 @@
 #' any combination of `N` (frequencies including `NA`), `"raw"` (percentage
 #' including `NA` values), `"valid"` (percentage excluding `NA` values) and
 #' `"cumulative"` (percentage excluding `NA` values).
+#' @param chisq include chi square for two dimensional tables. This is always
+#' calculated with the `chisq.test()` `simulate.p.value = TRUE`.
 #' @param ... not used.
 #' @inheritParams extract_column_names
 #'
@@ -163,6 +165,7 @@ data_tabulate.default <- function(
   name = NULL,
   verbose = TRUE,
   metrics = c("N", "raw", "valid", "cumulative"),
+  chisq = FALSE,
   ...
 ) {
   # save label attribute, before it gets lost...
@@ -211,7 +214,8 @@ data_tabulate.default <- function(
       remove_na = remove_na,
       proportions = proportions,
       obj_name = obj_name,
-      group_variable = group_variable
+      group_variable = group_variable,
+      chisq = chisq
     ))
   }
   # frequency table
@@ -334,6 +338,7 @@ data_tabulate.default <- function(
     attr(out, "by") <- NULL
   } else {
     attr(out, "by") <- by_name
+    attr(out, "chi_square") <- chisq
   }
 
   class(out) <- c("datawizard_table", "data.frame")
@@ -357,6 +362,7 @@ data_tabulate.data.frame <- function(
   proportions = NULL,
   collapse = FALSE,
   verbose = TRUE,
+  chisq = FALSE,
   ...
 ) {
   if (!is.null(by)) {
@@ -391,6 +397,7 @@ data_tabulate.data.frame <- function(
       remove_na = remove_na,
       name = i,
       verbose = verbose,
+      chisq = chisq,
       ...
     )
   })
@@ -422,6 +429,7 @@ data_tabulate.grouped_df <- function(
   remove_na = FALSE,
   collapse = FALSE,
   verbose = TRUE,
+  chisq = FALSE,
   ...
 ) {
   grps <- attr(x, "groups", exact = TRUE)

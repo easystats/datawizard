@@ -318,7 +318,18 @@ test_that("data_tabulate data.frame with wrong value for 'metrics'", {
 
 test_that("data_tabulate data.frame by", {
   data(efc, package = "datawizard")
-  x <- data_tabulate(efc, "c172code", by = "e16sex")
+  by <- factor(efc$e16sex, labels = attr(efc$e16sex, "labels") |> names())
+  x <- factor(efc$c172code)
+  set.seed(456)
+  if (nlevels(x) > 1 && nlevels(x) > 1) {
+    chi_square <- chisq.test(x, by, simulate.p.value = TRUE)
+  } else {
+    chi_square <-
+      "Both 'by' and 'x' must have at least 2 unique values
+      in order to calculate chi square."
+  }
+  set.seed(456)
+  x <- data_tabulate(efc, "c172code", by = "e16sex", chisq = FALSE)
   expect_s3_class(x, c("datawizard_crosstab", "list"))
   expect_length(x, 1L)
   expect_identical(
@@ -335,6 +346,7 @@ test_that("data_tabulate data.frame by", {
       total_n = 100L,
       varname = "c172code",
       by = "e16sex",
+      chi_square = chi_square,
       grouped_df = FALSE
     )
   )
@@ -342,6 +354,18 @@ test_that("data_tabulate data.frame by", {
 
 test_that("data_tabulate default by", {
   data(efc, package = "datawizard")
+  by <- factor(efc$e16sex, labels = attr(efc$e16sex, "labels") |> names())
+  x <- factor(efc$c172code)
+  set.seed(456)
+  if (length(unique(x)) > 1 & length(unique(by)) > 1) {
+    chi_square <- chisq.test(x, by, simulate.p.value = TRUE)
+  } else {
+    chi_square <- list(
+      "Both 'by' and 'x' must have at least 2 unique values\n
+    in order to calculate chi square."
+    )
+  }
+  set.seed(456)
   x <- data_tabulate(efc$c172code, by = efc$e16sex)
   expect_s3_class(x, c("datawizard_crosstab", "data.frame"))
   expect_length(x, 4L)
@@ -359,14 +383,34 @@ test_that("data_tabulate default by", {
       total_n = 100L,
       varname = "efc$c172code",
       by = "efc$e16sex",
+      chi_square = chi_square,
       grouped_df = FALSE
     )
   )
 })
 
+test_that("data_tabulate default by with chisq", {
+  expect_no_error(data_tabulate(
+    x = efc$e16sex,
+    by = efc$c172code,
+    chisq = TRUE
+  ))
+})
+
 test_that("data_tabulate grouped data.frame by", {
   skip_if_not_installed("poorman")
   data(efc, package = "datawizard")
+  efc_group1 <- subset(efc, efc$e16sex == 1)
+  x <- factor(
+    efc_group1$c172code
+  )
+  by <- factor(efc_group1$e42dep)
+  Group <- factor(efc_group1$e16sex)
+  set.seed(456)
+  chi_square <-
+    "Both 'by' and 'x' must have at least 2 unique levels\n
+    in order to calculate chi square."
+  set.seed(456)
   x <- data_tabulate(poorman::group_by(efc, e16sex), "c172code", by = "e42dep")
   expect_identical(
     attributes(x[[1]]),
@@ -385,10 +429,24 @@ test_that("data_tabulate grouped data.frame by", {
       total_n = 46L,
       varname = "c172code",
       by = "e42dep",
+      chi_square = chi_square,
       grouped_df = TRUE
     )
   )
 })
+
+
+test_that("data_tabulate grouped data.frame by with chi square", {
+  skip_if_not_installed("poorman")
+  data(efc, package = "datawizard")
+  expect_no_warning(data_tabulate(
+    poorman::group_by(efc, e16sex),
+    "c172code",
+    by = "e42dep",
+    chisq = TRUE
+  ))
+})
+
 test_that("data_tabulate unsupported class", {
   data(mtcars)
   expect_warning(
@@ -396,7 +454,6 @@ test_that("data_tabulate unsupported class", {
     regex = "Can't compute frequency tables"
   )
 })
-
 
 test_that("data_tabulate print", {
   set.seed(123)
@@ -439,6 +496,15 @@ test_that("data_tabulate big numbers", {
   expect_snapshot(print(data_tabulate(x), big_mark = ""))
 })
 
+test_that("data_tabulate default by with chisq", {
+  data(efc, package = "datawizard")
+  set.seed(123)
+  expect_snapshot(data_tabulate(
+    x = efc$e16sex,
+    by = efc$c172code,
+    chisq = TRUE
+  ))
+})
 
 test_that("data_tabulate print multiple, collapse", {
   data(efc, package = "datawizard")
@@ -957,14 +1023,16 @@ test_that("data_tabulate, cross tables, markdown", {
     remove_na = TRUE,
     weights = efc$weights
   ))) # nolint
-  expect_snapshot(print_md(data_tabulate(
-    efc,
-    "c172code",
-    by = "e16sex",
-    proportions = "column",
-    remove_na = TRUE,
-    weights = "weights"
-  ))) # nolint
+  expect_snapshot(
+    print_md(data_tabulate(
+      efc,
+      "c172code",
+      by = "e16sex",
+      proportions = "column",
+      remove_na = TRUE,
+      weights = "weights"
+    ))
+  ) # nolint
   expect_snapshot(print_md(data_tabulate(
     efc,
     c("c172code", "e42dep"),
@@ -984,9 +1052,18 @@ test_that("data_tabulate, cross tables, markdown", {
     c("c172code", "e42dep"),
     by = "e16sex",
     proportions = "row"
+  ))) # nolint
+  set.seed(123)
+  expect_snapshot(display(data_tabulate(
+    efc,
+    "c172code",
+    by = "e16sex",
+    proportions = "column",
+    remove_na = TRUE,
+    weights = "weights",
+    chisq = TRUE
   ))) # nolint
 })
-
 
 # validate against table -------------------------
 
@@ -1083,7 +1160,7 @@ test_that("data_tabulate, as.data.frame, cross tables", {
   )
   expect_length(out$table, 1L)
   expect_named(out$table[[1]], c("cyl", "0", "1", "NA"))
-  expect_identical(nrow(out$table[[1]]), 4L)
+  expect_shape(out$table[[1]], nrow = 4L)
   # cross tables
   x <- data_tabulate(mtcars, c("cyl", "vs"), by = "am")
   out <- as.data.frame(x)
@@ -1095,7 +1172,7 @@ test_that("data_tabulate, as.data.frame, cross tables", {
   )
   expect_length(out$table, 2L)
   expect_named(out$table[[1]], c("cyl", "0", "1", "NA"))
-  expect_identical(nrow(out$table[[1]]), 4L)
+  expect_shape(out$table[[1]], nrow = 4L)
 })
 
 
@@ -1111,7 +1188,7 @@ test_that("data_tabulate, as.data.frame, cross tables with total N", {
   )
   expect_length(out$table, 1L)
   expect_named(out$table[[1]], c("cyl", "0", "1", "<NA>", "Total"))
-  expect_identical(nrow(out$table[[1]]), 5L)
+  expect_shape(out$table[[1]], nrow = 5L)
   expect_identical(out$table[[1]]$cyl, c("4", "6", "8", NA, "Total"))
   # cross tables, with total
   x <- data_tabulate(mtcars, c("cyl", "vs"), by = "am")
@@ -1124,7 +1201,7 @@ test_that("data_tabulate, as.data.frame, cross tables with total N", {
   )
   expect_length(out$table, 2L)
   expect_named(out$table[[1]], c("cyl", "0", "1", "<NA>", "Total"))
-  expect_identical(nrow(out$table[[1]]), 5L)
+  expect_shape(out$table[[1]], nrow = 5L)
   expect_identical(out$table[[1]]$cyl, c("4", "6", "8", NA, "Total"))
 })
 
