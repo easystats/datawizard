@@ -6,7 +6,8 @@
 #' used in regression analysis to model the between- and within-subject effect
 #' (person-mean centering or centering within clusters). `degroup()` is more
 #' generic in terms of the centering-operation. While `demean()` always uses
-#' mean-centering, `degroup()` can also use the mode or median for centering.
+#' mean-centering, `degroup()` can also use the mode, the median, or a function
+#' for centering.
 #'
 #' @param x A data frame.
 #' @param select Character vector (or formula) with names of variables to select
@@ -49,7 +50,10 @@
 #' @param center Method for centering. `demean()` always performs
 #'   mean-centering, while `degroup()` can use `center = "median"` or
 #'   `center = "mode"` for median- or mode-centering, and also `"min"`
-#'   or `"max"`.
+#'   or `"max"`. `degroup()` also accepts a function, such as
+#'   `center = function(x) mean(x, trim = 0.2)`, which is applied to the
+#'   non-missing values of each group (a vector of length 0 for groups with
+#'   only missing values) and must return a single number or `NA`.
 #' @param suffix_demean,suffix_groupmean String value, will be appended to the
 #'   names of the group-meaned and de-meaned variables of `x`. By default,
 #'   de-meaned variables will be suffixed with `"_within"` and
@@ -61,6 +65,11 @@
 #'   attributes to indicate the within- and between-effects. This is only
 #'   relevant when printing `model_parameters()` - in such cases, the
 #'   within- and between-effects are printed in separated blocks.
+#' @param grand_center Logical or character vector. If `TRUE`, the group-meaned
+#'   and de-meaned variables are grand-mean centered. A character vector names
+#'   the variables to center: `"within"` for the de-meaned variables, or the
+#'   name of a `by` variable for its group-meaned variables. Default is `FALSE`.
+#'   See section _Grand-mean centering of the components_.
 #' @inheritParams center
 #'
 #' @return
@@ -72,8 +81,8 @@
 #' grouping level, e.g. `predictor_L3_between` and `predictor_L2_between`.
 #'
 #' @seealso If grand-mean centering (instead of centering within-clusters)
-#'   is required, see [`center()`]. See [`performance::check_group_variation()`]
-#'   to check for heterogeneity bias.
+#'   is required, see [`center()`] or argument `grand_center`. See
+#'   [`performance::check_group_variation()`] to check for heterogeneity bias.
 #'
 #' @section Heterogeneity Bias:
 #'
@@ -224,8 +233,9 @@
 #' over cell means, so combinations of J and K with more rows weigh more. The
 #' components also apply to unbalanced data, with different numbers of rows
 #' per combination of J and K. For each row where the variable is not
-#' missing, the components sum to the value. For a row with a missing value
-#' in a `by` variable, the mean for that variable is the row's own value.
+#' missing, the components sum to the value, unless `grand_center` is used.
+#' For a row with a missing value in a `by` variable, the mean for that
+#' variable is the row's own value.
 #' _Guo et al. (2024)_ also cover three or more crossed variables: footnote 6
 #' and the R function in their Appendix C subtract the mean of each crossed
 #' variable, and `demean()` does the same. With `degroup()` and a `center`
@@ -282,7 +292,20 @@
 #' levels. Means are computed over all non-missing observations of a group, so
 #' larger groups weigh more (as in _Brincks et al. 2017_). For `degroup()`, the
 #' variables are defined the same way with the statistic selected by `center`
-#' in place of the mean, and they still sum to the original value.
+#' in place of the mean, and they still sum to the original value, unless
+#' `grand_center` is used.
+#'
+#' @section Grand-mean centering of the components:
+#'
+#' In cross-classified designs, or when `center` is not the mean, the
+#' de-meaned variables usually do not have a mean of 0. `grand_center`
+#' subtracts the mean from the group-meaned and de-meaned variables, using the
+#' rows where the original variable is not missing. The mean is used whatever
+#' `center` is, and the centered variables no longer sum to the original
+#' value. For cross-classified designs, _Guo et al. (2024)_ note that each
+#' component can be grand-mean centered, which only changes the intercept of
+#' the model. A character vector in `grand_center` cannot be used when a `by`
+#' variable is named `"within"`.
 #'
 #' @section Analysing panel data with mixed models using lme4:
 #'
@@ -363,7 +386,8 @@ demean <- function(
   suffix_groupmean = "_between",
   append = TRUE,
   add_attributes = TRUE,
-  verbose = TRUE
+  verbose = TRUE,
+  grand_center = FALSE
 ) {
   degroup(
     x = x,
@@ -375,7 +399,8 @@ demean <- function(
     suffix_groupmean = suffix_groupmean,
     append = append,
     add_attributes = add_attributes,
-    verbose = verbose
+    verbose = verbose,
+    grand_center = grand_center
   )
 }
 
@@ -392,16 +417,19 @@ degroup <- function(
   suffix_groupmean = "_between",
   append = TRUE,
   add_attributes = TRUE,
-  verbose = TRUE
+  verbose = TRUE,
+  grand_center = FALSE
 ) {
   # ugly tibbles again... but save original data frame
   original_data <- x
   x <- .coerce_to_dataframe(x)
 
-  center <- match.arg(
-    tolower(center),
-    choices = c("mean", "median", "mode", "min", "max")
-  )
+  if (!is.function(center)) {
+    center <- match.arg(
+      tolower(center),
+      choices = c("mean", "median", "mode", "min", "max")
+    )
+  }
 
   if (inherits(select, "formula")) {
     # formula to character, remove "~", split at "+". We don't use `all.vars()`
@@ -461,6 +489,9 @@ degroup <- function(
     )
   }
 
+  # names of the components to grand-center
+  grand_center <- .check_grand_center(grand_center, by)
+
   # warn if the data suggest that `by` does not match the design
   if (isTRUE(verbose) && length(by) > 1) {
     .check_grouping_structure(x, by, nested)
@@ -517,16 +548,20 @@ degroup <- function(
   # for variables within each group (the group means). assign
   # mean values to a vector of same length as the data
 
-  gm_fun <- switch(
-    center,
-    mode = function(.gm) {
-      distribution_mode(stats::na.omit(.gm), verbose = verbose)
-    },
-    median = function(.gm) stats::median(.gm, na.rm = TRUE),
-    min = function(.gm) min(.gm, na.rm = TRUE),
-    max = function(.gm) max(.gm, na.rm = TRUE),
-    function(.gm) mean(.gm, na.rm = TRUE)
-  )
+  gm_fun <- if (is.function(center)) {
+    .center_function(center)
+  } else {
+    switch(
+      center,
+      mode = function(.gm) {
+        distribution_mode(stats::na.omit(.gm), verbose = verbose)
+      },
+      median = function(.gm) stats::median(.gm, na.rm = TRUE),
+      min = function(.gm) min(.gm, na.rm = TRUE),
+      max = function(.gm) max(.gm, na.rm = TRUE),
+      function(.gm) mean(.gm, na.rm = TRUE)
+    )
+  }
 
   # we allow disaggregating level-specific effects for cross-classified multilevel
   # models (see Guo et al. 2024). Eq. 4 defines the components for two crossed
@@ -539,6 +574,9 @@ degroup <- function(
       stats::ave(dat[[i]], dat[[by]], FUN = gm_fun)
     })
     names(group_means_list) <- select
+    # the selected variable and the `by` variable of each group-meaned column
+    group_means_source <- select
+    group_means_by <- rep(by, length(select))
     # create de-meaned variables by subtracting the group mean from each individual value
     person_means_list <- lapply(select, function(i) {
       dat[[i]] - group_means_list[[i]]
@@ -567,6 +605,8 @@ degroup <- function(
       names(out) <- paste0(i, "_", by)
       out
     })
+    group_means_source <- rep(select, each = length(by))
+    group_means_by <- rep(by, times = length(select))
     # create de-meaned variables by subtracting the group mean from each individual value
     person_means_list <- lapply(
       # seq_along(select),
@@ -586,6 +626,8 @@ degroup <- function(
       out
     })
     group_means_list <- unlist(group_means_list, recursive = FALSE)
+    group_means_source <- rep(select, times = length(by))
+    group_means_by <- rep(by, each = length(select))
 
     # de-meaned variables for cross-classified design is simply subtracting
     # all group means from each individual value
@@ -602,6 +644,23 @@ degroup <- function(
 
   group_means <- as.data.frame(group_means_list)
   person_means <- as.data.frame(person_means_list)
+
+  # grand-center the chosen components. Columns are chosen from the recorded
+  # `by` variables, not from their names, which `as.data.frame()` can change
+  for (k in which(group_means_by %in% grand_center)) {
+    group_means[[k]] <- .grand_center_column(
+      group_means[[k]],
+      dat[[group_means_source[k]]]
+    )
+  }
+  if ("within" %in% grand_center) {
+    for (k in seq_along(select)) {
+      person_means[[k]] <- .grand_center_column(
+        person_means[[k]],
+        dat[[select[k]]]
+      )
+    }
+  }
 
   colnames(person_means) <- sprintf(
     "%s%s",
@@ -652,6 +711,59 @@ detrend <- degroup
 
 
 # helper -----------------------------------------------------------------------
+
+# Returns the names of the components to grand-center: "within" for the
+# de-meaned variables and the names of `by` variables for the group-meaned ones.
+.check_grand_center <- function(grand_center, by) {
+  if (isFALSE(grand_center)) {
+    return(character(0))
+  }
+  if (isTRUE(grand_center)) {
+    return(c("within", by))
+  }
+  if (!is.character(grand_center)) {
+    insight::format_error(
+      "`grand_center` must be `TRUE`, `FALSE`, or a character vector of component names." # nolint
+    )
+  }
+  if (length(grand_center) && "within" %in% by) {
+    insight::format_error(
+      "A `by` variable is named \"within\", so `grand_center` cannot name components. Rename that variable, or use `grand_center = TRUE`." # nolint
+    )
+  }
+  allowed <- c("within", by)
+  if (anyNA(grand_center) || !all(grand_center %in% allowed)) {
+    insight::format_error(paste0(
+      "`grand_center` can only name these components: ",
+      text_concatenate(allowed, enclose = "\""),
+      "."
+    ))
+  }
+  grand_center
+}
+
+
+# Subtracts from a component its mean over the rows where the variable it
+# comes from is not missing.
+.grand_center_column <- function(component, origin) {
+  component - mean(component[!is.na(origin)], na.rm = TRUE)
+}
+
+
+# Wraps a function given in `center`: it gets the non-missing values of a
+# group and must return a single number (or `NA`).
+.center_function <- function(center) {
+  function(.gm) {
+    out <- center(.gm[!is.na(.gm)])
+    single_number <- is.numeric(out) || (is.logical(out) && is.na(out))
+    if (length(out) != 1L || !single_number) {
+      insight::format_error(
+        "A function in `center` must return a single number for each group."
+      )
+    }
+    out
+  }
+}
 
 # Returns the variable names in `by` and whether the design is nested.
 # `columns` are the column names of the data.
