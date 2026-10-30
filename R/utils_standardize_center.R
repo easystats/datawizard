@@ -300,7 +300,21 @@
     select <- colnames(new_variables)
   }
 
-  # check for reference center and scale
+  # check for reference center and scale. A single TRUE or FALSE applies to
+  # each selected variable, as it does for a single variable. The other
+  # argument is matched to the variables as usual, or is left to its default.
+  is_flag <- function(i) is.logical(i) && length(i) == 1L && !is.na(i)
+  if (is_flag(.center) || is_flag(.scale)) {
+    broadcast <- function(i) {
+      if (is.null(i) || length(i) == 1L) {
+        rep(i %||% NA, length(select))
+      } else {
+        i
+      }
+    }
+    .center <- broadcast(.center)
+    .scale <- broadcast(.scale)
+  }
   if (!is.null(.center)) {
     # for center(), we have no scale - set it to default value
     if (is.null(.scale)) {
