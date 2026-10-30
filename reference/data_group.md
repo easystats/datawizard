@@ -142,11 +142,9 @@ efc %>%
 efc %>%
   data_group(c172code) %>%
   summarize(mean_hours = mean(c12hour, na.rm = TRUE))
-#> # A tibble: 3 × 2
-#> # Groups:   c172code [3]
 #>   c172code mean_hours
-#>      <dbl>      <dbl>
-#> 1        1       87.1
-#> 2        2       94.0
-#> 3        3       75  
+#> 1        1   87.12500
+#> 2        2   94.04688
+#> 3        3   75.00000
+#> 4       NA   47.80000
 ```

@@ -308,29 +308,26 @@ less negativity) <strong>and autobiographical link</strong>.</p>
 <span>    Valence_Mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">Subjective_Valence</span><span class="op">)</span>,</span>
 <span>    Valence_SD <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd</a></span><span class="op">(</span><span class="va">Subjective_Valence</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 19 × 4</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Groups:   Participant_ID [19]</span></span></span>
-<span><span class="co">#&gt;    Participant_ID n_Trials Valence_Mean Valence_SD</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 10S                  24       -<span style="color: #BB0000;">58.1</span>       42.6 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 11S                  24       -<span style="color: #BB0000;">73.2</span>       37.0 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 12S                  24       -<span style="color: #BB0000;">57.5</span>       26.6 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 13S                  24       -<span style="color: #BB0000;">63.2</span>       23.7 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 14S                  24       -<span style="color: #BB0000;">56.6</span>       26.5 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 15S                  24       -<span style="color: #BB0000;">60.6</span>       33.7 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 16S                  24       -<span style="color: #BB0000;">46.1</span>       24.9 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 17S                  24        -<span style="color: #BB0000;">1.54</span>       4.98</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 18S                  24       -<span style="color: #BB0000;">67.2</span>       35.0 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 19S                  24       -<span style="color: #BB0000;">59.6</span>       33.2 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> 1S                   24       -<span style="color: #BB0000;">53.0</span>       42.9 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> 2S                   23       -<span style="color: #BB0000;">43.0</span>       39.2 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> 3S                   24       -<span style="color: #BB0000;">64.3</span>       34.4 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">14</span> 4S                   24       -<span style="color: #BB0000;">81.6</span>       27.6 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">15</span> 5S                   24       -<span style="color: #BB0000;">58.1</span>       25.3 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">16</span> 6S                   24       -<span style="color: #BB0000;">74.7</span>       29.2 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">17</span> 7S                   24       -<span style="color: #BB0000;">62.3</span>       39.7 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">18</span> 8S                   24       -<span style="color: #BB0000;">56.9</span>       32.7 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">19</span> 9S                   24       -<span style="color: #BB0000;">31.5</span>       52.7</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;    Participant_ID n_Trials Valence_Mean Valence_SD</span></span>
+<span><span class="co">#&gt; 1             10S       24   -58.072917  42.591635</span></span>
+<span><span class="co">#&gt; 2             11S       24   -73.215593  37.007830</span></span>
+<span><span class="co">#&gt; 3             12S       24   -57.530382  26.555608</span></span>
+<span><span class="co">#&gt; 4             13S       24   -63.216146  23.719774</span></span>
+<span><span class="co">#&gt; 5             14S       24   -56.600781  26.473300</span></span>
+<span><span class="co">#&gt; 6             15S       24   -60.590278  33.711785</span></span>
+<span><span class="co">#&gt; 7             16S       24   -46.115451  24.879398</span></span>
+<span><span class="co">#&gt; 8             17S       24    -1.540799   4.980239</span></span>
+<span><span class="co">#&gt; 9             18S       24   -67.234017  34.975828</span></span>
+<span><span class="co">#&gt; 10            19S       24   -59.613715  33.218843</span></span>
+<span><span class="co">#&gt; 11             1S       24   -52.951389  42.889843</span></span>
+<span><span class="co">#&gt; 12             2S       23   -42.957428  39.219341</span></span>
+<span><span class="co">#&gt; 13             3S       24   -64.250854  34.425488</span></span>
+<span><span class="co">#&gt; 14             4S       24   -81.575521  27.621385</span></span>
+<span><span class="co">#&gt; 15             5S       24   -58.116319  25.253899</span></span>
+<span><span class="co">#&gt; 16             6S       24   -74.688873  29.167546</span></span>
+<span><span class="co">#&gt; 17             7S       24   -62.304688  39.720103</span></span>
+<span><span class="co">#&gt; 18             8S       24   -56.901042  32.666872</span></span>
+<span><span class="co">#&gt; 19             9S       24   -31.524524  52.729623</span></span></code></pre>
 <p>As we can see from the means and SDs, there is a lot of variability
 <strong>between</strong> participants both in their means and their
 individual <em>within</em>-participant SD.</p>
