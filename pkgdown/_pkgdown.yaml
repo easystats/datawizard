@@ -52,10 +52,10 @@ reference:
       - rescale
       - normalize
       - unstandardize
-      - makepredictcall.dw_transformer
   - subtitle: "Others"
     contents:
     - contr.deviation
+    - makepredictcall.dw_transformer
 
   - title: Data Properties
     desc: |
