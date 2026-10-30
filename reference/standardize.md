@@ -171,17 +171,19 @@ unstandardize(
 
 - cluster:
 
-  Can be `NULL` (for no clustering), or a vector of cluster ids with one
-  element per observation. For data frames, it can also be the name of a
-  column that contains the cluster ids. If given, the center and scale
-  are computed from one value per cluster instead of from all
-  observations, so that a cluster-level (Level 2) variable in long
-  format is not weighted by the number of observations per cluster. The
-  variable must take only one finite value within each cluster (infinite
-  values are treated as missing), and observations with a missing
-  cluster id are returned as `NA`. `cluster` cannot be combined with
-  `weights`, `reference`, or values for `center` and `scale`. For
-  grouped data frames, `cluster` must be a column name.
+  Can be `NULL` (for no clustering), a vector of cluster ids with one
+  element per observation, or a list of such vectors. For data frames,
+  it can also be the names of columns that contain the cluster ids. With
+  several cluster variables, each combination of their values is one
+  cluster. If given, the center and scale are computed from one value
+  per cluster instead of from all observations, so that a cluster-level
+  (Level 2) variable in long format is not weighted by the number of
+  observations per cluster. The variable must take only one finite value
+  within each cluster (infinite values are treated as missing), and
+  observations with a missing cluster id are returned as `NA`. Using
+  `cluster` together with `weights`, `reference`, or numeric `center` or
+  `scale` gives an error. For grouped data frames, `cluster` must be
+  column names.
 
 - force:
 

@@ -57,7 +57,8 @@ CHANGES
   [`standardize()`](https://easystats.github.io/datawizard/reference/standardize.md)
   gain a `cluster` argument. If `cluster` is given, the center and scale
   come from one value per cluster. Cluster-level variables in unbalanced
-  long-format data are then not weighted by cluster size
+  long-format data are then not weighted by cluster size. `cluster` can
+  also be several column names, or a list of cluster id vectors
   ([\#672](https://github.com/easystats/datawizard/issues/672)).
 
 - [`skewness()`](https://easystats.github.io/datawizard/reference/skewness.md),
