@@ -31,13 +31,13 @@
 #'   frames, it can also be the names of columns that contain the cluster ids.
 #'   With several cluster variables, each combination of their values is one
 #'   cluster. If given, the center and scale are computed from one value per
-#'   cluster instead of from all observations, so that a cluster-level
-#'   (Level 2) variable in long format is not weighted by the number of
-#'   observations per cluster. The variable must take only one finite value
-#'   within each cluster (infinite values are treated as missing), and
-#'   observations with a missing cluster id are returned as `NA`. Using `cluster` together with `weights`, `reference`, or
-#'   numeric `center` or `scale` gives an error. For grouped data frames,
-#'   `cluster` must be column names.
+#'   cluster instead of from all observations, so that a cluster-level (Level 2)
+#'   variable in long format is not weighted by the number of observations per
+#'   cluster. The variable must take only one finite value within each cluster
+#'   (infinite values are treated as missing), and observations with a missing
+#'   cluster id are returned as `NA`. Using `cluster` together with `weights`,
+#'   `reference`, or numeric `center` or `scale` gives an error. For grouped
+#'   data frames, `cluster` must be column names.
 #' @param verbose Toggle warnings and messages on or off.
 #' @param remove_na How should missing values (`NA`) be treated: if `"none"`
 #'   (default): each column's standardization is done separately, ignoring
