@@ -353,7 +353,7 @@ test_that("standardize when only providing one of center/scale", {
   )
 })
 
-test_that("standardize data frame with TRUE or FALSE in center/scale", {
+test_that("standardize data frame with TRUE or FALSE in center and scale", {
   d <- data.frame(a = c(1, 2, 3, 10), b = c(5, 1, 4, 2))
   for (args in list(
     list(center = FALSE),
@@ -375,6 +375,19 @@ test_that("standardize data frame with TRUE or FALSE in center/scale", {
       ignore_attr = TRUE
     )
   }
+})
+
+test_that("standardize data frame with TRUE or FALSE and numeric values", {
+  d <- data.frame(a = c(1, 2, 3, 10), b = c(5, 1, 4, 2))
+  out <- standardize(d, center = c(a = 1, b = 5), scale = FALSE)
+  expect_equal(out$a, d$a - 1, ignore_attr = TRUE)
+  expect_equal(out$b, d$b - 5, ignore_attr = TRUE)
+  out <- standardize(d, center = FALSE, scale = c(a = 2, b = 4))
+  expect_equal(out$a, d$a / 2, ignore_attr = TRUE)
+  expect_equal(out$b, d$b / 4, ignore_attr = TRUE)
+  out <- standardize(d, center = TRUE, scale = 2)
+  expect_equal(out$a, (d$a - mean(d$a)) / 2, ignore_attr = TRUE)
+  expect_equal(out$b, (d$b - mean(d$b)) / 2, ignore_attr = TRUE)
 })
 
 
