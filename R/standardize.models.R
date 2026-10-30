@@ -96,12 +96,12 @@ standardize.default <- function(
 
 .standardize_models <- function(
   x,
+  update_expr,
   robust = FALSE,
   two_sd = FALSE,
   weights = TRUE,
   verbose = TRUE,
   include_response = TRUE,
-  update_expr,
   ...
 ) {
   # check model formula. Some notations don't work when standardizing data
@@ -416,11 +416,10 @@ standardize.mediate <- function(
   treat.value <- x$treat.value
 
   if (!is.null(covs)) {
-    covs <- mapply(
+    covs <- Map(
       .rescale_fixed_values,
       covs,
       names(covs),
-      SIMPLIFY = FALSE,
       MoreArgs = list(
         y_data = y_data,
         m_data = m_data,
