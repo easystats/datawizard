@@ -71,6 +71,12 @@ CHANGES
   checks `class(x)[1]` for the old names needs to be updated
   ([\#248](https://github.com/easystats/datawizard/issues/248)).
 
+- [`describe_distribution()`](https://easystats.github.io/datawizard/reference/describe_distribution.md)
+  gains an `indices` argument, to select the optional columns to return,
+  e.g. to leave out skewness and kurtosis. Arguments `dispersion`,
+  `iqr`, `range`, and `quartiles` are deprecated. Please use `indices`
+  instead ([\#687](https://github.com/easystats/datawizard/issues/687)).
+
 - [`adjust()`](https://easystats.github.io/datawizard/reference/adjust.md)
   gains `...`, which passes arguments to the function that fits the
   model ([\#696](https://github.com/easystats/datawizard/issues/696)).

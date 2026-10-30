@@ -77,11 +77,19 @@ centrality, dispersion, range, skewness, (excess) kurtosis).</p>
 <span>  iterations <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>  threshold <span class="op">=</span> <span class="fl">0.1</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  indices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"dispersion"</span>, <span class="st">"iqr"</span>, <span class="st">"range"</span>, <span class="st">"skewness"</span>, <span class="st">"kurtosis"</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'factor'</span></span>
-<span><span class="fu">describe_distribution</span><span class="op">(</span><span class="va">x</span>, dispersion <span class="op">=</span> <span class="cn">TRUE</span>, range <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">describe_distribution</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  dispersion <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  range <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  indices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"dispersion"</span>, <span class="st">"range"</span>, <span class="st">"skewness"</span>, <span class="st">"kurtosis"</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'data.frame'</span></span>
 <span><span class="fu">describe_distribution</span><span class="op">(</span></span>
@@ -101,6 +109,7 @@ centrality, dispersion, range, skewness, (excess) kurtosis).</p>
 <span>  regex <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  by <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  indices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"dispersion"</span>, <span class="st">"iqr"</span>, <span class="st">"range"</span>, <span class="st">"skewness"</span>, <span class="st">"kurtosis"</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -125,24 +134,9 @@ centrality, dispersion, range, skewness, (excess) kurtosis).</p>
 <code>"mode"</code> or <code>"all"</code>.</p></dd>
 
 
-<dt id="arg-dispersion">dispersion<a class="anchor" aria-label="anchor" href="#arg-dispersion"></a></dt>
-<dd><p>Logical, if <code>TRUE</code>, computes indices of dispersion related
-to the estimate(s) (<code>SD</code> and <code>MAD</code> for <code>mean</code> and <code>median</code>, respectively).
-Dispersion is not available for <code>"MAP"</code> or <code>"mode"</code> centrality indices.</p></dd>
-
-
-<dt id="arg-iqr">iqr<a class="anchor" aria-label="anchor" href="#arg-iqr"></a></dt>
-<dd><p>Logical, if <code>TRUE</code>, the interquartile range is calculated (based
-on <code><a href="https://rdrr.io/r/stats/IQR.html" class="external-link">stats::IQR()</a></code>, using <code>type = 6</code>).</p></dd>
-
-
-<dt id="arg-range">range<a class="anchor" aria-label="anchor" href="#arg-range"></a></dt>
-<dd><p>Return the range (min and max).</p></dd>
-
-
-<dt id="arg-quartiles">quartiles<a class="anchor" aria-label="anchor" href="#arg-quartiles"></a></dt>
-<dd><p>Return the first and third quartiles (25th and 75th
-percentiles).</p></dd>
+<dt id="arg-dispersion-iqr-range-quartiles">dispersion, iqr, range, quartiles<a class="anchor" aria-label="anchor" href="#arg-dispersion-iqr-range-quartiles"></a></dt>
+<dd><p>Deprecated, please use <code>indices</code>
+instead.</p></dd>
 
 
 <dt id="arg-ci">ci<a class="anchor" aria-label="anchor" href="#arg-ci"></a></dt>
@@ -166,6 +160,15 @@ vector before the mean is computed.</p></dd>
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Show or silence warnings and messages.</p></dd>
+
+
+<dt id="arg-indices">indices<a class="anchor" aria-label="anchor" href="#arg-indices"></a></dt>
+<dd><p>Character vector, indicating which indices to return. Can
+include any combination of <code>"dispersion"</code> (SD or MAD, depending on
+<code>centrality</code>), <code>"iqr"</code> (interquartile range, based on <code><a href="https://rdrr.io/r/stats/IQR.html" class="external-link">stats::IQR()</a></code>,
+using <code>type = 6</code>), <code>"range"</code> (min and max), <code>"quartiles"</code> (25th and 75th
+percentiles), <code>"skewness"</code> and <code>"kurtosis"</code>. Use <code>NULL</code> to return none of
+them.</p></dd>
 
 
 <dt id="arg-select">select<a class="anchor" aria-label="anchor" href="#arg-select"></a></dt>
@@ -281,7 +284,13 @@ implemented in the <a href="https://easystats.github.io/see/" class="external-li
 <span class="r-out co"><span class="r-pr">#&gt;</span> Sepal.Width  | 3.06 | 0.44 | 0.52 | [2.00, 4.40] |     0.32 |     0.23 | 150 |         0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Length | 3.76 | 1.77 | 3.52 | [1.00, 6.90] |    -0.27 |    -1.40 | 150 |         0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width  | 1.20 | 0.76 | 1.50 | [0.10, 2.50] |    -0.10 |    -1.34 | 150 |         0</span>
-<span class="r-in"><span><span class="fu">describe_distribution</span><span class="op">(</span><span class="va">iris</span>, include_factors <span class="op">=</span> <span class="cn">TRUE</span>, quartiles <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">describe_distribution</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">iris</span>,</span></span>
+<span class="r-in"><span>  include_factors <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>  indices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="st">"dispersion"</span>, <span class="st">"iqr"</span>, <span class="st">"range"</span>, <span class="st">"quartiles"</span>, <span class="st">"skewness"</span>, <span class="st">"kurtosis"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Variable     | Mean |   SD |  IQR |               Range |  Quartiles | Skewness</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Sepal.Length | 5.84 | 0.83 | 1.30 |          [4.3, 7.9] | 5.10, 6.40 |     0.31</span>
@@ -302,6 +311,15 @@ implemented in the <a href="https://easystats.github.io/see/" class="external-li
 <span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------------------------------------------------------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> mtcars$mpg | 20.09 | 6.03 | 7.53 | [10.40, 33.90] |     0.67 |    -0.02 | 32 |         0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> mtcars$cyl |  6.19 | 1.79 | 4.00 |   [4.00, 8.00] |    -0.19 |    -1.76 | 32 |         0</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># only the range, skewness and kurtosis</span></span></span>
+<span class="r-in"><span><span class="fu">describe_distribution</span><span class="op">(</span><span class="va">iris</span>, indices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"range"</span>, <span class="st">"skewness"</span>, <span class="st">"kurtosis"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Variable     | Mean |        Range | Skewness | Kurtosis |   n | n_Missing</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> --------------------------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Sepal.Length | 5.84 | [4.30, 7.90] |     0.31 |    -0.55 | 150 |         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Sepal.Width  | 3.06 | [2.00, 4.40] |     0.32 |     0.23 | 150 |         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Length | 3.76 | [1.00, 6.90] |    -0.27 |    -1.40 | 150 |         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width  | 1.20 | [0.10, 2.50] |    -0.10 |    -1.34 | 150 |         0</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

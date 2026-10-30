@@ -20,11 +20,19 @@ describe_distribution(
   iterations = 100,
   threshold = 0.1,
   verbose = TRUE,
+  indices = c("dispersion", "iqr", "range", "skewness", "kurtosis"),
   ...
 )
 
 # S3 method for class 'factor'
-describe_distribution(x, dispersion = TRUE, range = TRUE, verbose = TRUE, ...)
+describe_distribution(
+  x,
+  dispersion = TRUE,
+  range = TRUE,
+  verbose = TRUE,
+  indices = c("dispersion", "range", "skewness", "kurtosis"),
+  ...
+)
 
 # S3 method for class 'data.frame'
 describe_distribution(
@@ -44,6 +52,7 @@ describe_distribution(
   regex = FALSE,
   verbose = TRUE,
   by = NULL,
+  indices = c("dispersion", "iqr", "range", "skewness", "kurtosis"),
   ...
 )
 ```
@@ -68,25 +77,9 @@ describe_distribution(
   `"trimmed"` (which is just `mean(x, trim = threshold)`), `"mode"` or
   `"all"`.
 
-- dispersion:
+- dispersion, iqr, range, quartiles:
 
-  Logical, if `TRUE`, computes indices of dispersion related to the
-  estimate(s) (`SD` and `MAD` for `mean` and `median`, respectively).
-  Dispersion is not available for `"MAP"` or `"mode"` centrality
-  indices.
-
-- iqr:
-
-  Logical, if `TRUE`, the interquartile range is calculated (based on
-  [`stats::IQR()`](https://rdrr.io/r/stats/IQR.html), using `type = 6`).
-
-- range:
-
-  Return the range (min and max).
-
-- quartiles:
-
-  Return the first and third quartiles (25th and 75th percentiles).
+  Deprecated, please use `indices` instead.
 
 - ci:
 
@@ -110,6 +103,15 @@ describe_distribution(
 - verbose:
 
   Show or silence warnings and messages.
+
+- indices:
+
+  Character vector, indicating which indices to return. Can include any
+  combination of `"dispersion"` (SD or MAD, depending on `centrality`),
+  `"iqr"` (interquartile range, based on
+  [`stats::IQR()`](https://rdrr.io/r/stats/IQR.html), using `type = 6`),
+  `"range"` (min and max), `"quartiles"` (25th and 75th percentiles),
+  `"skewness"` and `"kurtosis"`. Use `NULL` to return none of them.
 
 - select:
 
@@ -253,7 +255,13 @@ describe_distribution(iris)
 #> Sepal.Width  | 3.06 | 0.44 | 0.52 | [2.00, 4.40] |     0.32 |     0.23 | 150 |         0
 #> Petal.Length | 3.76 | 1.77 | 3.52 | [1.00, 6.90] |    -0.27 |    -1.40 | 150 |         0
 #> Petal.Width  | 1.20 | 0.76 | 1.50 | [0.10, 2.50] |    -0.10 |    -1.34 | 150 |         0
-describe_distribution(iris, include_factors = TRUE, quartiles = TRUE)
+describe_distribution(
+  iris,
+  include_factors = TRUE,
+  indices = c(
+    "dispersion", "iqr", "range", "quartiles", "skewness", "kurtosis"
+  )
+)
 #> Variable     | Mean |   SD |  IQR |               Range |  Quartiles | Skewness
 #> -------------------------------------------------------------------------------
 #> Sepal.Length | 5.84 | 0.83 | 1.30 |          [4.3, 7.9] | 5.10, 6.40 |     0.31
@@ -274,4 +282,13 @@ describe_distribution(list(mtcars$mpg, mtcars$cyl))
 #> ----------------------------------------------------------------------------------------
 #> mtcars$mpg | 20.09 | 6.03 | 7.53 | [10.40, 33.90] |     0.67 |    -0.02 | 32 |         0
 #> mtcars$cyl |  6.19 | 1.79 | 4.00 |   [4.00, 8.00] |    -0.19 |    -1.76 | 32 |         0
+
+# only the range, skewness and kurtosis
+describe_distribution(iris, indices = c("range", "skewness", "kurtosis"))
+#> Variable     | Mean |        Range | Skewness | Kurtosis |   n | n_Missing
+#> --------------------------------------------------------------------------
+#> Sepal.Length | 5.84 | [4.30, 7.90] |     0.31 |    -0.55 | 150 |         0
+#> Sepal.Width  | 3.06 | [2.00, 4.40] |     0.32 |     0.23 | 150 |         0
+#> Petal.Length | 3.76 | [1.00, 6.90] |    -0.27 |    -1.40 | 150 |         0
+#> Petal.Width  | 1.20 | [0.10, 2.50] |    -0.10 |    -1.34 | 150 |         0
 ```
