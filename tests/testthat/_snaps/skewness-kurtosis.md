@@ -5,10 +5,10 @@
     Output
       Parameter    | Skewness |    SE
       -------------------------------
-      Sepal.Length |    0.315 | 0.196
-      Sepal.Width  |    0.319 | 0.196
-      Petal.Length |   -0.275 | 0.196
-      Petal.Width  |   -0.103 | 0.196
+      Sepal.Length |    0.315 | 0.198
+      Sepal.Width  |    0.319 | 0.198
+      Petal.Length |   -0.275 | 0.198
+      Petal.Width  |   -0.103 | 0.198
 
 ---
 
@@ -29,10 +29,10 @@
     Output
       Parameter    | Kurtosis |    SE
       -------------------------------
-      Sepal.Length |   -0.552 | 0.381
-      Sepal.Width  |    0.228 | 0.381
-      Petal.Length |   -1.402 | 0.381
-      Petal.Width  |   -1.341 | 0.381
+      Sepal.Length |   -0.552 | 0.394
+      Sepal.Width  |    0.228 | 0.394
+      Petal.Length |   -1.402 | 0.394
+      Petal.Width  |   -1.341 | 0.394
 
 ---
 
@@ -53,10 +53,10 @@
     Output
       Parameter    | Skewness |    SE
       -------------------------------
-      Sepal.Length |    0.315 | 0.196
-      Sepal.Width  |    0.319 | 0.196
-      Petal.Length |   -0.275 | 0.196
-      Petal.Width  |   -0.103 | 0.196
+      Sepal.Length |    0.315 | 0.198
+      Sepal.Width  |    0.319 | 0.198
+      Petal.Length |   -0.275 | 0.198
+      Petal.Width  |   -0.103 | 0.198
 
 ---
 
@@ -77,10 +77,10 @@
     Output
       Parameter    | Kurtosis |    SE
       -------------------------------
-      Sepal.Length |   -0.552 | 0.381
-      Sepal.Width  |    0.228 | 0.381
-      Petal.Length |   -1.402 | 0.381
-      Petal.Width  |   -1.341 | 0.381
+      Sepal.Length |   -0.552 | 0.394
+      Sepal.Width  |    0.228 | 0.394
+      Petal.Length |   -1.402 | 0.394
+      Petal.Width  |   -1.341 | 0.394
 
 ---
 

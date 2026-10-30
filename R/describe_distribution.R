@@ -8,9 +8,14 @@
 #' @param by Column names indicating how to split the data in various groups
 #' before describing the distribution. `by` groups will be added to potentially
 #' existing groups created by `data_group()`.
-#' @param range Return the range (min and max).
-#' @param quartiles Return the first and third quartiles (25th and 75th
-#'   percentiles).
+#' @param indices Character vector, indicating which indices to return. Can
+#'   include any combination of `"dispersion"` (SD or MAD, depending on
+#'   `centrality`), `"iqr"` (interquartile range, based on [stats::IQR()],
+#'   using `type = 6`), `"range"` (min and max), `"quartiles"` (25th and 75th
+#'   percentiles), `"skewness"` and `"kurtosis"`. Use `NULL` to return none of
+#'   them.
+#' @param dispersion,iqr,range,quartiles Deprecated, please use `indices`
+#'   instead.
 #' @param include_factors Logical, if `TRUE`, factors are included in the
 #'   output, however, only columns for range (first and last factor levels) as
 #'   well as n and missing will contain information.
@@ -21,8 +26,6 @@
 #'   intervals. Only applies when `ci` is not `NULL`. Defaults to `100`. For
 #'   more stable results, increase the number of `iterations`, but note that this
 #'   can also increase the computation time significantly.
-#' @param iqr Logical, if `TRUE`, the interquartile range is calculated (based
-#'   on [stats::IQR()], using `type = 6`).
 #' @param verbose Show or silence warnings and messages.
 #' @inheritParams bayestestR::point_estimate
 #' @inheritParams extract_column_names
@@ -50,8 +53,17 @@
 #'
 #' data(iris)
 #' describe_distribution(iris)
-#' describe_distribution(iris, include_factors = TRUE, quartiles = TRUE)
+#' describe_distribution(
+#'   iris,
+#'   include_factors = TRUE,
+#'   indices = c(
+#'     "dispersion", "iqr", "range", "quartiles", "skewness", "kurtosis"
+#'   )
+#' )
 #' describe_distribution(list(mtcars$mpg, mtcars$cyl))
+#'
+#' # only the range, skewness and kurtosis
+#' describe_distribution(iris, indices = c("range", "skewness", "kurtosis"))
 #' @export
 describe_distribution <- function(x, ...) {
   UseMethod("describe_distribution")
@@ -82,8 +94,14 @@ describe_distribution.list <- function(
   iterations = 100,
   threshold = 0.1,
   verbose = TRUE,
+  indices = c("dispersion", "iqr", "range", "skewness", "kurtosis"),
   ...
 ) {
+  indices <- .process_indices(
+    indices,
+    mget(intersect(names(match.call()), .describe_distribution_flags))
+  )
+
   factor_el <- which(vapply(x, is.factor, FUN.VALUE = logical(1L)))
   num_el <- which(vapply(x, is.numeric, FUN.VALUE = logical(1L)))
 
@@ -124,14 +142,11 @@ describe_distribution.list <- function(
         describe_distribution(
           i,
           centrality = centrality,
-          dispersion = dispersion,
-          iqr = iqr,
-          range = range,
-          quartiles = quartiles,
           ci = ci,
           iterations = iterations,
           threshold = threshold,
-          verbose = verbose
+          verbose = verbose,
+          indices = indices
         )
       }
     })
@@ -175,8 +190,14 @@ describe_distribution.numeric <- function(
   iterations = 100,
   threshold = 0.1,
   verbose = TRUE,
+  indices = c("dispersion", "iqr", "range", "skewness", "kurtosis"),
   ...
 ) {
+  indices <- .process_indices(
+    indices,
+    mget(intersect(names(match.call()), .describe_distribution_flags))
+  )
+
   insight::check_if_installed("bayestestR")
   out <- data.frame(.temp = 0)
 
@@ -190,7 +211,7 @@ describe_distribution.numeric <- function(
     bayestestR::point_estimate(
       x,
       centrality = centrality,
-      dispersion = dispersion,
+      dispersion = "dispersion" %in% indices,
       threshold = threshold,
       verbose = verbose,
       ...
@@ -198,7 +219,7 @@ describe_distribution.numeric <- function(
   )
 
   # interquartile range, type same as minitab and SPSS
-  if (iqr) {
+  if ("iqr" %in% indices) {
     out$IQR <- stats::IQR(x, na.rm = TRUE, type = 6)
   }
 
@@ -240,7 +261,7 @@ describe_distribution.numeric <- function(
   }
 
   # Range
-  if (range) {
+  if ("range" %in% indices) {
     out <- cbind(
       out,
       data.frame(
@@ -251,7 +272,7 @@ describe_distribution.numeric <- function(
   }
 
   # Quartiles
-  if (quartiles) {
+  if ("quartiles" %in% indices) {
     out <- cbind(
       out,
       data.frame(
@@ -261,14 +282,13 @@ describe_distribution.numeric <- function(
     )
   }
 
-  # Skewness
-  out <- cbind(
-    out,
-    data.frame(
-      Skewness = as.numeric(skewness(x, verbose = verbose)),
-      Kurtosis = as.numeric(kurtosis(x, verbose = verbose))
-    )
-  )
+  # Skewness and kurtosis
+  if ("skewness" %in% indices) {
+    out$Skewness <- as.numeric(skewness(x, verbose = verbose))
+  }
+  if ("kurtosis" %in% indices) {
+    out$Kurtosis <- as.numeric(kurtosis(x, verbose = verbose))
+  }
 
   out$n <- length(x)
   out$n_Missing <- n_missing
@@ -294,8 +314,17 @@ describe_distribution.factor <- function(
   dispersion = TRUE,
   range = TRUE,
   verbose = TRUE,
+  indices = c("dispersion", "range", "skewness", "kurtosis"),
   ...
 ) {
+  dot_args <- list(...)
+  indices <- .process_indices(
+    indices,
+    c(list(dispersion = dispersion, range = range), dot_args)[
+      intersect(names(match.call()), .describe_distribution_flags)
+    ]
+  )
+
   # Missing
   n_missing <- sum(is.na(x))
   x <- stats::na.omit(x)
@@ -310,37 +339,19 @@ describe_distribution.factor <- function(
     Max = levels(x)[nlevels(x)],
     Q1 = NA,
     Q3 = NA,
-    Skewness = as.numeric(skewness(x, verbose = verbose)),
-    Kurtosis = as.numeric(kurtosis(x, verbose = verbose)),
+    Skewness = NA,
+    Kurtosis = NA,
     n = length(x),
     n_Missing = n_missing,
     stringsAsFactors = FALSE
   )
-
-  if (!dispersion) {
-    out$SD <- NULL
-  }
-
-  dot_args <- list(...)
 
   if (is.null(dot_args[["ci"]])) {
     out$CI_low <- NULL
     out$CI_high <- NULL
   }
 
-  if (is.null(dot_args[["iqr"]]) || isFALSE(dot_args[["iqr"]])) {
-    out$IQR <- NULL
-  }
-
-  if (is.null(dot_args[["quartiles"]]) || isFALSE(dot_args[["quartiles"]])) {
-    out$Q1 <- NULL
-    out$Q3 <- NULL
-  }
-
-  if (!range) {
-    out$Min <- NULL
-    out$Max <- NULL
-  }
+  out <- .drop_unused_indices(out, x, indices, verbose)
 
   class(out) <- unique(c(
     "parameters_distribution",
@@ -358,8 +369,17 @@ describe_distribution.character <- function(
   dispersion = TRUE,
   range = TRUE,
   verbose = TRUE,
+  indices = c("dispersion", "range", "skewness", "kurtosis"),
   ...
 ) {
+  dot_args <- list(...)
+  indices <- .process_indices(
+    indices,
+    c(list(dispersion = dispersion, range = range), dot_args)[
+      intersect(names(match.call()), .describe_distribution_flags)
+    ]
+  )
+
   # Missing
   n_missing <- sum(is.na(x))
   x <- stats::na.omit(x)
@@ -375,36 +395,19 @@ describe_distribution.character <- function(
     Max = values[length(values)],
     Q1 = NA,
     Q3 = NA,
-    Skewness = as.numeric(skewness(x, verbose = verbose)),
-    Kurtosis = as.numeric(kurtosis(x, verbose = verbose)),
+    Skewness = NA,
+    Kurtosis = NA,
     n = length(x),
     n_Missing = n_missing,
     stringsAsFactors = FALSE
   )
 
-  if (!dispersion) {
-    out$SD <- NULL
-  }
-
-  dot_args <- list(...)
   if (is.null(dot_args[["ci"]])) {
     out$CI_low <- NULL
     out$CI_high <- NULL
   }
 
-  if (is.null(dot_args[["iqr"]]) || isFALSE(dot_args[["iqr"]])) {
-    out$IQR <- NULL
-  }
-
-  if (is.null(dot_args[["quartiles"]]) || isFALSE(dot_args[["quartiles"]])) {
-    out$Q1 <- NULL
-    out$Q3 <- NULL
-  }
-
-  if (!range) {
-    out$Min <- NULL
-    out$Max <- NULL
-  }
+  out <- .drop_unused_indices(out, x, indices, verbose)
 
   class(out) <- unique(c(
     "parameters_distribution",
@@ -435,8 +438,14 @@ describe_distribution.data.frame <- function(
   regex = FALSE,
   verbose = TRUE,
   by = NULL,
+  indices = c("dispersion", "iqr", "range", "skewness", "kurtosis"),
   ...
 ) {
+  indices <- .process_indices(
+    indices,
+    mget(intersect(names(match.call()), .describe_distribution_flags))
+  )
+
   select <- .select_nse(
     select,
     x,
@@ -462,17 +471,14 @@ describe_distribution.data.frame <- function(
       select = select,
       exclude = exclude,
       centrality = centrality,
-      dispersion = dispersion,
-      iqr = iqr,
-      range = range,
-      quartiles = quartiles,
       include_factors = include_factors,
       ci = ci,
       iterations = iterations,
       threshold = threshold,
       ignore_case = ignore_case,
       regex = regex,
-      verbose = verbose
+      verbose = verbose,
+      indices = indices
     )
     out <- data_ungroup(out)
     return(out)
@@ -489,14 +495,11 @@ describe_distribution.data.frame <- function(
         describe_distribution(
           i,
           centrality = centrality,
-          dispersion = dispersion,
-          iqr = iqr,
-          range = range,
-          quartiles = quartiles,
           ci = ci,
           iterations = iterations,
           threshold = threshold,
           verbose = verbose,
+          indices = indices,
           show_iterations_msg = FALSE
         )
       }
@@ -542,8 +545,14 @@ describe_distribution.grouped_df <- function(
   regex = FALSE,
   verbose = TRUE,
   by = NULL,
+  indices = c("dispersion", "iqr", "range", "skewness", "kurtosis"),
   ...
 ) {
+  indices <- .process_indices(
+    indices,
+    mget(intersect(names(match.call()), .describe_distribution_flags))
+  )
+
   if (!is.null(by)) {
     if (!is.character(by)) {
       insight::format_error("`by` must be a character vector.")
@@ -577,15 +586,12 @@ describe_distribution.grouped_df <- function(
       d <- describe_distribution.data.frame(
         groups[[i]][select],
         centrality = centrality,
-        dispersion = dispersion,
-        iqr = iqr,
-        range = range,
-        quartiles = quartiles,
         include_factors = include_factors,
         ci = ci,
         iterations = iterations,
         threshold = threshold,
         verbose = verbose,
+        indices = indices,
         show_iterations_msg = FALSE,
         ...
       )
@@ -729,18 +735,92 @@ plot.parameters_distribution <- function(x, ...) {
 
 # bootstrapping CIs ----------------------------------
 
-.boot_distribution <- function(data, indices, centrality) {
+.boot_distribution <- function(data, rows, centrality) {
   out <- datawizard::describe_distribution(
-    data[indices],
+    data[rows],
     centrality = centrality,
-    dispersion = FALSE,
-    iqr = FALSE,
-    range = FALSE,
-    quartiles = FALSE,
     ci = NULL,
-    verbose = FALSE
+    verbose = FALSE,
+    indices = NULL
   )
   out[[1]]
+}
+
+
+# indices ----------------------------------------
+
+.describe_distribution_indices <- c(
+  "dispersion",
+  "iqr",
+  "range",
+  "quartiles",
+  "skewness",
+  "kurtosis"
+)
+
+.describe_distribution_flags <- c("dispersion", "iqr", "range", "quartiles")
+
+# check `indices`, then apply the deprecated flags given in the call
+.process_indices <- function(indices, flags = list()) {
+  if (!is.null(indices) && !is.character(indices)) {
+    insight::format_error("`indices` must be a character vector or `NULL`.")
+  }
+  invalid <- setdiff(indices, .describe_distribution_indices)
+  if (length(invalid) > 0L) {
+    insight::format_error(paste0(
+      "Invalid values in `indices`: ",
+      toString(paste0("\"", invalid, "\"")),
+      ". Valid values are ",
+      text_concatenate(.describe_distribution_indices, enclose = "\""),
+      "."
+    ))
+  }
+  for (flag in names(flags)) {
+    value <- flags[[flag]]
+    if (!isTRUE(value) && !isFALSE(value)) {
+      insight::format_error(paste0("`", flag, "` must be `TRUE` or `FALSE`."))
+    }
+    insight::format_warning(paste0(
+      "Argument `",
+      flag,
+      "` is deprecated. Please use `indices` instead."
+    ))
+    if (value) {
+      indices <- union(indices, flag)
+    } else {
+      indices <- setdiff(indices, flag)
+    }
+  }
+  indices
+}
+
+# for factors and characters: keep only the columns `indices` asks for
+.drop_unused_indices <- function(out, x, indices, verbose) {
+  if ("skewness" %in% indices) {
+    out$Skewness <- as.numeric(skewness(x, verbose = verbose))
+  } else {
+    out$Skewness <- NULL
+  }
+  if ("kurtosis" %in% indices) {
+    out$Kurtosis <- as.numeric(kurtosis(x, verbose = verbose))
+  } else {
+    out$Kurtosis <- NULL
+  }
+  if (!"dispersion" %in% indices) {
+    out$SD <- NULL
+  }
+  if (!"iqr" %in% indices) {
+    out$IQR <- NULL
+  }
+  if (!"range" %in% indices) {
+    out$Min <- NULL
+    out$Max <- NULL
+  }
+  if (!"quartiles" %in% indices) {
+    out$Q1 <- NULL
+    out$Q3 <- NULL
+  }
+  out
 }
 
 

@@ -25,6 +25,9 @@
 #'   re-added. This avoids the centering around 0 that happens by default
 #'   when regressing out another variable (see the examples below for a
 #'   visual representation of this).
+#' @param ... Arguments passed to the function that fits the model:
+#'   [stats::lm()], [lme4::lmer()], [gamm4::gamm4()], [rstanarm::stan_glm()],
+#'   [rstanarm::stan_glmer()], or [rstanarm::stan_gamm4()].
 #' @inheritParams extract_column_names
 #' @inheritParams standardize
 #'
@@ -75,7 +78,8 @@ adjust <- function(
   keep_intercept = FALSE,
   ignore_case = FALSE,
   regex = FALSE,
-  verbose = FALSE
+  verbose = FALSE,
+  ...
 ) {
   # make sure column names are syntactically valid
   .check_dataframe_names(data, action = "error")
@@ -147,7 +151,8 @@ adjust <- function(
       additive = additive,
       bayesian = bayesian,
       formula_random = formula_random,
-      keep_intercept = keep_intercept
+      keep_intercept = keep_intercept,
+      ...
     )
     out[var] <- x
   }
@@ -170,8 +175,12 @@ data_adjust <- adjust
   additive = FALSE,
   bayesian = FALSE,
   formula_random = NULL,
-  keep_intercept = FALSE
+  keep_intercept = FALSE,
+  ...,
+  refresh = 0L
 ) {
+  # `refresh` is an argument here, so it is not passed twice to rstanarm
+
   # Additive -----------------------
   if (additive) {
     # Bayesian
@@ -181,7 +190,8 @@ data_adjust <- adjust
         stats::as.formula(model_formula),
         random = formula_random,
         data = data,
-        refresh = 0
+        refresh = refresh,
+        ...
       )
       # Frequentist
     } else {
@@ -189,7 +199,8 @@ data_adjust <- adjust
       model <- gamm4::gamm4(
         stats::as.formula(model_formula),
         random = formula_random,
-        data = data
+        data = data,
+        ...
       )
     }
 
@@ -198,20 +209,31 @@ data_adjust <- adjust
     # Bayesian
     insight::check_if_installed("rstanarm")
     if (multilevel) {
-      model <- rstanarm::stan_lmer(
+      # stan_lmer() fails when rstanarm is not attached
+      model <- rstanarm::stan_glmer(
         paste(model_formula, formula_random),
         data = data,
-        refresh = 0
+        refresh = refresh,
+        ...
       )
     } else {
-      model <- rstanarm::stan_glm(model_formula, data = data, refresh = 0)
+      model <- rstanarm::stan_glm(
+        model_formula,
+        data = data,
+        refresh = refresh,
+        ...
+      )
     }
   } else if (multilevel) {
     # Frequentist
     insight::check_if_installed("lme4")
-    model <- lme4::lmer(paste(model_formula, formula_random), data = data)
+    model <- lme4::lmer(
+      paste(model_formula, formula_random),
+      data = data,
+      ...
+    )
   } else {
-    model <- stats::lm(model_formula, data = data)
+    model <- stats::lm(model_formula, data = data, ...)
   }
 
   adjusted <- insight::get_residuals(model)

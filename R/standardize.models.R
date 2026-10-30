@@ -96,12 +96,12 @@ standardize.default <- function(
 
 .standardize_models <- function(
   x,
+  update_expr,
   robust = FALSE,
   two_sd = FALSE,
   weights = TRUE,
   verbose = TRUE,
   include_response = TRUE,
-  update_expr,
   ...
 ) {
   # check model formula. Some notations don't work when standardizing data
@@ -320,6 +320,30 @@ standardize.brmsfit <- function(
 
 
 #' @export
+standardize.lmerMod <- function(
+  x,
+  robust = FALSE,
+  two_sd = FALSE,
+  weights = TRUE,
+  verbose = TRUE,
+  include_response = TRUE,
+  ...
+) {
+  data_std <- NULL # needed to avoid note
+  .standardize_models(
+    x,
+    robust = robust,
+    two_sd = two_sd,
+    weights = weights,
+    verbose = verbose,
+    include_response = include_response,
+    update_expr = .update_lmer(x, data_std),
+    ...
+  )
+}
+
+
+#' @export
 standardize.mixor <- function(
   x,
   robust = FALSE,
@@ -392,11 +416,10 @@ standardize.mediate <- function(
   treat.value <- x$treat.value
 
   if (!is.null(covs)) {
-    covs <- mapply(
+    covs <- Map(
       .rescale_fixed_values,
       covs,
       names(covs),
-      SIMPLIFY = FALSE,
       MoreArgs = list(
         y_data = y_data,
         m_data = m_data,
@@ -572,6 +595,36 @@ standardize.fixest <- function(
     to = range(temp_data_std[[cov_nm]]),
     range = range(temp_data[[cov_nm]])
   )
+}
+
+
+# lme4's update() and lmerTest::as_lmerModLmerTest() re-evaluate the model
+# call, `data = data_std` included, and none of the frames they search holds
+# `data_std` once standardize() has returned. So we refit in an environment
+# that holds `data_std` and make it the refit's formula environment, which lets
+# users update or coerce the standardized model later (#716). The refit thus
+# keeps a copy of the standardized data. We do not use update() for the refit,
+# because lmerTest's update() method coerces from a frame without `data_std`.
+.update_lmer <- function(x, data_std) {
+  formula_env <- new.env(parent = environment(stats::formula(x)))
+  formula_env$data_std <- data_std
+  model_call <- stats::getCall(x)
+  model_call$data <- quote(data_std)
+  model_std <- eval(model_call, envir = formula_env)
+
+  f <- attr(model_std@frame, "formula")
+  if (!is.null(f)) {
+    environment(f) <- formula_env
+    attr(model_std@frame, "formula") <- f
+  }
+
+  if (
+    inherits(x, "lmerModLmerTest") &&
+      !inherits(model_std, "lmerModLmerTest")
+  ) {
+    model_std <- lmerTest::as_lmerModLmerTest(model_std)
+  }
+  model_std
 }
 
 

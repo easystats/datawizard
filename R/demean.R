@@ -6,7 +6,8 @@
 #' used in regression analysis to model the between- and within-subject effect
 #' (person-mean centering or centering within clusters). `degroup()` is more
 #' generic in terms of the centering-operation. While `demean()` always uses
-#' mean-centering, `degroup()` can also use the mode or median for centering.
+#' mean-centering, `degroup()` can also use the mode, the median, or a function
+#' for centering.
 #'
 #' @param x A data frame.
 #' @param select Character vector (or formula) with names of variables to select
@@ -16,8 +17,13 @@
 #'   `by` can also identify two or more variables as group- or cluster-IDs. If
 #'   the data is nested and should be treated as such, set `nested = TRUE`. Else,
 #'   if `by` defines two or more variables and `nested = FALSE`, a cross-classified
-#'   design is assumed. Note that `demean()` and `degroup()` can't handle a mix
-#'   of nested and cross-classified designs in one model.
+#'   design is assumed. `demean()` and `degroup()` do not support designs that
+#'   mix nested and cross-classified grouping. These forms of `by` stop with an
+#'   error: a formula or a single string with both `+` and `/`, such as
+#'   `~ C + A/B` or `"C + A/B"`, and a character vector of length two or more
+#'   with an element that contains `/`, such as `c("C", "A/B")`, unless that
+#'   element is the name of a column. For a formula, only the right-hand side
+#'   is read.
 #'
 #'   For nested designs, `by` can be:
 #'   - a character vector with the name of the variable that indicates the
@@ -25,16 +31,29 @@
 #'     `by = c("L4", "L3", "L2")`.
 #'   - a character vector with variable names in the format `by = "L4/L3/L2"`,
 #'     where the levels are separated by `/`.
+#'   - a formula in which the levels are separated by `/`, such as
+#'     `by = ~ L4/L3/L2`. This formula gives the same result as
+#'     `by = "L4/L3/L2"`, and it sets `nested = TRUE`.
+#'
+#'   For cross-classified designs, `by` can be a character vector such as
+#'   `by = c("A", "B")`, or a formula in which the variables are separated by
+#'   `+`, such as `by = ~ A + B`.
+#'
+#'   See also section _Checks of the grouping structure_ below.
 #'
 #'   See also section _De-meaning for cross-classified designs_ and
 #'   _De-meaning for nested designs_ below.
 #' @param nested Logical, if `TRUE`, the data is treated as nested. If `FALSE`,
 #'   the data is treated as cross-classified. Only applies if `by` contains more
-#'   than one variable.
+#'   than one variable. A `by` with `/`, such as `by = "L3/L2"` or
+#'   `by = ~ L3/L2`, sets `nested = TRUE`.
 #' @param center Method for centering. `demean()` always performs
 #'   mean-centering, while `degroup()` can use `center = "median"` or
 #'   `center = "mode"` for median- or mode-centering, and also `"min"`
-#'   or `"max"`.
+#'   or `"max"`. `degroup()` also accepts a function, such as
+#'   `center = function(x) mean(x, trim = 0.2)`, which is applied to the
+#'   non-missing values of each group (a vector of length 0 for groups with
+#'   only missing values) and must return a single number or `NA`.
 #' @param suffix_demean,suffix_groupmean String value, will be appended to the
 #'   names of the group-meaned and de-meaned variables of `x`. By default,
 #'   de-meaned variables will be suffixed with `"_within"` and
@@ -46,6 +65,11 @@
 #'   attributes to indicate the within- and between-effects. This is only
 #'   relevant when printing `model_parameters()` - in such cases, the
 #'   within- and between-effects are printed in separated blocks.
+#' @param grand_center Logical or character vector. If `TRUE`, the group-meaned
+#'   and de-meaned variables are grand-mean centered. A character vector names
+#'   the variables to center: `"within"` for the de-meaned variables, or the
+#'   name of a `by` variable for its group-meaned variables. Default is `FALSE`.
+#'   See section _Grand-mean centering of the components_.
 #' @inheritParams center
 #'
 #' @return
@@ -57,8 +81,8 @@
 #' grouping level, e.g. `predictor_L3_between` and `predictor_L2_between`.
 #'
 #' @seealso If grand-mean centering (instead of centering within-clusters)
-#'   is required, see [`center()`]. See [`performance::check_group_variation()`]
-#'   to check for heterogeneity bias.
+#'   is required, see [`center()`] or argument `grand_center`. See
+#'   [`performance::check_group_variation()`] to check for heterogeneity bias.
 #'
 #' @section Heterogeneity Bias:
 #'
@@ -196,8 +220,54 @@
 #' more levels. Set `nested = TRUE` to explicitly assume a nested design. For
 #' cross-classified designs, de-meaning is supposed to work for models like
 #' `y ~ x + (1|level3) + (1|level2)`, but *not* for models like
-#' `y ~ x + (1|level3/level2)`. Note that `demean()` and `degroup()` can't
-#' handle a mix of nested and cross-classified designs in one model.
+#' `y ~ x + (1|level3/level2)`. Designs that mix nested and cross-classified
+#' grouping are not supported. A `by` that combines `/` with `+`, or a vector
+#' of names in which one name contains `/` and is not a column name, gives an
+#' error.
+#'
+#' For two crossed variables, J and K, `demean()` returns the three components
+#' of the fully cluster-mean-centered model in _Guo et al. (2024)_, equation 4:
+#' the mean of the variable in its J cluster, the mean in its K cluster, and
+#' the within component, which is the value minus both means. Each mean is
+#' taken over the rows of the cluster where the variable is not missing, not
+#' over cell means, so combinations of J and K with more rows weigh more. The
+#' components also apply to unbalanced data, with different numbers of rows
+#' per combination of J and K. For each row where the variable is not
+#' missing, the components sum to the value, unless `grand_center` is used.
+#' For a row with a missing value in a `by` variable, the mean for that
+#' variable is the row's own value.
+#' _Guo et al. (2024)_ also cover three or more crossed variables: footnote 6
+#' and the R function in their Appendix C subtract the mean of each crossed
+#' variable, and `demean()` does the same. With `degroup()` and a `center`
+#' other than `"mean"`, the cluster statistic replaces the mean.
+#' _Guo et al. (2024)_ define the components with means.
+#'
+#' @section Checks of the grouping structure:
+#'
+#' With two or more variables in `by` and `verbose = TRUE`, `demean()` and
+#' `degroup()` check whether the data match `by`. A check uses only the rows
+#' where both variables of a pair are not missing, and it ignores unused factor
+#' levels.
+#'
+#' - With `nested = FALSE`, the check gives a warning when each value of one
+#'   `by` variable occurs with only one value of another `by` variable. Such
+#'   data look nested, so the warning names each such pair and suggests
+#'   `nested = TRUE`. Crossed data with this pattern, for example a variable
+#'   with a single value, also give the warning. Nested data whose lower-level
+#'   IDs repeat across clusters (e.g. class `"1"` in each school) look crossed,
+#'   so this check does not find them.
+#' - With `nested = TRUE`, the check gives a warning for each adjacent pair
+#'   in `by` when each value of the first variable occurs with only one value
+#'   of the second, and some value of the second occurs with two or more
+#'   values of the first. The warning says that `by` lists the levels from
+#'   highest to lowest, and it names both variables. Nested data with a single
+#'   lower-level cluster in each higher-level cluster and lower-level IDs that
+#'   repeat (e.g. class `"1"` alone in each school) also give the warning,
+#'   although the order is correct. A wrong order is not found when the
+#'   lower-level IDs repeat across clusters.
+#'
+#' The warnings do not change the returned values. Set `verbose = FALSE` to
+#' turn the checks off.
 #'
 #' @section De-meaning for nested designs:
 #'
@@ -205,10 +275,37 @@
 #' nested designs, which is implemented in `demean()`. For nested designs, set
 #' `nested = TRUE` *and* specify the variables that indicate the different
 #' levels in descending order in the `by` argument. E.g.,
-#' `by = c("level4", "level3, "level2")` assumes a model like
+#' `by = c("level4", "level3", "level2")` assumes a model like
 #' `y ~ x + (1|level4/level3/level2)`. An alternative notation for the
 #' `by`-argument would be `by = "level4/level3/level2"`, similar to the
-#' formula notation.
+#' formula notation, or the formula `by = ~ level4/level3/level2`.
+#'
+#' Any number of levels is possible. The group-meaned variable of the highest
+#' level is the mean within each of its groups. The group-meaned variable of
+#' each lower level is the mean within each of its groups minus the mean of
+#' the level above. The de-meaned variable is the value minus the mean of the
+#' lowest level. For `by = "level4/level3/level2"`, the variables are thus the
+#' `level4` mean, the `level3` mean minus the `level4` mean, the `level2` mean
+#' minus the `level3` mean, and the value minus the `level2` mean. Together,
+#' they sum to the original value. A group is defined by its level and all
+#' levels above it, so IDs of lower levels can repeat across groups of higher
+#' levels. Means are computed over all non-missing observations of a group, so
+#' larger groups weigh more (as in _Brincks et al. 2017_). For `degroup()`, the
+#' variables are defined the same way with the statistic selected by `center`
+#' in place of the mean, and they still sum to the original value, unless
+#' `grand_center` is used.
+#'
+#' @section Grand-mean centering of the components:
+#'
+#' In cross-classified designs, or when `center` is not the mean, the
+#' de-meaned variables usually do not have a mean of 0. `grand_center`
+#' subtracts the mean from the group-meaned and de-meaned variables, using the
+#' rows where the original variable is not missing. The mean is used whatever
+#' `center` is, and the centered variables no longer sum to the original
+#' value. For cross-classified designs, _Guo et al. (2024)_ note that each
+#' component can be grand-mean centered, which only changes the intercept of
+#' the model. A character vector in `grand_center` cannot be used when a `by`
+#' variable is named `"within"`.
 #'
 #' @section Analysing panel data with mixed models using lme4:
 #'
@@ -289,7 +386,8 @@ demean <- function(
   suffix_groupmean = "_between",
   append = TRUE,
   add_attributes = TRUE,
-  verbose = TRUE
+  verbose = TRUE,
+  grand_center = FALSE
 ) {
   degroup(
     x = x,
@@ -301,7 +399,8 @@ demean <- function(
     suffix_groupmean = suffix_groupmean,
     append = append,
     add_attributes = add_attributes,
-    verbose = verbose
+    verbose = verbose,
+    grand_center = grand_center
   )
 }
 
@@ -318,16 +417,19 @@ degroup <- function(
   suffix_groupmean = "_between",
   append = TRUE,
   add_attributes = TRUE,
-  verbose = TRUE
+  verbose = TRUE,
+  grand_center = FALSE
 ) {
   # ugly tibbles again... but save original data frame
   original_data <- x
   x <- .coerce_to_dataframe(x)
 
-  center <- match.arg(
-    tolower(center),
-    choices = c("mean", "median", "mode", "min", "max")
-  )
+  if (!is.function(center)) {
+    center <- match.arg(
+      tolower(center),
+      choices = c("mean", "median", "mode", "min", "max")
+    )
+  }
 
   if (inherits(select, "formula")) {
     # formula to character, remove "~", split at "+". We don't use `all.vars()`
@@ -343,18 +445,9 @@ degroup <- function(
   }
 
   # handle different "by" options
-  if (inherits(by, "formula")) {
-    by <- all.vars(by)
-  }
-
-  # we also allow lme4-syntax here: if by = "L4/L3/L2", we assume a nested design
-  if (length(by) == 1 && grepl("/", by, fixed = TRUE)) {
-    by <- insight::trim_ws(unlist(
-      strsplit(by, "/", fixed = TRUE),
-      use.names = FALSE
-    ))
-    nested <- TRUE
-  }
+  by_parsed <- .parse_by(by, nested, colnames(x))
+  by <- by_parsed$by
+  nested <- by_parsed$nested
 
   # identify interaction terms
   interactions_no <- select[!grepl("(\\*|\\:)", select)]
@@ -394,6 +487,14 @@ degroup <- function(
         "Possibly misspelled or not yet defined?"
       )
     )
+  }
+
+  # names of the components to grand-center
+  grand_center <- .check_grand_center(grand_center, by)
+
+  # warn if the data suggest that `by` does not match the design
+  if (isTRUE(verbose) && length(by) > 1) {
+    .check_grouping_structure(x, by, nested)
   }
 
   # get data to demean...
@@ -447,21 +548,25 @@ degroup <- function(
   # for variables within each group (the group means). assign
   # mean values to a vector of same length as the data
 
-  gm_fun <- switch(
-    center,
-    mode = function(.gm) {
-      distribution_mode(stats::na.omit(.gm), verbose = verbose)
-    },
-    median = function(.gm) stats::median(.gm, na.rm = TRUE),
-    min = function(.gm) min(.gm, na.rm = TRUE),
-    max = function(.gm) max(.gm, na.rm = TRUE),
-    function(.gm) mean(.gm, na.rm = TRUE)
-  )
+  gm_fun <- if (is.function(center)) {
+    .center_function(center)
+  } else {
+    switch(
+      center,
+      mode = function(.gm) {
+        distribution_mode(stats::na.omit(.gm), verbose = verbose)
+      },
+      median = function(.gm) stats::median(.gm, na.rm = TRUE),
+      min = function(.gm) min(.gm, na.rm = TRUE),
+      max = function(.gm) max(.gm, na.rm = TRUE),
+      function(.gm) mean(.gm, na.rm = TRUE)
+    )
+  }
 
   # we allow disaggregating level-specific effects for cross-classified multilevel
-  # models (see Guo et al. 2024). Two levels should work as proposed by the authors,
-  # more levels also already work, but need to check the formula from the paper
-  # and validate results
+  # models (see Guo et al. 2024). Eq. 4 defines the components for two crossed
+  # variables; footnote 6 and the cc.gmc() function in Appendix C subtract the
+  # mean of each crossed variable for three or more
 
   if (length(by) == 1) {
     # simple case: one level
@@ -469,6 +574,9 @@ degroup <- function(
       stats::ave(dat[[i]], dat[[by]], FUN = gm_fun)
     })
     names(group_means_list) <- select
+    # the selected variable and the `by` variable of each group-meaned column
+    group_means_source <- select
+    group_means_by <- rep(by, length(select))
     # create de-meaned variables by subtracting the group mean from each individual value
     person_means_list <- lapply(select, function(i) {
       dat[[i]] - group_means_list[[i]]
@@ -483,17 +591,22 @@ degroup <- function(
     # x(ijk) is the individual value / variable that is measured on level 1
     # xbar(k) <- ave(x_ijk, L3, FUN = mean), the group mean of the variable at highest level
     # xbar(jk) <- ave(x_ijk, L3, L2, FUN = mean), the group mean of the variable at second level
+    # With more levels, each level's component is its group mean minus the
+    # group mean of the level above it.
     group_means_list <- lapply(select, function(i) {
       out <- lapply(seq_along(by), function(k) {
         stats::ave(dat[[i]], dat[, by[1:k], drop = FALSE], FUN = gm_fun)
       })
-      # subtract mean of higher level from lower level
-      for (j in 2:length(by)) {
+      # subtract mean of higher level from lower level. Loop from the lowest
+      # level up, so that the subtracted mean is not yet modified
+      for (j in length(by):2) {
         out[[j]] <- out[[j]] - out[[j - 1]]
       }
       names(out) <- paste0(i, "_", by)
       out
     })
+    group_means_source <- rep(select, each = length(by))
+    group_means_by <- rep(by, times = length(select))
     # create de-meaned variables by subtracting the group mean from each individual value
     person_means_list <- lapply(
       # seq_along(select),
@@ -513,6 +626,8 @@ degroup <- function(
       out
     })
     group_means_list <- unlist(group_means_list, recursive = FALSE)
+    group_means_source <- rep(select, times = length(by))
+    group_means_by <- rep(by, each = length(select))
 
     # de-meaned variables for cross-classified design is simply subtracting
     # all group means from each individual value
@@ -529,6 +644,23 @@ degroup <- function(
 
   group_means <- as.data.frame(group_means_list)
   person_means <- as.data.frame(person_means_list)
+
+  # grand-center the chosen components. Columns are chosen from the recorded
+  # `by` variables, not from their names, which `as.data.frame()` can change
+  for (k in which(group_means_by %in% grand_center)) {
+    group_means[[k]] <- .grand_center_column(
+      group_means[[k]],
+      dat[[group_means_source[k]]]
+    )
+  }
+  if ("within" %in% grand_center) {
+    for (k in seq_along(select)) {
+      person_means[[k]] <- .grand_center_column(
+        person_means[[k]],
+        dat[[select[k]]]
+      )
+    }
+  }
 
   colnames(person_means) <- sprintf(
     "%s%s",
@@ -576,3 +708,192 @@ degroup <- function(
 #' @rdname demean
 #' @export
 detrend <- degroup
+
+
+# helper -----------------------------------------------------------------------
+
+# Returns the names of the components to grand-center: "within" for the
+# de-meaned variables and the names of `by` variables for the group-meaned ones.
+.check_grand_center <- function(grand_center, by) {
+  if (isFALSE(grand_center)) {
+    return(character(0))
+  }
+  if (isTRUE(grand_center)) {
+    return(c("within", by))
+  }
+  if (!is.character(grand_center)) {
+    insight::format_error(
+      "`grand_center` must be `TRUE`, `FALSE`, or a character vector of component names." # nolint
+    )
+  }
+  if (length(grand_center) && "within" %in% by) {
+    insight::format_error(
+      "A `by` variable is named \"within\", so `grand_center` cannot name components. Rename that variable, or use `grand_center = TRUE`." # nolint
+    )
+  }
+  allowed <- c("within", by)
+  if (anyNA(grand_center) || !all(grand_center %in% allowed)) {
+    insight::format_error(paste0(
+      "`grand_center` can only name these components: ",
+      text_concatenate(allowed, enclose = "\""),
+      "."
+    ))
+  }
+  grand_center
+}
+
+
+# Subtracts from a component its mean over the rows where the variable it
+# comes from is not missing.
+.grand_center_column <- function(component, origin) {
+  component - mean(component[!is.na(origin)], na.rm = TRUE)
+}
+
+
+# Wraps a function given in `center`: it gets the non-missing values of a
+# group and must return a single number (or `NA`).
+.center_function <- function(center) {
+  function(.gm) {
+    out <- center(.gm[!is.na(.gm)])
+    single_number <- is.numeric(out) || (is.logical(out) && is.na(out))
+    if (length(out) != 1L || !single_number) {
+      insight::format_error(
+        "A function in `center` must return a single number for each group."
+      )
+    }
+    out
+  }
+}
+
+# Returns the variable names in `by` and whether the design is nested.
+# `columns` are the column names of the data.
+.parse_by <- function(by, nested, columns) {
+  # A formula with only "/" (e.g. ~ L4/L3/L2) is nested, like the string
+  # "L4/L3/L2". A formula with only "+" keeps the value of `nested`. Only the
+  # right-hand side of the formula is read. Operators are read from the calls
+  # in the formula, so a backticked column name such as `A/B` is not split.
+  if (inherits(by, "formula")) {
+    by_rhs <- by[[length(by)]]
+    by_operators <- all.names(by_rhs, functions = TRUE)
+    by_operators <- setdiff(by_operators, all.vars(by_rhs))
+    by_nested <- "/" %in% by_operators
+    if (by_nested && "+" %in% by_operators) {
+      .mixed_design_error()
+    }
+    if (by_nested) {
+      nested <- TRUE
+    }
+    return(list(by = all.vars(by_rhs), nested = nested))
+  }
+
+  # a character vector such as c("L4", "L3/L2") mixes crossed and nested,
+  # unless the element with "/" is a column name
+  if (length(by) > 1 && any(grepl("/", setdiff(by, columns), fixed = TRUE))) {
+    .mixed_design_error()
+  }
+
+  # we also allow lme4-syntax here: if by = "L4/L3/L2", we assume a nested design
+  if (length(by) == 1 && grepl("/", by, fixed = TRUE)) {
+    # a string such as "C + A/B" mixes crossed and nested
+    if (grepl("+", by, fixed = TRUE)) {
+      .mixed_design_error()
+    }
+    by <- insight::trim_ws(unlist(
+      strsplit(by, "/", fixed = TRUE),
+      use.names = FALSE
+    ))
+    nested <- TRUE
+  }
+
+  list(by = by, nested = nested)
+}
+
+
+.mixed_design_error <- function() {
+  insight::format_error(
+    "Designs that mix nested and crossed grouping are not supported.",
+    "Use either `/` to separate nested levels, e.g. `by = ~ L3/L2`, or `+` to separate crossed groups, e.g. `by = ~ A + B`, but not both." # nolint
+  )
+}
+
+
+# For a pair of grouping variables, `p_in_q` is TRUE if each observed value of
+# `p` occurs with exactly one value of `q`, and `q_in_p` the reverse. Only
+# rows where neither is missing count, and unused factor levels are ignored.
+# Both are FALSE if no such row exists.
+.nesting_of_pair <- function(p, q) {
+  keep <- !is.na(p) & !is.na(q)
+  if (!any(keep)) {
+    return(c(p_in_q = FALSE, q_in_p = FALSE))
+  }
+  p <- p[keep]
+  q <- q[keep]
+  # integer codes, and one row for each observed combination of p and q
+  p_id <- match(p, unique(p))
+  q_id <- match(q, unique(q))
+  first <- !duplicated((q_id - 1) * max(p_id) + p_id)
+  c(
+    p_in_q = !anyDuplicated(p_id[first]),
+    q_in_p = !anyDuplicated(q_id[first])
+  )
+}
+
+
+# Warn when the observed values suggest that `by` does not match the design:
+# for crossed designs, when one variable is nested in another; for nested
+# designs, when an adjacent pair is listed from lower to higher level.
+.check_grouping_structure <- function(x, by, nested) {
+  if (nested) {
+    for (i in seq_len(length(by) - 1)) {
+      higher <- by[i]
+      lower <- by[i + 1]
+      nesting <- .nesting_of_pair(x[[higher]], x[[lower]])
+      if (nesting[["p_in_q"]] && !nesting[["q_in_p"]]) {
+        insight::format_warning(paste0(
+          "`by` lists levels from highest to lowest, but `",
+          higher,
+          "` is nested in `",
+          lower,
+          "` in these data: each value of `",
+          higher,
+          "` occurs with only one value of `",
+          lower,
+          "`. List `",
+          lower,
+          "` before `",
+          higher,
+          "` in `by`."
+        ))
+      }
+    }
+  } else {
+    # one entry for each pair in which one variable is nested in the other;
+    # a one-to-one pair is reported once
+    reported <- character(0)
+    for (pair in utils::combn(by, 2, simplify = FALSE)) {
+      nesting <- .nesting_of_pair(x[[pair[1]]], x[[pair[2]]])
+      if (nesting[["p_in_q"]]) {
+        lower <- pair[1]
+        higher <- pair[2]
+      } else if (nesting[["q_in_p"]]) {
+        lower <- pair[2]
+        higher <- pair[1]
+      } else {
+        next
+      }
+      reported <- c(
+        reported,
+        paste0("`", lower, "` is nested in `", higher, "`")
+      )
+    }
+    if (length(reported)) {
+      insight::format_warning(paste0(
+        "In these data, ",
+        toString(reported),
+        ": each value of the first variable occurs with only one value of the second.", # nolint
+        " For a nested design, set `nested = TRUE` and list the levels from highest to lowest in `by`. For a crossed design, set `verbose = FALSE` to silence this warning." # nolint
+      ))
+    }
+  }
+  invisible(NULL)
+}
