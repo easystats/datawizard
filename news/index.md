@@ -125,6 +125,13 @@ FIXES
   [`update()`](https://rdrr.io/r/stats/update.html)
   ([\#716](https://github.com/easystats/datawizard/issues/716)).
 
+- Fixed
+  [`standardize()`](https://easystats.github.io/datawizard/reference/standardize.md)
+  on data frames when `center` or `scale` is a single `TRUE` or `FALSE`.
+  `scale = FALSE` still divided by the standard deviation,
+  `center = FALSE` did not scale, and `center = TRUE` did not scale
+  either. The results now match those for a single variable.
+
 ## datawizard 1.4.1
 
 CRAN release: 2026-10-17
