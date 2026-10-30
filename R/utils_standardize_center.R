@@ -300,8 +300,23 @@
     select <- colnames(new_variables)
   }
 
-  # check for reference center and scale
-  if (!is.null(.center)) {
+  # check for reference center and scale. A single TRUE or FALSE is passed on
+  # to each column as it is, as the numeric methods take it.
+  is_flag <- function(i) is.logical(i) && length(i) == 1L && !is.na(i)
+  if (
+    (is_flag(.center) || is.null(.center)) &&
+      (is_flag(.scale) || is.null(.scale)) &&
+      (is_flag(.center) || is_flag(.scale))
+  ) {
+    .center <- stats::setNames(
+      rep(if (is_flag(.center)) .center else NA, length(select)),
+      select
+    )
+    .scale <- stats::setNames(
+      rep(if (is_flag(.scale)) .scale else NA, length(select)),
+      select
+    )
+  } else if (!is.null(.center)) {
     # for center(), we have no scale - set it to default value
     if (is.null(.scale)) {
       .scale <- rep(1, length(.center))

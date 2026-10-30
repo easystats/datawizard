@@ -353,6 +353,30 @@ test_that("standardize when only providing one of center/scale", {
   )
 })
 
+test_that("standardize data frame with TRUE or FALSE in center/scale", {
+  d <- data.frame(a = c(1, 2, 3, 10), b = c(5, 1, 4, 2))
+  for (args in list(
+    list(center = FALSE),
+    list(center = TRUE),
+    list(scale = FALSE),
+    list(scale = TRUE),
+    list(center = FALSE, scale = FALSE),
+    list(center = FALSE, scale = TRUE)
+  )) {
+    out <- do.call(standardize, c(list(d), args))
+    expect_equal(
+      out$a,
+      do.call(standardize, c(list(d$a), args)),
+      ignore_attr = TRUE
+    )
+    expect_equal(
+      out$b,
+      do.call(standardize, c(list(d$b), args)),
+      ignore_attr = TRUE
+    )
+  }
+})
+
 
 # grouped data
 

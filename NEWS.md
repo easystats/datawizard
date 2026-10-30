@@ -75,6 +75,11 @@ FIXES
   `lmerTest::as_lmerModLmerTest()`. You can also pass a standardized
   `lme4::lmer()` model to `as_lmerModLmerTest()` or to `update()` (#716).
 
+* Fixed `standardize()` on data frames when `center` or `scale` is a single
+  `TRUE` or `FALSE`. `scale = FALSE` still divided by the standard deviation,
+  `center = FALSE` did not scale, and `center = TRUE` did not scale either.
+  The results now match those for a single variable.
+
 # datawizard 1.4.1
 
 CHANGES
