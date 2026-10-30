@@ -43,6 +43,9 @@ CHANGES
   `parameters_smoothness` remain as secondary classes, so code that checks
   `class(x)[1]` for the old names needs to be updated (#248).
 
+* `winsorize()` gains an `include_factors` argument. If `TRUE`, rare factor
+  levels are merged into one level, `".other"` (#48).
+
 * `describe_distribution()` gains an `indices` argument, to select the
   optional columns to return, e.g. to leave out skewness and kurtosis.
   Arguments `dispersion`, `iqr`, `range`, and `quartiles` are deprecated.

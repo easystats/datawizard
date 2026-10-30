@@ -2,10 +2,32 @@
 % Please edit documentation in R/winsorize.R
 \name{winsorize}
 \alias{winsorize}
+\alias{winsorize.factor}
+\alias{winsorize.data.frame}
 \alias{winsorize.numeric}
 \title{Winsorize data}
 \usage{
 winsorize(data, ...)
+
+\method{winsorize}{factor}(
+  data,
+  threshold = 0.2,
+  method = "percentile",
+  robust = FALSE,
+  verbose = TRUE,
+  include_factors = FALSE,
+  ...
+)
+
+\method{winsorize}{data.frame}(
+  data,
+  threshold = 0.2,
+  method = "percentile",
+  robust = FALSE,
+  verbose = TRUE,
+  include_factors = FALSE,
+  ...
+)
 
 \method{winsorize}{numeric}(
   data,
@@ -24,7 +46,8 @@ winsorize(data, ...)
 \item{threshold}{The amount of winsorization, depends on the value of \code{method}:
 \itemize{
 \item For \code{method = "percentile"}: the amount to winsorize from \emph{each} tail.
-The value of \code{threshold} must be between 0 and 0.5 and of length 1.
+The value of \code{threshold} must be between 0 and 0.5 and of length 1. For
+factors, levels with a smaller share of the values are merged.
 \item For \code{method = "zscore"}: the number of \emph{SD}/\emph{MAD}-deviations from the
 \emph{mean}/\emph{median} (see \code{robust}). The value of \code{threshold} must be greater
 than 0 and of length 1.
@@ -32,13 +55,17 @@ than 0 and of length 1.
 for winsorization.
 }}
 
-\item{method}{One of "percentile" (default), "zscore", or "raw".}
+\item{method}{One of "percentile" (default), "zscore", or "raw". Factors
+only work with "percentile".}
 
 \item{robust}{Logical, if TRUE, winsorizing through the "zscore" method is
 done via the median and the median absolute deviation (MAD); if FALSE, via
 the mean and the standard deviation.}
 
 \item{verbose}{Not used anymore since \code{datawizard} 0.6.6.}
+
+\item{include_factors}{Logical, if \code{TRUE}, rare levels of factors are merged
+into a level \code{".other"} (see 'Details').}
 }
 \value{
 A data frame with winsorized columns or a winsorized vector.
@@ -56,6 +83,12 @@ example, a \verb{90\%} winsorization would see all data below the 5th percentile
 to the 5th percentile, and data above the 95th percentile set to the 95th
 percentile. Winsorized estimators are usually more robust to outliers than
 their more standard forms.
+
+Factors are returned unchanged, unless \code{include_factors = TRUE}. Then,
+levels with a share of the non-missing values below \code{threshold} are merged
+into a new last level, \code{".other"}. Nothing is merged if fewer than two
+levels are rare. \code{NA} levels are never merged. Character and logical vectors
+are returned unchanged.
 }
 \examples{
 hist(iris$Sepal.Length, main = "Original data")
@@ -78,6 +111,10 @@ hist(winsorize(iris$Sepal.Length, threshold = c(5, 7.5), method = "raw"),
 
 # Also works on a data frame:
 winsorize(iris, threshold = 0.2)
+
+# Merge levels with less than 10\% of the values:
+x <- factor(c(rep("a", 10), rep("b", 8), "c", "d"))
+winsorize(x, threshold = 0.1, include_factors = TRUE)
 
 }
 \seealso{
