@@ -15,10 +15,8 @@
   scale = NULL,
   cluster = NULL
 ) {
-  if (!is.null(cluster) && length(cluster) != length(x)) {
-    insight::format_error(
-      "`cluster` must have the same length as the variable to transform."
-    )
+  if (!is.null(cluster)) {
+    cluster <- .cluster_data(cluster, length(x))
   }
 
   # Warning if all NaNs
@@ -27,8 +25,9 @@
   }
 
   if (!is.null(cluster)) {
-    valid_x <- !is.na(x) & !is.infinite(x) & !is.na(cluster)
-    na_values <- is.na(x) | is.na(cluster)
+    has_cluster <- stats::complete.cases(cluster)
+    valid_x <- !is.na(x) & !is.infinite(x) & has_cluster
+    na_values <- is.na(x) | !has_cluster
     inf_values <- is.infinite(x)
     vals <- x[valid_x]
   } else if (.are_weights(weights)) {
@@ -67,7 +66,7 @@
   if (!is.null(cluster)) {
     ref_vals <- .cluster_values(
       vals,
-      cluster[valid_x],
+      cluster[valid_x, , drop = FALSE],
       min_clusters = if (is.null(scale)) 1L else 2L
     )
   }
@@ -103,8 +102,8 @@
 #
 #' @keywords internal
 .cluster_values <- function(x, cluster, min_clusters = 2L) {
-  cluster_pairs <- unique(data.frame(cluster = cluster, x = x))
-  if (anyDuplicated(cluster_pairs$cluster) > 0) {
+  cluster_pairs <- unique(cbind(cluster, x))
+  if (anyDuplicated(cluster_pairs[seq_along(cluster)]) > 0) {
     insight::format_error(
       "The variable takes more than one value within a cluster. With `cluster`, it must have one value per cluster."
     )
@@ -117,6 +116,24 @@
     ))
   }
   cluster_pairs$x
+}
+
+
+# `cluster` as a data frame with one column per cluster variable. Several
+# variables come as a list or data frame, and each combination of their values
+# is one cluster.
+#
+#' @keywords internal
+.cluster_data <- function(cluster, n) {
+  if (!is.data.frame(cluster) && !inherits(cluster, "list")) {
+    cluster <- list(cluster)
+  }
+  if (!length(cluster) || any(lengths(cluster) != n)) {
+    insight::format_error(
+      "`cluster` must have the same length as the variable to transform."
+    )
+  }
+  as.data.frame(stats::setNames(cluster, seq_along(cluster)), optional = TRUE)
 }
 
 
@@ -147,9 +164,10 @@
 
 #' @keywords internal
 .check_cluster_column <- function(x, cluster) {
-  if (!cluster %in% colnames(x)) {
+  missing_columns <- setdiff(cluster, colnames(x))
+  if (length(missing_columns)) {
     insight::format_error(
-      paste0("Could not find the `cluster` column `", cluster, "`.")
+      paste0("Could not find the `cluster` column `", missing_columns[1], "`.")
     )
   }
 }
@@ -185,20 +203,17 @@
     append <- append_suffix
   }
 
-  # a single string is the name of the cluster column, which is never
-  # transformed
+  # a character vector names the cluster columns, which are never transformed
   cluster_name <- NULL
   if (!is.null(cluster)) {
     # check here, because `.scale` is dropped below when no `.center` is given
     .check_cluster_args(cluster, weights, reference, .center, .scale)
-    if (is.character(cluster) && length(cluster) == 1L) {
+    if (is.character(cluster)) {
       .check_cluster_column(x, cluster)
       cluster_name <- cluster
       exclude <- c(exclude, cluster)
-    } else if (length(cluster) != nrow(x)) {
-      insight::format_error(
-        "`cluster` must have the same length as the number of rows in the data."
-      )
+    } else {
+      cluster <- .cluster_data(cluster, nrow(x))
     }
   }
 
@@ -260,9 +275,9 @@
   }
 
   if (!is.null(cluster_name)) {
-    cluster <- x[[cluster_name]]
+    cluster <- x[cluster_name]
   } else if (!is.null(cluster)) {
-    cluster <- cluster[!omit]
+    cluster <- cluster[!omit, , drop = FALSE]
   }
 
   # append standardized variables
@@ -594,9 +609,9 @@
   cluster = NULL
 ) {
   if (!is.null(cluster)) {
-    if (!is.character(cluster) || length(cluster) != 1L) {
+    if (!is.character(cluster)) {
       insight::format_error(
-        "For grouped data frames, `cluster` must be a column name."
+        "For grouped data frames, `cluster` must be column names."
       )
     }
     .check_cluster_args(cluster, weights, reference)
