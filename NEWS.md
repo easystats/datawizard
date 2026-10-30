@@ -18,6 +18,12 @@ BREAKING CHANGES
 
 CHANGES
 
+* `degroup()` now also accepts a function in `center`, e.g.
+  `center = function(x) mean(x, trim = 0.2)` (#21).
+
+* `demean()` and `degroup()` gain a `grand_center` argument, to grand-mean
+  center the group-meaned and de-meaned variables (#637).
+
 * `demean()` and `degroup()` now warn when the data do not seem to match `by`.
   With `nested = FALSE`, the warning comes when each value of one `by`
   variable occurs with only one value of another, which suggests a nested
@@ -28,7 +34,8 @@ CHANGES
 * `center()` and `standardize()` gain a `cluster` argument. If `cluster` is
   given, the center and scale come from one value per cluster. Cluster-level
   variables in unbalanced long-format data are then not weighted by cluster
-  size (#672).
+  size. `cluster` can also be several column names, or a list of cluster id
+  vectors (#672).
 
 * `skewness()`, `kurtosis()`, and `smoothness()` now return objects of class
   `datawizard_skewness`, `datawizard_kurtosis`, and `datawizard_smoothness`.
@@ -39,12 +46,23 @@ CHANGES
 * `winsorize()` gains an `include_factors` argument. If `TRUE`, rare factor
   levels are merged into one level, `".other"` (#48).
 
+* `describe_distribution()` gains an `indices` argument, to select the
+  optional columns to return, e.g. to leave out skewness and kurtosis.
+  Arguments `dispersion`, `iqr`, `range`, and `quartiles` are deprecated.
+  Please use `indices` instead (#687).
+
+* `adjust()` gains `...`, which passes arguments to the function that fits the
+  model (#696).
+
 FIXES
 
 * `skewness()` and `kurtosis()` now return the standard error for the chosen
   `type`. Before, the `SE` column was the type-1 standard error for every
   `type`, including the default `type = "2"`. Bootstrapped standard errors
   (`iterations`) are not changed.
+
+* Fixed an error in `adjust()` with `multilevel = TRUE` and `bayesian = TRUE`
+  when `rstanarm` was not attached (#726).
 
 * Fixed `demean()` and `degroup()` for nested designs with three or more
   grouping variables. The group-meaned variables of the third and later
@@ -55,6 +73,10 @@ FIXES
   and loops. Internal variables of `data_filter()` no longer hide variables of
   the calling code. A condition that gives a warning now returns the filtered
   data with that warning (#309, #379).
+
+* `standardize()` now works with models coerced with
+  `lmerTest::as_lmerModLmerTest()`. You can also pass a standardized
+  `lme4::lmer()` model to `as_lmerModLmerTest()` or to `update()` (#716).
 
 # datawizard 1.4.1
 
