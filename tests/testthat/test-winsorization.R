@@ -11,6 +11,13 @@ test_that("with missing values", {
   expect_length(winsorize(as.factor(ggplot2::msleep$vore)), 83L)
 })
 
+test_that("winsorize: missing values do not count in percentile", {
+  expect_equal(
+    winsorize(c(NA, 1:5, NA, 6:10, NA), threshold = 0.2),
+    c(NA, 3, 3, 3, 4, 5, NA, 6, 7, 8, 8, 8, NA)
+  )
+})
+
 test_that("winsorize: threshold must be between 0 and 1", {
   expect_error(
     winsorize(sample(1:10, 5), threshold = -0.1),
