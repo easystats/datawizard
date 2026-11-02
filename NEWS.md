@@ -85,10 +85,10 @@ FIXES
   The results now match those for a single variable.
 
 * `winsorize()` no longer makes a variable with more than one distinct value
-  constant. At the default `threshold`, this happened with no message to a
-  dummy variable whose rarer value made up 20% or less of the values. Such a
-  variable now comes back unchanged, with a warning that names the column in a
-  data frame (#736).
+  constant. At the default `threshold` and with no missing values, this happened
+  with no message to a dummy variable whose rarer value made up 20% or less of
+  the values. Such a variable now comes back unchanged, with a warning that
+  names the column in a data frame (#736).
 
 # datawizard 1.4.1
 

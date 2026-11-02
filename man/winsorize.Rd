@@ -60,9 +60,10 @@ percentile. Winsorized estimators are usually more robust to outliers than
 their more standard forms.
 
 If winsorizing would make a numeric variable with more than one distinct
-value constant, the variable is returned unchanged with a warning. This
-happens, for example, with \code{threshold = 0.5}, and with a dummy variable whose
-rarer value makes up no more than \code{threshold} of the values.
+value constant, the variable is returned unchanged with a warning. With
+\code{method = "percentile"} and no missing values, this happens with
+\code{threshold = 0.5} and with a dummy variable whose rarer value makes up no more
+than \code{threshold} of the values.
 }
 \examples{
 hist(iris$Sepal.Length, main = "Original data")
