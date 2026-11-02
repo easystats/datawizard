@@ -34,7 +34,11 @@
 #' @param pool Logical. If `TRUE`, the counts are summed over the selected
 #'   columns, and all of them get the same merges and levels. Use this for the
 #'   items of a scale. Ordered factors must have the same levels in the same
-#'   order and cannot be mixed with other factors or character vectors.
+#'   order and cannot be mixed with other factors or character vectors. Only the
+#'   summed counts decide which levels are sparse, so a level that is sparse in
+#'   only one column can stay, and the selected columns change the result. If no
+#'   level is sparse in the summed counts, nothing merges, and there is no
+#'   warning. See the examples.
 #' @param verbose Toggle warnings and messages.
 #' @param ... Not used.
 #' @inheritParams extract_column_names
@@ -66,7 +70,16 @@
 #'   item1 = ordered(rep(1:3, c(2, 8, 90))),
 #'   item2 = ordered(rep(1:3, c(6, 88, 6)))
 #' )
+#' # level 1 has 8 of 200 values (4%), so it is sparse and merges
 #' table(collapse_levels(d, pool = TRUE)$item2)
+#'
+#' # the selected columns change the pooled counts: with a third column, level 1
+#' # has 18 of 300 values (6%), so it is not sparse and nothing merges
+#' d$no_item <- ordered(rep(1:3, c(10, 82, 8)))
+#' table(collapse_levels(d, pool = TRUE)$item2)
+#'
+#' # select only the items of the scale
+#' table(collapse_levels(d, select = c("item1", "item2"), pool = TRUE)$item2)
 #' @export
 collapse_levels <- function(x, ...) {
   UseMethod("collapse_levels")

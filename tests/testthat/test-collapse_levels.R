@@ -1,6 +1,9 @@
 # Oracle for this file: hand counts. With the default `min_prop = 0.05` and
 # n = 100, a level is sparse below 5 values.
-counts <- function(x) c(table(x))
+counts <- function(x) {
+  tab <- table(x)
+  stats::setNames(as.vector(tab), names(tab))
+}
 lump <- function(...) {
   k <- c(...)
   factor(rep(names(k), k), levels = names(k))
@@ -270,6 +273,18 @@ test_that("collapse_levels pools counts for ordered items", {
   out <- collapse_levels(d, pool = TRUE)
   expect_identical(levels(out$i1), c("a/b", "c", "d", NA))
   expect_identical(levels(out$i2), c("a/b", "c", "d"))
+
+  # a's share is 8 / 200 with i1 and i2. It is 18 / 300 with i3, which is not
+  # sparse
+  d <- data.frame(
+    i1 = ord(a = 2, b = 8, c = 90),
+    i2 = ord(a = 6, b = 88, c = 6),
+    i3 = ord(a = 10, b = 82, c = 8)
+  )
+  expect_identical(collapse_levels(d, pool = TRUE), d)
+  out <- collapse_levels(d, select = c("i1", "i2"), pool = TRUE)
+  expect_identical(counts(out$i1), c("a/b" = 10L, c = 90L))
+  expect_identical(out$i3, d$i3)
 })
 
 test_that("collapse_levels pools counts for nominal items", {
