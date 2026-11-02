@@ -164,6 +164,12 @@ test_that("collapse_levels keeps missing values", {
   # an NA level is never unused
   x <- addNA(factor(c("a", "b")))
   expect_identical(collapse_levels(x), x)
+
+  # NA values and an NA level are not in n: 5 / 100 is not below 0.05, though
+  # 5 / 101 would be
+  x <- factor(c(rep(c("a", "b", "c"), c(90, 5, 5)), NA))
+  expect_identical(collapse_levels(x), x)
+  expect_identical(collapse_levels(addNA(x)), addNA(x))
 })
 
 test_that("collapse_levels keeps class and attributes", {
@@ -282,15 +288,17 @@ test_that("collapse_levels pools counts for nominal items", {
   expect_identical(counts(out$y), c(a = 0L, d = 96L, "b/c" = 4L))
   expect_identical(counts(out$z), c(a = 95L, d = 5L, "b/c" = 0L))
 
-  # pooled: a = 140, b = 50, c = 6, d = 4; c/d = 10 of 200 is not sparse
+  # alone, s has no sparse level. pooled: a = 130, b = 45, c = 18, d = 7;
+  # d = 7 of 200 is sparse and pulls in c
   d <- data.frame(
     f = lump(a = 90, b = 5, c = 3, d = 2),
-    s = as.character(lump(a = 50, b = 45, c = 3, d = 2)),
+    s = as.character(lump(a = 40, b = 40, c = 15, d = 5)),
     stringsAsFactors = FALSE
   )
   out <- collapse_levels(d, pool = TRUE)
   expect_identical(levels(out$f), c("a", "b", "c/d"))
   expect_identical(out$s[100], "c/d")
+  expect_identical(collapse_levels(d$s), d$s)
 
   # nothing is sparse, so the columns keep their own levels
   d <- data.frame(x = factor(c("a", "b")), y = factor(c("c", "d")))
