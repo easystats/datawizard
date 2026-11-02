@@ -273,6 +273,19 @@ test_that("collapse_levels works on data frames", {
   out <- collapse_levels(d, select = "nom", append = "_new")
   expect_named(out, c(names(d), "nom_new"))
 
+  # a grouped data frame is counted as a whole, and keeps its grouping column:
+  # g = 3 is sparse, and so is x = 3
+  g <- data_group(
+    data.frame(
+      g = lump(a = 50, b = 47, c = 3),
+      x = lump(a = 50, b = 47, c = 3)
+    ),
+    "g"
+  )
+  out <- collapse_levels(g)
+  expect_identical(levels(out$g), c("a", "b", "c"))
+  expect_identical(levels(out$x), c("a", "b/c"))
+
   # no column to copy
   expect_identical(collapse_levels(d["id"], append = TRUE), d["id"])
 
@@ -385,6 +398,9 @@ test_that("collapse_levels gives errors", {
   # the joined label equals a kept level
   y <- lump(a = 88, b = 2, c = 3, "b/c" = 7)
   expect_error(collapse_levels(y), "`b/c`", fixed = TRUE)
+  # two merged levels get one name: a + bc and ab + c are both "abc"
+  y <- ord(a = 2, bc = 48, ab = 2, c = 48)
+  expect_error(collapse_levels(y, sep = ""), "`abc`", fixed = TRUE)
   # no name error if nothing merges, or if the name is only an unused level
   y <- lump(a = 50, b = 50)
   expect_identical(collapse_levels(y, other = "a"), y)

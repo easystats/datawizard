@@ -3,12 +3,23 @@
 \name{collapse_levels}
 \alias{collapse_levels}
 \alias{collapse_levels.factor}
+\alias{collapse_levels.character}
 \alias{collapse_levels.data.frame}
 \title{Collapse sparse levels of categorical variables}
 \usage{
 collapse_levels(x, ...)
 
 \method{collapse_levels}{factor}(
+  x,
+  min_prop = 0.05,
+  min_n = 0,
+  other = NULL,
+  sep = "/",
+  verbose = TRUE,
+  ...
+)
+
+\method{collapse_levels}{character}(
   x,
   min_prop = 0.05,
   min_n = 0,
@@ -96,10 +107,9 @@ from \code{exclude} will be excluded instead of selected. If \code{NULL} (the de
 excludes no columns.}
 
 \item{pool}{Logical. If \code{TRUE}, the counts are summed over the selected
-columns, and all of them get the same merges, so a column can gain levels
-that only other columns have. Use this for the items of a scale, so that
-they stay comparable. Selected ordered factors must have the same levels in
-the same order and cannot be mixed with other factors or character vectors.}
+columns, and all of them get the same merges and levels. Use this for the
+items of a scale. Ordered factors must have the same levels in the same
+order and cannot be mixed with other factors or character vectors.}
 
 \item{append}{Logical or string. If \code{TRUE}, recoded or converted variables
 get new column names and are appended (column bind) to \code{x}, thus returning
@@ -137,19 +147,18 @@ values.
 Nominal variables (unordered factors and character vectors): all sparse
 levels merge into one last level. If that level is still sparse, the smallest
 remaining level joins it until it is not, so a large level can lose its own
-name. If this would merge all levels into one, \code{x} is returned unchanged with
-a warning.
+name. If all levels would merge into one, \code{x} is returned unchanged with a
+warning.
 
 Ordered factors: the smallest level merges with the adjacent level that has
-fewer values, until no level is sparse. On equal counts, it merges toward the
-middle of the scale. A level exactly at the middle merges with the lower
-level. If only two levels are left, the merging stops, with a warning if a
-level is still sparse. The result stays ordered.
+fewer values, until no level is sparse or two levels are left, with a warning
+if a level is still sparse. On equal counts, it merges toward the middle of
+the scale, and from the exact middle to the lower level.
 
-With \code{min_prop = 0} and \code{min_n = 0}, no level is sparse. If \code{x} changes,
-levels unused in all selected columns are dropped, and a factor loses the
-attribute \code{labels} and a contrast matrix. \code{NA} values stay \code{NA}, and an \code{NA}
-level (see \code{\link[=addNA]{addNA()}}) is not counted or merged.
+If \code{x} changes, levels unused in all selected columns are dropped, and a
+factor loses the attribute \code{labels} and a contrast matrix. \code{NA} values and an
+\code{NA} level (see \code{\link[=addNA]{addNA()}}) are not counted or merged. A grouped data frame is
+counted as a whole, and its grouping columns stay unchanged.
 }
 \section{Selection of variables - the \code{select} argument}{
 

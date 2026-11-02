@@ -10,19 +10,18 @@
 #' Nominal variables (unordered factors and character vectors): all sparse
 #' levels merge into one last level. If that level is still sparse, the smallest
 #' remaining level joins it until it is not, so a large level can lose its own
-#' name. If this would merge all levels into one, `x` is returned unchanged with
-#' a warning.
+#' name. If all levels would merge into one, `x` is returned unchanged with a
+#' warning.
 #'
 #' Ordered factors: the smallest level merges with the adjacent level that has
-#' fewer values, until no level is sparse. On equal counts, it merges toward the
-#' middle of the scale. A level exactly at the middle merges with the lower
-#' level. If only two levels are left, the merging stops, with a warning if a
-#' level is still sparse. The result stays ordered.
+#' fewer values, until no level is sparse or two levels are left, with a warning
+#' if a level is still sparse. On equal counts, it merges toward the middle of
+#' the scale, and from the exact middle to the lower level.
 #'
-#' With `min_prop = 0` and `min_n = 0`, no level is sparse. If `x` changes,
-#' levels unused in all selected columns are dropped, and a factor loses the
-#' attribute `labels` and a contrast matrix. `NA` values stay `NA`, and an `NA`
-#' level (see [addNA()]) is not counted or merged.
+#' If `x` changes, levels unused in all selected columns are dropped, and a
+#' factor loses the attribute `labels` and a contrast matrix. `NA` values and an
+#' `NA` level (see [addNA()]) are not counted or merged. A grouped data frame is
+#' counted as a whole, and its grouping columns stay unchanged.
 #'
 #' @param x A factor, a character vector, or a data frame.
 #' @param min_prop A level with a smaller share of the non-missing values is
@@ -33,10 +32,9 @@
 #'   merge, it is an error if the name is already a used level.
 #' @param sep String that joins the labels of merged levels.
 #' @param pool Logical. If `TRUE`, the counts are summed over the selected
-#'   columns, and all of them get the same merges, so a column can gain levels
-#'   that only other columns have. Use this for the items of a scale, so that
-#'   they stay comparable. Selected ordered factors must have the same levels in
-#'   the same order and cannot be mixed with other factors or character vectors.
+#'   columns, and all of them get the same merges and levels. Use this for the
+#'   items of a scale. Ordered factors must have the same levels in the same
+#'   order and cannot be mixed with other factors or character vectors.
 #' @param verbose Toggle warnings and messages.
 #' @param ... Not used.
 #' @inheritParams extract_column_names
@@ -107,6 +105,7 @@ collapse_levels.factor <- function(
 }
 
 
+#' @rdname collapse_levels
 #' @export
 collapse_levels.character <- collapse_levels.factor
 
@@ -140,6 +139,7 @@ collapse_levels.data.frame <- function(
     exclude,
     ignore_case,
     regex = regex,
+    remove_group_var = TRUE,
     verbose = verbose
   )
   # only factors and character vectors have levels
@@ -151,42 +151,21 @@ collapse_levels.data.frame <- function(
 
   # ".process_append()" creates the new variables and updates "select"
   if (!isFALSE(append) && length(select) > 0L) {
-    my_args <- .process_append(
-      x,
-      select,
-      append,
-      append_suffix = "_r",
-      keep_character = TRUE
-    )
+    my_args <- .process_append(x, select, append, append_suffix = "_r")
     x <- my_args$x
     select <- my_args$select
   }
 
-  if (pool && length(select) > 0L) {
-    plan <- .collapse_plan(
-      x[select],
-      min_prop,
-      min_n,
-      other,
-      sep,
-      verbose,
-      where = " in the selected columns"
-    )
-    x[select] <- lapply(x[select], .collapse_apply, plan = plan)
-    return(x)
-  }
-
-  for (i in select) {
-    plan <- .collapse_plan(
-      x[i],
-      min_prop,
-      min_n,
-      other,
-      sep,
-      verbose,
-      where = paste0(" in column `", i, "`")
-    )
-    x[[i]] <- .collapse_apply(x[[i]], plan)
+  # with pool, all selected columns share one plan
+  batches <- if (pool && length(select) > 0L) list(select) else as.list(select)
+  for (i in batches) {
+    where <- if (pool) {
+      " in the selected columns"
+    } else {
+      paste0(" in column `", i, "`")
+    }
+    plan <- .collapse_plan(x[i], min_prop, min_n, other, sep, verbose, where)
+    x[i] <- lapply(x[i], .collapse_apply, plan = plan)
   }
   x
 }
@@ -207,7 +186,15 @@ collapse_levels.data.frame <- function(
     if (is.character(i)) factor(i) else i
   })
   own_levels <- lapply(columns, function(i) levels(i)[!is.na(levels(i))])
-  nominal <- !.check_collapse_ordered(columns, own_levels)
+  is_ordered <- vapply(columns, is.ordered, logical(1))
+  if (
+    any(is_ordered) && (!all(is_ordered) || length(unique(own_levels)) > 1L)
+  ) {
+    insight::format_error(paste(
+      "With `pool = TRUE`, ordered factors must have the same levels in the",
+      "same order and can't be mixed with other factors or character vectors."
+    ))
+  }
 
   lvls <- unique(unlist(own_levels))
   counts <- Reduce(
@@ -219,21 +206,23 @@ collapse_levels.data.frame <- function(
   names(counts) <- lvls
   n <- sum(counts)
   is_sparse <- function(k) k < min_n | k / n < min_prop
+  warn <- function(...) {
+    if (isTRUE(verbose)) insight::format_warning(paste0(...))
+  }
   if (n == 0L || !any(is_sparse(counts))) {
     return(NULL)
   }
 
   # a level is sparse, so min_n or min_prop is above 0, and unused levels are
   counts <- counts[counts > 0L]
-  groups <- if (nominal) {
-    .collapse_nominal(counts, is_sparse)
-  } else {
+  groups <- if (all(is_ordered)) {
     .collapse_ordered(counts, is_sparse)
+  } else {
+    .collapse_nominal(counts, is_sparse)
   }
 
   if (length(groups) == 1L && any(is_sparse(counts))) {
-    .collapse_warning(
-      verbose,
+    warn(
       "Merging sparse levels",
       where,
       " would leave only one level, so nothing was merged."
@@ -241,15 +230,31 @@ collapse_levels.data.frame <- function(
     return(NULL)
   }
 
-  new_names <- .collapse_names(groups, if (nominal) other, sep, names(counts))
+  new_names <- vapply(groups, paste, character(1), collapse = sep)
+  merged <- lengths(groups) > 1L
+  if (!all(is_ordered) && !is.null(other)) {
+    new_names[merged] <- other
+  }
+  taken <- c(
+    intersect(new_names[merged], names(counts)),
+    new_names[duplicated(new_names)]
+  )
+  if (length(taken) > 0L) {
+    insight::format_error(paste0(
+      "The name of a merged level, `",
+      taken[1],
+      "`, is already a level. Use `sep`, or `other` for nominal variables, ",
+      "to change it."
+    ))
+  }
+
   still_sparse <- is_sparse(vapply(
     groups,
     function(i) sum(counts[match(i, names(counts))]),
     numeric(1)
   ))
   if (any(still_sparse)) {
-    .collapse_warning(
-      verbose,
+    warn(
       "Only two levels are left",
       where,
       ", and still sparse: ",
@@ -299,32 +304,6 @@ collapse_levels.data.frame <- function(
 }
 
 
-.collapse_names <- function(groups, other, sep, old_names) {
-  new_names <- vapply(groups, paste, character(1), collapse = sep)
-  merged <- lengths(groups) > 1L
-  if (!is.null(other)) {
-    new_names[merged] <- other
-  }
-  taken <- intersect(new_names[merged], old_names)
-  if (length(taken) > 0L) {
-    insight::format_error(paste0(
-      "The name of a merged level, `",
-      taken[1],
-      "`, is already a level. Use `sep`, or `other` for nominal variables, ",
-      "to change it."
-    ))
-  }
-  new_names
-}
-
-
-.collapse_warning <- function(verbose, ...) {
-  if (isTRUE(verbose)) {
-    insight::format_warning(paste0(...))
-  }
-}
-
-
 .collapse_apply <- function(x, plan) {
   if (is.null(plan)) {
     return(x)
@@ -352,36 +331,20 @@ collapse_levels.data.frame <- function(
 }
 
 
-.check_collapse_ordered <- function(columns, own_levels) {
-  is_ordered <- vapply(columns, is.ordered, logical(1))
-  if (
-    any(is_ordered) && (!all(is_ordered) || length(unique(own_levels)) > 1L)
-  ) {
-    insight::format_error(paste(
-      "With `pool = TRUE`, ordered factors must have the same levels in the",
-      "same order and can't be mixed with other factors or character vectors."
-    ))
-  }
-  all(is_ordered)
-}
-
-
 .check_collapse_args <- function(min_prop, min_n, other, sep) {
-  if (!.is_scalar(min_prop, "numeric") || min_prop < 0 || min_prop > 1) {
+  is_scalar <- function(i, mode) {
+    is.vector(i, mode = mode) && length(i) == 1L && !is.na(i)
+  }
+  if (!is_scalar(min_prop, "numeric") || min_prop < 0 || min_prop > 1) {
     insight::format_error("`min_prop` must be a number between 0 and 1.")
   }
-  if (!.is_scalar(min_n, "numeric") || min_n < 0) {
+  if (!is_scalar(min_n, "numeric") || min_n < 0) {
     insight::format_error("`min_n` must be a number of 0 or more.")
   }
-  if (!is.null(other) && !.is_scalar(other, "character")) {
+  if (!is.null(other) && !is_scalar(other, "character")) {
     insight::format_error("`other` must be `NULL` or a string.")
   }
-  if (!.is_scalar(sep, "character")) {
+  if (!is_scalar(sep, "character")) {
     insight::format_error("`sep` must be a string.")
   }
-}
-
-
-.is_scalar <- function(x, mode) {
-  is.vector(x, mode = mode) && length(x) == 1L && !is.na(x)
 }
