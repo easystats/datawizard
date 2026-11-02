@@ -12,14 +12,16 @@
 #' percentile. Winsorized estimators are usually more robust to outliers than
 #' their more standard forms.
 #'
-#' If winsorizing would turn a variable with several distinct values into a
-#' constant, as with a dummy variable and the default `threshold` or with
-#' `threshold = 0.5`, the variable is returned unchanged with a warning.
+#' If winsorizing would make a numeric variable with more than one distinct
+#' value constant, the variable is returned unchanged with a warning. This
+#' happens, for example, with `threshold = 0.5`, and with a dummy variable whose
+#' rarer value makes up no more than `threshold` of the values.
 #'
 #' @return
 #'
-#' A data frame with winsorized columns or a winsorized vector. A variable that
-#' winsorizing would make constant is returned unchanged (see Details).
+#' A data frame with winsorized columns or a winsorized vector. A variable with
+#' more than one distinct value that winsorizing would make constant is returned
+#' unchanged (see Details).
 #'
 #' @param data data frame or vector.
 #' @param threshold The amount of winsorization, depends on the value of `method`:
@@ -159,7 +161,7 @@ winsorize.numeric <- function(
       !insight::has_single_value(data, remove_na = TRUE)
   ) {
     if (verbose) {
-      column <- list(...)$column
+      column <- list(...)[["column"]]
       variable <- if (is.null(column)) "the variable" else paste0("`", column, "`")
       insight::format_warning(paste0(
         "Winsorizing would make ",

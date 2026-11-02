@@ -95,7 +95,7 @@ test_that("winsorize: warning names the columns of a data frame", {
   expect_equal(out[[2]], c(7, 7, 8, 9, 9))
 })
 
-test_that("winsorize: no warning when the result is not constant", {
+test_that("winsorize: no warning when winsorizing does not make a variable constant", {
   expect_silent(out <- winsorize(rep(3, 10)))
   expect_identical(out, rep(3, 10))
   expect_silent(out <- winsorize(c(NA_real_, NA_real_)))
