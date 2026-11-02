@@ -243,7 +243,7 @@ collapse_levels.data.frame <- function(
     insight::format_error(paste0(
       "The name of a merged level, `",
       taken[1],
-      "`, is already a level. Use `sep`, or `other` for nominal variables, ",
+      "`, is already taken. Use `sep`, or `other` for nominal variables, ",
       "to change it."
     ))
   }
