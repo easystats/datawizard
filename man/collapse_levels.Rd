@@ -45,8 +45,8 @@ sparse. A number between 0 and 1.}
 \item{min_n}{A level with fewer values is sparse. A number of 0 or more.}
 
 \item{other}{Name of the merged level of a nominal variable. If \code{NULL}, the
-merged levels are joined with \code{sep}. Ignored for ordered factors. It is an
-error if the name is already a level.}
+merged levels are joined with \code{sep}. Ignored for ordered factors. If levels
+merge, it is an error if the name is already a used level.}
 
 \item{sep}{String that joins the labels of merged levels.}
 
@@ -96,9 +96,10 @@ from \code{exclude} will be excluded instead of selected. If \code{NULL} (the de
 excludes no columns.}
 
 \item{pool}{Logical. If \code{TRUE}, the counts are summed over the selected
-columns, and all of them get the same merges. Use this for the items of a
-scale, so that they stay comparable. Selected ordered factors must have the
-same levels and cannot be mixed with other factors or character vectors.}
+columns, and all of them get the same merges, so a column can gain levels
+that only other columns have. Use this for the items of a scale, so that
+they stay comparable. Selected ordered factors must have the same levels in
+the same order and cannot be mixed with other factors or character vectors.}
 
 \item{append}{Logical or string. If \code{TRUE}, recoded or converted variables
 get new column names and are appended (column bind) to \code{x}, thus returning
@@ -141,14 +142,14 @@ a warning.
 
 Ordered factors: the smallest level merges with the adjacent level that has
 fewer values, until no level is sparse. On equal counts, it merges toward the
-middle of the scale, because that keeps more of the variable's variance. A
-level exactly at the middle merges with the lower level. If only two levels
-are left, the merging stops, with a warning if a level is still sparse. The
-result stays ordered.
+middle of the scale. A level exactly at the middle merges with the lower
+level. If only two levels are left, the merging stops, with a warning if a
+level is still sparse. The result stays ordered.
 
-Unused sparse levels are dropped. \code{NA} values stay \code{NA}, and an \code{NA} level
-(see \code{\link[=addNA]{addNA()}}) is not counted or merged. If levels merge, the attributes
-\code{labels} and a contrast matrix are dropped.
+With \code{min_prop = 0} and \code{min_n = 0}, no level is sparse. If \code{x} changes,
+unused levels are dropped, and so are the attribute \code{labels} and a contrast
+matrix. \code{NA} values stay \code{NA}, and an \code{NA} level (see \code{\link[=addNA]{addNA()}}) is not
+counted or merged.
 }
 \section{Selection of variables - the \code{select} argument}{
 
@@ -177,9 +178,9 @@ table(collapse_levels(x))
 # the items of a scale get the same merges
 d <- data.frame(
   item1 = ordered(rep(1:3, c(2, 8, 90))),
-  item2 = ordered(rep(1:3, c(6, 2, 92)))
+  item2 = ordered(rep(1:3, c(6, 88, 6)))
 )
-collapse_levels(d, min_prop = 0.05, pool = TRUE)
+table(collapse_levels(d, pool = TRUE)$item2)
 }
 \seealso{
 \code{\link[=recode_values]{recode_values()}} and \code{\link[=recode_into]{recode_into()}} to recode by hand, and

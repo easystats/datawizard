@@ -15,27 +15,28 @@
 #'
 #' Ordered factors: the smallest level merges with the adjacent level that has
 #' fewer values, until no level is sparse. On equal counts, it merges toward the
-#' middle of the scale, because that keeps more of the variable's variance. A
-#' level exactly at the middle merges with the lower level. If only two levels
-#' are left, the merging stops, with a warning if a level is still sparse. The
-#' result stays ordered.
+#' middle of the scale. A level exactly at the middle merges with the lower
+#' level. If only two levels are left, the merging stops, with a warning if a
+#' level is still sparse. The result stays ordered.
 #'
-#' Unused sparse levels are dropped. `NA` values stay `NA`, and an `NA` level
-#' (see [addNA()]) is not counted or merged. If levels merge, the attributes
-#' `labels` and a contrast matrix are dropped.
+#' With `min_prop = 0` and `min_n = 0`, no level is sparse. If `x` changes,
+#' unused levels are dropped, and so are the attribute `labels` and a contrast
+#' matrix. `NA` values stay `NA`, and an `NA` level (see [addNA()]) is not
+#' counted or merged.
 #'
 #' @param x A factor, a character vector, or a data frame.
 #' @param min_prop A level with a smaller share of the non-missing values is
 #'   sparse. A number between 0 and 1.
 #' @param min_n A level with fewer values is sparse. A number of 0 or more.
 #' @param other Name of the merged level of a nominal variable. If `NULL`, the
-#'   merged levels are joined with `sep`. Ignored for ordered factors. It is an
-#'   error if the name is already a level.
+#'   merged levels are joined with `sep`. Ignored for ordered factors. If levels
+#'   merge, it is an error if the name is already a used level.
 #' @param sep String that joins the labels of merged levels.
 #' @param pool Logical. If `TRUE`, the counts are summed over the selected
-#'   columns, and all of them get the same merges. Use this for the items of a
-#'   scale, so that they stay comparable. Selected ordered factors must have the
-#'   same levels and cannot be mixed with other factors or character vectors.
+#'   columns, and all of them get the same merges, so a column can gain levels
+#'   that only other columns have. Use this for the items of a scale, so that
+#'   they stay comparable. Selected ordered factors must have the same levels in
+#'   the same order and cannot be mixed with other factors or character vectors.
 #' @param verbose Toggle warnings and messages.
 #' @param ... Not used.
 #' @inheritParams extract_column_names
@@ -65,9 +66,9 @@
 #' # the items of a scale get the same merges
 #' d <- data.frame(
 #'   item1 = ordered(rep(1:3, c(2, 8, 90))),
-#'   item2 = ordered(rep(1:3, c(6, 2, 92)))
+#'   item2 = ordered(rep(1:3, c(6, 88, 6)))
 #' )
-#' collapse_levels(d, min_prop = 0.05, pool = TRUE)
+#' table(collapse_levels(d, pool = TRUE)$item2)
 #' @export
 collapse_levels <- function(x, ...) {
   UseMethod("collapse_levels")
@@ -149,7 +150,7 @@ collapse_levels.data.frame <- function(
   )]
 
   # ".process_append()" creates the new variables and updates "select"
-  if (!isFALSE(append)) {
+  if (!isFALSE(append) && length(select) > 0L) {
     my_args <- .process_append(
       x,
       select,
@@ -241,13 +242,17 @@ collapse_levels.data.frame <- function(
   }
 
   new_names <- .collapse_names(groups, if (nominal) other, sep, names(counts))
-  still_sparse <- is_sparse(vapply(groups, function(i) sum(counts[i]), 1))
+  still_sparse <- is_sparse(vapply(
+    groups,
+    function(i) sum(counts[match(i, names(counts))]),
+    numeric(1)
+  ))
   if (any(still_sparse)) {
     .collapse_warning(
       verbose,
       "Only two levels are left",
       where,
-      ", and these are still sparse: ",
+      ", and still sparse: ",
       toString(paste0("`", new_names[still_sparse], "`")),
       "."
     )
@@ -305,7 +310,8 @@ collapse_levels.data.frame <- function(
     insight::format_error(paste0(
       "The name of a merged level, `",
       taken[1],
-      "`, is already a level. Use `other` or `sep` to change it."
+      "`, is already a level. Use `sep`, or `other` for unordered factors, ",
+      "to change it."
     ))
   }
   new_names
@@ -324,7 +330,7 @@ collapse_levels.data.frame <- function(
     return(x)
   }
   if (is.character(x)) {
-    x[] <- plan[x]
+    x[] <- plan[match(x, names(plan))]
     return(x)
   }
 
@@ -332,7 +338,7 @@ collapse_levels.data.frame <- function(
   if (anyNA(levels(x))) {
     new_levels <- c(new_levels, NA)
   }
-  out <- match(plan[levels(x)], new_levels)[unclass(x)]
+  out <- match(plan[match(levels(x), names(plan))], new_levels)[unclass(x)]
 
   # keep class and attributes, but drop labels and contrasts of the old levels
   attrs <- attributes(x)

@@ -5,7 +5,10 @@ lump <- function(...) {
   k <- c(...)
   factor(rep(names(k), k), levels = names(k))
 }
-ord <- function(...) as.ordered(lump(...))
+ord <- function(...) {
+  k <- c(...)
+  factor(rep(names(k), k), levels = names(k), ordered = TRUE)
+}
 
 test_that("collapse_levels merges sparse nominal levels", {
   # c and d are sparse, and c/d = 6 is not
@@ -28,7 +31,7 @@ test_that("collapse_levels merges sparse nominal levels", {
     counts(collapse_levels(lump(a = 50, b = 47, c = 3))),
     c(a = 50L, "b/c" = 50L)
   )
-  # the pulled level comes first in the label
+  # c pulls in a, and the label follows the level order
   expect_identical(
     counts(collapse_levels(lump(a = 6, b = 90, c = 4))),
     c(b = 90L, "a/c" = 10L)
@@ -217,6 +220,13 @@ test_that("collapse_levels works on character vectors", {
   expect_true(is.na(out[[101]]))
 })
 
+test_that("collapse_levels handles an empty string", {
+  # "" = 3 and c = 2 are sparse; plain indexing by name can't find ""
+  x <- rep(c("a", "b", "c", ""), c(90, 5, 2, 3))
+  expect_identical(table(collapse_levels(x))[["/c"]], 5L)
+  expect_identical(levels(collapse_levels(factor(x))), c("a", "b", "/c"))
+})
+
 test_that("collapse_levels handles other classes", {
   expect_message(collapse_levels(1:3), "integer", fixed = TRUE)
   expect_identical(suppressMessages(collapse_levels(1:3)), 1:3)
@@ -262,6 +272,9 @@ test_that("collapse_levels works on data frames", {
   expect_identical(out$txt_r[100], "c/d")
   out <- collapse_levels(d, select = "nom", append = "_new")
   expect_named(out, c(names(d), "nom_new"))
+
+  # no column to copy
+  expect_identical(collapse_levels(d["id"], append = TRUE), d["id"])
 
   # warnings name the column
   d <- data.frame(nom = lump(a = 97, b = 3), ordi = ord(a = 97, b = 3))
