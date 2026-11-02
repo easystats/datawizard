@@ -337,4 +337,7 @@ collapse_levels.data.frame <- function(
   if (!is.null(other) && !is_scalar(other, "character")) {
     insight::format_error("`other` must be `NULL` or a string.")
   }
+  if (!is_scalar(sep, "character")) {
+    insight::format_error("`sep` must be a string.")
+  }
 }

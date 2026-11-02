@@ -325,6 +325,7 @@ test_that("collapse_levels gives errors", {
   expect_error(collapse_levels(x, min_prop = 1.1), "`min_prop`", fixed = TRUE)
   expect_error(collapse_levels(x, min_n = -1), "`min_n`", fixed = TRUE)
   expect_error(collapse_levels(x, other = NA), "`other`", fixed = TRUE)
+  expect_error(collapse_levels(x, sep = c("a", "b")), "`sep`", fixed = TRUE)
 
   d <- data.frame(x = x, y = as.ordered(x))
   expect_error(collapse_levels(d, pool = NA), "`pool`", fixed = TRUE)
