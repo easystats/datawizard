@@ -20,9 +20,9 @@
 #' level is still sparse. The result stays ordered.
 #'
 #' With `min_prop = 0` and `min_n = 0`, no level is sparse. If `x` changes,
-#' unused levels are dropped, and so are the attribute `labels` and a contrast
-#' matrix. `NA` values stay `NA`, and an `NA` level (see [addNA()]) is not
-#' counted or merged.
+#' levels unused in all selected columns are dropped, and a factor loses the
+#' attribute `labels` and a contrast matrix. `NA` values stay `NA`, and an `NA`
+#' level (see [addNA()]) is not counted or merged.
 #'
 #' @param x A factor, a character vector, or a data frame.
 #' @param min_prop A level with a smaller share of the non-missing values is
@@ -310,7 +310,7 @@ collapse_levels.data.frame <- function(
     insight::format_error(paste0(
       "The name of a merged level, `",
       taken[1],
-      "`, is already a level. Use `sep`, or `other` for unordered factors, ",
+      "`, is already a level. Use `sep`, or `other` for nominal variables, ",
       "to change it."
     ))
   }
@@ -358,8 +358,8 @@ collapse_levels.data.frame <- function(
     any(is_ordered) && (!all(is_ordered) || length(unique(own_levels)) > 1L)
   ) {
     insight::format_error(paste(
-      "With `pool = TRUE`, ordered factors must have the same levels and can't",
-      "be mixed with other factors or character vectors."
+      "With `pool = TRUE`, ordered factors must have the same levels in the",
+      "same order and can't be mixed with other factors or character vectors."
     ))
   }
   all(is_ordered)

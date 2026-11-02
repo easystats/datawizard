@@ -147,9 +147,9 @@ level. If only two levels are left, the merging stops, with a warning if a
 level is still sparse. The result stays ordered.
 
 With \code{min_prop = 0} and \code{min_n = 0}, no level is sparse. If \code{x} changes,
-unused levels are dropped, and so are the attribute \code{labels} and a contrast
-matrix. \code{NA} values stay \code{NA}, and an \code{NA} level (see \code{\link[=addNA]{addNA()}}) is not
-counted or merged.
+levels unused in all selected columns are dropped, and a factor loses the
+attribute \code{labels} and a contrast matrix. \code{NA} values stay \code{NA}, and an \code{NA}
+level (see \code{\link[=addNA]{addNA()}}) is not counted or merged.
 }
 \section{Selection of variables - the \code{select} argument}{
 
