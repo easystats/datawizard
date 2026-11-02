@@ -13,10 +13,10 @@
 #' their more standard forms.
 #'
 #' If winsorizing would make a numeric variable with more than one distinct
-#' value constant, the variable is returned unchanged with a warning. With
-#' `method = "percentile"` and no missing values, this happens with
-#' `threshold = 0.5` and with a dummy variable whose rarer value makes up no more
-#' than `threshold` of the values.
+#' value constant, the variable is returned unchanged with a warning. For
+#' example, with `method = "percentile"` and no missing values, this happens with
+#' `threshold = 0.5` and with a dummy variable whose rarer value makes up no
+#' more than `threshold` of the values.
 #'
 #' @return
 #'
@@ -161,9 +161,13 @@ winsorize.numeric <- function(
     insight::has_single_value(out, remove_na = TRUE) &&
       !insight::has_single_value(data, remove_na = TRUE)
   ) {
-    if (verbose) {
+    if (isTRUE(verbose)) {
       column <- list(...)[["column"]]
-      variable <- if (is.null(column)) "the variable" else paste0("`", column, "`")
+      variable <- if (is.null(column)) {
+        "the variable"
+      } else {
+        paste0("`", column, "`")
+      }
       insight::format_warning(paste0(
         "Winsorizing would make ",
         variable,

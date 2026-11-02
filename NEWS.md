@@ -88,7 +88,7 @@ FIXES
   constant. With no missing values, this happened at the default `threshold` to
   a dummy variable whose rarer value made up 20% or less of the values. Such a
   variable now comes back unchanged, with a warning that names the column in a
-  data frame (#736).
+  data frame. `verbose = FALSE` turns the warning off (#736).
 
 # datawizard 1.4.1
 

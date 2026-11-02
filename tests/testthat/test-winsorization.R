@@ -71,7 +71,10 @@ test_that("winsorize: variables that would become constant stay unchanged", {
 })
 
 test_that("winsorize: warning names the columns of a data frame", {
-  d <- data.frame(score = c(1:90, rep(100, 10)), smoker = c(rep(0, 90), rep(1, 10)))
+  d <- data.frame(
+    score = c(1:90, rep(100, 10)),
+    smoker = c(rep(0, 90), rep(1, 10))
+  )
   warnings <- capture_warnings(out <- winsorize(d))
   expect_identical(out$smoker, d$smoker)
   expect_identical(out$score, winsorize(d$score))
@@ -89,10 +92,9 @@ test_that("winsorize: warning names the columns of a data frame", {
   expect_match(warnings[1], "`a`")
   expect_match(warnings[2], "`b`")
 
-  # columns with the same name are not mixed up
   out <- winsorize(data.frame(a = 1:5, a = 6:10, check.names = FALSE))
-  expect_equal(out[[1]], c(2, 2, 3, 4, 4))
-  expect_equal(out[[2]], c(7, 7, 8, 9, 9))
+  expect_identical(out[[1]], c(2L, 2L, 3L, 4L, 4L))
+  expect_identical(out[[2]], c(7L, 7L, 8L, 9L, 9L))
 })
 
 test_that("winsorize: no warning when winsorizing does not make a variable constant", {
@@ -102,7 +104,15 @@ test_that("winsorize: no warning when winsorizing does not make a variable const
   expect_identical(out, c(NA_real_, NA_real_))
   expect_silent(out <- winsorize(1:10, threshold = 0.2))
   expect_identical(out, c(3L, 3L, 3L, 4L, 5L, 6L, 7L, 8L, 8L, 8L))
-  expect_silent(out <- winsorize(c(rep(1, 5), rep(2, 20), rep(3, 50), rep(4, 20), rep(5, 5))))
+  expect_silent(
+    out <- winsorize(c(
+      rep(1, 5),
+      rep(2, 20),
+      rep(3, 50),
+      rep(4, 20),
+      rep(5, 5)
+    ))
+  )
   expect_identical(out, c(rep(2, 25), rep(3, 50), rep(4, 25)))
   expect_silent(out <- winsorize(1:10, method = "raw", threshold = c(3, 8)))
   expect_identical(out, c(3, 3, 3, 4, 5, 6, 7, 8, 8, 8))
