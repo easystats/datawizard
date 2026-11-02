@@ -4,11 +4,13 @@
 test_that("reverse works with numeric", {
   expect_identical(
     reverse(1:5),
-    as.double(5:1)
+    as.double(5:1),
+    ignore_attr = TRUE
   )
   expect_identical(
     reverse(-2:2),
-    as.double(2:-2)
+    as.double(2:-2),
+    ignore_attr = TRUE
   )
 })
 
@@ -33,21 +35,24 @@ test_that("reverse works with data frame", {
     data.frame(
       x = as.double(5:1),
       y = c(3, 8, 2, 5, 1)
-    )
+    ),
+    ignore_attr = TRUE
   )
   expect_identical(
     reverse(test, exclude = "x"),
     data.frame(
       x = 1:5,
       y = c(6, 1, 7, 4, 8)
-    )
+    ),
+    ignore_attr = TRUE
   )
   expect_identical(
     reverse(test),
     data.frame(
       x = as.double(5:1),
       y = c(6, 1, 7, 4, 8)
-    )
+    ),
+    ignore_attr = TRUE
   )
 })
 
@@ -62,7 +67,8 @@ test_that("reverse works with data frame and append", {
       x = 1:5,
       y = c(3, 8, 2, 5, 1),
       x_r = as.double(5:1)
-    )
+    ),
+    ignore_attr = TRUE
   )
   expect_identical(
     reverse(test, append = TRUE),
@@ -71,7 +77,8 @@ test_that("reverse works with data frame and append", {
       y = c(3, 8, 2, 5, 1),
       x_r = as.double(5:1),
       y_r = c(6, 1, 7, 4, 8)
-    )
+    ),
+    ignore_attr = TRUE
   )
 })
 
@@ -85,14 +92,16 @@ test_that("reverse: arg 'select' works with formula", {
     data.frame(
       x = as.double(5:1),
       y = c(3, 8, 2, 5, 1)
-    )
+    ),
+    ignore_attr = TRUE
   )
   expect_identical(
     reverse(test, select = ~ x + y),
     data.frame(
       x = as.double(5:1),
       y = c(6, 1, 7, 4, 8)
-    )
+    ),
+    ignore_attr = TRUE
   )
 })
 
@@ -106,18 +115,21 @@ test_that("reverse: arg 'exclude' works with formula", {
     data.frame(
       x = 1:5,
       y = c(6, 1, 7, 4, 8)
-    )
+    ),
+    ignore_attr = TRUE
   )
   expect_identical(
     reverse(test, exclude = ~ x + y),
-    test
+    test,
+    ignore_attr = TRUE
   )
 })
 
 test_that("reverse: argument 'range' works", {
   expect_identical(
     reverse(c(1, 3, 4), range = c(0, 4)),
-    c(3, 1, 0)
+    c(3, 1, 0),
+    ignore_attr = TRUE
   )
   expect_identical(
     reverse(factor(c(1, 2, 3, 4, 5)), range = 0:10),
@@ -133,21 +145,24 @@ test_that("reverse: argument 'range' works", {
     data.frame(
       x = as.double(7:3),
       y = c(3, 8, 2, 5, 1)
-    )
+    ),
+    ignore_attr = TRUE
   )
   expect_identical(
     reverse(test, range = c(0, 8)),
     data.frame(
       x = as.double(7:3),
       y = c(5, 0, 6, 3, 7)
-    )
+    ),
+    ignore_attr = TRUE
   )
 })
 
 test_that("reverse ignores NA", {
   expect_identical(
     reverse(c(1, 2, 8, NA)),
-    c(8, 7, 1, NA)
+    c(8, 7, 1, NA),
+    ignore_attr = TRUE
   )
 })
 
@@ -183,11 +198,13 @@ test_that("reverse msg for unsupported", {
 test_that("reverse_scale works with numeric", {
   expect_identical(
     reverse_scale(1:5),
-    as.double(5:1)
+    as.double(5:1),
+    ignore_attr = TRUE
   )
   expect_identical(
     reverse_scale(-2:2),
-    as.double(2:-2)
+    as.double(2:-2),
+    ignore_attr = TRUE
   )
 })
 
@@ -212,21 +229,24 @@ test_that("reverse_scale works with data frame", {
     data.frame(
       x = as.double(5:1),
       y = c(3, 8, 2, 5, 1)
-    )
+    ),
+    ignore_attr = TRUE
   )
   expect_identical(
     reverse_scale(test, exclude = "x"),
     data.frame(
       x = 1:5,
       y = c(6, 1, 7, 4, 8)
-    )
+    ),
+    ignore_attr = TRUE
   )
   expect_identical(
     reverse_scale(test),
     data.frame(
       x = as.double(5:1),
       y = c(6, 1, 7, 4, 8)
-    )
+    ),
+    ignore_attr = TRUE
   )
 })
 
@@ -240,14 +260,16 @@ test_that("reverse_scale: arg 'select' works with formula", {
     data.frame(
       x = as.double(5:1),
       y = c(3, 8, 2, 5, 1)
-    )
+    ),
+    ignore_attr = TRUE
   )
   expect_identical(
     reverse_scale(test, select = ~ x + y),
     data.frame(
       x = as.double(5:1),
       y = c(6, 1, 7, 4, 8)
-    )
+    ),
+    ignore_attr = TRUE
   )
 })
 
@@ -261,22 +283,26 @@ test_that("reverse_scale: arg 'exclude' works with formula", {
     data.frame(
       x = 1:5,
       y = c(6, 1, 7, 4, 8)
-    )
+    ),
+    ignore_attr = TRUE
   )
   expect_identical(
     reverse_scale(test, exclude = ~ x + y),
-    test
+    test,
+    ignore_attr = TRUE
   )
 })
 
 test_that("reverse_scale: argument 'range' works", {
   expect_identical(
     reverse_scale(c(1, 3, 4), range = c(0, 4)),
-    c(3, 1, 0)
+    c(3, 1, 0),
+    ignore_attr = TRUE
   )
   expect_identical(
     reverse_scale(factor(c(1, 2, 3, 4, 5)), range = 0:10),
-    factor(9:5, levels = 0:10)
+    factor(9:5, levels = 0:10),
+    ignore_attr = TRUE
   )
 
   test <- data.frame(
@@ -288,21 +314,24 @@ test_that("reverse_scale: argument 'range' works", {
     data.frame(
       x = as.double(7:3),
       y = c(3, 8, 2, 5, 1)
-    )
+    ),
+    ignore_attr = TRUE
   )
   expect_identical(
     reverse_scale(test, range = c(0, 8)),
     data.frame(
       x = as.double(7:3),
       y = c(5, 0, 6, 3, 7)
-    )
+    ),
+    ignore_attr = TRUE
   )
 })
 
 test_that("reverse_scale ignores NA", {
   expect_identical(
     reverse_scale(c(1, 2, 8, NA)),
-    c(8, 7, 1, NA)
+    c(8, 7, 1, NA),
+    ignore_attr = TRUE
   )
 })
 
@@ -461,7 +490,8 @@ test_that("reverse, larger range", {
   # works
   expect_identical(
     reverse(c(1, 3, 4), range = c(0, 4)),
-    c(3, 1, 0)
+    c(3, 1, 0),
+    ignore_attr = TRUE
   )
   expect_identical(
     reverse(factor(c(1, 3, 4)), range = 0:4),

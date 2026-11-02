@@ -107,16 +107,16 @@ reverse.numeric <- function(x, range = NULL, verbose = TRUE, ...) {
     )
   }
 
-  new_min <- max_value
-  new_max <- min_value
-
-  out <- as.vector(
-    (new_max - new_min) / (max_value - min_value) * (x - min_value) + new_min
+  out <- rescale(
+    x,
+    to = c(max_value, min_value),
+    range = c(min_value, max_value),
+    verbose = verbose,
+    ...
   )
 
   # labelled data?
-  out <- .set_back_labels(out, x, reverse_values = TRUE)
-  out
+  .set_back_labels(out, x, reverse_values = TRUE)
 }
 
 
@@ -252,6 +252,7 @@ reverse.grouped_df <- function(
       exclude = exclude,
       range = range,
       append = FALSE, # need to set to FALSE here, else variable will be doubled
+      add_transform_class = FALSE,
       ...
     )
   }
@@ -306,7 +307,7 @@ reverse.data.frame <- function(
   }
 
   x[select] <- lapply(select, function(n) {
-    reverse(x[[n]], range = range[[n]])
+    reverse(x[[n]], range = range[[n]], add_transform_class = FALSE)
   })
   x
 }
