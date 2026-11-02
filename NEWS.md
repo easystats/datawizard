@@ -84,6 +84,11 @@ FIXES
   `center = FALSE` did not scale, and `center = TRUE` did not scale either.
   The results now match those for a single variable.
 
+* `winsorize()` no longer turns a variable with several distinct values into a
+  constant, such as a dummy variable with the default `threshold`. Such a
+  variable came back constant with no message before. It now comes back
+  unchanged, with a warning that names the column (#736).
+
 # datawizard 1.4.1
 
 CHANGES

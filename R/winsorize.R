@@ -12,9 +12,14 @@
 #' percentile. Winsorized estimators are usually more robust to outliers than
 #' their more standard forms.
 #'
+#' If winsorizing would turn a variable with several distinct values into a
+#' constant, as with a dummy variable and the default `threshold` or with
+#' `threshold = 0.5`, the variable is returned unchanged with a warning.
+#'
 #' @return
 #'
-#' A data frame with winsorized columns or a winsorized vector.
+#' A data frame with winsorized columns or a winsorized vector. A variable that
+#' winsorizing would make constant is returned unchanged (see Details).
 #'
 #' @param data data frame or vector.
 #' @param threshold The amount of winsorization, depends on the value of `method`:
@@ -30,7 +35,7 @@
 #'   done via the median and the median absolute deviation (MAD); if FALSE, via
 #'   the mean and the standard deviation.
 #' @param ... Currently not used.
-#' @param verbose Not used anymore since `datawizard` 0.6.6.
+#' @param verbose Toggle warnings.
 #'
 #' @examples
 #' hist(iris$Sepal.Length, main = "Original data")
@@ -81,14 +86,16 @@ winsorize.data.frame <- function(
   verbose = TRUE,
   ...
 ) {
-  data[] <- lapply(
-    data,
-    winsorize,
-    threshold = threshold,
-    method = method,
-    robust = robust,
-    verbose = verbose
-  )
+  data[] <- lapply(seq_along(data), function(i) {
+    winsorize(
+      data[[i]],
+      threshold = threshold,
+      method = method,
+      robust = robust,
+      verbose = verbose,
+      column = names(data)[i]
+    )
+  })
   data
 }
 
@@ -143,7 +150,25 @@ winsorize.numeric <- function(
     threshold <- centeral + c(-1, 1) * deviation * threshold
   }
 
-  data[data < threshold[1]] <- threshold[1]
-  data[data > threshold[2]] <- threshold[2]
-  return(data)
+  out <- data
+  out[out < threshold[1]] <- threshold[1]
+  out[out > threshold[2]] <- threshold[2]
+
+  if (
+    insight::has_single_value(out, remove_na = TRUE) &&
+      !insight::has_single_value(data, remove_na = TRUE)
+  ) {
+    if (verbose) {
+      column <- list(...)$column
+      variable <- if (is.null(column)) "the variable" else paste0("`", column, "`")
+      insight::format_warning(paste0(
+        "Winsorizing would make ",
+        variable,
+        " constant, so it was left unchanged."
+      ))
+    }
+    return(data)
+  }
+
+  return(out)
 }

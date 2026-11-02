@@ -38,10 +38,11 @@ for winsorization.
 done via the median and the median absolute deviation (MAD); if FALSE, via
 the mean and the standard deviation.}
 
-\item{verbose}{Not used anymore since \code{datawizard} 0.6.6.}
+\item{verbose}{Toggle warnings.}
 }
 \value{
-A data frame with winsorized columns or a winsorized vector.
+A data frame with winsorized columns or a winsorized vector. A variable that
+winsorizing would make constant is returned unchanged (see Details).
 }
 \description{
 Winsorize data
@@ -56,6 +57,10 @@ example, a \verb{90\%} winsorization would see all data below the 5th percentile
 to the 5th percentile, and data above the 95th percentile set to the 95th
 percentile. Winsorized estimators are usually more robust to outliers than
 their more standard forms.
+
+If winsorizing would turn a variable with several distinct values into a
+constant, as with a dummy variable and the default \code{threshold} or with
+\code{threshold = 0.5}, the variable is returned unchanged with a warning.
 }
 \examples{
 hist(iris$Sepal.Length, main = "Original data")
