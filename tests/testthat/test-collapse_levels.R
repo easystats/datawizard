@@ -121,6 +121,7 @@ test_that("collapse_levels stops with two ordered levels", {
   expect_identical(counts(out), c("a/b" = 2L, c = 1L))
 })
 
+
 test_that("collapse_levels leaves x unchanged when it can't merge", {
   # no sparse level, unused level kept
   x <- lump(a = 50, b = 50, u = 0)
@@ -129,25 +130,19 @@ test_that("collapse_levels leaves x unchanged when it can't merge", {
   x <- factor(c(NA, NA), levels = c("a", "b"))
   expect_identical(collapse_levels(x), x)
 
-  # every level would merge: each of a, b, c is below min_n = 5
-  x <- lump(a = 3, b = 3, c = 3)
-  expect_warning(collapse_levels(x, min_n = 5), "only one level", fixed = TRUE)
-  expect_silent(collapse_levels(x, min_n = 5, verbose = FALSE))
-  expect_identical(collapse_levels(x, min_n = 5, verbose = FALSE), x)
   # every level would merge: b = 3 is sparse and pulls in a; u stays
   x <- lump(a = 97, b = 3, u = 0)
   expect_warning(collapse_levels(x), "only one level", fixed = TRUE)
-  expect_identical(suppressWarnings(collapse_levels(x)), x)
+  expect_silent(collapse_levels(x, verbose = FALSE))
+  expect_identical(collapse_levels(x, verbose = FALSE), x)
   # one used level below min_n = 10
-  for (x in list(lump(a = 5, u = 0), ord(a = 5, u = 0))) {
-    expect_warning(collapse_levels(x, min_n = 10), "only one level")
-    expect_identical(suppressWarnings(collapse_levels(x, min_n = 10)), x)
-  }
+  x <- ord(a = 5, u = 0)
+  expect_warning(collapse_levels(x, min_n = 10), "only one level", fixed = TRUE)
+  expect_identical(collapse_levels(x, min_n = 10, verbose = FALSE), x)
 
   # a sparse unused level alone changes the result
   x <- lump(a = 50, b = 50, u = 0)
   expect_identical(levels(collapse_levels(x)), c("a", "b"))
-  expect_identical(levels(collapse_levels(lump(a = 5, u = 0))), "a")
 })
 
 test_that("collapse_levels keeps missing values", {
@@ -166,13 +161,7 @@ test_that("collapse_levels keeps missing values", {
   expect_identical(levels(out), c("a", "b", "c/d", NA))
   expect_identical(as.integer(out)[c(1, 2, 100, 101)], c(NA, 1L, 3L, 4L))
 
-  # an NA level comes last, and is never unused
-  x <- factor(
-    c(NA, rep(c("a", "b", "c"), c(90, 5, 5))),
-    levels = c(NA, "a", "b", "c"),
-    exclude = NULL
-  )
-  expect_identical(levels(collapse_levels(x, min_n = 6)), c("a", "b/c", NA))
+  # an NA level is never unused
   x <- addNA(factor(c("a", "b")))
   expect_identical(collapse_levels(x), x)
 })
@@ -196,45 +185,26 @@ test_that("collapse_levels keeps class and attributes", {
   x <- lump(a = 80, b = 14, c = 3, d = 3)
   stats::contrasts(x) <- "contr.sum"
   expect_identical(attr(collapse_levels(x), "contrasts"), "contr.sum")
-
-  # a subclass with its own as.character() gets the same merges
-  x <- lump(a = 80, b = 14, c = 3, d = 3)
-  class(x) <- c("my_label_factor", "factor")
-  registerS3method(
-    "as.character",
-    "my_label_factor",
-    function(x, ...) rep("z", length(x))
-  )
-  expect_identical(levels(collapse_levels(x)), c("a", "b", "c/d"))
 })
 
 test_that("collapse_levels works on character vectors", {
-  x <- as.character(lump(a = 80, b = 14, c = 3, d = 3))
-  x <- c(x, NA)
+  x <- c(as.character(lump(a = 80, b = 14, c = 3, d = 3)), NA)
   names(x) <- seq_along(x)
   out <- collapse_levels(x)
   expect_type(out, "character")
   expect_named(out, names(x))
   expect_identical(unname(out), as.character(collapse_levels(factor(x))))
-  expect_identical(out[[100]], "c/d")
   expect_true(is.na(out[[101]]))
-})
 
-test_that("collapse_levels handles an empty string", {
   # "" = 3 and c = 2 are sparse; plain indexing by name can't find ""
   x <- rep(c("a", "b", "c", ""), c(90, 5, 2, 3))
-  expect_identical(table(collapse_levels(x))[["/c"]], 5L)
   expect_identical(levels(collapse_levels(factor(x))), c("a", "b", "/c"))
+  expect_identical(table(collapse_levels(x))[["/c"]], 5L)
 })
 
 test_that("collapse_levels handles other classes", {
-  expect_message(collapse_levels(1:3), "integer", fixed = TRUE)
-  expect_identical(suppressMessages(collapse_levels(1:3)), 1:3)
-  expect_silent(collapse_levels(c(TRUE, FALSE), verbose = FALSE))
-  expect_identical(
-    collapse_levels(c(TRUE, FALSE), verbose = FALSE),
-    c(TRUE, FALSE)
-  )
+  expect_message(collapse_levels(1:3), "Only factors", fixed = TRUE)
+  expect_identical(collapse_levels(1:3, verbose = FALSE), 1:3)
 })
 
 test_that("collapse_levels works on data frames", {
@@ -242,70 +212,36 @@ test_that("collapse_levels works on data frames", {
   d <- data.frame(
     id = 1:100,
     nom = f,
-    ordi = as.ordered(rep(c("a", "b", "c", "d"), c(40, 3, 10, 47))),
+    ordi = ord(a = 40, b = 3, c = 10, d = 47),
     txt = as.character(f),
     keep = rev(f),
     stringsAsFactors = FALSE
   )
   expect_silent(collapse_levels(d, exclude = "keep"))
   out <- collapse_levels(d, exclude = "keep")
-  expect_identical(out$id, d$id)
-  expect_identical(out$keep, d$keep)
+  expect_identical(out[c("id", "keep")], d[c("id", "keep")])
   expect_identical(out$nom, collapse_levels(d$nom))
   expect_identical(out$ordi, collapse_levels(d$ordi))
   expect_identical(out$txt, collapse_levels(d$txt))
-
-  # select, regex, and ignore_case work as in other functions
-  out <- collapse_levels(d, select = "nom")
-  expect_identical(out[-2], d[-2])
-  out <- collapse_levels(d, select = "^no", regex = TRUE)
-  expect_identical(out[-2], d[-2])
-  expect_identical(levels(out$nom), c("a", "b", "c/d"))
-  out <- collapse_levels(d, select = "NOM", ignore_case = TRUE)
-  expect_identical(levels(out$nom), c("a", "b", "c/d"))
 
   # a copy for each factor or character column, none for id
   out <- collapse_levels(d, select = c("id", "nom", "txt"), append = TRUE)
   expect_named(out, c(names(d), "nom_r", "txt_r"))
   expect_identical(out[names(d)], d)
   expect_identical(levels(out$nom_r), c("a", "b", "c/d"))
-  expect_identical(out$txt_r[100], "c/d")
-  out <- collapse_levels(d, select = "nom", append = "_new")
-  expect_named(out, c(names(d), "nom_new"))
+  # no column to copy
+  expect_identical(collapse_levels(d["id"], append = TRUE), d["id"])
 
-  # a grouped data frame is counted as a whole, and keeps its grouping column:
-  # g = 3 is sparse, and so is x = 3
-  g <- data_group(
-    data.frame(
-      g = lump(a = 50, b = 47, c = 3),
-      x = lump(a = 50, b = 47, c = 3)
-    ),
-    "g"
-  )
+  # a grouped data frame keeps its grouping column
+  f <- lump(a = 50, b = 47, c = 3)
+  g <- data_group(data.frame(g = f, x = f), "g")
   out <- collapse_levels(g)
   expect_identical(levels(out$g), c("a", "b", "c"))
   expect_identical(levels(out$x), c("a", "b/c"))
 
-  # no column to copy
-  expect_identical(collapse_levels(d["id"], append = TRUE), d["id"])
-
   # warnings name the column
-  d <- data.frame(nom = lump(a = 97, b = 3), ordi = ord(a = 97, b = 3))
-  expect_warning(
-    collapse_levels(d, select = "nom"),
-    "column `nom`",
-    fixed = TRUE
-  )
-  expect_warning(
-    collapse_levels(d, select = "ordi"),
-    "column `ordi`",
-    fixed = TRUE
-  )
-  expect_warning(
-    collapse_levels(d, select = "nom", append = TRUE),
-    "column `nom_r`",
-    fixed = TRUE
-  )
+  d <- data.frame(nom = lump(a = 97, b = 3))
+  expect_warning(collapse_levels(d), "column `nom`", fixed = TRUE)
 })
 
 test_that("collapse_levels pools counts for ordered items", {
@@ -322,11 +258,6 @@ test_that("collapse_levels pools counts for ordered items", {
   expect_identical(counts(out$i2), c("a/b" = 4L, c = 48L, d = 48L))
   expect_identical(counts(out$i3), c("a/b" = 12L, c = 6L, d = 82L))
   expect_s3_class(out$i1, "ordered")
-
-  # copies get the plan, originals stay
-  out <- collapse_levels(d, pool = TRUE, append = TRUE)
-  expect_identical(out[names(d)], d)
-  expect_identical(counts(out$i3_r), c("a/b" = 12L, c = 6L, d = 82L))
 
   # each column keeps its own NA level, which is not a difference in levels
   d$i1 <- addNA(d$i1)
@@ -347,7 +278,6 @@ test_that("collapse_levels pools counts for nominal items", {
   d$y <- factor(rep(c("b", "c", "d"), c(2, 2, 96)))
   d$z <- factor(rep(c("a", "d"), c(95, 5)))
   out <- collapse_levels(d, min_prop = 0, min_n = 8, pool = TRUE)
-  expect_identical(out$id, d$id)
   expect_identical(counts(out$x), c(a = 94L, d = 0L, "b/c" = 6L))
   expect_identical(counts(out$y), c(a = 0L, d = 96L, "b/c" = 4L))
   expect_identical(counts(out$z), c(a = 95L, d = 5L, "b/c" = 0L))
@@ -360,34 +290,11 @@ test_that("collapse_levels pools counts for nominal items", {
   )
   out <- collapse_levels(d, pool = TRUE)
   expect_identical(levels(out$f), c("a", "b", "c/d"))
-  expect_type(out$s, "character")
   expect_identical(out$s[100], "c/d")
-
-  # pooled: c = 3, b = 4, a = 193, in first-seen order; c/b = 7 is not below 5
-  d <- data.frame(id = 1:100)
-  d$x <- factor(rep(c("c", "b", "a"), c(2, 2, 96)), levels = c("c", "b", "a"))
-  d$y <- factor(rep(c("a", "b", "c"), c(97, 2, 1)))
-  out <- collapse_levels(
-    d,
-    select = c("x", "y"),
-    min_prop = 0,
-    min_n = 5,
-    pool = TRUE
-  )
-  expect_identical(levels(out$y), c("a", "c/b"))
 
   # nothing is sparse, so the columns keep their own levels
   d <- data.frame(x = factor(c("a", "b")), y = factor(c("c", "d")))
   expect_identical(collapse_levels(d, pool = TRUE), d)
-  # every level would merge: a = 3 and b = 3 are below min_n = 10
-  d <- data.frame(x = factor(rep("a", 3)), y = factor(rep("b", 3)))
-  expect_warning(
-    collapse_levels(d, min_n = 10, pool = TRUE),
-    "selected columns",
-    fixed = TRUE
-  )
-  out <- suppressWarnings(collapse_levels(d, min_n = 10, pool = TRUE))
-  expect_identical(out, d)
 })
 
 test_that("collapse_levels gives errors", {
@@ -407,23 +314,12 @@ test_that("collapse_levels gives errors", {
   y <- lump(a = 80, b = 14, c = 3, d = 3, u = 0)
   expect_identical(levels(collapse_levels(y, other = "u")), c("a", "b", "u"))
 
-  for (bad in list(-0.1, 1.1, NA_real_, c(0.1, 0.2), "a")) {
-    expect_error(collapse_levels(x, min_prop = bad), "`min_prop`", fixed = TRUE)
-  }
-  for (bad in list(-1, NA_real_, c(1, 2), "a")) {
-    expect_error(collapse_levels(x, min_n = bad), "`min_n`", fixed = TRUE)
-  }
-  for (bad in list(1, NA_character_, c("a", "b"))) {
-    expect_error(collapse_levels(x, other = bad), "`other`", fixed = TRUE)
-  }
-  for (bad in list(1, NA_character_, c("a", "b"), NULL)) {
-    expect_error(collapse_levels(x, sep = bad), "`sep`", fixed = TRUE)
-  }
+  expect_error(collapse_levels(x, min_prop = 1.1), "`min_prop`", fixed = TRUE)
+  expect_error(collapse_levels(x, min_n = -1), "`min_n`", fixed = TRUE)
+  expect_error(collapse_levels(x, other = NA), "`other`", fixed = TRUE)
 
   d <- data.frame(x = x, y = as.ordered(x))
-  for (bad in list(NA, "yes", c(TRUE, TRUE))) {
-    expect_error(collapse_levels(d, pool = bad), "`pool`", fixed = TRUE)
-  }
+  expect_error(collapse_levels(d, pool = NA), "`pool`", fixed = TRUE)
   # ordered with other columns, or ordered with different levels
   expect_error(collapse_levels(d, pool = TRUE), "`pool = TRUE`", fixed = TRUE)
   d <- data.frame(

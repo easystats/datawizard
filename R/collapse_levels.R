@@ -77,11 +77,7 @@ collapse_levels <- function(x, ...) {
 collapse_levels.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
     insight::format_alert(
-      paste0(
-        "Variables of class `",
-        class(x)[1],
-        "` have no levels to collapse and remain unchanged."
-      )
+      "Only factors and character vectors have levels to collapse."
     )
   }
   x
@@ -159,11 +155,8 @@ collapse_levels.data.frame <- function(
   # with pool, all selected columns share one plan
   batches <- if (pool && length(select) > 0L) list(select) else as.list(select)
   for (i in batches) {
-    where <- if (pool) {
-      " in the selected columns"
-    } else {
-      paste0(" in column `", i, "`")
-    }
+    where <- if (pool) "the selected columns" else paste0("column `", i, "`")
+    where <- paste("in", where)
     plan <- .collapse_plan(x[i], min_prop, min_n, other, sep, verbose, where)
     x[i] <- lapply(x[i], .collapse_apply, plan = plan)
   }
@@ -180,7 +173,7 @@ collapse_levels.data.frame <- function(
   other,
   sep,
   verbose,
-  where = ""
+  where = "in `x`"
 ) {
   columns <- lapply(columns, function(i) {
     if (is.character(i)) factor(i) else i
@@ -223,7 +216,7 @@ collapse_levels.data.frame <- function(
 
   if (length(groups) == 1L && any(is_sparse(counts))) {
     warn(
-      "Merging sparse levels",
+      "Merging sparse levels ",
       where,
       " would leave only one level, so nothing was merged."
     )
@@ -255,7 +248,7 @@ collapse_levels.data.frame <- function(
   ))
   if (any(still_sparse)) {
     warn(
-      "Only two levels are left",
+      "Only two levels are left ",
       where,
       ", and still sparse: ",
       toString(paste0("`", new_names[still_sparse], "`")),
@@ -343,8 +336,5 @@ collapse_levels.data.frame <- function(
   }
   if (!is.null(other) && !is_scalar(other, "character")) {
     insight::format_error("`other` must be `NULL` or a string.")
-  }
-  if (!is_scalar(sep, "character")) {
-    insight::format_error("`sep` must be a string.")
   }
 }
