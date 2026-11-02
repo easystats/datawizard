@@ -2,6 +2,10 @@
 
 BREAKING CHANGES
 
+* New function `collapse_levels()` merges sparse levels of factors and character
+  vectors. Nominal levels merge into one level, and ordered levels merge with a
+  neighbor. With `pool = TRUE`, the items of a scale get the same merges (#48).
+
 * In `demean()` and `degroup()`, a formula in `by` whose terms are separated
   only by `/`, such as `by = ~ L3/L2`, now means a nested design, like the
   string `by = "L3/L2"`. Before, such a formula gave a cross-classified design
