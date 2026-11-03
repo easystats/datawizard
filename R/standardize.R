@@ -131,6 +131,15 @@
 #' # standardization, taking same mean and sd for each variable
 #' standardize(d, center = 1, scale = 3)
 #'
+#' # standardization, mean and sd defined by variable name
+#' d <- data.frame(a = c(1, 2, 3, 10), b = c(2, 4, 6, 8))
+#' standardize(
+#'   d,
+#'   center = c(b = 5, a = 1),
+#'   scale = c(b = 4, a = 2),
+#'   append = TRUE
+#' )
+#'
 #' # cluster-level variable in long format: one value per school, but
 #' # schools have different numbers of students
 #' d <- data.frame(

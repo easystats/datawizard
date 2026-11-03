@@ -207,6 +207,10 @@ center(d, center = 0)
 
 # centering, using -5 as mean
 center(d, center = -5)
+
+# centering, individual center per variable
+d <- data.frame(a = c(1, 2, 3, 10), b = c(2, 4, 6, 8))
+center(d, center = c(b = 5, a = 1), append = TRUE)
 }
 \seealso{
 If centering within-clusters (instead of grand-mean centering)
