@@ -53,7 +53,8 @@ CHANGES
   Please use `indices` instead (#687).
 
 * `adjust()` gains `...`, which passes arguments to the function that fits the
-  model (#696).
+  model. Rows that the model drops, for example for a missing value in
+  `weights`, are `NA` in the adjusted variables (#696).
 
 FIXES
 

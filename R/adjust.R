@@ -27,7 +27,9 @@
 #'   visual representation of this).
 #' @param ... Arguments passed to the function that fits the model:
 #'   [stats::lm()], [lme4::lmer()], [gamm4::gamm4()], [rstanarm::stan_glm()],
-#'   [rstanarm::stan_glmer()], or [rstanarm::stan_gamm4()].
+#'   [rstanarm::stan_glmer()], or [rstanarm::stan_gamm4()]. Rows that the model
+#'   drops, for example for a missing value in `weights`, are `NA` in the
+#'   adjusted variables.
 #' @inheritParams extract_column_names
 #' @inheritParams standardize
 #'
@@ -250,9 +252,18 @@ data_adjust <- adjust
     adjusted <- adjusted + intercept
   }
 
-  # Deal with missing data
+  # Deal with missing data, and with rows the model drops because of `...`
+  rows <- stats::complete.cases(data)
+  if (!is.null(names(adjusted))) {
+    rows <- match(names(adjusted), rownames(data))
+  } else if (sum(rows) != length(adjusted)) {
+    insight::format_error(
+      "Can't tell which rows the model used, because its residuals have no names.",
+      "Remove the arguments in `...` that make the model drop rows."
+    )
+  }
   out <- rep(NA, nrow(data))
-  out[stats::complete.cases(data)] <- as.vector(adjusted)
+  out[rows] <- as.vector(adjusted)
 
   out
 }

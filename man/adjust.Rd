@@ -117,7 +117,9 @@ functions (see 'Details'), this argument may be used as workaround.}
 
 \item{...}{Arguments passed to the function that fits the model:
 \code{\link[stats:lm]{stats::lm()}}, \code{\link[lme4:lmer]{lme4::lmer()}}, \code{\link[gamm4:gamm4]{gamm4::gamm4()}}, \code{\link[rstanarm:stan_glm]{rstanarm::stan_glm()}},
-\code{\link[rstanarm:stan_glmer]{rstanarm::stan_glmer()}}, or \code{\link[rstanarm:stan_gamm4]{rstanarm::stan_gamm4()}}.}
+\code{\link[rstanarm:stan_glmer]{rstanarm::stan_glmer()}}, or \code{\link[rstanarm:stan_gamm4]{rstanarm::stan_gamm4()}}. Rows that the model
+drops, for example for a missing value in \code{weights}, are \code{NA} in the
+adjusted variables.}
 }
 \value{
 A data frame comparable to \code{data}, with adjusted variables.
