@@ -84,24 +84,40 @@ test_that("data_partition works as expected", {
   # data frames
 
   data(iris)
-  expect_snapshot(str(data_partition(iris, proportion = 0.7, seed = 123)))
-  expect_snapshot(str(data_partition(
-    iris,
-    proportion = c(0.2, 0.5),
-    seed = 123
-  )))
-  expect_snapshot(str(data_partition(
-    iris,
-    proportion = 0.7,
-    by = "Species",
-    seed = 123
-  )))
-  expect_snapshot(str(data_partition(
-    iris,
-    proportion = c(0.2, 0.5),
-    by = "Species",
-    seed = 123
-  )))
+  # R-devel prints a space before 'data.frame' in nested str() output
+  same_str <- function(x) {
+    gsub(": 'data.frame'", ":'data.frame'", x, fixed = TRUE)
+  }
+  expect_snapshot(
+    str(data_partition(iris, proportion = 0.7, seed = 123)),
+    transform = same_str
+  )
+  expect_snapshot(
+    str(data_partition(
+      iris,
+      proportion = c(0.2, 0.5),
+      seed = 123
+    )),
+    transform = same_str
+  )
+  expect_snapshot(
+    str(data_partition(
+      iris,
+      proportion = 0.7,
+      by = "Species",
+      seed = 123
+    )),
+    transform = same_str
+  )
+  expect_snapshot(
+    str(data_partition(
+      iris,
+      proportion = c(0.2, 0.5),
+      by = "Species",
+      seed = 123
+    )),
+    transform = same_str
+  )
 })
 
 test_that("data_partition warns if no testing set", {
