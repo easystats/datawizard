@@ -139,6 +139,13 @@ FIXES
   `center = FALSE` did not scale, and `center = TRUE` did not scale
   either. The results now match those for a single variable.
 
+- Fixed
+  [`winsorize()`](https://easystats.github.io/datawizard/reference/winsorize.md)
+  with `method = "percentile"` for data with missing values. Missing
+  values counted toward the number of observations, which gave wrong
+  results: the lower limit was too high in some cases, and the upper
+  limit was too high or was not applied.
+
 ## datawizard 1.4.1
 
 CRAN release: 2026-10-17
