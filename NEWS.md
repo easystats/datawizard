@@ -95,6 +95,12 @@ FIXES
   variable now comes back unchanged, with a warning that names the column in a
   data frame. `verbose = FALSE` turns the warning off (#736).
 
+* Fixed wrong results of `standardize()` on data frames when only one of
+  `center` and `scale` was given. A `scale` alone was ignored, so
+  `scale = 2` gave z-scores. With a `center` alone, the variables were not
+  divided by their standard deviation, so `center = 1` only subtracted 1. The
+  results now match those for a single variable.
+
 # datawizard 1.4.1
 
 CHANGES
