@@ -219,7 +219,9 @@ functions (see 'Details'), this argument may be used as workaround.</p></dd>
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Arguments passed to the function that fits the model:
 <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">stats::lm()</a></code>, <code><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lme4::lmer()</a></code>, <code><a href="https://rdrr.io/pkg/gamm4/man/gamm4.html" class="external-link">gamm4::gamm4()</a></code>, <code><a href="https://mc-stan.org/rstanarm/reference/stan_glm.html" class="external-link">rstanarm::stan_glm()</a></code>,
-<code><a href="https://mc-stan.org/rstanarm/reference/stan_glmer.html" class="external-link">rstanarm::stan_glmer()</a></code>, or <code><a href="https://mc-stan.org/rstanarm/reference/stan_gamm4.html" class="external-link">rstanarm::stan_gamm4()</a></code>.</p></dd>
+<code><a href="https://mc-stan.org/rstanarm/reference/stan_glmer.html" class="external-link">rstanarm::stan_glmer()</a></code>, or <code><a href="https://mc-stan.org/rstanarm/reference/stan_gamm4.html" class="external-link">rstanarm::stan_gamm4()</a></code>. Rows that the model
+drops, for example for a missing value in <code>weights</code>, are <code>NA</code> in the
+adjusted variables.</p></dd>
 
 </dl></div>
     <div class="section level2">

@@ -174,6 +174,8 @@ data_adjust(
   [`rstanarm::stan_glmer()`](https://mc-stan.org/rstanarm/reference/stan_glmer.html),
   or
   [`rstanarm::stan_gamm4()`](https://mc-stan.org/rstanarm/reference/stan_gamm4.html).
+  Rows that the model drops, for example for a missing value in
+  `weights`, are `NA` in the adjusted variables.
 
 ## Value
 
