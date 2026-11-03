@@ -84,6 +84,23 @@ FIXES
   `center = FALSE` did not scale, and `center = TRUE` did not scale either.
   The results now match those for a single variable.
 
+* Fixed `winsorize()` with `method = "percentile"` for data with missing
+  values. Missing values counted toward the number of observations, which gave
+  wrong results: the lower limit was too high in some cases, and the upper
+  limit was too high or was not applied.
+
+* `winsorize()` no longer makes a variable with more than one distinct value
+  constant. With no missing values, this happened at the default `threshold` to
+  a dummy variable whose rarer value made up 20% or less of the values. Such a
+  variable now comes back unchanged, with a warning that names the column in a
+  data frame. `verbose = FALSE` turns the warning off (#736).
+
+* Fixed wrong results of `standardize()` on data frames when only one of
+  `center` and `scale` was given. A `scale` alone was ignored, so
+  `scale = 2` gave z-scores. With a `center` alone, the variables were not
+  divided by their standard deviation, so `center = 1` only subtracted 1. The
+  results now match those for a single variable.
+
 * Fixed wrong results of `standardize()` and `center()` on data frames when
   `center` or `scale` is a named vector and `append` is used. The named values
   were ignored, so the appended columns used the mean and standard deviation of

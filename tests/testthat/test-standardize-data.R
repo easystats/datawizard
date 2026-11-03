@@ -390,6 +390,36 @@ test_that("standardize data frame with TRUE or FALSE and numeric values", {
   expect_equal(out$b, (d$b - mean(d$b)) / 2, ignore_attr = TRUE)
 })
 
+test_that("standardize data frame with only numeric scale", {
+  d <- data.frame(a = c(1, 2, 3, 10), b = c(2, 4, 6, 8))
+  out <- standardize(d, scale = 2)
+  expect_equal(out$a, (d$a - mean(d$a)) / 2, ignore_attr = TRUE)
+  expect_equal(out$b, (d$b - mean(d$b)) / 2, ignore_attr = TRUE)
+})
+
+test_that("standardize data frame with only numeric center", {
+  d <- data.frame(a = c(1, 2, 3, 10), b = c(2, 4, 6, 8))
+  out <- standardize(d, center = 1)
+  expect_equal(out$a, (d$a - 1) / sd(d$a), ignore_attr = TRUE)
+  expect_equal(out$b, (d$b - 1) / sd(d$b), ignore_attr = TRUE)
+  # center() has no scale
+  expect_equal(center(d, center = 1)$a, d$a - 1, ignore_attr = TRUE)
+})
+
+test_that("standardize data frame with logical vector in scale", {
+  d <- data.frame(a = c(1, 2, 3, 10), b = c(2, 4, 6, 8))
+  out <- standardize(d, scale = c(TRUE, FALSE))
+  expect_equal(out$a, (d$a - mean(d$a)) / sd(d$a), ignore_attr = TRUE)
+  expect_equal(out$b, d$b - mean(d$b), ignore_attr = TRUE)
+})
+
+test_that("standardize data frame with NA in center", {
+  d <- data.frame(a = c(1, 2, 3, 10), b = c(2, 4, 6, 8))
+  out <- standardize(d, center = NA)
+  expect_equal(out$a, (d$a - mean(d$a)) / sd(d$a), ignore_attr = TRUE)
+  expect_equal(out$b, (d$b - mean(d$b)) / sd(d$b), ignore_attr = TRUE)
+})
+
 test_that("standardize and center data frame with named values and append", {
   d <- data.frame(a = c(1, 2, 3, 10), b = c(5, 1, 4, 2))
   out <- standardize(
