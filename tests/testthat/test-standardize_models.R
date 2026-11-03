@@ -306,6 +306,38 @@ test_that("standardize, lmerTest models (#716)", {
 
 
 # variables evaluated in the environment $$$ ------------------------------
+test_that("standardize, stan_lmer models", {
+  skip_on_cran()
+  skip_if_not_installed("rstanarm")
+  # the call of a stan_lmer() model names stan_glmer(), which a refit must find
+  assign("stan_glmer", rstanarm::stan_glmer, envir = globalenv())
+  on.exit(rm("stan_glmer", envir = globalenv()))
+
+  m <- suppressWarnings(rstanarm::stan_lmer(
+    Sepal.Length ~ Petal.Length + (1 | Species),
+    data = iris,
+    chains = 1,
+    iter = 200,
+    refresh = 0,
+    seed = 123
+  ))
+  out <- suppressWarnings(standardize(m, verbose = FALSE))
+  expect_s3_class(out, "stanreg")
+
+  # oracle: the refit's data are the z-scores of the model's variables
+  expect_equal(
+    as.numeric(out$data$Sepal.Length),
+    as.numeric(scale(iris$Sepal.Length)),
+    tolerance = 1e-8
+  )
+  expect_equal(
+    as.numeric(out$data$Petal.Length),
+    as.numeric(scale(iris$Petal.Length)),
+    tolerance = 1e-8
+  )
+})
+
+
 test_that("variables evaluated in the environment", {
   m <- lm(mtcars$mpg ~ mtcars$cyl + am, data = mtcars)
   w <- capture_error(standardize(m))
