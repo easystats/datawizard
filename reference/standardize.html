@@ -6,7 +6,6 @@ statistical model, this function extracts the dataset, standardizes it, and
 refits the model with this standardized version of the dataset. The
 normalize() function can also be used to scale all numeric variables within
 the 0 - 1 range.
-
 For model standardization, see standardize.default()."><meta property="og:description" content="Performs a standardization of data (z-scoring), i.e., centering and scaling,
 so that the data is expressed in terms of standard deviation (i.e., mean = 0,
 SD = 1) or Median Absolute Deviance (median = 0, MAD = 1). When applied to a
@@ -14,7 +13,6 @@ statistical model, this function extracts the dataset, standardizes it, and
 refits the model with this standardized version of the dataset. The
 normalize() function can also be used to scale all numeric variables within
 the 0 - 1 range.
-
 For model standardization, see standardize.default()."><meta property="og:image" content="https://easystats.github.io/datawizard/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
@@ -23,7 +21,7 @@ For model standardization, see standardize.default()."><meta property="og:image"
 
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.1.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.1.9005</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,9 +75,8 @@ SD = 1) or Median Absolute Deviance (median = 0, MAD = 1). When applied to a
 statistical model, this function extracts the dataset, standardizes it, and
 refits the model with this standardized version of the dataset. The
 <code><a href="normalize.html">normalize()</a></code> function can also be used to scale all numeric variables within
-the 0 - 1 range.
-<br><br>
-For model standardization, see <code><a href="standardize.default.html">standardize.default()</a></code>.</p>
+the 0 - 1 range.</p>
+<p>For model standardization, see <code><a href="standardize.default.html">standardize.default()</a></code>.</p>
     </div>
 
     <div class="section level2">
@@ -209,8 +206,8 @@ standardizing a subset or new data according to another data frame.</p></dd>
 
 
 <dt id="arg-center-scale">center, scale<a class="anchor" aria-label="anchor" href="#arg-center-scale"></a></dt>
-<dd><ul><li><p>For <code>standardize()</code>: <br>
-Numeric values, which can be used as alternative to <code>reference</code> to define
+<dd><ul><li><p>For <code>standardize()</code>:</p>
+<p>Numeric values, which can be used as alternative to <code>reference</code> to define
 a reference centrality and deviation. If <code>scale</code> and <code>center</code> are of
 length 1, they will be recycled to match the length of selected variables
 for standardization. Else, <code>center</code> and <code>scale</code> must be of same length as
@@ -218,7 +215,8 @@ the number of selected variables. Values in <code>center</code> and <code>scale<
 matched to selected variables in the provided order, unless a named vector
 is given. In this case, names are matched against the names of the selected
 variables.</p></li>
-<li><p>For <code>unstandardize()</code>: <br><code>center</code> and <code>scale</code> correspond to the center (the mean / median) and the scale (SD / MAD) of
+<li><p>For <code>unstandardize()</code>:</p>
+<p><code>center</code> and <code>scale</code> correspond to the center (the mean / median) and the scale (SD / MAD) of
 the original non-standardized data (for data frames, should be named, or
 have column order correspond to the numeric column). However, one can also
 directly provide the original data through <code>reference</code>, from which the
@@ -452,6 +450,20 @@ from the input data frame.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3 -0.3333333 1.3333333</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4  0.0000000 1.6666667</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5  0.3333333 2.0000000</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># standardization, mean and sd defined by variable name</span></span></span>
+<span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">10</span><span class="op">)</span>, b <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">6</span>, <span class="fl">8</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">standardize</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">d</span>,</span></span>
+<span class="r-in"><span>  center <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>b <span class="op">=</span> <span class="fl">5</span>, a <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  scale <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>b <span class="op">=</span> <span class="fl">4</span>, a <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  append <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    a b a_z   b_z</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  1 2 0.0 -0.75</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  2 4 0.5 -0.25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  3 6 1.0  0.25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 10 8 4.5  0.75</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># cluster-level variable in long format: one value per school, but</span></span></span>
 <span class="r-in"><span><span class="co"># schools have different numbers of students</span></span></span>

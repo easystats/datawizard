@@ -8,8 +8,8 @@ dataset, standardizes it, and refits the model with this standardized
 version of the dataset. The
 [`normalize()`](https://easystats.github.io/datawizard/reference/normalize.md)
 function can also be used to scale all numeric variables within the 0 -
-1 range.\
-\
+1 range.
+
 For model standardization, see
 [`standardize.default()`](https://easystats.github.io/datawizard/reference/standardize.default.md).
 
@@ -144,7 +144,8 @@ unstandardize(
 
 - center, scale:
 
-  - For `standardize()`:\
+  - For `standardize()`:
+
     Numeric values, which can be used as alternative to `reference` to
     define a reference centrality and deviation. If `scale` and `center`
     are of length 1, they will be recycled to match the length of
@@ -154,7 +155,8 @@ unstandardize(
     provided order, unless a named vector is given. In this case, names
     are matched against the names of the selected variables.
 
-  - For `unstandardize()`:\
+  - For `unstandardize()`:
+
     `center` and `scale` correspond to the center (the mean / median)
     and the scale (SD / MAD) of the original non-standardized data (for
     data frames, should be named, or have column order correspond to the
@@ -420,6 +422,20 @@ standardize(d, center = 1, scale = 3)
 #> 3 -0.3333333 1.3333333
 #> 4  0.0000000 1.6666667
 #> 5  0.3333333 2.0000000
+
+# standardization, mean and sd defined by variable name
+d <- data.frame(a = c(1, 2, 3, 10), b = c(2, 4, 6, 8))
+standardize(
+  d,
+  center = c(b = 5, a = 1),
+  scale = c(b = 4, a = 2),
+  append = TRUE
+)
+#>    a b a_z   b_z
+#> 1  1 2 0.0 -0.75
+#> 2  2 4 0.5 -0.25
+#> 3  3 6 1.0  0.25
+#> 4 10 8 4.5  0.75
 
 # cluster-level variable in long format: one value per school, but
 # schools have different numbers of students

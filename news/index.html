@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.1.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.1.9005</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,6 +75,9 @@
 <li><p><code><a href="../reference/standardize.html">standardize()</a></code> now works with models coerced with <code><a href="https://rdrr.io/pkg/lmerTest/man/as_lmerModLmerTest.html" class="external-link">lmerTest::as_lmerModLmerTest()</a></code>. You can also pass a standardized <code><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lme4::lmer()</a></code> model to <code>as_lmerModLmerTest()</code> or to <code><a href="https://rdrr.io/r/stats/update.html" class="external-link">update()</a></code> (<a href="https://github.com/easystats/datawizard/issues/716" class="external-link">#716</a>).</p></li>
 <li><p>Fixed <code><a href="../reference/standardize.html">standardize()</a></code> on data frames when <code>center</code> or <code>scale</code> is a single <code>TRUE</code> or <code>FALSE</code>. <code>scale = FALSE</code> still divided by the standard deviation, <code>center = FALSE</code> did not scale, and <code>center = TRUE</code> did not scale either. The results now match those for a single variable.</p></li>
 <li><p>Fixed <code><a href="../reference/winsorize.html">winsorize()</a></code> with <code>method = "percentile"</code> for data with missing values. Missing values counted toward the number of observations, which gave wrong results: the lower limit was too high in some cases, and the upper limit was too high or was not applied.</p></li>
+<li><p><code><a href="../reference/winsorize.html">winsorize()</a></code> no longer makes a variable with more than one distinct value constant. With no missing values, this happened at the default <code>threshold</code> to a dummy variable whose rarer value made up 20% or less of the values. Such a variable now comes back unchanged, with a warning that names the column in a data frame. <code>verbose = FALSE</code> turns the warning off (<a href="https://github.com/easystats/datawizard/issues/736" class="external-link">#736</a>).</p></li>
+<li><p>Fixed wrong results of <code><a href="../reference/standardize.html">standardize()</a></code> on data frames when only one of <code>center</code> and <code>scale</code> was given. A <code>scale</code> alone was ignored, so <code>scale = 2</code> gave z-scores. With a <code>center</code> alone, the variables were not divided by their standard deviation, so <code>center = 1</code> only subtracted 1. The results now match those for a single variable.</p></li>
+<li><p>Fixed wrong results of <code><a href="../reference/standardize.html">standardize()</a></code> and <code><a href="../reference/center.html">center()</a></code> on data frames when <code>center</code> or <code>scale</code> is a named vector and <code>append</code> is used. The named values were ignored, so the appended columns used the mean and standard deviation of each variable instead.</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.4.1" id="datawizard-141">datawizard 1.4.1<a class="anchor" aria-label="anchor" href="#datawizard-141"></a></h2><p class="text-muted">CRAN release: 2026-10-17</p>

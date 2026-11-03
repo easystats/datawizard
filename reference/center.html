@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.1.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.1.9005</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -356,6 +356,15 @@ is required, see <code><a href="demean.html">demean()</a></code>. For standardiz
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3 5 10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4 6 11</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5 7 12</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># centering, individual center per variable</span></span></span>
+<span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">10</span><span class="op">)</span>, b <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">6</span>, <span class="fl">8</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">center</span><span class="op">(</span><span class="va">d</span>, center <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>b <span class="op">=</span> <span class="fl">5</span>, a <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>, append <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    a b a_c b_c</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  1 2   0  -3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  2 4   1  -1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  3 6   2   1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 10 8   9   3</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

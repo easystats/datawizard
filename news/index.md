@@ -146,6 +146,30 @@ FIXES
   results: the lower limit was too high in some cases, and the upper
   limit was too high or was not applied.
 
+- [`winsorize()`](https://easystats.github.io/datawizard/reference/winsorize.md)
+  no longer makes a variable with more than one distinct value constant.
+  With no missing values, this happened at the default `threshold` to a
+  dummy variable whose rarer value made up 20% or less of the values.
+  Such a variable now comes back unchanged, with a warning that names
+  the column in a data frame. `verbose = FALSE` turns the warning off
+  ([\#736](https://github.com/easystats/datawizard/issues/736)).
+
+- Fixed wrong results of
+  [`standardize()`](https://easystats.github.io/datawizard/reference/standardize.md)
+  on data frames when only one of `center` and `scale` was given. A
+  `scale` alone was ignored, so `scale = 2` gave z-scores. With a
+  `center` alone, the variables were not divided by their standard
+  deviation, so `center = 1` only subtracted 1. The results now match
+  those for a single variable.
+
+- Fixed wrong results of
+  [`standardize()`](https://easystats.github.io/datawizard/reference/standardize.md)
+  and
+  [`center()`](https://easystats.github.io/datawizard/reference/center.md)
+  on data frames when `center` or `scale` is a named vector and `append`
+  is used. The named values were ignored, so the appended columns used
+  the mean and standard deviation of each variable instead.
+
 ## datawizard 1.4.1
 
 CRAN release: 2026-10-17

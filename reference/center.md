@@ -327,4 +327,13 @@ center(d, center = -5)
 #> 3 5 10
 #> 4 6 11
 #> 5 7 12
+
+# centering, individual center per variable
+d <- data.frame(a = c(1, 2, 3, 10), b = c(2, 4, 6, 8))
+center(d, center = c(b = 5, a = 1), append = TRUE)
+#>    a b a_c b_c
+#> 1  1 2   0  -3
+#> 2  2 4   1  -1
+#> 3  3 6   2   1
+#> 4 10 8   9   3
 ```

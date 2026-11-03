@@ -55,11 +55,13 @@ winsorize(
 
 - verbose:
 
-  Not used anymore since `datawizard` 0.6.6.
+  Toggle warnings.
 
 ## Value
 
-A data frame with winsorized columns or a winsorized vector.
+A data frame with winsorized columns or a winsorized vector. A variable
+with more than one distinct value that winsorizing would make constant
+is returned unchanged (see Details).
 
 ## Details
 
@@ -72,6 +74,12 @@ of the data; for example, a `90%` winsorization would see all data below
 the 5th percentile set to the 5th percentile, and data above the 95th
 percentile set to the 95th percentile. Winsorized estimators are usually
 more robust to outliers than their more standard forms.
+
+If winsorizing would make a numeric variable with more than one distinct
+value constant, the variable is returned unchanged with a warning. For
+example, with `method = "percentile"` and no missing values, this
+happens with `threshold = 0.5` and with a dummy variable whose rarer
+value makes up no more than `threshold` of the values.
 
 ## See also
 
