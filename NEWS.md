@@ -84,6 +84,11 @@ FIXES
   `center = FALSE` did not scale, and `center = TRUE` did not scale either.
   The results now match those for a single variable.
 
+* Fixed `winsorize()` with `method = "percentile"` for data with missing
+  values. Missing values counted toward the number of observations, which gave
+  wrong results: the lower limit was too high in some cases, and the upper
+  limit was too high or was not applied.
+
 * `winsorize()` no longer makes a variable with more than one distinct value
   constant. With no missing values, this happened at the default `threshold` to
   a dummy variable whose rarer value made up 20% or less of the values. Such a

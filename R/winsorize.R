@@ -128,9 +128,9 @@ winsorize.numeric <- function(
     }
 
     y <- sort(data)
-    n <- length(data)
+    n <- length(y)
     ibot <- floor(threshold * n) + 1
-    itop <- length(data) - ibot + 1
+    itop <- n - ibot + 1
 
     threshold <- c(y[ibot], y[itop])
   }
