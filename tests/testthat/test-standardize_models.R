@@ -310,8 +310,7 @@ test_that("standardize, stan_lmer models", {
   skip_on_cran()
   skip_if_not_installed("rstanarm")
   # the call of a stan_lmer() model names stan_glmer(), which a refit must find
-  assign("stan_glmer", rstanarm::stan_glmer, envir = globalenv())
-  on.exit(rm("stan_glmer", envir = globalenv()))
+  withr::local_environment(list2env(list(stan_glmer = rstanarm::stan_glmer)))
 
   m <- suppressWarnings(rstanarm::stan_lmer(
     Sepal.Length ~ Petal.Length + (1 | Species),
