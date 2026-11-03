@@ -20,10 +20,18 @@ describe_distribution(x, ...)
   iterations = 100,
   threshold = 0.1,
   verbose = TRUE,
+  indices = c("dispersion", "iqr", "range", "skewness", "kurtosis"),
   ...
 )
 
-\method{describe_distribution}{factor}(x, dispersion = TRUE, range = TRUE, verbose = TRUE, ...)
+\method{describe_distribution}{factor}(
+  x,
+  dispersion = TRUE,
+  range = TRUE,
+  verbose = TRUE,
+  indices = c("dispersion", "range", "skewness", "kurtosis"),
+  ...
+)
 
 \method{describe_distribution}{data.frame}(
   x,
@@ -42,6 +50,7 @@ describe_distribution(x, ...)
   regex = FALSE,
   verbose = TRUE,
   by = NULL,
+  indices = c("dispersion", "iqr", "range", "skewness", "kurtosis"),
   ...
 )
 }
@@ -56,17 +65,8 @@ describe_distribution(x, ...)
 (see \code{\link[bayestestR:map_estimate]{map_estimate()}}), \code{"trimmed"} (which is just \code{mean(x, trim = threshold)}),
 \code{"mode"} or \code{"all"}.}
 
-\item{dispersion}{Logical, if \code{TRUE}, computes indices of dispersion related
-to the estimate(s) (\code{SD} and \code{MAD} for \code{mean} and \code{median}, respectively).
-Dispersion is not available for \code{"MAP"} or \code{"mode"} centrality indices.}
-
-\item{iqr}{Logical, if \code{TRUE}, the interquartile range is calculated (based
-on \code{\link[stats:IQR]{stats::IQR()}}, using \code{type = 6}).}
-
-\item{range}{Return the range (min and max).}
-
-\item{quartiles}{Return the first and third quartiles (25th and 75th
-percentiles).}
+\item{dispersion, iqr, range, quartiles}{Deprecated, please use \code{indices}
+instead.}
 
 \item{ci}{Confidence Interval (CI) level. Default is \code{NULL}, i.e. no
 confidence intervals are computed. If not \code{NULL}, confidence intervals are
@@ -82,6 +82,13 @@ the fraction (0 to 0.5) of observations to be trimmed from each end of the
 vector before the mean is computed.}
 
 \item{verbose}{Show or silence warnings and messages.}
+
+\item{indices}{Character vector, indicating which indices to return. Can
+include any combination of \code{"dispersion"} (SD or MAD, depending on
+\code{centrality}), \code{"iqr"} (interquartile range, based on \code{\link[stats:IQR]{stats::IQR()}},
+using \code{type = 6}), \code{"range"} (min and max), \code{"quartiles"} (25th and 75th
+percentiles), \code{"skewness"} and \code{"kurtosis"}. Use \code{NULL} to return none of
+them.}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
@@ -176,8 +183,17 @@ describe_distribution(rnorm(100))
 
 data(iris)
 describe_distribution(iris)
-describe_distribution(iris, include_factors = TRUE, quartiles = TRUE)
+describe_distribution(
+  iris,
+  include_factors = TRUE,
+  indices = c(
+    "dispersion", "iqr", "range", "quartiles", "skewness", "kurtosis"
+  )
+)
 describe_distribution(list(mtcars$mpg, mtcars$cyl))
+
+# only the range, skewness and kurtosis
+describe_distribution(iris, indices = c("range", "skewness", "kurtosis"))
 \dontshow{\}) # examplesIf}
 }
 \seealso{

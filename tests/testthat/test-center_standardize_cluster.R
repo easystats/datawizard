@@ -373,6 +373,45 @@ for (fun_name in c("center", "standardize")) {
 }
 
 
+# several cluster variables -------------------------------------------
+
+# neither variable identifies the schools, but each pair of values is one school
+a <- school %% 2
+b <- school %/% 2
+d2 <- data.frame(a = a, b = b, funding = funding)
+
+for (fun_name in c("center", "standardize")) {
+  fun <- get(fun_name)
+
+  test_that(paste(fun_name, "several cluster variables"), {
+    expected <- as.vector(fun(funding, cluster = school))
+    expect_equal(
+      fun(funding, cluster = list(a, b)),
+      expected,
+      ignore_attr = TRUE
+    )
+
+    out <- fun(d2, cluster = c("a", "b"))
+    expect_equal(out$funding, expected, ignore_attr = TRUE)
+    expect_identical(out[c("a", "b")], d2[c("a", "b")])
+    out <- fun(d2, select = "funding", cluster = list(a, b))
+    expect_equal(out$funding, expected, ignore_attr = TRUE)
+
+    a_na <- replace(a, 1, NA)
+    expect_true(is.na(fun(funding, cluster = list(a_na, b))[1]))
+
+    expect_error(
+      fun(funding, cluster = list(a, b[-1])),
+      "`cluster` must have the same length"
+    )
+    expect_error(
+      fun(d2, cluster = c("a", "district")),
+      "Could not find the `cluster` column `district`"
+    )
+  })
+}
+
+
 # grouped data frames -------------------------------------------
 
 g <- data.frame(
@@ -482,7 +521,7 @@ for (fun_name in c("center", "standardize")) {
     )
     expect_error(
       fun(gd, select = "funding", cluster = g$school),
-      "`cluster` must be a column name"
+      "`cluster` must be column names"
     )
     g_one <- poorman::group_by(g[g$school %in% c(1, 2, 4), ], region)
     if (fun_name == "standardize") {

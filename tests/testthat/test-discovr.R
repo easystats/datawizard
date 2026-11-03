@@ -5,7 +5,7 @@ test_that("discovr-book-examples, chap 8.8", {
   set.seed(123)
   out <- describe_distribution(
     album_sales,
-    range = FALSE,
+    indices = c("dispersion", "iqr", "skewness", "kurtosis"),
     ci = 0.95,
     iterations = 500
   )

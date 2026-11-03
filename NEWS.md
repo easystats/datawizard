@@ -18,6 +18,10 @@ BREAKING CHANGES
 
 CHANGES
 
+* New function `collapse_levels()` merges sparse levels of factors and character
+  vectors. Nominal levels merge into one level, and ordered levels merge with a
+  neighbor. With `pool = TRUE`, the items of a scale get the same merges (#48).
+
 * `degroup()` now also accepts a function in `center`, e.g.
   `center = function(x) mean(x, trim = 0.2)` (#21).
 
@@ -34,7 +38,8 @@ CHANGES
 * `center()` and `standardize()` gain a `cluster` argument. If `cluster` is
   given, the center and scale come from one value per cluster. Cluster-level
   variables in unbalanced long-format data are then not weighted by cluster
-  size (#672).
+  size. `cluster` can also be several column names, or a list of cluster id
+  vectors (#672).
 
 * `skewness()`, `kurtosis()`, and `smoothness()` now return objects of class
   `datawizard_skewness`, `datawizard_kurtosis`, and `datawizard_smoothness`.
@@ -42,8 +47,14 @@ CHANGES
   `parameters_smoothness` remain as secondary classes, so code that checks
   `class(x)[1]` for the old names needs to be updated (#248).
 
+* `describe_distribution()` gains an `indices` argument, to select the
+  optional columns to return, e.g. to leave out skewness and kurtosis.
+  Arguments `dispersion`, `iqr`, `range`, and `quartiles` are deprecated.
+  Please use `indices` instead (#687).
+
 * `adjust()` gains `...`, which passes arguments to the function that fits the
-  model (#696).
+  model. Rows that the model drops, for example for a missing value in
+  `weights`, are `NA` in the adjusted variables (#696).
 
 FIXES
 
@@ -68,6 +79,33 @@ FIXES
 * `standardize()` now works with models coerced with
   `lmerTest::as_lmerModLmerTest()`. You can also pass a standardized
   `lme4::lmer()` model to `as_lmerModLmerTest()` or to `update()` (#716).
+
+* Fixed `standardize()` on data frames when `center` or `scale` is a single
+  `TRUE` or `FALSE`. `scale = FALSE` still divided by the standard deviation,
+  `center = FALSE` did not scale, and `center = TRUE` did not scale either.
+  The results now match those for a single variable.
+
+* Fixed `winsorize()` with `method = "percentile"` for data with missing
+  values. Missing values counted toward the number of observations, which gave
+  wrong results: the lower limit was too high in some cases, and the upper
+  limit was too high or was not applied.
+
+* `winsorize()` no longer makes a variable with more than one distinct value
+  constant. With no missing values, this happened at the default `threshold` to
+  a dummy variable whose rarer value made up 20% or less of the values. Such a
+  variable now comes back unchanged, with a warning that names the column in a
+  data frame. `verbose = FALSE` turns the warning off (#736).
+
+* Fixed wrong results of `standardize()` on data frames when only one of
+  `center` and `scale` was given. A `scale` alone was ignored, so
+  `scale = 2` gave z-scores. With a `center` alone, the variables were not
+  divided by their standard deviation, so `center = 1` only subtracted 1. The
+  results now match those for a single variable.
+
+* Fixed wrong results of `standardize()` and `center()` on data frames when
+  `center` or `scale` is a named vector and `append` is used. The named values
+  were ignored, so the appended columns used the mean and standard deviation of
+  each variable instead.
 
 # datawizard 1.4.1
 

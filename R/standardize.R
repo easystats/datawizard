@@ -1,5 +1,7 @@
-#' Standardization (Z-scoring)
+#' @title Standardization (Z-scoring)
+#' @name standardize
 #'
+#' @description
 #' Performs a standardization of data (z-scoring), i.e., centering and scaling,
 #' so that the data is expressed in terms of standard deviation (i.e., mean = 0,
 #' SD = 1) or Median Absolute Deviance (median = 0, MAD = 1). When applied to a
@@ -7,7 +9,7 @@
 #' refits the model with this standardized version of the dataset. The
 #' [normalize()] function can also be used to scale all numeric variables within
 #' the 0 - 1 range.
-#' \cr\cr
+#'
 #' For model standardization, see [`standardize.default()`].
 #'
 #' @param x A (grouped) data frame, a vector or a statistical model (for
@@ -26,17 +28,18 @@
 #' - For `data.frame`s: a numeric vector of weights, or a character of the
 #'   name of a column in the `data.frame` that contains the weights.
 #' - For numeric vectors: a numeric vector of weights.
-#' @param cluster Can be `NULL` (for no clustering), or a vector of cluster
-#'   ids with one element per observation. For data frames, it can also be the
-#'   name of a column that contains the cluster ids. If given, the center and
-#'   scale are computed from one value per cluster instead of from all
-#'   observations, so that a cluster-level (Level 2) variable in long format is
-#'   not weighted by the number of observations per cluster. The variable must
-#'   take only one finite value within each cluster (infinite values are
-#'   treated as missing), and observations with a missing cluster id are
-#'   returned as `NA`. `cluster` cannot be combined with
-#'   `weights`, `reference`, or values for `center` and `scale`. For grouped
-#'   data frames, `cluster` must be a column name.
+#' @param cluster Can be `NULL` (for no clustering), a vector of cluster ids
+#'   with one element per observation, or a list of such vectors. For data
+#'   frames, it can also be the names of columns that contain the cluster ids.
+#'   With several cluster variables, each combination of their values is one
+#'   cluster. If given, the center and scale are computed from one value per
+#'   cluster instead of from all observations, so that a cluster-level (Level 2)
+#'   variable in long format is not weighted by the number of observations per
+#'   cluster. The variable must take only one finite value within each cluster
+#'   (infinite values are treated as missing), and observations with a missing
+#'   cluster id are returned as `NA`. Using `cluster` together with `weights`,
+#'   `reference`, or numeric `center` or `scale` gives an error. For grouped
+#'   data frames, `cluster` must be column names.
 #' @param verbose Toggle warnings and messages on or off.
 #' @param remove_na How should missing values (`NA`) be treated: if `"none"`
 #'   (default): each column's standardization is done separately, ignoring
@@ -57,7 +60,8 @@
 #'   deviation will be computed instead of from the input variable. Useful for
 #'   standardizing a subset or new data according to another data frame.
 #' @param center,scale
-#' * For `standardize()`: \cr
+#' * For `standardize()`:
+#'
 #'   Numeric values, which can be used as alternative to `reference` to define
 #'   a reference centrality and deviation. If `scale` and `center` are of
 #'   length 1, they will be recycled to match the length of selected variables
@@ -67,7 +71,8 @@
 #'   is given. In this case, names are matched against the names of the selected
 #'   variables.
 #'
-#' * For `unstandardize()`: \cr
+#' * For `unstandardize()`:
+#'
 #'   `center` and `scale` correspond to the center (the mean / median) and the scale (SD / MAD) of
 #'   the original non-standardized data (for data frames, should be named, or
 #'   have column order correspond to the numeric column). However, one can also
@@ -129,6 +134,15 @@
 #'
 #' # standardization, taking same mean and sd for each variable
 #' standardize(d, center = 1, scale = 3)
+#'
+#' # standardization, mean and sd defined by variable name
+#' d <- data.frame(a = c(1, 2, 3, 10), b = c(2, 4, 6, 8))
+#' standardize(
+#'   d,
+#'   center = c(b = 5, a = 1),
+#'   scale = c(b = 4, a = 2),
+#'   append = TRUE
+#' )
 #'
 #' # cluster-level variable in long format: one value per school, but
 #' # schools have different numbers of students

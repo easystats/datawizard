@@ -118,7 +118,8 @@ deviation will be computed instead of from the input variable. Useful for
 standardizing a subset or new data according to another data frame.}
 
 \item{center, scale}{\itemize{
-\item For \code{standardize()}: \cr
+\item For \code{standardize()}:
+
 Numeric values, which can be used as alternative to \code{reference} to define
 a reference centrality and deviation. If \code{scale} and \code{center} are of
 length 1, they will be recycled to match the length of selected variables
@@ -127,7 +128,8 @@ the number of selected variables. Values in \code{center} and \code{scale} will 
 matched to selected variables in the provided order, unless a named vector
 is given. In this case, names are matched against the names of the selected
 variables.
-\item For \code{unstandardize()}: \cr
+\item For \code{unstandardize()}:
+
 \code{center} and \code{scale} correspond to the center (the mean / median) and the scale (SD / MAD) of
 the original non-standardized data (for data frames, should be named, or
 have column order correspond to the numeric column). However, one can also
@@ -140,17 +142,18 @@ rest of the arguments are absent.
 
 \item{verbose}{Toggle warnings and messages on or off.}
 
-\item{cluster}{Can be \code{NULL} (for no clustering), or a vector of cluster
-ids with one element per observation. For data frames, it can also be the
-name of a column that contains the cluster ids. If given, the center and
-scale are computed from one value per cluster instead of from all
-observations, so that a cluster-level (Level 2) variable in long format is
-not weighted by the number of observations per cluster. The variable must
-take only one finite value within each cluster (infinite values are
-treated as missing), and observations with a missing cluster id are
-returned as \code{NA}. \code{cluster} cannot be combined with
-\code{weights}, \code{reference}, or values for \code{center} and \code{scale}. For grouped
-data frames, \code{cluster} must be a column name.}
+\item{cluster}{Can be \code{NULL} (for no clustering), a vector of cluster ids
+with one element per observation, or a list of such vectors. For data
+frames, it can also be the names of columns that contain the cluster ids.
+With several cluster variables, each combination of their values is one
+cluster. If given, the center and scale are computed from one value per
+cluster instead of from all observations, so that a cluster-level (Level 2)
+variable in long format is not weighted by the number of observations per
+cluster. The variable must take only one finite value within each cluster
+(infinite values are treated as missing), and observations with a missing
+cluster id are returned as \code{NA}. Using \code{cluster} together with \code{weights},
+\code{reference}, or numeric \code{center} or \code{scale} gives an error. For grouped
+data frames, \code{cluster} must be column names.}
 
 \item{force}{Logical, if \code{TRUE}, forces recoding of factors and character
 vectors as well.}
@@ -236,7 +239,7 @@ statistical model, this function extracts the dataset, standardizes it, and
 refits the model with this standardized version of the dataset. The
 \code{\link[=normalize]{normalize()}} function can also be used to scale all numeric variables within
 the 0 - 1 range.
-\cr\cr
+
 For model standardization, see \code{\link[=standardize.default]{standardize.default()}}.
 }
 \note{
@@ -288,6 +291,15 @@ standardize(d, center = c(3, 4), scale = c(2, 4))
 
 # standardization, taking same mean and sd for each variable
 standardize(d, center = 1, scale = 3)
+
+# standardization, mean and sd defined by variable name
+d <- data.frame(a = c(1, 2, 3, 10), b = c(2, 4, 6, 8))
+standardize(
+  d,
+  center = c(b = 5, a = 1),
+  scale = c(b = 4, a = 2),
+  append = TRUE
+)
 
 # cluster-level variable in long format: one value per school, but
 # schools have different numbers of students

@@ -353,6 +353,96 @@ test_that("standardize when only providing one of center/scale", {
   )
 })
 
+test_that("standardize data frame with TRUE or FALSE in center and scale", {
+  d <- data.frame(a = c(1, 2, 3, 10), b = c(5, 1, 4, 2))
+  for (args in list(
+    list(center = FALSE),
+    list(center = TRUE),
+    list(scale = FALSE),
+    list(scale = TRUE),
+    list(center = FALSE, scale = FALSE),
+    list(center = FALSE, scale = TRUE)
+  )) {
+    out <- do.call(standardize, c(list(d), args))
+    expect_equal(
+      out$a,
+      do.call(standardize, c(list(d$a), args)),
+      ignore_attr = TRUE
+    )
+    expect_equal(
+      out$b,
+      do.call(standardize, c(list(d$b), args)),
+      ignore_attr = TRUE
+    )
+  }
+})
+
+test_that("standardize data frame with TRUE or FALSE and numeric values", {
+  d <- data.frame(a = c(1, 2, 3, 10), b = c(5, 1, 4, 2))
+  out <- standardize(d, center = c(a = 1, b = 5), scale = FALSE)
+  expect_equal(out$a, d$a - 1, ignore_attr = TRUE)
+  expect_equal(out$b, d$b - 5, ignore_attr = TRUE)
+  out <- standardize(d, center = FALSE, scale = c(a = 2, b = 4))
+  expect_equal(out$a, d$a / 2, ignore_attr = TRUE)
+  expect_equal(out$b, d$b / 4, ignore_attr = TRUE)
+  out <- standardize(d, center = TRUE, scale = 2)
+  expect_equal(out$a, (d$a - mean(d$a)) / 2, ignore_attr = TRUE)
+  expect_equal(out$b, (d$b - mean(d$b)) / 2, ignore_attr = TRUE)
+})
+
+test_that("standardize data frame with only numeric scale", {
+  d <- data.frame(a = c(1, 2, 3, 10), b = c(2, 4, 6, 8))
+  out <- standardize(d, scale = 2)
+  expect_equal(out$a, (d$a - mean(d$a)) / 2, ignore_attr = TRUE)
+  expect_equal(out$b, (d$b - mean(d$b)) / 2, ignore_attr = TRUE)
+})
+
+test_that("standardize data frame with only numeric center", {
+  d <- data.frame(a = c(1, 2, 3, 10), b = c(2, 4, 6, 8))
+  out <- standardize(d, center = 1)
+  expect_equal(out$a, (d$a - 1) / sd(d$a), ignore_attr = TRUE)
+  expect_equal(out$b, (d$b - 1) / sd(d$b), ignore_attr = TRUE)
+  # center() has no scale
+  expect_equal(center(d, center = 1)$a, d$a - 1, ignore_attr = TRUE)
+})
+
+test_that("standardize data frame with logical vector in scale", {
+  d <- data.frame(a = c(1, 2, 3, 10), b = c(2, 4, 6, 8))
+  out <- standardize(d, scale = c(TRUE, FALSE))
+  expect_equal(out$a, (d$a - mean(d$a)) / sd(d$a), ignore_attr = TRUE)
+  expect_equal(out$b, d$b - mean(d$b), ignore_attr = TRUE)
+})
+
+test_that("standardize data frame with NA in center", {
+  d <- data.frame(a = c(1, 2, 3, 10), b = c(2, 4, 6, 8))
+  out <- standardize(d, center = NA)
+  expect_equal(out$a, (d$a - mean(d$a)) / sd(d$a), ignore_attr = TRUE)
+  expect_equal(out$b, (d$b - mean(d$b)) / sd(d$b), ignore_attr = TRUE)
+})
+
+test_that("standardize and center data frame with named values and append", {
+  d <- data.frame(a = c(1, 2, 3, 10), b = c(5, 1, 4, 2))
+  out <- standardize(
+    d,
+    center = c(b = 5, a = 1),
+    scale = c(b = 4, a = 2),
+    append = TRUE
+  )
+  expect_equal(out$a_z, (d$a - 1) / 2, ignore_attr = TRUE)
+  expect_equal(out$b_z, (d$b - 5) / 4, ignore_attr = TRUE)
+  out <- center(d, center = c(b = 5, a = 1), append = TRUE)
+  expect_equal(out$a_c, d$a - 1, ignore_attr = TRUE)
+  expect_equal(out$b_c, d$b - 5, ignore_attr = TRUE)
+  # names of the appended columns
+  out <- standardize(
+    d,
+    center = c(a_z = 1, b_z = 5),
+    scale = c(a_z = 2, b_z = 4),
+    append = TRUE
+  )
+  expect_equal(out$a_z, (d$a - 1) / 2, ignore_attr = TRUE)
+})
+
 
 # grouped data
 
