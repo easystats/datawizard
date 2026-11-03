@@ -177,5 +177,5 @@ winsorize.numeric <- function(
     return(data)
   }
 
-  return(out)
+  out
 }
