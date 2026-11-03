@@ -655,6 +655,8 @@ Functions for transforming variables
   : Unite ("merge") multiple variables
 - [`categorize()`](https://easystats.github.io/datawizard/reference/categorize.md)
   : Recode (or "cut" / "bin") data into groups of values.
+- [`collapse_levels()`](https://easystats.github.io/datawizard/reference/collapse_levels.md)
+  : Collapse sparse levels of categorical variables
 - [`recode_into()`](https://easystats.github.io/datawizard/reference/recode_into.md)
   : Recode values from one or more variables into a new variable
 - [`recode_values()`](https://easystats.github.io/datawizard/reference/recode_values.md)

@@ -29,6 +29,13 @@ BREAKING CHANGES
 
 CHANGES
 
+- New function
+  [`collapse_levels()`](https://easystats.github.io/datawizard/reference/collapse_levels.md)
+  merges sparse levels of factors and character vectors. Nominal levels
+  merge into one level, and ordered levels merge with a neighbor. With
+  `pool = TRUE`, the items of a scale get the same merges
+  ([\#48](https://github.com/easystats/datawizard/issues/48)).
+
 - [`degroup()`](https://easystats.github.io/datawizard/reference/demean.md)
   now also accepts a function in `center`, e.g.
   `center = function(x) mean(x, trim = 0.2)`
