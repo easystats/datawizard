@@ -118,7 +118,8 @@ deviation will be computed instead of from the input variable. Useful for
 standardizing a subset or new data according to another data frame.}
 
 \item{center, scale}{\itemize{
-\item For \code{standardize()}: \cr
+\item For \code{standardize()}:
+
 Numeric values, which can be used as alternative to \code{reference} to define
 a reference centrality and deviation. If \code{scale} and \code{center} are of
 length 1, they will be recycled to match the length of selected variables
@@ -127,7 +128,8 @@ the number of selected variables. Values in \code{center} and \code{scale} will 
 matched to selected variables in the provided order, unless a named vector
 is given. In this case, names are matched against the names of the selected
 variables.
-\item For \code{unstandardize()}: \cr
+\item For \code{unstandardize()}:
+
 \code{center} and \code{scale} correspond to the center (the mean / median) and the scale (SD / MAD) of
 the original non-standardized data (for data frames, should be named, or
 have column order correspond to the numeric column). However, one can also
@@ -237,7 +239,7 @@ statistical model, this function extracts the dataset, standardizes it, and
 refits the model with this standardized version of the dataset. The
 \code{\link[=normalize]{normalize()}} function can also be used to scale all numeric variables within
 the 0 - 1 range.
-\cr\cr
+
 For model standardization, see \code{\link[=standardize.default]{standardize.default()}}.
 }
 \note{
