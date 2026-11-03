@@ -183,3 +183,18 @@ test_that("adjust passes ... to rstanarm::stan_gamm4()", {
     tolerance = 1e-6
   )
 })
+
+test_that("adjust keeps values on their rows when the model drops rows", {
+  d <- mtcars[c("mpg", "wt")]
+  w <- c(NA, rep(1, 31))
+  # oracle: the residuals of the same fit, with NA on the row it drops
+  m <- stats::lm(mpg ~ 1 + wt, data = d, weights = w)
+  adj <- adjust(d, effect = "wt", select = "mpg", weights = w)
+  expect_equal(adj$mpg, c(NA, unname(stats::residuals(m))), tolerance = 1e-6)
+
+  # oracle: na.exclude already returns one residual per row, with NA on row 3
+  d$mpg[3] <- NA
+  m <- stats::lm(mpg ~ 1 + wt, data = d, na.action = na.exclude)
+  adj <- adjust(d, effect = "wt", select = "mpg", na.action = na.exclude)
+  expect_equal(adj$mpg, unname(stats::residuals(m)), tolerance = 1e-6)
+})
