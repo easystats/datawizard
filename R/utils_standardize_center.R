@@ -206,7 +206,6 @@
   # a character vector names the cluster columns, which are never transformed
   cluster_name <- NULL
   if (!is.null(cluster)) {
-    # check here, because `.scale` is dropped below when no `.center` is given
     .check_cluster_args(cluster, weights, reference, .center, .scale)
     if (is.character(cluster)) {
       .check_cluster_column(x, cluster)
@@ -315,10 +314,14 @@
     .center <- broadcast(.center)
     .scale <- broadcast(.scale)
   }
-  if (!is.null(.center)) {
-    # for center(), we have no scale - set it to default value
+  if (!is.null(.center) || !is.null(.scale)) {
+    # an argument that is not given is left to its default (NA), as it is for a
+    # single variable. center() has no scale and does not use the value.
+    if (is.null(.center)) {
+      .center <- rep(NA, length(.scale))
+    }
     if (is.null(.scale)) {
-      .scale <- rep(1, length(.center))
+      .scale <- rep(NA, length(.center))
     }
 
     # center and scale must have same length
