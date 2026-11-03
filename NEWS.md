@@ -84,6 +84,11 @@ FIXES
   `center = FALSE` did not scale, and `center = TRUE` did not scale either.
   The results now match those for a single variable.
 
+* Fixed wrong results of `standardize()` and `center()` on data frames when
+  `center` or `scale` is a named vector and `append` is used. The named values
+  were ignored, so the appended columns used the mean and standard deviation of
+  each variable instead.
+
 # datawizard 1.4.1
 
 CHANGES
