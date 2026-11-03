@@ -12,9 +12,9 @@ test_that("with missing values", {
 })
 
 test_that("winsorize: missing values do not count in percentile", {
-  expect_equal(
+  expect_identical(
     winsorize(c(NA, 1:5, NA, 6:10, NA), threshold = 0.2),
-    c(NA, 3, 3, 3, 4, 5, NA, 6, 7, 8, 8, 8, NA)
+    c(NA, 3L, 3L, 3L, 4L, 5L, NA, 6L, 7L, 8L, 8L, 8L, NA)
   )
 })
 
