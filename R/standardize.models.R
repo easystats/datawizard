@@ -343,6 +343,11 @@ standardize.lmerMod <- function(
 }
 
 
+# stan_lmer() models also have class "lmerMod", but they are not S4 objects
+#' @export
+standardize.stanreg <- standardize.default
+
+
 #' @export
 standardize.mixor <- function(
   x,
