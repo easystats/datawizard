@@ -1,5 +1,7 @@
-#' Standardization (Z-scoring)
+#' @title Standardization (Z-scoring)
+#' @name standardize
 #'
+#' @description
 #' Performs a standardization of data (z-scoring), i.e., centering and scaling,
 #' so that the data is expressed in terms of standard deviation (i.e., mean = 0,
 #' SD = 1) or Median Absolute Deviance (median = 0, MAD = 1). When applied to a
@@ -7,7 +9,7 @@
 #' refits the model with this standardized version of the dataset. The
 #' [normalize()] function can also be used to scale all numeric variables within
 #' the 0 - 1 range.
-#' \cr\cr
+#'
 #' For model standardization, see [`standardize.default()`].
 #'
 #' @param x A (grouped) data frame, a vector or a statistical model (for
@@ -58,7 +60,8 @@
 #'   deviation will be computed instead of from the input variable. Useful for
 #'   standardizing a subset or new data according to another data frame.
 #' @param center,scale
-#' * For `standardize()`: \cr
+#' * For `standardize()`:
+#'
 #'   Numeric values, which can be used as alternative to `reference` to define
 #'   a reference centrality and deviation. If `scale` and `center` are of
 #'   length 1, they will be recycled to match the length of selected variables
@@ -68,7 +71,8 @@
 #'   is given. In this case, names are matched against the names of the selected
 #'   variables.
 #'
-#' * For `unstandardize()`: \cr
+#' * For `unstandardize()`:
+#'
 #'   `center` and `scale` correspond to the center (the mean / median) and the scale (SD / MAD) of
 #'   the original non-standardized data (for data frames, should be named, or
 #'   have column order correspond to the numeric column). However, one can also
@@ -130,6 +134,15 @@
 #'
 #' # standardization, taking same mean and sd for each variable
 #' standardize(d, center = 1, scale = 3)
+#'
+#' # standardization, mean and sd defined by variable name
+#' d <- data.frame(a = c(1, 2, 3, 10), b = c(2, 4, 6, 8))
+#' standardize(
+#'   d,
+#'   center = c(b = 5, a = 1),
+#'   scale = c(b = 4, a = 2),
+#'   append = TRUE
+#' )
 #'
 #' # cluster-level variable in long format: one value per school, but
 #' # schools have different numbers of students

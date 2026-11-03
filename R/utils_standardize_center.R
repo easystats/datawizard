@@ -296,6 +296,17 @@
       )
     }
     x <- cbind(x, new_variables)
+    # names in center and scale refer to the selected variables, not to the new
+    # columns that are transformed
+    add_suffix <- function(i) {
+      selected <- names(i) %in% select
+      if (any(selected)) {
+        names(i)[selected] <- paste0(names(i)[selected], append)
+      }
+      i
+    }
+    .center <- add_suffix(.center)
+    .scale <- add_suffix(.scale)
     select <- colnames(new_variables)
   }
 

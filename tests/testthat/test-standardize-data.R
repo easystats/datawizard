@@ -420,6 +420,29 @@ test_that("standardize data frame with NA in center", {
   expect_equal(out$b, (d$b - mean(d$b)) / sd(d$b), ignore_attr = TRUE)
 })
 
+test_that("standardize and center data frame with named values and append", {
+  d <- data.frame(a = c(1, 2, 3, 10), b = c(5, 1, 4, 2))
+  out <- standardize(
+    d,
+    center = c(b = 5, a = 1),
+    scale = c(b = 4, a = 2),
+    append = TRUE
+  )
+  expect_equal(out$a_z, (d$a - 1) / 2, ignore_attr = TRUE)
+  expect_equal(out$b_z, (d$b - 5) / 4, ignore_attr = TRUE)
+  out <- center(d, center = c(b = 5, a = 1), append = TRUE)
+  expect_equal(out$a_c, d$a - 1, ignore_attr = TRUE)
+  expect_equal(out$b_c, d$b - 5, ignore_attr = TRUE)
+  # names of the appended columns
+  out <- standardize(
+    d,
+    center = c(a_z = 1, b_z = 5),
+    scale = c(a_z = 2, b_z = 4),
+    append = TRUE
+  )
+  expect_equal(out$a_z, (d$a - 1) / 2, ignore_attr = TRUE)
+})
+
 
 # grouped data
 
