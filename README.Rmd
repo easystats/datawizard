@@ -236,10 +236,10 @@ To winsorize data:
 
 ```{r}
 # before
-anscombe
+anscombe[5:8]
 
 # after
-winsorize(anscombe)
+winsorize(anscombe[5:8])
 ```
 
 ### Center
