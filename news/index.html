@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,11 +50,11 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/easystats/datawizard/blob/v1.5.0/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/easystats/datawizard/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.5.0" id="datawizard-150">datawizard 1.5.0<a class="anchor" aria-label="anchor" href="#datawizard-150"></a></h2>
+<h2 class="pkg-version" data-toc-text="1.5.0" id="datawizard-150">datawizard 1.5.0<a class="anchor" aria-label="anchor" href="#datawizard-150"></a></h2><p class="text-muted">CRAN release: 2026-11-04</p>
 <p>BREAKING CHANGES</p>
 <ul><li><p>In <code><a href="../reference/demean.html">demean()</a></code> and <code><a href="../reference/demean.html">degroup()</a></code>, a formula in <code>by</code> whose terms are separated only by <code>/</code>, such as <code>by = ~ L3/L2</code>, now means a nested design, like the string <code>by = "L3/L2"</code>. Before, such a formula gave a cross-classified design unless <code>nested = TRUE</code> was set. Only the right-hand side of a formula in <code>by</code> is read now. Before, a variable on the left-hand side was also used as a grouping variable (<a href="https://github.com/easystats/datawizard/issues/722" class="external-link">#722</a>).</p></li>
 <li><p><code><a href="../reference/demean.html">demean()</a></code> and <code><a href="../reference/demean.html">degroup()</a></code> now stop with an error when <code>by</code> mixes nested and cross-classified grouping. A formula with both <code>+</code> and <code>/</code>, such as <code>by = ~ C + A/B</code>, gave a cross-classified design before, or a nested design with <code>nested = TRUE</code>. A character vector such as <code>by = c("C", "A/B")</code>, with no column named <code>"A/B"</code>, gave an error that a variable was not found. A string such as <code>by = "C + A/B"</code> gave the same error (<a href="https://github.com/easystats/datawizard/issues/722" class="external-link">#722</a>).</p></li>

@@ -2,6 +2,8 @@
 
 ## datawizard 1.5.0
 
+CRAN release: 2026-11-04
+
 BREAKING CHANGES
 
 - In
