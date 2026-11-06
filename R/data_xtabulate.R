@@ -343,14 +343,13 @@ print_html.datawizard_crosstab <- function(x, big_mark = NULL, ...) {
     x$Group <- NULL
   }
   if (!is.null(attr(x, "chisq_caption"))) {
-    caption <- paste0(caption, attr(x, "chisq_caption"))
+    footer <- attr(x, "chisq_caption")
+  } else {
+    footer <- ""
   }
   if (!is.null(attr(x, "chi_square_warning"))) {
-    paste0(
-      caption,
-      "\n",
+    footer <-
       insight::format_warning(attr(x, "chi_square_warning"))
-    )
   }
 
   # this function is used by all four supported format, markdown, text, html
@@ -361,6 +360,7 @@ print_html.datawizard_crosstab <- function(x, big_mark = NULL, ...) {
   fun_args <- list(
     format(x, big_mark = big_mark, format = format, ...),
     caption = caption,
+    footer = footer,
     format = backend
   )
   if (!format %in% c("html", "tt")) {
