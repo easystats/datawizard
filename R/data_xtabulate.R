@@ -65,7 +65,7 @@
   }
 
   if (is.null(x_table)) {
-    insight::format_warning(paste0(
+    insight::format_message(paste0(
       "Can't compute cross tables for objects of class `",
       class(x)[1],
       "`."
