@@ -342,10 +342,10 @@ print_html.datawizard_crosstab <- function(x, big_mark = NULL, ...) {
     caption <- paste0("Grouped by ", x[["Group"]][1])
     x$Group <- NULL
   }
-  if (!is.null(attr(x, "chisq_caption"))) {
-    footer <- attr(x, "chisq_caption")
-  } else {
+  if (is.null(attr(x, "chisq_caption"))) {
     footer <- ""
+  } else {
+    footer <- attr(x, "chisq_caption")
   }
   if (!is.null(attr(x, "chi_square_warning"))) {
     footer <-
