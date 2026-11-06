@@ -7,8 +7,21 @@
   remove_na = FALSE,
   proportions = NULL,
   obj_name = NULL,
-  group_variable = NULL
+  group_variable = NULL,
+  chisq = FALSE
 ) {
+  if (
+    is.null(group_variable) &&
+      is.null(attr(x, "groups")) ||
+      (nlevels(x) > 1 && nlevels(x) > 1)
+  ) {
+    chi_square <- stats::chisq.test(x, by, simulate.p.value = TRUE)
+  } else {
+    chi_square <-
+      "Both 'by' and 'x' must have at least 2 unique levels\n
+    in order to calculate chi square."
+  }
+
   if (!is.null(proportions)) {
     proportions <- match.arg(proportions, c("row", "column", "full"))
   }
@@ -52,7 +65,7 @@
   }
 
   if (is.null(x_table)) {
-    insight::format_warning(paste0(
+    insight::format_message(paste0(
       "Can't compute cross tables for objects of class `",
       class(x)[1],
       "`."
@@ -97,7 +110,24 @@
   if (!is.null(by_name)) {
     attr(out, "by") <- by_name
   }
-
+  attr(out, "chi_square") <- chi_square
+  if (chisq) {
+    if (is.list(chi_square)) {
+      attr(out, "chisq_caption") <- paste0(
+        chi_square$method,
+        "\n ",
+        "X-squared = ",
+        round(chi_square[["statistic"]], 3),
+        ", ",
+        "df = ",
+        chi_square[["parameter"]][["df"]],
+        ", p = ",
+        round(chi_square$p.value, 3)
+      )
+    } else if (is.character(chi_square)) {
+      attr(out, "chisq_caption") <- chi_square
+    }
+  }
   attr(out, "grouped_df") <- !is.null(group_variable)
   attr(out, "prop_table") <- .prop_table(out)
 
@@ -312,6 +342,15 @@ print_html.datawizard_crosstab <- function(x, big_mark = NULL, ...) {
     caption <- paste0("Grouped by ", x[["Group"]][1])
     x$Group <- NULL
   }
+  if (is.null(attr(x, "chisq_caption"))) {
+    footer <- ""
+  } else {
+    footer <- attr(x, "chisq_caption")
+  }
+  if (!is.null(attr(x, "chi_square_warning"))) {
+    footer <-
+      insight::format_warning(attr(x, "chi_square_warning"))
+  }
 
   # this function is used by all four supported format, markdown, text, html
   # and tt (tinytable). For tt, we sometimes have format "html" and backend = "tt",
@@ -321,6 +360,7 @@ print_html.datawizard_crosstab <- function(x, big_mark = NULL, ...) {
   fun_args <- list(
     format(x, big_mark = big_mark, format = format, ...),
     caption = caption,
+    footer = footer,
     format = backend
   )
   if (!format %in% c("html", "tt")) {
