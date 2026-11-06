@@ -10,10 +10,12 @@
   group_variable = NULL,
   chisq = FALSE
 ) {
-  if (is.null(group_variable) && is.null(attr(x, "groups"))) {
-    chi_square <- chisq.test(x, by, simulate.p.value = TRUE)
-  } else if (nlevels(x) > 1 && nlevels(x) > 1) {
-    chi_square <- chisq.test(x, by, simulate.p.value = TRUE)
+  if (
+    is.null(group_variable) &&
+      is.null(attr(x, "groups")) ||
+      (nlevels(x) > 1 && nlevels(x) > 1)
+  ) {
+    chi_square <- stats::chisq.test(x, by, simulate.p.value = TRUE)
   } else {
     chi_square <-
       "Both 'by' and 'x' must have at least 2 unique levels\n
