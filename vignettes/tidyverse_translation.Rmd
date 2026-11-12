@@ -55,6 +55,10 @@ Patil et al., (2022). datawizard: An R Package for Easy Data Preparation and Sta
   padding: 5px;
   margin-bottom: 10px
 }
+[data-bs-theme="dark"] .custom_note {
+  border-left-color: hsl(220, 100%, 65%);
+  background-color: hsl(220, 40%, 20%);
+}
 ```
 
 # Introduction
