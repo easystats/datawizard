@@ -399,6 +399,14 @@ test_that("data_tabulate default by with chisq", {
   ))
 })
 
+test_that("data_tabulate default by with effectsize", {
+  expect_no_error(data_tabulate(
+    x = efc$e16sex,
+    by = efc$c172code,
+    effect_size = "cramers_v"
+  ))
+})
+
 test_that("data_tabulate grouped data.frame by", {
   skip_if_not_installed("poorman")
   data(efc, package = "datawizard")
@@ -447,6 +455,17 @@ test_that("data_tabulate grouped data.frame by with chi square", {
     "c172code",
     by = "e42dep",
     chisq = TRUE
+  ))
+})
+
+test_that("data_tabulate grouped data.frame by with effect size", {
+  skip_if_not_installed("poorman")
+  data(efc, package = "datawizard")
+  expect_no_warning(data_tabulate(
+    poorman::group_by(efc, e16sex),
+    "c172code",
+    by = "e42dep",
+    effect_size = "pearsons_c"
   ))
 })
 
@@ -509,11 +528,30 @@ test_that("data_tabulate default by with chisq", {
   ))
 })
 
+test_that("data_tabulate default by with effect size", {
+  data(efc, package = "datawizard")
+  set.seed(123)
+  expect_snapshot(data_tabulate(
+    x = efc$e16sex,
+    by = efc$c172code,
+    effect_size = "cramers_v"
+  ))
+})
+
+test_that("data_tabulate default by with effect size phi incorrect", {
+  data(efc, package = "datawizard")
+  set.seed(123)
+  expect_snapshot(data_tabulate(
+    x = efc$e16sex,
+    by = efc$c172code,
+    effect_size = "phi"
+  ))
+})
+
 test_that("data_tabulate print multiple, collapse", {
   data(efc, package = "datawizard")
   expect_snapshot(data_tabulate(efc, c("c172code", "e16sex"), collapse = TRUE))
 })
-
 
 test_that("data_tabulate grouped data.frame", {
   skip_if_not_installed("poorman")

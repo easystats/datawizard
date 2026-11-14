@@ -294,6 +294,59 @@
       	 (based on 2000 replicates)
        X-squared = 3.88, df = NA, p = 0.163
 
+# data_tabulate default by with effect size
+
+    Code
+      data_tabulate(x = efc$e16sex, by = efc$c172code, effect_size = "cramers_v")
+    Message
+      Removing NA values from frequency table.
+    Output
+      efc$e16sex | low level of education | intermediate level of education
+      -----------+------------------------+--------------------------------
+      1          |                      5 |                              32
+      2          |                      3 |                              34
+      <NA>       |                      0 |                               0
+      -----------+------------------------+--------------------------------
+      Total      |                      8 |                              66
+      
+      efc$e16sex | high level of education | <NA> | Total
+      -----------+-------------------------+------+------
+      1          |                       4 |    5 |    46
+      2          |                      12 |    5 |    54
+      <NA>       |                       0 |    0 |     0
+      -----------+-------------------------+------+------
+      Total      |                      16 |   10 |   100
+      
+      |Cramer's V (adj.) |      95% CI |
+      |:-----------------|:------------|
+      |0.14              |[0.00, 1.00] |
+      One-sided CIs: upper bound fixed at [1.00].
+
+# data_tabulate default by with effect size phi incorrect
+
+    Code
+      data_tabulate(x = efc$e16sex, by = efc$c172code, effect_size = "phi")
+    Message
+      Removing NA values from frequency table.
+      Removing NA values from frequency table.
+    Output
+      Error : Phi can only be calculated for 2 by 2 tables.
+      efc$e16sex | low level of education | intermediate level of education
+      -----------+------------------------+--------------------------------
+      1          |                      5 |                              32
+      2          |                      3 |                              34
+      <NA>       |                      0 |                               0
+      -----------+------------------------+--------------------------------
+      Total      |                      8 |                              66
+      
+      efc$e16sex | high level of education | <NA> | Total
+      -----------+-------------------------+------+------
+      1          |                       4 |    5 |    46
+      2          |                      12 |    5 |    54
+      <NA>       |                       0 |    0 |     0
+      -----------+-------------------------+------+------
+      Total      |                      16 |   10 |   100
+
 # data_tabulate print multiple, collapse
 
     Code

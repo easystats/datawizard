@@ -46,6 +46,10 @@
 #' `"cumulative"` (percentage excluding `NA` values).
 #' @param chisq include chi square for two dimensional tables. This is always
 #' calculated with the `chisq.test()` `simulate.p.value = TRUE`.
+#' @param effect_size include an effect size for two dimensional tables using
+#' functions from the `effectsize` packages. Options are: "none",
+#' "[effectsize::phi()]",
+#' "[effectsize::cramers_v()]" and "[effectsize::tschuprows_t()]".  Defaults to "none."
 #' @param ... not used.
 #' @inheritParams extract_column_names
 #'
