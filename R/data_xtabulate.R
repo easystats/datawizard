@@ -7,8 +7,22 @@
   remove_na = FALSE,
   proportions = NULL,
   obj_name = NULL,
-  group_variable = NULL
+  group_variable = NULL,
+  chisq = FALSE,
+  effect_size = NULL
 ) {
+  if (
+    is.null(group_variable) &&
+      is.null(attr(x, "groups")) ||
+      (nlevels(x) > 1 && nlevels(x) > 1)
+  ) {
+    chi_square <- stats::chisq.test(x, by, simulate.p.value = TRUE)
+  } else {
+    chi_square <-
+      "Both 'by' and 'x' must have at least 2 unique levels\n
+    in order to calculate chi square."
+  }
+
   if (!is.null(proportions)) {
     proportions <- match.arg(proportions, c("row", "column", "full"))
   }
@@ -52,7 +66,7 @@
   }
 
   if (is.null(x_table)) {
-    insight::format_warning(paste0(
+    insight::format_message(paste0(
       "Can't compute cross tables for objects of class `",
       class(x)[1],
       "`."
@@ -97,12 +111,71 @@
   if (!is.null(by_name)) {
     attr(out, "by") <- by_name
   }
-
+  attr(out, "chi_square") <- chi_square
+  if (chisq) {
+    if (is.list(chi_square)) {
+      attr(out, "chisq_caption") <- paste0(
+        chi_square$method,
+        "\n ",
+        "X-squared = ",
+        round(chi_square[["statistic"]], 3),
+        ", ",
+        "df = ",
+        chi_square[["parameter"]][["df"]],
+        ", p = ",
+        round(chi_square$p.value, 3)
+      )
+    } else if (is.character(chi_square)) {
+      attr(out, "chisq_caption") <- chi_square
+    }
+  }
   attr(out, "grouped_df") <- !is.null(group_variable)
   attr(out, "prop_table") <- .prop_table(out)
 
   class(out) <- c("datawizard_crosstab", "data.frame")
+  # validate "effect_size"
+  if (!is.null(effect_size)) {
+    invalid <- setdiff(
+      effect_size,
+      c("none", "phi", "pearsons_c", "cramers_v", "tschuprows_t", "cohens_w")
+    )
+    if (length(invalid) > 0) {
+      insight::format_error(
+        "Invalid values in `effect_size`: ",
+        text_concatenate(invalid, enclose = '"')
+      )
+    }
+  }
+  if ("none" %in% effect_size || is.null(effect_size)) {
+    effect_size <- "none"
+  }
+  effect_size_value <-
+    switch(
+      effect_size,
+      "none" = "",
+      "phi" = {
+        if (
+          dim(as.table(out)[[1]])[1] == 2 &&
+            dim(as.table(out)[[1]])[2] == 2
+        ) {
+          effectsize::phi(out)
+        } else {
+          effect_size <- ""
+          try(insight::format_error(
+            "Phi can only be calculated for 2 by 2 tables."
+          ))
+        }
+      },
+      "pearsons_c" = effectsize::pearsons_c(out),
+      "cramers_v" = effectsize::cramers_v(out),
+      "tschuprows_t" = effectsize::tschuprows_t(out),
+    )
 
+  if (effect_size == "" || effect_size == "none") {
+    attr(out, "effect_size") <- ""
+  } else {
+    attr(out, "effect_size") <- effect_size_value |> insight::display()
+  }
   out
 }
 
@@ -312,6 +385,20 @@ print_html.datawizard_crosstab <- function(x, big_mark = NULL, ...) {
     caption <- paste0("Grouped by ", x[["Group"]][1])
     x$Group <- NULL
   }
+  if (is.null(attr(x, "chisq_caption"))) {
+    footer <- ""
+  } else {
+    footer <- attr(x, "chisq_caption")
+  }
+  if (!is.null(attr(x, "chi_square_warning"))) {
+    footer <-
+      insight::format_warning(attr(x, "chi_square_warning"))
+  }
+  effect_size <- attr(x, "effect_size")
+
+  if (effect_size[1] != "") {
+    footer <- paste0(footer, "\n", paste(effect_size, collapse = "\n"))
+  }
 
   # this function is used by all four supported format, markdown, text, html
   # and tt (tinytable). For tt, we sometimes have format "html" and backend = "tt",
@@ -321,6 +408,7 @@ print_html.datawizard_crosstab <- function(x, big_mark = NULL, ...) {
   fun_args <- list(
     format(x, big_mark = big_mark, format = format, ...),
     caption = caption,
+    footer = footer,
     format = backend
   )
   if (!format %in% c("html", "tt")) {

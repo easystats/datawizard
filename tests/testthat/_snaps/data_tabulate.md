@@ -270,6 +270,83 @@
       5     | 2002107 | 20.02 |   20.02 |       100.00
       <NA>  |       0 |  0.00 |    <NA> |         <NA>
 
+# data_tabulate default by with chisq
+
+    Code
+      data_tabulate(x = efc$e16sex, by = efc$c172code, chisq = TRUE)
+    Output
+      efc$e16sex | low level of education | intermediate level of education
+      -----------+------------------------+--------------------------------
+      1          |                      5 |                              32
+      2          |                      3 |                              34
+      <NA>       |                      0 |                               0
+      -----------+------------------------+--------------------------------
+      Total      |                      8 |                              66
+      
+      efc$e16sex | high level of education | <NA> | Total
+      -----------+-------------------------+------+------
+      1          |                       4 |    5 |    46
+      2          |                      12 |    5 |    54
+      <NA>       |                       0 |    0 |     0
+      -----------+-------------------------+------+------
+      Total      |                      16 |   10 |   100
+      Pearson's Chi-squared test with simulated p-value
+      	 (based on 2000 replicates)
+       X-squared = 3.88, df = NA, p = 0.163
+
+# data_tabulate default by with effect size
+
+    Code
+      data_tabulate(x = efc$e16sex, by = efc$c172code, effect_size = "cramers_v")
+    Message
+      Removing NA values from frequency table.
+    Output
+      efc$e16sex | low level of education | intermediate level of education
+      -----------+------------------------+--------------------------------
+      1          |                      5 |                              32
+      2          |                      3 |                              34
+      <NA>       |                      0 |                               0
+      -----------+------------------------+--------------------------------
+      Total      |                      8 |                              66
+      
+      efc$e16sex | high level of education | <NA> | Total
+      -----------+-------------------------+------+------
+      1          |                       4 |    5 |    46
+      2          |                      12 |    5 |    54
+      <NA>       |                       0 |    0 |     0
+      -----------+-------------------------+------+------
+      Total      |                      16 |   10 |   100
+      
+      |Cramer's V (adj.) |      95% CI |
+      |:-----------------|:------------|
+      |0.14              |[0.00, 1.00] |
+      One-sided CIs: upper bound fixed at [1.00].
+
+# data_tabulate default by with effect size phi incorrect
+
+    Code
+      data_tabulate(x = efc$e16sex, by = efc$c172code, effect_size = "phi")
+    Message
+      Removing NA values from frequency table.
+      Removing NA values from frequency table.
+    Output
+      Error : Phi can only be calculated for 2 by 2 tables.
+      efc$e16sex | low level of education | intermediate level of education
+      -----------+------------------------+--------------------------------
+      1          |                      5 |                              32
+      2          |                      3 |                              34
+      <NA>       |                      0 |                               0
+      -----------+------------------------+--------------------------------
+      Total      |                      8 |                              66
+      
+      efc$e16sex | high level of education | <NA> | Total
+      -----------+-------------------------+------+------
+      1          |                       4 |    5 |    46
+      2          |                      12 |    5 |    54
+      <NA>       |                       0 |    0 |     0
+      -----------+-------------------------+------+------
+      Total      |                      16 |   10 |   100
+
 # data_tabulate print multiple, collapse
 
     Code
@@ -860,6 +937,25 @@
       |e42dep   |     3|  8  (28.6%)| 18 (64.3%)| 2 (7.1%) |    28|
       |e42dep   |     4| 32  (50.8%)| 28 (44.4%)| 3 (4.8%) |    63|
       |e42dep   |  (NA)|  1  (33.3%)|  2 (66.7%)| 0 (0.0%) |     3|
+
+---
+
+    Code
+      display(data_tabulate(efc, "c172code", by = "e16sex", proportions = "column",
+        remove_na = TRUE, weights = "weights", chisq = TRUE))
+    Output
+      
+      
+      |c172code |       male|     female| Total|
+      |:--------|----------:|----------:|-----:|
+      |1        |  5 (12.5%)|  3  (6.5%)|     8|
+      |2        | 32 (80.0%)| 32 (69.6%)|    64|
+      |3        |  3  (7.5%)| 11 (23.9%)|    14|
+      |         |           |           |      |
+      |Total    |         40|         46|    86|
+      Pearson's Chi-squared test with simulated p-value
+      	 (based on 2000 replicates)
+       X-squared = 4.217, df = NA, p = 0.117
 
 # data_tabulate, correct 0% for proportions
 

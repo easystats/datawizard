@@ -20,6 +20,8 @@ data_tabulate(x, ...)
   name = NULL,
   verbose = TRUE,
   metrics = c("N", "raw", "valid", "cumulative"),
+  chisq = FALSE,
+  effect_size = c("none", "phi", "pearsons_c", "cramers_v", "tschuprows_t"),
   ...
 )
 
@@ -36,6 +38,8 @@ data_tabulate(x, ...)
   proportions = NULL,
   collapse = FALSE,
   verbose = TRUE,
+  chisq = FALSE,
+  effect_size = NULL,
   ...
 )
 
@@ -80,6 +84,14 @@ included. Only applies to frequencies, i.e. when \code{by} is \code{NULL}. Can i
 any combination of \code{N} (frequencies including \code{NA}), \code{"raw"} (percentage
 including \code{NA} values), \code{"valid"} (percentage excluding \code{NA} values) and
 \code{"cumulative"} (percentage excluding \code{NA} values).}
+
+\item{chisq}{include chi square for two dimensional tables. This is always
+calculated with the \code{chisq.test()} \code{simulate.p.value = TRUE}.}
+
+\item{effect_size}{include an effect size for two dimensional tables using
+functions from the \code{effectsize} packages. Options are: "none",
+"\code{\link[effectsize:phi]{effectsize::phi()}}",
+"\code{\link[effectsize:cramers_v]{effectsize::cramers_v()}}" and "\code{\link[effectsize:tschuprows_t]{effectsize::tschuprows_t()}}".  Defaults to "none."}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
