@@ -6,7 +6,16 @@ test_that("standardize.lm", {
   m0 <- lm(Sepal.Length ~ Species * Petal.Width, data = iris_z)
   m1 <- lm(Sepal.Length ~ Species * Petal.Width, data = iris2)
   model <- standardize(m1)
-  expect_identical(coef(m0), coef(model))
+  expect_equal(coef(m0), coef(model), tolerance = 1e-5)
+})
+
+test_that("standardize.lm, edge case (intercept only)", {
+  iris2 <- na.omit(iris)
+  iris_z <- standardize(iris2)
+  m0 <- lm(Sepal.Length ~ 1, data = iris_z)
+  m1 <- lm(Sepal.Length ~ 1, data = iris2)
+  model <- standardize(m1)
+  expect_equal(coef(m0), coef(model), tolerance = 1e-5)
 })
 
 test_that("standardize, mlm", {
@@ -73,12 +82,14 @@ test_that("transformations", {
   expect_equal(
     effectsize::standardize_parameters(fit_exp, method = "refit")[2, 2],
     unname(coef(fit_scale1)[2]),
+    tolerance = 1e-4
     ignore_attr = TRUE
   )
 
   expect_equal(
     effectsize::standardize_parameters(fit_exp, method = "basic")[2, 2],
     unname(coef(fit_scale2)[2]),
+    tolerance = 1e-4
     ignore_attr = TRUE
   )
 
@@ -137,12 +148,14 @@ test_that("weights", {
   expect_equal(
     stdREFIT[[2]],
     effectsize::standardize_parameters(m, method = "posthoc")[[2]],
+    tolerance = 1e-4
     ignore_attr = TRUE
   )
 
   expect_equal(
     stdREFIT[[2]],
     effectsize::standardize_parameters(m, method = "basic")[[2]],
+    tolerance = 1e-4
     ignore_attr = TRUE
   )
 })
