@@ -347,7 +347,8 @@ test_that("data_tabulate data.frame by", {
       varname = "c172code",
       by = "e16sex",
       chi_square = chi_square,
-      grouped_df = FALSE
+      grouped_df = FALSE,
+      effect_size = ""
     )
   )
 })
@@ -384,7 +385,8 @@ test_that("data_tabulate default by", {
       varname = "efc$c172code",
       by = "efc$e16sex",
       chi_square = chi_square,
-      grouped_df = FALSE
+      grouped_df = FALSE,
+      effect_size = ""
     )
   )
 })
@@ -430,7 +432,8 @@ test_that("data_tabulate grouped data.frame by", {
       varname = "c172code",
       by = "e42dep",
       chi_square = chi_square,
-      grouped_df = TRUE
+      grouped_df = TRUE,
+      effect_size = ""
     )
   )
 })

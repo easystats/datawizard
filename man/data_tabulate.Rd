@@ -21,6 +21,7 @@ data_tabulate(x, ...)
   verbose = TRUE,
   metrics = c("N", "raw", "valid", "cumulative"),
   chisq = FALSE,
+  effect_size = c("none", "phi", "pearsons_c", "cramers_v", "tschuprows_t"),
   ...
 )
 
@@ -38,6 +39,7 @@ data_tabulate(x, ...)
   collapse = FALSE,
   verbose = TRUE,
   chisq = FALSE,
+  effect_size = NULL,
   ...
 )
 

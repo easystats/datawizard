@@ -8,7 +8,8 @@
   proportions = NULL,
   obj_name = NULL,
   group_variable = NULL,
-  chisq = FALSE
+  chisq = FALSE,
+  effect_size = NULL
 ) {
   if (
     is.null(group_variable) &&
@@ -132,7 +133,49 @@
   attr(out, "prop_table") <- .prop_table(out)
 
   class(out) <- c("datawizard_crosstab", "data.frame")
+  # validate "effect_size"
+  if (!is.null(effect_size)) {
+    invalid <- setdiff(
+      effect_size,
+      c("none", "phi", "pearsons_c", "cramers_v", "tschuprows_t", "cohens_w")
+    )
+    if (length(invalid) > 0) {
+      insight::format_error(
+        "Invalid values in `effect_size`: ",
+        text_concatenate(invalid, enclose = '"')
+      )
+    }
+  }
+  if ("none" %in% effect_size || is.null(effect_size)) {
+    effect_size <- "none"
+  }
+  effect_size_value <-
+    switch(
+      effect_size,
+      "none" = "",
+      "phi" = {
+        if (
+          dim(as.table(out)[[1]])[1] == 2 &&
+            dim(as.table(out)[[1]])[2] == 2
+        ) {
+          effectsize::phi(out)
+        } else {
+          effect_size <- ""
+          try(insight::format_error(
+            "Phi can only be calculated for 2 by 2 tables."
+          ))
+        }
+      },
+      "pearsons_c" = effectsize::pearsons_c(out),
+      "cramers_v" = effectsize::cramers_v(out),
+      "tschuprows_t" = effectsize::tschuprows_t(out),
+    )
 
+  if (effect_size == "" || effect_size == "none") {
+    attr(out, "effect_size") <- ""
+  } else {
+    attr(out, "effect_size") <- effect_size_value |> insight::display()
+  }
   out
 }
 
@@ -350,6 +393,11 @@ print_html.datawizard_crosstab <- function(x, big_mark = NULL, ...) {
   if (!is.null(attr(x, "chi_square_warning"))) {
     footer <-
       insight::format_warning(attr(x, "chi_square_warning"))
+  }
+  effect_size <- attr(x, "effect_size")
+
+  if (effect_size[1] != "") {
+    footer <- paste0(footer, "\n", paste(effect_size, collapse = "\n"))
   }
 
   # this function is used by all four supported format, markdown, text, html

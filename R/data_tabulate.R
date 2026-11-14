@@ -166,6 +166,13 @@ data_tabulate.default <- function(
   verbose = TRUE,
   metrics = c("N", "raw", "valid", "cumulative"),
   chisq = FALSE,
+  effect_size = c(
+    "none",
+    "phi",
+    "pearsons_c",
+    "cramers_v",
+    "tschuprows_t"
+  ),
   ...
 ) {
   # save label attribute, before it gets lost...
@@ -215,7 +222,8 @@ data_tabulate.default <- function(
       proportions = proportions,
       obj_name = obj_name,
       group_variable = group_variable,
-      chisq = chisq
+      chisq = chisq,
+      effect_size = effect_size
     ))
   }
   # frequency table
@@ -363,6 +371,7 @@ data_tabulate.data.frame <- function(
   collapse = FALSE,
   verbose = TRUE,
   chisq = FALSE,
+  effect_size = NULL,
   ...
 ) {
   if (!is.null(by)) {
@@ -398,6 +407,7 @@ data_tabulate.data.frame <- function(
       name = i,
       verbose = verbose,
       chisq = chisq,
+      effect_size = effect_size,
       ...
     )
   })
