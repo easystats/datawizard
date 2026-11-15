@@ -36,6 +36,7 @@ Depends:
     R (>= 4.0)
 Imports:
     insight (>= 1.5.4),
+    effectsize,
     stats,
     utils
 Suggests:
