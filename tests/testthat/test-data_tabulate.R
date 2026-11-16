@@ -43,6 +43,10 @@ test_that("data_tabulate numeric", {
   )
 })
 
+test_that("data_tabulate handles ordinal and date data", {
+  expect_no_error(data_tabulate(as.Date("01-01-01")))
+  expect_no_error(data_tabulate(factor(letters[1:3], ordered = TRUE)))
+})
 
 test_that("data_tabulate, HTML", {
   skip_if_not_installed("gt")
@@ -408,6 +412,15 @@ test_that("data_tabulate default by with effectsize", {
     effect_size = "cramers_v"
   ))
 })
+
+test_that("data_tabulate default by with effectsize phi works with 2x2", {
+  expect_no_error(data_tabulate(
+    x = c(1, 1, 1, 1, 2, 2, 2, 2),
+    by = c(1, 2, 2, 1, 1, 1, 2, 2),
+    effect_size = "phi"
+  ))
+})
+
 
 test_that("data_tabulate default by with effectsize", {
   expect_error(data_tabulate(
