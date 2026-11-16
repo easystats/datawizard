@@ -1,3 +1,5 @@
+library(effectsize)
+library(insight)
 test_that("data_tabulate factor", {
   data(efc, package = "datawizard")
   x <- data_tabulate(efc$e42dep)
@@ -403,6 +405,23 @@ test_that("data_tabulate default by with effectsize", {
   expect_no_error(data_tabulate(
     x = efc$e16sex,
     by = efc$c172code,
+    effect_size = "cramers_v"
+  ))
+})
+
+test_that("data_tabulate default by with effectsize", {
+  expect_error(data_tabulate(
+    x = efc$e16sex,
+    by = efc$c172code,
+    effect_size = "unknown"
+  ))
+})
+
+test_that("data_tabulate default by with chi square and effectsize", {
+  expect_no_error(data_tabulate(
+    x = efc$e16sex,
+    by = efc$c172code,
+    chisq = TRUE,
     effect_size = "cramers_v"
   ))
 })
