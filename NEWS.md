@@ -7,6 +7,11 @@ BUG FIXES
   there, so `data_select(mtcars, "^C", regex = TRUE, ignore_case = TRUE)` found
   no column. The fix applies to every function with a `select` argument.
 
+* `smoothness()` on a data frame now returns a data frame with the columns
+  `Parameter` and `Smoothness`, as it already did with `iterations`. Before,
+  without `iterations`, it returned a character matrix, so `as.numeric()` on
+  the result returned the column names mixed with the values as text.
+
 # datawizard 1.5.0
 
 BREAKING CHANGES
