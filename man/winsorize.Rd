@@ -43,7 +43,8 @@ the mean and the standard deviation.}
 \value{
 A data frame with winsorized columns or a winsorized vector. A variable with
 more than one distinct value that winsorizing would make constant is returned
-unchanged (see Details).
+unchanged (see Details). Variables that are not numeric, such as factors or
+dates, are also returned unchanged.
 }
 \description{
 Winsorize data

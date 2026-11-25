@@ -7,6 +7,10 @@ BUG FIXES
   there, so `data_select(mtcars, "^C", regex = TRUE, ignore_case = TRUE)` found
   no column. The fix applies to every function with a `select` argument.
 
+* `winsorize()` now returns columns of classes it can't winsorize, such as
+  `Date`, `POSIXct`, or `haven_labelled`, unchanged with a message. Before, a
+  data frame with such a column gave the error "no applicable method".
+
 # datawizard 1.5.0
 
 BREAKING CHANGES

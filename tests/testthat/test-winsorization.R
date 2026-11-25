@@ -59,6 +59,18 @@ test_that("winsorize on data.frame", {
   expect_named(iris2, names(iris))
 })
 
+test_that("winsorize: columns of other classes stay unchanged", {
+  d <- data.frame(
+    x = c(1:9, 100),
+    date = .Date(18262 + 0:9)
+  )
+  expect_message(out <- winsorize(d), "`date`")
+  # invariant: the Date column is returned as is, the numeric one winsorized
+  expect_identical(out$date, d$date)
+  expect_identical(out$x, winsorize(d$x))
+  expect_silent(winsorize(d, verbose = FALSE))
+})
+
 test_that("winsorize: variables that would become constant stay unchanged", {
   dummy <- c(rep(0, 90), rep(1, 10))
   calls <- list(
