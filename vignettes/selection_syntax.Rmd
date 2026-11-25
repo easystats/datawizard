@@ -39,6 +39,10 @@ row.names(iris) <- NULL
   padding: 5px;
   margin-bottom: 10px
 }
+[data-bs-theme="dark"] .custom_note {
+  border-left-color: hsl(220, 100%, 65%);
+  background-color: hsl(220, 40%, 20%);
+}
 ```
 
 This vignette can be referred to by citing the following:
@@ -71,7 +75,7 @@ iris %>%
 
 ## Positions
 
-In addition to variable names, `select` can also take indices for the variables 
+In addition to variable names, `select` can also take indices for the variables
 to select in the dataframe.
 
 ```{r}
@@ -82,7 +86,7 @@ data_select(iris, c(1, 2, 5))
 ## Functions
 
 We can also pass a function to the `select` argument. This function will be applied
-to all columns and should return `TRUE` or `FALSE`. For example, if we want to 
+to all columns and should return `TRUE` or `FALSE`. For example, if we want to
 keep only numeric columns, we can use `is.numeric`.
 
 ```{r}
@@ -103,11 +107,11 @@ data_select(iris, my_function)
 ## Patterns
 
 With larger datasets, it would be tedious to write the names of variables to select,
-and it would be fragile to rely on variable positions as they may change later. 
+and it would be fragile to rely on variable positions as they may change later.
 To this end, we can use four select helpers: `starts_with()`, `ends_with()`,
 `contains()`, and `regex()`. The first three can take several patterns, while
 `regex()` takes a single regular expression.
- 
+
 ```{r}
 data_select(iris, starts_with("Sep", "Peta"))
 
@@ -133,8 +137,8 @@ data_select(iris, regex("^Sep|ies"))
 <div class="custom_note">
   <p>
     Note #2: because these functions are not exported, they will not create
-    conflicts with the ones that come from the `tidyverse` and that have the same 
-    name. Therefore, we can still use `dplyr` and its friends, it won't change 
+    conflicts with the ones that come from the `tidyverse` and that have the same
+    name. Therefore, we can still use `dplyr` and its friends, it won't change
     anything for selection in `datawizard` functions!
   </p>
 </div>
@@ -155,7 +159,7 @@ data_select(iris, -starts_with("Sep", "Peta"))
 data_select(iris, -is.numeric)
 ```
 
-Note that if we use numeric indices, we can't mix negative and positive values. 
+Note that if we use numeric indices, we can't mix negative and positive values.
 This means that we have to use `select = -(1:2)` if we want to exclude the first
 two columns; `select = -1:2` will *not* work:
 
@@ -169,9 +173,9 @@ Same thing for variable names:
 data_select(iris, -(Petal.Length:Species))
 ```
 
-The second way is to use the argument `exclude`. This argument has the same 
-possibilities as `select`. Although this may not be required in most contexts, 
-if we wanted to, we could use both `select` and `exclude` arguments at the same 
+The second way is to use the argument `exclude`. This argument has the same
+possibilities as `select`. Although this may not be required in most contexts,
+if we wanted to, we could use both `select` and `exclude` arguments at the same
 time.
 
 ```{r}
@@ -201,7 +205,7 @@ my_function_2 <- function(data, pattern) {
 my_function_2(iris, "Sep")
 ```
 
-It is also possible to pass these values in loops, for example if we have a list 
+It is also possible to pass these values in loops, for example if we have a list
 of patterns and we want to relocate columns based on these patterns, one by one:
 
 ```{r}
@@ -222,7 +226,7 @@ data frame, and the same thing was made with all columns starting with `"Pet"`.
 
 ## Ignore the case
 
-In every selection that uses variable names, we can ignore the case in the 
+In every selection that uses variable names, we can ignore the case in the
 selection by applying `ignore_case = TRUE`.
 
 ```{r}
@@ -241,6 +245,5 @@ It is also possible to use formulas to select variables:
 data_select(iris, ~ Sepal.Length + Petal.Width)
 ```
 
-This made it easier to use selection in custom functions before `datawizard` 
-0.6.0, and is kept available for backward compatibility. 
-
+This made it easier to use selection in custom functions before `datawizard`
+0.6.0, and is kept available for backward compatibility.
