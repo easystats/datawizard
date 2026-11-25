@@ -72,6 +72,11 @@ test_that("extract_column_names works as expected", {
     extract_column_names(iris, "Width$", regex = TRUE),
     c("Sepal.Width", "Petal.Width")
   )
+
+  expect_identical(
+    extract_column_names(mtcars, "^C", regex = TRUE, ignore_case = TRUE),
+    c("cyl", "carb")
+  )
 })
 
 

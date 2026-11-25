@@ -1,5 +1,12 @@
 # datawizard (development)
 
+BUG FIXES
+
+* If `select` is a regular expression with `regex = TRUE`, `ignore_case = TRUE`
+  now gives a match that ignores case. Before, `ignore_case` had no effect
+  there, so `data_select(mtcars, "^C", regex = TRUE, ignore_case = TRUE)` found
+  no column. The fix applies to every function with a `select` argument.
+
 # datawizard 1.5.0
 
 BREAKING CHANGES
