@@ -254,7 +254,7 @@ CHANGES
   gain a `password` argument, to encrypt and decrypt data files. This
   currently only works for R file formats (`.rda`, `.rds`, and
   `.rdata`). Data encryption is based on the AES-GCM algorithm using the
-  [`openssl::aes_gcm_encrypt()`](https://jeroen.r-universe.dev/openssl/reference/aes_cbc.html)
+  [`openssl::aes_gcm_encrypt()`](https://rdrr.io/pkg/openssl/man/aes_cbc.html)
   function
   ([\#675](https://github.com/easystats/datawizard/issues/675)).
 

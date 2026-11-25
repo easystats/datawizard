@@ -178,10 +178,10 @@ formats (`.rds`, `.rda` and `.rdata`). To encrypt a file, provide a
 password to the `password` argument in `data_write()`. To decrypt the
 file, provide the same password to `data_read()`. The encryption is
 based on the **openssl** package and uses the AES-GCM algorithm (see
-[`?openssl::aes_gcm_encrypt`](https://jeroen.r-universe.dev/openssl/reference/aes_cbc.html))
+[`?openssl::aes_gcm_encrypt`](https://rdrr.io/pkg/openssl/man/aes_cbc.html))
 with a 256-bit key (see
-[`?openssl::sha256`](https://jeroen.r-universe.dev/openssl/reference/hash.html)).
-Thus, data can also be decrypted without relying on the **datawizard**
+[`?openssl::sha256`](https://rdrr.io/pkg/openssl/man/hash.html)). Thus,
+data can also be decrypted without relying on the **datawizard**
 package, e.g. using following code:
 
     encrypted_data <- readRDS(datafile)
