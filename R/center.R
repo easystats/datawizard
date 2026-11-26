@@ -262,7 +262,7 @@ center.data.frame <- function(
     )
   }
 
-  # columns that were not centered, such as dates, have no attributes
+  # columns that were not centered, such as dates, have no "center" attribute
   centered <- Filter(
     function(z) !is.null(attributes(z)$center),
     x[my_args$select]
