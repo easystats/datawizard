@@ -21,6 +21,11 @@ BUG FIXES
   `Date`, `POSIXct`, or `haven_labelled`, unchanged with a message. Before, a
   data frame with such a column gave the error "no applicable method".
 
+* `adjust()` with `additive = TRUE` now fits every numeric variable in `effect`
+  as a smooth term when a factor comes before it in `effect`. Before, it gave
+  an error from `gamm4()` or fitted some numeric variables as linear terms, so
+  the adjusted values were wrong.
+
 # datawizard 1.5.0
 
 BREAKING CHANGES
