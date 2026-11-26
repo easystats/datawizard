@@ -22,7 +22,8 @@
 #'
 #' A data frame with winsorized columns or a winsorized vector. A variable with
 #' more than one distinct value that winsorizing would make constant is returned
-#' unchanged (see Details).
+#' unchanged (see Details). Variables that are not numeric, such as factors or
+#' dates, are also returned unchanged.
 #'
 #' @param data data frame or vector.
 #' @param threshold The amount of winsorization, depends on the value of `method`:
@@ -79,6 +80,27 @@ winsorize.character <- winsorize.factor
 
 #' @export
 winsorize.logical <- winsorize.factor
+
+#' @export
+winsorize.default <- function(data, verbose = TRUE, ...) {
+  if (isTRUE(verbose)) {
+    column <- list(...)[["column"]]
+    msg <- if (is.null(column)) {
+      sprintf(
+        "Variables of class `%s` can't be winsorized and remain unchanged.",
+        class(data)[1]
+      )
+    } else {
+      sprintf(
+        "`%s` (class `%s`) can't be winsorized and remains unchanged.",
+        column,
+        class(data)[1]
+      )
+    }
+    insight::format_alert(msg)
+  }
+  data
+}
 
 #' @export
 winsorize.data.frame <- function(

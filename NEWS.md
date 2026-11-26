@@ -17,6 +17,10 @@ BUG FIXES
   `POSIXct`, or `haven_labelled`. Such columns are returned unchanged, with a
   message from `normalize()` and `ranktransform()`.
 
+* `winsorize()` now returns columns of classes it can't winsorize, such as
+  `Date`, `POSIXct`, or `haven_labelled`, unchanged with a message. Before, a
+  data frame with such a column gave the error "no applicable method".
+
 # datawizard 1.5.0
 
 BREAKING CHANGES
