@@ -61,7 +61,8 @@ winsorize(
 
 A data frame with winsorized columns or a winsorized vector. A variable
 with more than one distinct value that winsorizing would make constant
-is returned unchanged (see Details).
+is returned unchanged (see Details). Variables that are not numeric,
+such as factors or dates, are also returned unchanged.
 
 ## Details
 

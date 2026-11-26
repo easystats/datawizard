@@ -114,7 +114,8 @@ the mean and the standard deviation.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A data frame with winsorized columns or a winsorized vector. A variable with
 more than one distinct value that winsorizing would make constant is returned
-unchanged (see Details).</p>
+unchanged (see Details). Variables that are not numeric, such as factors or
+dates, are also returned unchanged.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
