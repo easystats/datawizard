@@ -8,6 +8,15 @@ test_that("ranktransform works with factors", {
   expect_identical(ranktransform(x), x)
 })
 
+test_that("ranktransform works with data frames with a Date column", {
+  d <- data.frame(x = c(1:9, 100), date = .Date(18262 + 0:9))
+  expect_message(ranktransform(d), "can't be rank-transformed")
+  expect_silent(ranktransform(d, verbose = FALSE))
+  out <- ranktransform(d, verbose = FALSE)
+  expect_identical(out$date, d$date)
+  expect_identical(out$x, ranktransform(d$x))
+})
+
 test_that("ranktransform works with unique value vectors", {
   x <- c(1L, 1L, 1L)
 

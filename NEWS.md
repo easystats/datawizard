@@ -12,6 +12,11 @@ BUG FIXES
   without `iterations`, it returned a character matrix, so `as.numeric()` on
   the result returned the column names mixed with the values as text.
 
+* `normalize()`, `ranktransform()`, and `center()` no longer fail on data
+  frames with a column of a class they can't transform, such as `Date`,
+  `POSIXct`, or `haven_labelled`. Such columns are returned unchanged, with a
+  message from `normalize()` and `ranktransform()`.
+
 # datawizard 1.5.0
 
 BREAKING CHANGES

@@ -130,6 +130,21 @@ ranktransform.factor <- function(x, ...) {
 
 
 #' @export
+ranktransform.default <- function(x, verbose = TRUE, ...) {
+  if (isTRUE(verbose)) {
+    insight::format_alert(
+      paste0(
+        "Variables of class `",
+        class(x)[1],
+        "` can't be rank-transformed and remain unchanged."
+      )
+    )
+  }
+  x
+}
+
+
+#' @export
 ranktransform.grouped_df <- function(
   x,
   select = NULL,
@@ -164,6 +179,7 @@ ranktransform.grouped_df <- function(
       exclude = exclude,
       sign = sign,
       method = method,
+      verbose = verbose,
       ...
     )
   }
@@ -197,6 +213,12 @@ ranktransform.data.frame <- function(
     verbose = verbose
   )
 
-  x[select] <- lapply(x[select], ranktransform, sign = sign, method = method)
+  x[select] <- lapply(
+    x[select],
+    ranktransform,
+    sign = sign,
+    method = method,
+    verbose = verbose
+  )
   x
 }
