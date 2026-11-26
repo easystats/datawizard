@@ -76,6 +76,14 @@ test_that("ranktransform works with data frames", {
   expect_snapshot(ranktransform(BOD))
 })
 
+test_that("argument 'zeros' works with data frames", {
+  d <- data.frame(x = c(-1, 0, 2, -3, 4))
+  expect_identical(
+    ranktransform(d, sign = TRUE, zeros = "signrank")$x,
+    c(-2, 0, 3, -4, 5)
+  )
+})
+
 
 # with grouped data -------------------------------------------
 
@@ -140,6 +148,18 @@ test_that("ranktransform works with data frames containing NAs (grouped data)", 
     )
   )
   # nolint end
+})
+
+test_that("argument 'zeros' works with grouped data frames", {
+  skip_if_not_installed("poorman")
+
+  d <- data.frame(
+    id = rep(c("A", "B"), each = 4),
+    x = c(-1, 0, 2, -3, 3, -1, 0, 2)
+  )
+  out <- poorman::group_by(d, id)
+  out <- ranktransform(out, select = "x", sign = TRUE, zeros = "signrank")
+  expect_identical(out$x, c(-2, 0, 3, -4, 4, -2, 0, 3))
 })
 
 # select helpers ------------------------------

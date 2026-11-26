@@ -21,6 +21,11 @@ BUG FIXES
   `Date`, `POSIXct`, or `haven_labelled`, unchanged with a message. Before, a
   data frame with such a column gave the error "no applicable method".
 
+* `ranktransform()` on data frames and grouped data frames now uses the `zeros`
+  argument. Before, the argument was ignored and `zeros = "signrank"` gave
+  wrong results: zeros became `NA` and the other values were ranked without
+  them, as with `zeros = "na"`.
+
 # datawizard 1.5.0
 
 BREAKING CHANGES
