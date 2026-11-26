@@ -7,6 +7,16 @@ BUG FIXES
   there, so `data_select(mtcars, "^C", regex = TRUE, ignore_case = TRUE)` found
   no column. The fix applies to every function with a `select` argument.
 
+* `smoothness()` on a data frame now returns a data frame with the columns
+  `Parameter` and `Smoothness`, as it already did with `iterations`. Before,
+  without `iterations`, it returned a character matrix, so `as.numeric()` on
+  the result returned the column names mixed with the values as text.
+
+* `normalize()`, `ranktransform()`, and `center()` no longer fail on data
+  frames with a column of a class they can't transform, such as `Date`,
+  `POSIXct`, or `haven_labelled`. Such columns are returned unchanged, with a
+  message from `normalize()` and `ranktransform()`.
+
 * `winsorize()` now returns columns of classes it can't winsorize, such as
   `Date`, `POSIXct`, or `haven_labelled`, unchanged with a message. Before, a
   data frame with such a column gave the error "no applicable method".

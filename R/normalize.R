@@ -175,6 +175,21 @@ normalize.factor <- function(x, ...) {
 
 
 #' @export
+normalize.default <- function(x, verbose = TRUE, ...) {
+  if (isTRUE(verbose)) {
+    insight::format_alert(
+      paste0(
+        "Variables of class `",
+        class(x)[1],
+        "` can't be normalized and remain unchanged."
+      )
+    )
+  }
+  x
+}
+
+
+#' @export
 normalize.grouped_df <- function(
   x,
   select = NULL,

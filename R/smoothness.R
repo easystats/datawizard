@@ -79,13 +79,21 @@ smoothness.data.frame <- function(
   ...
 ) {
   .smoothness <-
-    lapply(
-      x,
-      smoothness,
-      method = method,
-      lag = lag,
-      iterations = iterations
-    )
+    lapply(x, function(i) {
+      out <- smoothness(
+        i,
+        method = method,
+        lag = lag,
+        iterations = iterations
+      )
+      # without bootstrapping, smoothness() returns a single number; make it
+      # a data frame like the bootstrapped result, so that `cbind()` below
+      # does not coerce the values to character
+      if (!is.data.frame(out)) {
+        out <- data.frame(Smoothness = as.numeric(out))
+      }
+      out
+    })
   .smoothness <- cbind(
     Parameter = names(.smoothness),
     do.call(rbind, .smoothness)
