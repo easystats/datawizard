@@ -7,6 +7,11 @@ BUG FIXES
   there, so `data_select(mtcars, "^C", regex = TRUE, ignore_case = TRUE)` found
   no column. The fix applies to every function with a `select` argument.
 
+* `normalize()`, `ranktransform()`, and `center()` no longer fail on data
+  frames with a column of a class they can't transform, such as `Date`,
+  `POSIXct`, or `haven_labelled`. Such columns are returned unchanged, with a
+  message from `normalize()` and `ranktransform()`.
+
 # datawizard 1.5.0
 
 BREAKING CHANGES

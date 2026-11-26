@@ -262,13 +262,18 @@ center.data.frame <- function(
     )
   }
 
+  # columns that were not centered, such as dates, have no attributes
+  centered <- Filter(
+    function(z) !is.null(attributes(z)$center),
+    x[my_args$select]
+  )
   attr(x, "center") <- vapply(
-    x[my_args$select],
+    centered,
     function(z) attributes(z)$center,
     numeric(1)
   )
   attr(x, "scale") <- vapply(
-    x[my_args$select],
+    centered,
     function(z) attributes(z)$scale,
     numeric(1)
   )

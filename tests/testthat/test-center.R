@@ -44,6 +44,13 @@ test_that("center, factors", {
   expect_identical(z$Species, iris$Species)
 })
 
+test_that("center, Date column", {
+  d <- data.frame(x = c(1:9, 100), date = .Date(18262 + 0:9))
+  z <- center(d)
+  expect_identical(z$date, d$date)
+  expect_equal(as.vector(z$x), d$x - mean(d$x), tolerance = 1e-4)
+})
+
 test_that("center, force factors", {
   z <- center(iris, select = "Species", force = TRUE)
   v <- as.numeric(iris$Species)
