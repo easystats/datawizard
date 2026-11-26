@@ -64,7 +64,8 @@ test_that("winsorize: columns of other classes stay unchanged", {
     x = c(1:9, 100),
     date = .Date(18262 + 0:9)
   )
-  expect_message(out <- winsorize(d), "`date`")
+  expect_message(winsorize(d), "`date`")
+  out <- winsorize(d, verbose = FALSE)
   # invariant: the Date column is returned as is, the numeric one winsorized
   expect_identical(out$date, d$date)
   expect_identical(out$x, winsorize(d$x))
