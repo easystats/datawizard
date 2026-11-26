@@ -34,6 +34,14 @@ test_that("smoothness works with data frames", {
   skip_if(getRversion() < "4.0.0")
   set.seed(123)
   expect_snapshot(smoothness(BOD))
+
+  # invariant: each value equals smoothness() of that column alone
+  out <- smoothness(BOD)
+  expect_identical(out$Parameter, c("Time", "demand"))
+  expect_identical(
+    as.numeric(out),
+    c(smoothness(BOD$Time)[[1]], smoothness(BOD$demand)[[1]])
+  )
 })
 
 test_that("smoothness returns datawizard class", {
@@ -46,7 +54,7 @@ test_that("smoothness returns datawizard class", {
   )
   expect_s3_class(
     smoothness(BOD),
-    c("datawizard_smoothness", "parameters_smoothness", "matrix", "array"),
+    c("datawizard_smoothness", "parameters_smoothness", "data.frame"),
     exact = TRUE
   )
 
