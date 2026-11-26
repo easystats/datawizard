@@ -181,7 +181,7 @@
   columns <- colnames(data)
   if (isTRUE(regex)) {
     # string is a regular expression
-    grep(x, columns)
+    grep(x, columns, ignore.case = isTRUE(ignore_case))
   } else if (length(x) == 1L && x == "all") {
     # string is "all" - select all columns
     seq_along(data)
