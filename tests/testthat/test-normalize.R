@@ -122,7 +122,8 @@ test_that("normalize: factor", {
 test_that("normalize: data frame with a Date column", {
   d <- data.frame(x = c(1:9, 100), date = .Date(18262 + 0:9))
   expect_message(normalize(d), "can't be normalized")
-  expect_silent(out <- normalize(d, verbose = FALSE))
+  expect_silent(normalize(d, verbose = FALSE))
+  out <- normalize(d, verbose = FALSE)
   expect_identical(out$date, d$date)
   expect_equal(out$x, normalize(d$x), ignore_attr = TRUE)
 })
