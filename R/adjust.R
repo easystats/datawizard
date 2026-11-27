@@ -137,7 +137,7 @@ adjust <- function(
         is.numeric,
         logical(1L)
       )])
-      predictors[predictors == predictors_num] <- paste0(
+      predictors[predictors %in% predictors_num] <- paste0(
         "s(",
         predictors_num,
         ")"

@@ -48,6 +48,21 @@ test_that("adjust, invalid column names", {
   )
 })
 
+test_that("adjust additive, factor before numeric effects", {
+  skip_if_not_installed("gamm4")
+  d <- iris[c("Sepal.Length", "Species", "Sepal.Width", "Petal.Length")]
+  adj <- adjust(d, select = "Sepal.Length", additive = TRUE)
+  m <- gamm4::gamm4(
+    Sepal.Length ~ Species + s(Sepal.Width) + s(Petal.Length),
+    data = d
+  )
+  expect_equal(
+    adj$Sepal.Length,
+    unname(insight::get_residuals(m)),
+    tolerance = 1e-6
+  )
+})
+
 # passing arguments to the model-fitting function ------------------------------
 test_that("adjust passes ... to lm()", {
   d <- iris[c("Sepal.Length", "Species")]

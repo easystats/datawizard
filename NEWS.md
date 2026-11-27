@@ -26,6 +26,11 @@ BUG FIXES
   wrong results: zeros became `NA` and the other values were ranked without
   them, as with `zeros = "na"`.
 
+* `adjust()` with `additive = TRUE` now fits every numeric variable in `effect`
+  as a smooth term when a factor comes before it in `effect`. Before, it gave
+  an error from `gamm4()` or fitted some numeric variables as linear terms, so
+  the adjusted values were wrong.
+
 # datawizard 1.5.0
 
 BREAKING CHANGES
