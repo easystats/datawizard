@@ -291,6 +291,64 @@ test_that("empty groups are discarded from the output, #608", {
   )
 })
 
+test_that("describe_distribution - grouped df labels match groups when combinations are missing", {
+  out <- describe_distribution(
+    mtcars,
+    select = "mpg",
+    by = c("cyl", "gear"),
+    indices = NULL,
+    verbose = FALSE
+  )
+  expected <- stats::aggregate(mpg ~ cyl + gear, data = mtcars, FUN = mean)
+  expected_n <- stats::aggregate(mpg ~ cyl + gear, data = mtcars, FUN = length)
+
+  expect_identical(nrow(out), nrow(expected))
+  expect_identical(as.numeric(out$cyl), expected$cyl)
+  expect_identical(as.numeric(out$gear), expected$gear)
+  expect_equal(out$Mean, expected$mpg, tolerance = 1e-10)
+  expect_identical(out$n, expected_n$mpg)
+
+  # also with unused factor levels across multiple grouping columns
+  dat <- data.frame(
+    g1 = factor(
+      c("a", "a", "b", "b", "b", "b"),
+      levels = c("a", "unused", "b")
+    ),
+    g2 = factor(c("x", "x", "x", "x", "y", "y"), levels = c("x", "y")),
+    v = c(10, 12, 20, 22, 30, 32)
+  )
+  out2 <- describe_distribution(
+    dat,
+    select = "v",
+    by = c("g1", "g2"),
+    indices = NULL,
+    verbose = FALSE
+  )
+  expect_identical(as.character(out2$g1), c("a", "b", "b"))
+  expect_identical(as.character(out2$g2), c("x", "x", "y"))
+  expect_identical(out2$Mean, c(11, 21, 31))
+})
+
+test_that("describe_distribution - grouped df keeps the type of group columns", {
+  dat <- data.frame(
+    g_chr = rep(c("a", "b"), each = 4),
+    g_fct = factor(rep(c("x", "y"), times = 4)),
+    g_num = rep(c(1, 2), times = 4),
+    v = 1:8,
+    stringsAsFactors = FALSE
+  )
+  out <- describe_distribution(
+    dat,
+    select = "v",
+    by = c("g_chr", "g_fct", "g_num"),
+    verbose = FALSE
+  )
+  expect_type(out$g_chr, "character")
+  expect_s3_class(out$g_fct, "factor")
+  expect_identical(levels(out$g_fct), c("x", "y"))
+  expect_type(out$g_num, "double")
+})
+
 # distribution_mode --------------------------
 test_that("distribution_mode works as expected", {
   # atomic vector
