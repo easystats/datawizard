@@ -310,7 +310,10 @@ test_that("describe_distribution - grouped df labels match groups when combinati
 
   # also with unused factor levels across multiple grouping columns
   dat <- data.frame(
-    g1 = factor(c("a", "a", "b", "b", "b", "b"), levels = c("a", "unused", "b")),
+    g1 = factor(
+      c("a", "a", "b", "b", "b", "b"),
+      levels = c("a", "unused", "b")
+    ),
     g2 = factor(c("x", "x", "x", "x", "y", "y"), levels = c("x", "y")),
     v = c(10, 12, 20, 22, 30, 32)
   )
@@ -323,7 +326,7 @@ test_that("describe_distribution - grouped df labels match groups when combinati
   )
   expect_identical(as.character(out2$g1), c("a", "b", "b"))
   expect_identical(as.character(out2$g2), c("x", "x", "y"))
-  expect_equal(out2$Mean, c(11, 21, 31))
+  expect_identical(out2$Mean, c(11, 21, 31))
 })
 
 test_that("describe_distribution - grouped df keeps the type of group columns", {
@@ -331,7 +334,8 @@ test_that("describe_distribution - grouped df keeps the type of group columns", 
     g_chr = rep(c("a", "b"), each = 4),
     g_fct = factor(rep(c("x", "y"), times = 4)),
     g_num = rep(c(1, 2), times = 4),
-    v = 1:8
+    v = 1:8,
+    stringsAsFactors = FALSE
   )
   out <- describe_distribution(
     dat,
