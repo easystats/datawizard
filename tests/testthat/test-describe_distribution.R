@@ -326,6 +326,25 @@ test_that("describe_distribution - grouped df labels match groups when combinati
   expect_equal(out2$Mean, c(11, 21, 31))
 })
 
+test_that("describe_distribution - grouped df keeps the type of group columns", {
+  dat <- data.frame(
+    g_chr = rep(c("a", "b"), each = 4),
+    g_fct = factor(rep(c("x", "y"), times = 4)),
+    g_num = rep(c(1, 2), times = 4),
+    v = 1:8
+  )
+  out <- describe_distribution(
+    dat,
+    select = "v",
+    by = c("g_chr", "g_fct", "g_num"),
+    verbose = FALSE
+  )
+  expect_type(out$g_chr, "character")
+  expect_s3_class(out$g_fct, "factor")
+  expect_identical(levels(out$g_fct), c("x", "y"))
+  expect_type(out$g_num, "double")
+})
+
 # distribution_mode --------------------------
 test_that("distribution_mode works as expected", {
   # atomic vector

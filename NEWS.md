@@ -31,6 +31,13 @@ BUG FIXES
   an error from `gamm4()` or fitted some numeric variables as linear terms, so
   the adjusted values were wrong.
 
+* `describe_distribution()` on grouped data, or with more than one variable in
+  `by`, now labels each row with its own group. Before, when some combinations
+  of the group variables had no rows, rows after the first missing combination
+  had the labels of other groups, so their statistics were reported for the
+  wrong group. Character group variables are now returned as character instead
+  of factor (#757, @chenyangsu).
+
 # datawizard 1.5.0
 
 BREAKING CHANGES
