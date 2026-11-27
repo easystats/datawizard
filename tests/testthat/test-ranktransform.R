@@ -155,7 +155,8 @@ test_that("argument 'zeros' works with grouped data frames", {
 
   d <- data.frame(
     id = rep(c("A", "B"), each = 4),
-    x = c(-1, 0, 2, -3, 3, -1, 0, 2)
+    x = c(-1, 0, 2, -3, 3, -1, 0, 2),
+    stringsAsFactors = FALSE
   )
   out <- poorman::group_by(d, id)
   out <- ranktransform(out, select = "x", sign = TRUE, zeros = "signrank")
