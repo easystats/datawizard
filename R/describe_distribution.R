@@ -561,9 +561,7 @@ describe_distribution.grouped_df <- function(
     x <- data_group(x, c(existing_grps, by))
   }
   group_vars <- setdiff(colnames(attributes(x)$groups), ".rows")
-  group_data <- expand.grid(lapply(x[group_vars], function(i) unique(sort(i))))
-  groups <- split(x, x[group_vars])
-  groups <- Filter(function(x) nrow(x) > 0, groups)
+  groups <- split(x, x[group_vars], drop = TRUE)
 
   # check for reserved variable names
   .check_for_reserved_names(group_vars, type = "group_vars")
@@ -596,8 +594,8 @@ describe_distribution.grouped_df <- function(
         ...
       )
 
-      for (grp in seq_along(group_vars)) {
-        d[[group_vars[grp]]] <- group_data[i, grp]
+      for (grp in group_vars) {
+        d[[grp]] <- groups[[i]][[grp]][1]
       }
       d <- data_relocate(d, group_vars, before = 1)
 
