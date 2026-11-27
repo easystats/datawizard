@@ -179,6 +179,7 @@ ranktransform.grouped_df <- function(
       exclude = exclude,
       sign = sign,
       method = method,
+      zeros = zeros,
       verbose = verbose,
       ...
     )
@@ -218,6 +219,7 @@ ranktransform.data.frame <- function(
     ranktransform,
     sign = sign,
     method = method,
+    zeros = zeros,
     verbose = verbose
   )
   x
