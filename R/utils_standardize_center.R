@@ -436,11 +436,11 @@
   }
 
   # the SD of a single value is NA
-  if (is.na(scale)) {
+  if (is.na(scale) && sum(!is.na(reference)) == 1L) {
     scale <- 1
     if (verbose) {
       insight::format_warning(
-        "SD can't be computed from a single value - variable not standardized (only scaled)."
+        "SD can't be computed from a single value - variable not standardized."
       )
     }
   } else if (scale == 0) {

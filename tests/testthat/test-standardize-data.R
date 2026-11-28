@@ -39,6 +39,13 @@ test_that("standardize, single value", {
   )
   expect_identical(as.vector(x), c(0, NA))
 
+  # a center from `center` is kept
+  expect_warning(
+    x <- standardize(c(5, NA), center = 2), # nolint: implicit_assignment_linter.
+    "SD can.t be computed"
+  )
+  expect_identical(as.vector(x), c(3, NA))
+
   expect_silent(out <- standardize(data.frame(x = 5, y = 2))) # nolint: implicit_assignment_linter.
   expect_identical(as.vector(out$x), 0)
   expect_identical(as.vector(out$y), 0)
