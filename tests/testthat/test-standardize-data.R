@@ -23,19 +23,19 @@ test_that("standardize.numeric", {
 test_that("standardize, single value", {
   expect_warning(
     expect_message(x <- standardize(5), "only one unique value"), # nolint: implicit_assignment_linter.
-    "SD could not be computed"
+    "SD can.t be computed"
   )
   expect_identical(as.vector(x), 0)
 
   expect_warning(
     x <- standardize(c(5, NA)), # nolint: implicit_assignment_linter.
-    "SD could not be computed"
+    "SD can.t be computed"
   )
   expect_identical(as.vector(x), c(0, NA))
 
   expect_warning(
     x <- standardize(c(5, NA), weights = c(1, 1)), # nolint: implicit_assignment_linter.
-    "SD could not be computed"
+    "SD can.t be computed"
   )
   expect_identical(as.vector(x), c(0, NA))
 

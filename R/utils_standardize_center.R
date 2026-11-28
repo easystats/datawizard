@@ -440,7 +440,7 @@
     scale <- 1
     if (verbose) {
       insight::format_warning(
-        "SD could not be computed from a single value - variable not standardized (only scaled)."
+        "SD can't be computed from a single value - variable not standardized (only scaled)."
       )
     }
   } else if (scale == 0) {
