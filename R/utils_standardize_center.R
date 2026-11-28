@@ -436,7 +436,7 @@
   }
 
   # the SD of a single value is NA
-  if (is.na(scale) && sum(!is.na(reference)) == 1L) {
+  if (is.na(scale) && sum(is.finite(reference)) == 1L) {
     scale <- 1
     if (verbose) {
       insight::format_warning(
