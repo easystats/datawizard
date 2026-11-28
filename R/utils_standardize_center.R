@@ -435,7 +435,15 @@
     center <- .center
   }
 
-  if (scale == 0) {
+  # the SD of a single value is NA
+  if (is.na(scale) && sum(is.finite(reference)) == 1L) {
+    scale <- 1
+    if (verbose) {
+      insight::format_warning(
+        "SD can't be computed from a single value - variable not standardized."
+      )
+    }
+  } else if (scale == 0) {
     scale <- 1
     if (verbose) {
       insight::format_warning(sprintf(

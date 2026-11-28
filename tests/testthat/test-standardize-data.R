@@ -19,6 +19,61 @@ test_that("standardize.numeric", {
 })
 
 
+# standardize a single value ----------------------------------------------
+test_that("standardize, single value", {
+  expect_warning(
+    expect_message(x <- standardize(5), "only one unique value"), # nolint: implicit_assignment_linter.
+    "SD can.t be computed"
+  )
+  expect_identical(as.vector(x), 0)
+
+  expect_warning(
+    x <- standardize(c(5, NA)), # nolint: implicit_assignment_linter.
+    "SD can.t be computed"
+  )
+  expect_identical(as.vector(x), c(0, NA))
+
+  expect_warning(
+    x <- standardize(c(5, NA), weights = c(1, 1)), # nolint: implicit_assignment_linter.
+    "SD can.t be computed"
+  )
+  expect_identical(as.vector(x), c(0, NA))
+
+  # a center from `center` is kept
+  expect_warning(
+    x <- standardize(c(5, NA), center = 2), # nolint: implicit_assignment_linter.
+    "SD can.t be computed"
+  )
+  expect_identical(as.vector(x), c(3, NA))
+
+  expect_silent(out <- standardize(data.frame(x = 5, y = 2))) # nolint: implicit_assignment_linter.
+  expect_identical(as.vector(out$x), 0)
+  expect_identical(as.vector(out$y), 0)
+
+  # two equal values have an SD of 0
+  expect_warning(
+    expect_message(x <- standardize(c(5, 5)), "only one unique value"), # nolint: implicit_assignment_linter.
+    "SD is 0"
+  )
+  expect_identical(as.vector(x), c(0, 0))
+})
+
+test_that("standardize, grouped data with a one-row group", {
+  d <- data.frame(
+    g = c("a", "a", "b"),
+    x = c(1, 2, 3),
+    stringsAsFactors = FALSE
+  )
+  expect_silent(out <- standardize(data_group(d, "g"), select = "x")) # nolint: implicit_assignment_linter.
+  expect_equal(
+    out$x,
+    c(-1, 1, 0) / sqrt(2),
+    tolerance = 1e-10,
+    ignore_attr = TRUE
+  )
+})
+
+
 # standardize factor / Date -----------------------------------------------
 test_that("standardize.numeric", {
   f <- factor(c("c", "a", "b"))
