@@ -38,6 +38,13 @@ BUG FIXES
   wrong group. Character group variables are now returned as character instead
   of factor (#757, @chenyangsu).
 
+* `standardize()` now centers a variable with only one non-missing value to
+  0, as it already did for a variable whose values are all equal. Before, the
+  SD of a single value was `NA`, so it gave the error "missing value where
+  TRUE/FALSE needed", for example with grouped data frames where a group has
+  one row. On a vector, it now also warns that the SD can't be computed from a
+  single value.
+
 # datawizard 1.5.0
 
 BREAKING CHANGES
