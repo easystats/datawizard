@@ -59,9 +59,18 @@ test_that("standardize, single value", {
 })
 
 test_that("standardize, grouped data with a one-row group", {
-  d <- data.frame(g = c("a", "a", "b"), x = c(1, 2, 3))
+  d <- data.frame(
+    g = c("a", "a", "b"),
+    x = c(1, 2, 3),
+    stringsAsFactors = FALSE
+  )
   expect_silent(out <- standardize(data_group(d, "g"), select = "x")) # nolint: implicit_assignment_linter.
-  expect_equal(out$x, c(-1, 1, 0) / sqrt(2), tolerance = 1e-10, ignore_attr = TRUE)
+  expect_equal(
+    out$x,
+    c(-1, 1, 0) / sqrt(2),
+    tolerance = 1e-10,
+    ignore_attr = TRUE
+  )
 })
 
 
